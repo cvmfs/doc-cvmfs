@@ -1,7 +1,7 @@
 \chapter{Getting Started}
 \label{sct:start}
 
-This section describes how to install \cvmfs\ on Scientific Linux 5 for use with \cernvm\ repositories.
+This section describes how to install \cvmfs\ on Scientific Linux 5/6 for use with \cernvm\ repositories.
 For a list of currently hosted repositories at \cern\ see Table~\ref{tbl:repos}.
 \begin{table}[t]
 	\begin{center}
@@ -12,6 +12,7 @@ For a list of currently hosted repositories at \cern\ see Table~\ref{tbl:repos}.
 			atlas-nightlies.cern.ch & ATLAS nightly builds \\
 			cms.cern.ch & CMS experiment software \\
 			lhcb.cern.ch & LHCb experiment software \\
+			lhcb-conddb.cern.ch & LHCb conditions database \\
 			na61.cern.ch & NA61 experiment software \\
 			hone.cern.ch & H1 experiment software \\
 			boss.cern.ch & BES experiment software \\
@@ -29,18 +30,23 @@ Current versions are available from \url{https://cernvm.cern.ch/portal/downloads
 
 \section{Setting up yum for \cvmfs}
 If you want to use yum, there is a repository available at \url{http://cvmrepo.web.cern.ch/cvmrepo/yum}.
-If you install \cvmfs\ for the first time through yum, you'll have to add the \cvmfs\ repository to your local yum:
-\begin{enumerate}
-	\item download \url{http://cvmrepo.web.cern.ch/cvmrepo/yum/cernvm.repo} to /etc/yum.repos.d/ 
-	\item download \url{http://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM} to /etc/pki/rpm-gpg/.
-\end{enumerate}
+The \texttt{cvmfs-release} package can be used to add the \cvmfs\ repository to your local yum.
+Use the following script to download and install the \texttt{cvmfs-release} RPM:
+\begin{verbatim}
+RELEASE=$(rpm -q --queryformat '%{version}\n' sl-release)
+RELEASE_MAJOR=$(echo $RELEASE | cut -d. -f1)
+ARCH=$(uname -m)
+wget http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$RELEASE/$ARCH/\
+cvmfs-release-2-2.el${RELEASE_MAJOR}.noarch.rpm
+sudo rpm -i cvmfs-release-2-2.el${RELEASE_MAJOR}.noarch.rpm
+\end{verbatim}
 For Ubuntu and SuSE, compile from sources using the following configure options: 
 \begin{verbatim}
---enable-sqlite3-builtin --enable-libcurl-builtin \
+  --enable-sqlite3-builtin --enable-libcurl-builtin \
   --enable-libfuse-builtin --enable-libfuse-builtin \
-  --enable-zlib-builtin --enable-mount-scripts --disable-server
+  --enable-zlib-builtin --enable-mount-scripts --disable-server \
+  --prefix=/usr
 \end{verbatim}
-
 
 \section{Installation}
 To install, proceed according to the following steps:
