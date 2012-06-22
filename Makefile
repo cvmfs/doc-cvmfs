@@ -1,6 +1,6 @@
 
 .PHONY: clean draft preview open 
-SOURCES = cvmfstech.tex cpt-install.tex apx-crowdcache.tex cpt-overview.tex cpt-quickstart.tex cpt-details.tex cpt-benchmarks.tex apx-releasemgr.tex install.tex comparsion.tex concept.tex cvmfs-scvmfs.tex cvmfs-blocks.tex cernlogo.tex buildserver.pdf reposerver.pdf webserver.pdf infra.pdf cvmfs.pdf cvmfs-wo-memcached.pdf cvmfs-wi-memcached.pdf switch.pdf memcached-step1.tex memcached-step2.tex memcached-step3.tex mem.pdf crowdcache.tex vfsfilter.tex warmcache.tex references.bib cdrom-orange.pdf releasemanager.pdf memcache.png sqlite.pdf cache.pdf cernvm.png fingerprint.pdf sign-cert.pdf sign.pdf
+SOURCES = cvmfstech.tex packages.tex apx-rpms.tex cpt-install.tex apx-crowdcache.tex cpt-overview.tex cpt-quickstart.tex cpt-details.tex cpt-benchmarks.tex apx-releasemgr.tex install.tex comparsion.tex concept.tex cvmfs-scvmfs.tex cvmfs-blocks.tex cernlogo.tex buildserver.pdf reposerver.pdf webserver.pdf infra.pdf cvmfs.pdf cvmfs-wo-memcached.pdf cvmfs-wi-memcached.pdf switch.pdf memcached-step1.tex memcached-step2.tex memcached-step3.tex mem.pdf crowdcache.tex vfsfilter.tex warmcache.tex references.bib cdrom-orange.pdf releasemanager.pdf memcache.png sqlite.pdf cache.pdf cernvm.png fingerprint.pdf sign-cert.pdf sign.pdf
 
 all: cvmfstech.pdf
 
@@ -45,7 +45,7 @@ open: cvmfstech.pdf
 	open cvmfstech.pdf
 
 clean:
-	rm -f cvmfstech.pdf cvmfstech.synctex.gz cvmfstech.tpt cvmfstech.aux cvmfstech.bbl cvmfstech.blg cvmfstech.log cvmfstech.out cvmfstech.toc cvmfstech.idx cvmfstech.ind cvmfstech.ilg jtex.aux jtex.log flow-mount.aux flow-mount.log flow-mount.out flow-mount.synctex.gz flow-mount.pdf cvmfstech.rai
+	rm -f cvmfstech.pdf cvmfstech.synctex.gz cvmfstech.tpt cvmfstech.aux cvmfstech.bbl cvmfstech.blg cvmfstech.log cvmfstech.out cvmfstech.toc cvmfstech.idx cvmfstech.ind cvmfstech.ilg packages.aux packages.log flow-mount.aux flow-mount.log flow-mount.out flow-mount.synctex.gz flow-mount.pdf cvmfstech.rai
 	rm -f cvmfstech.draft.tex cvmfstech.draft.aux cvmfstech.draft.log cvmfstech.draft.out cvmfstech.draft.toc cvmfstech.draft.blg cvmfstech.draft.bbl cvmfstech.draft.idx cvmfstech.draft.ind cvmfstech.draft.ilg cvmfstech.draft.pdf cvmfstech.draft.rai
 	rm -f cvmfstech.preview.tex cvmfstech.preview.synctex.gz cvmfstech.preview.tpt cvmfstech.preview.aux cvmfstech.preview.bbl cvmfstech.preview.blg cvmfstech.preview.log cvmfstech.preview.out cvmfstec.preview.toc cvmfstech.preview.idx cvmfstech.preview.ind cvmfstech.preview.ilg cvmfstech.preview.rai
 	rm -f bandwidth.tex latency.tex

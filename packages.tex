@@ -41,8 +41,6 @@
 \newcommand{\ie}{i.\,e.\ }
 \newcommand{\ia}{i.\,allg.\ }
 \newcommand{\eg}{e.\,g.\ }
-\newcommand{\zb}{z.\,B.\ }
-\newcommand{\dah}{d.\,h.\ }
 \newcommand{\cf}{cf.\ }
 \newcommand{\dotfillbox}[1]{\makebox[#1]{\dotfill}}
 
@@ -50,9 +48,11 @@
 % Tables
 %-------------
 \usepackage{tabularx}
+
 % Split a cell into multiple rows/columns 
 \usepackage{multicol}
 \usepackage{multirow}
+
 \usepackage{slashbox} % Diagonal cells
 \usepackage{booktabs}
 \usepackage{rotating}
@@ -77,7 +77,7 @@
 %--------
 \usepackage{amsmath,amssymb,amstext,amsthm,amsfonts}
 \usepackage{dsfont} %Font for nice set symbols (R, N, Z, ...)
-\usepackage{nicefrac} % "Marktfrauenbruch"
+\usepackage{nicefrac} %"Marktfrauenbruch"
 % Set symbols
 \newcommand{\R}{\ensuremath{\mathds{R}}}
 \renewcommand{\P}{\ensuremath{\mathds{P}}}
@@ -113,14 +113,11 @@
 \DeclareMathOperator{\vol}{vol}
 \DeclareMathOperator{\identical}{id} 
 \providecommand{\id}{\ensuremath{\textsf{id}}} % identische Abbildung
-\DeclareMathOperator{\Kern}{Kern} % Kern
-\DeclareMathOperator{\Bild}{Bild} % Bild
-\DeclareMathOperator{\ggT}{ggT} % ggT
-\DeclareMathOperator{\kgV}{kgV} % kgV
-\DeclareMathOperator{\prob}{\mathbf{P}} % Wahrscheinlichkeit
-\DeclareMathOperator{\E}{\mathbf{E}} % Erwartungswert
+\DeclareMathOperator{\prob}{\mathbf{P}} % Probablility
+\DeclareMathOperator{\E}{\mathbf{E}} % Expected value
 \DeclareMathOperator{\percentile}{P} % Percentil
 \DeclareMathOperator{\definedas}{\mathrel{\mathop:}=}
+
 % Arbitrarily long double arrows
 \makeatletter
 \def\Relbar{\mathrel{\smash=}}
@@ -164,8 +161,8 @@
 \usepackage{microtype}
 \usepackage{slantsc} % Combine sc fonts with italic, bold, ...
 %\usepackage{geometry} % Page dimensions
-\clubpenalty = 9000 % Keine Schusterjungen
-\widowpenalty = 9000 \displaywidowpenalty = 9000 % Keine Hurenkinder
+\clubpenalty = 9000 % No Schusterjungen
+\widowpenalty = 9000 \displaywidowpenalty = 9000 % No Hurenkinder
 % Roman numbers
 \newcommand{\romannum}[1]{
 	\ifnum#1<1 
