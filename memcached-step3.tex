@@ -1,0 +1,8 @@
+
+	\node (vm1 cvmfs) at (node cs:name=vm1,angle=-15) {};
+	\node (vm2 memcached) at ($(node cs:name=vm2,angle=60) - (0,0.2cm)$) {};
+	\node (vm3 memcached) at ($(node cs:name=vm3,angle=60) - (0,0.2cm)$) {};
+	\node (vm2 cvmfs) at (node cs:name=vm2,angle=-15) {};
+	\draw[action,curve to,out=0,in=90] (vm1 cvmfs) to node[fill=white,near end] {store} (vm2 memcached);
+	\draw[action,<-,curve to,out=90,in=0] (vm3 memcached) to node[fill=white,very near end] {retrieve} ($(vm3 memcached) + (-1cm,1cm)$) 
+		to[out=180,in=0] (vm2 cvmfs);

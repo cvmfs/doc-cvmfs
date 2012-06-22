@@ -1,0 +1,101 @@
+%\documentclass[a4paper, 11pt]{article}\usepackage{tikz,ifthen}\usetikzlibrary{circuits.logic.US,arrows,positioning,shapes,topaths,calc,fit,backgrounds,matrix,shadows,decorations.pathreplacing}\usepackage[margin=2cm]{geometry}\begin{document}\sf
+
+\begin{tikzpicture}
+	\colorlet{backcolor}{gray}
+	\colorlet{alertcolor}{red}
+	\colorlet{cernvmcolor}{blue!75!black}
+	\colorlet{contextcolor}{orange}
+	\colorlet{cvmfscolor}{green!50!black}
+	\colorlet{httpdcolor}{orange}
+	\tikzset{
+		component/.style={rectangle,very thick,rounded corners,drop shadow,anchor=south west,fill=white},
+		raa/.style={component, draw= contextcolor, text= contextcolor},
+		slc/.style={component, draw=cernvmcolor, text=cernvmcolor},
+		kernel/.style={component, draw=cernvmcolor, text=cernvmcolor},
+		fuse/.style={component, draw=cernvmcolor, text=cernvmcolor},
+		context/.style={component, draw= contextcolor, text=contextcolor},
+		cvmfs/.style={component, draw=cvmfscolor, text=cvmfscolor},
+		httpd/.style={anchor=south west},
+		key/.style={font=\footnotesize}
+	}
+	
+	\def\gap{0.2}
+	\def\raaWd{1}
+	\def\raaHt{2}
+	\def\slcWd{3.5}
+	\def\slcHt{2}
+	\def\cvmfsWd{2.5}
+	\def\cvmfsHt{2}
+	\def\kernelHt{1.2}
+	\pgfmathsetmacro{\kernelWd}{\raaWd+\gap+\slcWd+\gap+\cvmfsWd}
+	\def\fuseHt{0.6}
+	\pgfmathsetmacro{\contextWd}{\raaWd+\gap+\slcWd}
+	\def\contextHt{1}
+	
+	\node[raa,minimum width=\raaWd cm,minimum height=\raaHt cm] (raa) at (0,0) {rAA};
+	\node[scale=0.3,circuit logic US,or gate,fill,httpdcolor] (connraa) at ($(raa.west)-(5.5pt,0)$) {};
+	\node[httpdcolor,anchor=south,xshift=-1ex,key,rotate=90] at (connraa.west) {\parbox{3cm}{\centering HTTP(S)\\XML-RPC}};
+	%\fill[httpdcolor] ($(raa.west)-(3pt,0)$) circle (3pt) node[left,rotate=90,anchor=south,yshift=1ex,key] {\parbox{3cm}{\centering HTTP(S)\\XML-RPC}};
+	%\node[httpdcolor,circle,anchor=east,draw,fill,size=2pt] at (raa.west) {};
+	%\draw[<->,very thick,httpdcolor] (raa.west) -- node[httpdcolor,fill=white] {\tiny\parbox{1cm}{\centering HTTP, XML-RPC}} ($(raa.west)-(2cm,0cm)$);
+	
+	\pgfmathsetmacro{\slcX}{\raaWd+\gap}
+	\pgfmathsetmacro{\slcLargeWd}{\slcWd}
+	\node[slc,minimum width= \slcLargeWd cm,minimum height=\slcHt cm, xshift=\slcX cm] at (0,0) {\parbox{3cm}{\centering Minimal\\ Linux OS}};
+	
+	\pgfmathsetmacro{\cvmfsX}{\raaWd+\gap+\slcWd+\gap}
+	\begin{scope}[xshift=\cvmfsX cm]
+		\pgfmathsetmacro{\cacheY}{-(\cvmfsHt/2-2*\gap)}
+		\node[cvmfs,minimum width=\cvmfsWd cm,minimum height=\cvmfsHt cm] (cvmfs) at (0,0) {};
+		\node[shape=cylinder,draw=cvmfscolor,thick,shape border rotate=90,yshift=\cacheY cm,minimum width=1.2cm] at (cvmfs) {};
+		
+		\path (cvmfs.south) -- node[text=cvmfscolor,near end] {CernVM-FS}  (cvmfs.north);
+	\end{scope}
+	
+	%\pgfmathsetmacro{\kernelX}{\raaWd+\gap}
+	\pgfmathsetmacro{\kernelY}{-(\kernelHt+\gap)}
+	\begin{scope}[yshift=\kernelY cm]
+		\pgfmathsetmacro{\kernelSmallHt}{\kernelHt-\fuseHt-\gap}
+		\pgfmathsetmacro{\kernelBigWd}{\kernelWd-\cvmfsWd-\gap}
+		\coordinate (p0) at (0,0);
+		\coordinate (p1) at (\kernelWd,0);
+		\coordinate (p2) at (\kernelWd, \kernelSmallHt);
+		\coordinate (p3) at (\kernelBigWd, \kernelSmallHt);
+		\coordinate (p4) at (\kernelBigWd, \kernelHt);
+		\coordinate (p5) at (0,\kernelHt);
+			
+		\draw[kernel] (p0) -- (p1) -- (p2) -- (p3) -- (p4) -- (p5) -- cycle;
+		\path (p0) -- node[midway] {\textcolor{cernvmcolor}{Linux Kernel}} (\kernelBigWd,\kernelHt);
+	\end{scope}
+	
+	\pgfmathsetmacro{\contextY}{\raaHt+\gap}
+	\node[context,minimum width=\contextWd cm,minimum height=\contextHt cm,yshift=\contextY cm] (context) at (0,0) {Contextualization};
+	\node[scale=0.3,circuit logic US,or gate,fill,httpdcolor,rotate=90] (connxmpp) at ($(context.north)+(0,4.5pt)$) {};
+	\node[httpdcolor,anchor=south,yshift=1ex,key] at (connxmpp.north) {\parbox{3cm}{\centering XMPP\\HTTP (Amazon EC2)}};
+	\node[scale=0.3,circuit logic US,or gate,fill,httpdcolor,rotate=180] (conniso) at ($(context.west)-(4.5pt,0)$) {};
+	\node[httpdcolor,anchor=east,xshift=-1ex,key] at (conniso.west) {\includegraphics[height=1cm]{cdrom-orange}};
+	%\fill[httpdcolor] ($(context.north)+(0,3pt)$) circle (3pt) node[above,anchor=south,yshift=1ex,key] {\parbox{3cm}{\centering XMPP\\HTTP (Amazon EC2)}};
+	%\fill[httpdcolor] ($(context.west)-(3pt,0)$) circle (3pt) node[left,anchor=east,xshift=-1ex,key] {\includegraphics[height=1cm]{cdrom}};
+	
+	\pgfmathsetmacro{\fuseX}{\raaWd+\gap+\slcWd+\gap-0.03}
+	\pgfmathsetmacro{\fuseY}{-\fuseHt-\gap-0.03}
+	\node[fuse,minimum width=\cvmfsWd cm,minimum height=\fuseHt cm,xshift=\fuseX cm,yshift= \fuseY cm] (fuse) at (0,0) {Fuse};
+	
+	\begin{scope}[xshift=12cm, yshift=-1cm]
+		\node[httpd] (webserver) at (0,0) {\includegraphics[width=2.5cm]{webserver}};
+		\node[shape=cylinder,draw=backcolor,thick,shape border rotate=90,xshift=1.25cm,yshift=-0.25cm,minimum width=1.2cm,fill=backcolor,fill opacity=0.5] at (0,0) {};
+		\node[anchor=south] (releasemgr) at ($(webserver.north)+(0,1.25cm)$) {\includegraphics[width=1cm]{releasemanager}};
+		\draw[very thick,backcolor,->] (releasemgr.south) to node[anchor=center,fill=white,midway] {\textcolor{black}{ssh}} (webserver.north);
+	\end{scope}
+	
+	\draw[backcolor,very thick,<-,curve to,out=180,in=0] (webserver.west) to node[fill=white,key,draw,cloud,aspect=2] {\parbox{2.1cm}{\centering \textcolor{black}{Hierarchy of\\HTTP Caches}}} ($(cvmfs.east)+(\gap cm,0)$);
+	
+	\node[key,cernvmcolor] (volimage) at (1.75cm,-2.25cm) {\parbox{3cm}{\centering 250\,MB\\Bootstrap Image}};
+	\node[key,cvmfscolor] (volcache) at (6.25cm,-2.25cm) {\parbox{3.5cm}{\centering 1\,GB\\CernVM-FS~Cache}};
+	\node[key] (volrelease) at (13.25cm,-2.25cm) {\parbox{3.5cm}{\centering 10\,GB\\Single Release\\(all releases available)}};
+	\draw[backcolor,decorate,decoration={expanding waves,segment length=0.1cm,angle=7}] (volimage.east) -- (volcache.west);
+	\draw[backcolor,decorate,decoration={expanding waves,segment length=0.1cm,angle=7}] (volcache.east) -- (volrelease.west);
+	
+\end{tikzpicture}
+
+%\end{document}

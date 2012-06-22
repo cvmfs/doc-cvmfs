@@ -1,0 +1,65 @@
+%\documentclass[a4paper, 11pt]{article}
+
+%\usepackage{tikz,ifthen}
+%\usetikzlibrary{arrows,positioning,shapes,topaths,calc,fit,backgrounds,matrix,shadows}
+
+%\begin{document}
+
+\begin{tikzpicture}
+	[
+		dirent/.style={
+			circle,
+			draw=green!50!black!50,
+			fill=green!50!black!50
+		},
+		dirtree/.style={
+			draw=gray
+		},
+		process/.style={
+			->,
+			green!50!black!75,
+			very thick
+		},
+		background/.style={
+			rectangle,
+			fill=gray!10,
+			inner sep=0.2cm,
+			rounded corners=5mm}
+	]
+	\node[dirent,label=right:/opt/atlas] (root) at (0,0) {};
+	\node[dirent,label=right:software] (software) at (1, -1) {};
+	\node[dirent,label=right:15.6.9] (1569) at (2, -2) {};
+	\node[dirent,label=right:ChangeLog] (ChangeLog) at (3, -3) {};
+	\node (dots) at (3, -3.5) {$\vdots$};
+		
+	\draw[dirtree] (root) -- (0,-1) -- (software);
+	\draw[dirtree] (software) -- (1,-2) -- (1569);
+	\draw[dirtree] (1569) -- (2,-3) -- (ChangeLog);
+	\draw[dirtree] (2,-3) -- (2,-3.8);
+	\draw[dirtree] (1,-2) -- (1,-3.8);
+	\draw[dirtree] (0,-1) -- (0,-3.8);
+
+	\node[anchor=west,fill,rounded corners,draw,blue!75] (checksum) at (0.5, -5.1) {\texttt{\textcolor{white}{806fbb67373e9\dots}}};
+	\node[anchor= north] (cache) at (0, -7) {\includegraphics[width=1.5cm]{cache}};
+	\node[anchor= north] at (0,-9) {\footnotesize Data Store};
+	\node[anchor= north] (sqlite) at (4, -7.25) {\includegraphics[height=1cm]{sqlite}};
+	\node[anchor= north] at (4,-9) {\footnotesize File Catalog};
+	
+	\draw[process,curve to,out=240,in=90] (ChangeLog) to node[near end,fill=gray!10] {\footnotesize Compression, SHA1} (checksum); 
+	\draw[process,curve to,out=240,in=90] (checksum) to 
+		%node[fill=white] {\footnotesize compress} 
+		(0,-7);
+	\draw[process,curve to,out=300,in=90] (checksum) to (3.5,-7);
+	
+	\node (top left) at (-1,0) {};
+	\node (mid right) at (5.5,-5.325) {};
+	\node (mid left) at (-1,-6.8) {};
+	\node (bottom right) at (5.5,-9.25) {};
+	\begin{pgfonlayer}{background}
+        		\node[background, fit=(top left) (mid right)] {};
+		\node[anchor=east,blue!75] at (5.625,0) {\footnotesize\emph{Shadow Tree}};
+		\node[background, fit=(mid left) (bottom right)] {};
+		\node[anchor=east,blue!75] at (5.625,-6.8) {\footnotesize\emph{Repository}};
+        \end{pgfonlayer}
+\end{tikzpicture}
+%\end{document}

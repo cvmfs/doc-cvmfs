@@ -1,0 +1,30 @@
+%\documentclass[a4paper, 11pt]{article}\usepackage{tikz,ifthen}\usetikzlibrary{arrows,positioning,shapes,topaths,calc,fit,backgrounds,matrix,shadows}\begin{document}
+
+\begin{tikzpicture}
+	[cell/.style={node distance=3pt,draw,minimum height=0.75cm,font=\scriptsize,line width=1pt},
+	background/.style={
+		rectangle,
+		fill=gray!10,
+		inner sep=0.2cm,
+		rounded corners=5mm}
+	]
+		
+	\node[cell,signal,signal to=east,green!50!black,minimum width=3.4cm] (AutoUpd) at (0,0) {Local Installation};
+	\node[cell,signal,signal to=east,green!50!black,minimum width=1.7cm] (cvmfs) [right = of AutoUpd] {\parbox{1.5cm}{CernVM-FS\\Network FS}};
+	\draw[green!50!black,line width=1pt] (cvmfs.west) -- (cvmfs.east);
+	\node[cell,signal,signal to=west,orange,minimum width=1.7cm] (SaaS) [right = of cvmfs] {SaaS};
+	\node[yshift=-0.5cm] (scaleleft) at (AutoUpd.south west) {};
+	\node[yshift=-0.5cm] (scaleright) at (SaaS.south east) {};
+	\draw[->,blue!75!black] (scaleleft) -- node[below, very near start] (morecontrol) {\scriptsize more effort, more control} (scaleright);
+	\node[xshift=-0.45cm,yshift=1.3cm] (scaletop) at (SaaS.south west) {};
+	\node[xshift=-0.45cm,yshift=-0.7cm] (scalebottom) at (SaaS.south west) {};
+	\draw[blue!75!black] (scalebottom) -- node[yshift=0.1cm,left,very near end,green!50!black] {\scriptsize local execution}
+								       node[yshift=0.1cm,right,very near end,orange] (remote){\scriptsize remote execution} (scaletop);
+					       
+	\begin{pgfonlayer}{background}
+		\node[background,fit=(morecontrol) (remote)] (bg) {};
+		%\node[anchor=north west,green!50!black] at (bg.north west) {\emph{classification}};
+	\end{pgfonlayer}
+\end{tikzpicture}
+
+%\end{document}

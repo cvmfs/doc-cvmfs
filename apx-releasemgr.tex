@@ -1,0 +1,238 @@
+\chapter{\deprecated{A Release Manager Machine for \zep}}
+\label{apx:releasemgr}
+At \cern\ we host repositories using OpenSolaris/ZFS, Apache, and Squid servers running on a VMware vSphere virtualized infrastructure.
+However, for small VOs similar functionality can be achieved with a single standard SLC5 machine.
+
+So, let's assume you are software manager for the ambitious and imaginary \zep\ experiment driven by the famous and imaginary Aviation Research Institute.
+Recently you decided to distribute your software packages with \cvmfs\ and you are in charge of maintaining the releases.
+So you acquired an SLC5 machine and an additional harddisk that is supposed to store the repository.
+The machine is available from the outside as \texttt{zeppelin-webfs.aviation-research.org}.
+
+\section{Roadmap}
+The release manager machine will have three purposes:
+\begin{enumerate}
+	\item Serve as a template machine where software releases are installed and tested
+	\item Store snapshots of the software releases
+	\item Publish releases via HTTP
+\end{enumerate}
+Software releases will be installed in \texttt{/opt/zeppelin}, which is supposed to be a self-contained software directory.
+We use the logical volume manger (LVM) in order to create snapshots of different releases.
+These snapshots are mounted read-only in \texttt{/srv/www/webfs} and served to the outside by Apache under \url{http://zeppelin-webfs.aviation-research.org/opt/zeppelin}.
+This way you are able to install and test new software releases while always serving a consistent repository.
+
+\section{Initial Setup}
+We start by installing the necessary software for the rest of the installation procedure.
+Make sure, the following SLC5 packages are installed:
+\begin{lstlisting}[language=bash]
+yum install autoconf automake gcc gcc-c++ pcre-devel curl-devel \
+            openssl-devel fuse fuse-devel screen httpd
+\end{lstlisting}
+Additionally we require \texttt{inotify-tools}.
+The tarball can be downloaded from \url{http://inotify-tools.sourceforge.net}.
+After untaring, the installation is a straight forward \lstinline{./configure; make; make install}.
+
+We now have the necessary requirements to build and install \cvmfs.
+Download the latest tarball from \url{https://cernvm.cern.ch/project/trac/cernvm/downloads} (cf.~Section \ref{sct:start}).
+Note that we need to work with the tarball since we require the server part and additional scripts not shipped with the RPM.
+After untaring we build and install by
+\begin{lstlisting}[language=bash]
+./configure --enable-sqlite3-builtin --enable-libcurl-builtin
+make
+make install
+\end{lstlisting}
+
+It's now time to prepare the repository harddisk, which we assume to be located at \texttt{/dev/sdb}.
+We start the interactive utility \lstinline{/usr/sbin/parted /dev/sdb} to initialize the disk.
+We use the \lstinline{print} command to make sure we see the empty partition table of the correct harddisk.
+Also, remember the size of the harddisk as shown by \lstinline{print}.
+We create an ms-dos partition table by \lstinline{mklabel} and a primary partition spanning the entire size with \lstinline{mkpart}.
+We check again with \lstinline{print} and leave the utility with \lstinline{quit}.
+Now there should be \texttt{/dev/sdb} and \texttt{/dev/sdb1}
+
+The next step is to setup LVM in the newly created partition.
+At this point, we have to estimate a maximum size of the software repository.
+In order to make sure that snapshots never become unusable, each snapshot has to have at least the size of the working repository.
+So the size of the harddisk should be large enough to store the working repository and a couple of snapshots.
+For this tutorial, let's assume a 200\,GB harddisk and an upper bound of 20\,GB for the repository.
+The following commands set up the repository volume:
+\begin{lstlisting}[language=bash]
+/usr/sbin/pvcreate /dev/sdb1
+/usr/sbin/vgcreate vg-zeppelin /dev/sdb1
+/usr/sbin/lvcreate -L 20G -n lv-zeppelin vg-zeppelin
+/sbin/mkfs.ext3 /dev/vg-zeppelin/lv-zeppelin
+\end{lstlisting}
+The volume ist supposed to be mounted at \texttt{/srv/cvmfs/zeppelin}.
+We create the necessary directory hieves by:
+\begin{lstlisting}[language=bash]
+mkdir -p /srv/cvmfs/zeppelin # working repository
+mkdir -p /srv/www/webfs/zeppelin # Apache document root
+mkdir -p /opt/zeppelin # Install and test your software here
+
+# Create repository directory structure
+mount  /dev/vg-zeppelin/lv-zeppelin /srv/cvmfs/zeppelin
+mkdir -p /srv/cvmfs/zeppelin/pub/catalogs /srv/cvmfs/zeppelin/pub/data \
+         /srv/cvmfs/zeppelin/ctrl /srv/cvmfs/zeppelin/shadow
+umount /srv/cvmfs/zeppelin
+\end{lstlisting}
+To mount the volume persistently we edit \texttt{/etc/fstab} and add the lines
+\begin{lstlisting}[language=bash]
+/dev/vg-zeppelin/lv-zeppelin  /srv/cvmfs/zeppelin  ext3  defaults       0 0
+/srv/cvmfs/zeppelin/shadow    /opt/zeppelin        bind  defaults,bind  0 0
+\end{lstlisting}
+We test the changes with \lstinline{mount -a; mount}.
+
+As last step, we create a user to install and test software.
+This user becomes owner of the repository, \ie we run
+\begin{lstlisting}[language=bash]
+useradd zeppelin
+chown -R zeppelin:zeppelin /srv/cvmfs/zeppelin
+\end{lstlisting}
+
+\section{Maintaining the Repository}
+Your software will be installed in \texttt{/opt/zeppelin}.
+This directory has to be under surveillance of \texttt{cvmfs\_journald}.
+This utility records all the changes to the \texttt{/opt/zeppelin} directory in order to synchronize it with the \cvmfs\ repository (cf.~Section~\ref{sct:createrepo}).
+You can use the \texttt{initd} script in the \texttt{add-ons} directory of the \cvmfs\ tarball.
+The important command to startup the utility is
+\begin{lstlisting}[language=bash]
+screen -dmS cvmfs_journald sudo -u zeppelin sh -c \
+ "LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH /usr/local/bin/cvmfs_journald\
+ -w /opt/zeppelin -r /srv/cvmfs/zeppelin/pub -e /srv/cvmfs/zeppelin/inotify_events\
+ -l /src/cvmfs/zeppelin/ctrl/log -s /srv/cvmfs/zeppelin/ctrl/in_sync\
+ -o /srv/cvmfs/zeppelin/ctrl/ready -a  /srv/cvmfs/zeppelin/ctrl/auth\
+ | tee /srv/cvmfs/zeppelin/ctrl/stdout"
+\end{lstlisting}
+Always make sure that \texttt{cvmfs\_journald} is running before making changes to the repository.
+As root you can check with \lstinline{screen -x cvmfs_journald}.
+
+Now switch to user zeppelin by \lstinline{su zeppelin} and install and test your installation.
+For now we just create a single file with \lstinline{echo "Hello, CVMFS" > /opt/zeppelin/README}.
+For publishing it, we switch back to root, create and LVM snapshot and mount it under \texttt{/srv/www/webfs/zeppelin}.
+In the \texttt{add-ons} directory of the \cvmfs\ tarball you'll find the \texttt{cvmfs-publish} shell script that wraps up all the necessary steps.
+Listing~\ref{lst:publish} shows the essential commands from that script.
+\begin{lstlisting}[caption=Excerpt from \texttt{cvmfs-publish} utility,label=lst:publish,language=bash]
+REPOSITORY=$1
+COMMAND=$2
+
+switch_snapshot ()
+{
+  snapshot=$1
+  fstabline="/dev/vg-$REPOSITORY/$snapshot /srv/www/webfs/$REPOSITORY \
+             ext3 defaults,ro 0 0 #CVMFS_AUTOPUBLISH"
+  grep -v CVMFS_AUTOPUBLISH /etc/fstab > /etc/fstab.2
+  echo $fstabline >> /etc/fstab.2
+  mv /etc/fstab.2 /etc/fstab
+  umount /srv/www/webfs/$REPOSITORY 2>/dev/null
+  mount -a
+}
+
+case $COMMAND in
+  list)
+    snapshots=`ls /dev/vg-$REPOSITORY/ 2>/dev/null`
+    for s in $snapshots
+    do
+      echo $s
+    done    
+  ;;
+  publish)
+    origin="/dev/vg-$REPOSITORY/lv-$REPOSITORY"
+    size=`lvs --noheadings -o lv_size --units K $origin`
+
+    touch /opt/$REPOSITORY/.cvmfscatalog 
+    sleep 2
+    while [ ! -f /srv/cvmfs/$REPOSITORY/ctrl/in_sync ]; do
+      sleep 2
+    done
+    
+    timestamp=`date "+%Y%m%d%H%M%S"`
+    snapshot=lv-$REPOSITORY-$timestamp
+    /usr/sbin/lvcreate -s -L $size -p r -n $snapshot $origin
+    
+    switch_snapshot $snapshot
+  ;;
+  switch)
+    snapshot=$3
+    switch_snapshot $snapshot
+  ;;
+  remove)
+    snapshot=$3
+    /usr/sbin/lvremove /dev/vg-$REPOSITORY/$snapshot
+  ;;
+esac
+\end{lstlisting}
+So we run \lstinline{cvmfs-publish zeppelin publish} and check with \lstinline{cvmfs-publish zeppelin list}.
+
+\section{Apache Configuration}
+We are almost done.
+The last step is to make Apache publish \texttt{/srv/www/webfs/zeppelin}.
+To do so, we first add the apache user to the zeppelin group by \lstinline{usermod -a -G zeppelin apache}.
+Then we drop an Apache configure file in \texttt{/etc/httpd/conf.d/webfs.conf}.
+This configuration will create a virtual directory \url{http://zeppelin-webfs.aviation-research.org/opt} without touching the rest of your Apache configuration.
+You can find the \texttt{initd} script in the \texttt{add-ons} directory of the \cvmfs\ tarball.
+Listing~\ref{lst:apache} shows the essential options from that configuration file.
+\begin{lstlisting}[caption=Excerpt from \texttt{webfs.conf} Apache configuration,label= lst:apache,language=bash]
+RewriteEngine on
+
+#  - /opt/<experiment> is forced to be lower case 
+RewriteMap toLower int:tolower
+
+# Lowering the case for repository names
+RewriteRule ^/opt/([A-Za-z0-9\-\.]+)/(.*)$ /opt/${toLower:$1}/pub/catalogs/$2 [PT] 
+
+# Translation URL to real pathname
+Alias /opt /srv/www/webfs
+
+# Close access to non-pub directories
+<DirectoryMatch /srv/www/webfs/[A-Za-z0-9\-\.]+/(shadow|ctrl)>
+    Order allow,deny
+    Deny from all
+</DirectoryMatch>
+
+<Directory "/srv/www/webfs">
+    Options Indexes -MultiViews FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+
+    IndexOptions +SuppressDescription +FoldersFirst +VersionSort +SuppressIcon
+
+    EnableMMAP Off
+    EnableSendFile Off
+
+    AddType application/x-compress-cvmfs .cvmfschecksum
+
+    FileETag INode MTime Size 
+    ExpiresActive On
+    ExpiresDefault "access plus 15 minutes"
+    ExpiresByType text/html "access plus 5 minutes" 
+    ExpiresByType application/x-compress-cvmfs "access" 
+</Directory>
+\end{lstlisting}
+
+At this point, we have to deal with some of the security measures in SLC5.
+In particular, SELinux and iptables will shield you from all the dangers in the world.
+Apart from that, they will also shield your users from accessing the repository.
+So, as a first step, we tell SELinux that the repository is really supposed to be served by Apache (note that we have to publish again afterwards)
+\begin{lstlisting}
+chcon -h -R -t httpd_sys_content_t /srv/cvmfs/zeppelin
+cvmfs-publish zeppelin publish
+\end{lstlisting}
+Secondly, in order to let other machines talk to your release manager machine, you have to open TCP port 80 in iptables.
+There is a configuration utility to do that without editing the iptables configuration files.
+Run \lstinline{system-config-securitylevel} (text based), go to ``customize'' and open WWW for incoming traffic.
+
+\section{Test the Release Manager Machine}
+The first step is to open a web browser and look if you can browse through \url{http://zeppelin-webfs.aviation-research.org/opt/zeppelin}.
+You should be able to jump to the \texttt{data} directory and in the subdirectories within \texttt{data}.
+In case there are any errors, \texttt{/var/log/httpd/access\_log} and \texttt{/var/log/httpd/error\_log} might contain useful information.
+For SELinux, looking into \texttt{/var/log/audit/audit.log} might be helpful as well.
+
+To test with the \cvmfs\ client part, we run the following commands:
+\begin{lstlisting}
+modprobe fuse
+mkdir -p /var/cache/cvmfs2/default /mnt/cvmfs
+cvmfs2 /mnt/cvmfs http://localhost/opt/zeppelin
+cat /mnt/cvmfs/README
+umount /mnt/cvmfs
+\end{lstlisting}
+In case of success, we have just observed a \texttt{Hello, CVMFS}.

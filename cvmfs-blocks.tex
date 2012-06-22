@@ -1,0 +1,118 @@
+%\documentclass[a4paper, 11pt]{article}
+
+%\usepackage{tikz,ifthen}
+%\usetikzlibrary{shapes,matrix,shadows,fit,backgrounds}
+
+%\begin{document}
+\begin{tikzpicture}
+\edef\blockwidth{7em} 
+\edef\blockheight{2.5em}
+\scope[ 
+      block/.style={
+         anchor=south west,
+         rectangle,
+         very thick,
+         drop shadow,
+         rounded corners=3mm,
+         minimum width=\blockwidth,
+         minimum height=\blockheight},   
+      buildingblock/.style={
+         block,
+         draw=red!50!black!50,
+         top color=white,
+         bottom color=red!50!black!20},
+      module/.style={
+         block,
+         draw=green!50!black!50,
+         top color=white,
+         bottom color=green!50!black!20},
+      fuse/.style={
+         block,
+         draw=blue!50!black!50,
+         top color=white,
+         bottom color=blue!50!black!20},
+      blocklabel/.style={
+         anchor=north west,
+         inner ysep=-0.5ex,
+         font=\large\sf},
+      every fit/.style={
+         rectangle,
+         very thick,
+         draw=gray},
+      font={\small\sf}
+   ]
+   
+   \edef\spacesep{2ex}
+   \edef\numofelemsperline{3}
+
+   % Bulding Blocks
+   \edef\numofelems{8} 
+   \pgfmathparse{floor(\numofelems/\numofelemsperline)*\numofelemsperline}\edef\fitsuntil{\pgfmathresult}
+   \foreach \i / \name in {0 / SHA1, 1 / MD5, 2 / zlib, 3 / SQLite, 4 / libcurl, 5 / libcrypto, 6 / Fuse, 7 / redirfs}
+   {
+      \ifthenelse{\i<\fitsuntil}{\edef\offset{0}}{
+         \pgfmathparse{((\numofelemsperline-mod(\numofelems,\numofelemsperline))/2)*(\blockwidth+\spacesep)}\edef\offset{\pgfmathresult}}
+      \pgfmathparse{\offset + mod(\i,\numofelemsperline)*(\blockwidth+\spacesep)}\edef\blockx{\pgfmathresult}
+      \pgfmathparse{floor(\i/\numofelemsperline) * (\blockheight+\spacesep)}\edef\blocky{\pgfmathresult}
+      \coordinate (blockxy) at (\blockx pt, \blocky pt);
+      \node [buildingblock] at (blockxy) {\name};
+   }
+   \pgfmathparse{\numofelemsperline*(\blockwidth+\spacesep)-\spacesep}\edef\extremx{\pgfmathresult}
+   \pgfmathparse{ceil(\numofelems/\numofelemsperline)*(\blockheight+\spacesep)-\spacesep + 4ex}\edef\extremy{\pgfmathresult}
+   \coordinate (extremxy) at (\extremx pt, \extremy pt);
+   \node (bb bottom left) at (0,0) {};
+   \node (bb top right) at (extremxy) {};
+   \begin{pgfonlayer}{background}
+      \node [fit=(bb bottom left) (bb top right),top color=red!50!black!20,bottom color=white] (bb box) {};
+      \node [blocklabel] at (0,\extremy pt) {Building Blocks};
+   \end{pgfonlayer}
+   
+
+   % Modules
+   \pgfmathparse{\extremy+2*\spacesep}\edef\yoffset{\pgfmathresult}
+   \edef\numofelems{5}
+   \pgfmathparse{floor(\numofelems/\numofelemsperline)*\numofelemsperline}\edef\fitsuntil{\pgfmathresult}
+   \foreach \i / \name in {0 / Catalog, 1 / Cache, 2 / {Quota / LRU}, 3 / Trace Capturing, 4 / {VFS Filter}}
+   {
+      \ifthenelse{\i<\fitsuntil}{\edef\offset{0}}{
+         \pgfmathparse{((\numofelemsperline-mod(\numofelems,\numofelemsperline))/2)*(\blockwidth+\spacesep)}\edef\offset{\pgfmathresult}}
+      \pgfmathparse{\offset + mod(\i,\numofelemsperline)*(\blockwidth+\spacesep)}\edef\blockx{\pgfmathresult}
+      \pgfmathparse{\yoffset + floor(\i/\numofelemsperline) * (\blockheight+\spacesep)}\edef\blocky{\pgfmathresult}
+      \coordinate (blockxy) at (\blockx pt, \blocky pt);
+      \node [module] at (blockxy) {\name};
+   }
+   \pgfmathparse{\numofelemsperline*(\blockwidth+\spacesep)-\spacesep}\edef\extremx{\pgfmathresult}
+   \pgfmathparse{\yoffset+ceil(\numofelems/\numofelemsperline)*(\blockheight+\spacesep)-\spacesep + 4ex}\edef\extremy{\pgfmathresult}
+   \coordinate (extremxy) at (\extremx pt, \extremy pt);
+   \node (mod bottom left) at (0,\yoffset pt) {};
+   \node (mod top right) at (extremxy) {};
+   \begin{pgfonlayer}{background}
+      \node [fit=(mod bottom left) (mod top right),top color=green!50!black!20,bottom color=white] (mod box) {};
+      \node [blocklabel] at (0,\extremy pt) {Components};
+   \end{pgfonlayer}
+   
+   %fuse
+   \pgfmathparse{\extremy+2*\spacesep}\edef\yoffset{\pgfmathresult}
+   \edef\numofelems{2}
+   \pgfmathparse{floor(\numofelems/\numofelemsperline)*\numofelemsperline}\edef\fitsuntil{\pgfmathresult}
+   \foreach \i / \name in {0 / \cvmfs, 1 / cvmfs\_sync}
+   {
+      \ifthenelse{\i<\fitsuntil}{\edef\offset{0}}{
+         \pgfmathparse{((\numofelemsperline-mod(\numofelems,\numofelemsperline))/2)*(\blockwidth+\spacesep)}\edef\offset{\pgfmathresult}}
+      \pgfmathparse{\offset + mod(\i,\numofelemsperline)*(\blockwidth+\spacesep)}\edef\blockx{\pgfmathresult}
+      \pgfmathparse{\yoffset + floor(\i/\numofelemsperline) * (\blockheight+\spacesep)}\edef\blocky{\pgfmathresult}
+      \coordinate (blockxy) at (\blockx pt, \blocky pt);
+      \node [fuse] at (blockxy) {\name};
+   }
+   \pgfmathparse{\numofelemsperline*(\blockwidth+\spacesep)-\spacesep}\edef\extremx{\pgfmathresult}
+   \pgfmathparse{\yoffset+ceil(\numofelems/\numofelemsperline)*(\blockheight+\spacesep)-\spacesep + 4ex}\edef\extremy{\pgfmathresult}
+   \coordinate (extremxy) at (\extremx pt, \extremy pt);
+   \node (fuse bottom left) at (0,\yoffset pt) {};
+   \node (fuse top right) at (extremxy) {};
+   \begin{pgfonlayer}{background}
+      \node [fit=(fuse bottom left) (fuse top right),top color=blue!50!black!20,bottom color=white] (fuse box) {};
+      \node [blocklabel] at (0,\extremy pt) {User Interface};
+   \end{pgfonlayer}      
+\endscope
+\end{tikzpicture}
+%\end{document}
