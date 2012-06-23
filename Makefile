@@ -72,7 +72,8 @@ preview: $(SOURCES)
 
 	
 clean:
-	rm -f  $(MAINFILE).pdf \
+	rm -f *.aux
+	rm -f $(MAINFILE).pdf \
   $(MAINFILE).synctex.gz \
   $(MAINFILE).rai \
   $(MAINFILE).tpt \
