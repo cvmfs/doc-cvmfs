@@ -20,9 +20,9 @@
 	\node[block] (libfuse) [right = of glibc, xshift=0.5cm] {libfuse};
 	\node[block, cvmfscolor, very thick] (cvmfs) [above = of libfuse] {CernVM-FS};
 	
-	\node[fig] (sqlite) [right = of cvmfs,xshift=1cm,yshift=-1.25cm] {\includegraphics[width=1cm]{memcache} \includegraphics[width=2.5cm]{sqlite}};
-	\node[fig] (cache) [right = of cvmfs,xshift=1cm,yshift=0.5cm] {\includegraphics[width=1cm]{cache}};
-	\node[fig] (webserver) [right = of cache,yshift=1.5cm] {\includegraphics[width=2cm]{webserver}};
+	\node[fig] (sqlite) [right = of cvmfs,xshift=1cm,yshift=-1.25cm] {\includegraphics[width=1cm]{figures/memcache} \includegraphics[width=2.5cm]{figures/sqlite}};
+	\node[fig] (cache) [right = of cvmfs,xshift=1cm,yshift=0.5cm] {\includegraphics[width=1cm]{figures/cache}};
+	\node[fig] (webserver) [right = of cache,yshift=1.5cm] {\includegraphics[width=2cm]{figures/webserver}};
 	
 	\node[node distance=0.8cm] (splitleft) [below=of glibc,xshift=-2cm] {};
 	\node[node distance=0.8cm] (splitright) [below=of glibc,xshift=+12cm] {};

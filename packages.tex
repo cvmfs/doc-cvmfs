@@ -5,14 +5,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage{cmap}    % Correct encoding for Umlaute in pdf
 \usepackage[T1]{fontenc}    % Correct hyphenation for non-ASCII characters
-\usepackage[english,german]{babel}
+\usepackage[english]{babel}
 \usepackage{calc}
 \usepackage[left]{eurosym}
 \usepackage{thumbpdf}
 \usepackage{cite} % Order citations automatically (such as [1-4,5,8])
-\usepackage{multibib}
 \usepackage{array} % Extend array and tabular with column formatting
-%\usepackage[nottoc]{tocbibind} % Add index and bibliography to toc, buggy
 \usepackage{hyperref}
 \hypersetup{final,
 	        plainpages=false,
@@ -31,15 +29,12 @@
 \DeclareSIUnit\loc{LOC}
 \DeclareSIUnit\permil{\textperthousand}
 
-
 \providecommand{\todo}[1]{{\Large TODO: #1}}
 \providecommand{\newterm}[1]{\emph{#1}}
 \providecommand{\indexed}[1]{\index{#1}#1}
 \providecommand{\product}[1]{{\scshape #1}\index{#1@\textsc{#1}}}
-\providecommand{\anf}[1]{{\glqq #1\grqq}}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 \newcommand{\ie}{i.\,e.\ }
-\newcommand{\ia}{i.\,allg.\ }
 \newcommand{\eg}{e.\,g.\ }
 \newcommand{\cf}{cf.\ }
 \newcommand{\dotfillbox}[1]{\makebox[#1]{\dotfill}}
@@ -68,9 +63,6 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows,positioning,shapes,topaths,calc,fit,backgrounds,matrix,shadows,automata,patterns,decorations.pathmorphing,decorations.pathreplacing,decorations.text,circuits.logic.US,trees,mindmap}
 \usepackage{gnuplot-lua-tikz} % GNUplot plots
-\usepackage{chronology} % timeline
-\usepackage{fancybox}
-%\usepackage{pgfpages} % Get N-up layout
 
 
 % Math
@@ -135,23 +127,6 @@
 \usepackage[final]{listings}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt, frame=lines, basicstyle=\small, language=c}
 
-\usepackage{tikz-er2} % ER-Diagrams with TikZ
-\usepackage[underline=false,rounded corners=false]{pgf-umlsd} % UML diagrams with TikZ
-\usepackage{rail}
-\railalias{lbrace}{\{}
-\railalias{rbrace}{\}}
-\railalias{underscore}{\_}
-\railalias{dollar}{\$}
-\railalias{percent}{\%}
-\railalias{ampersand}{<>}
-\railalias{backslash}{\char"5C}
-\railalias{tilde}{$\sim$}
-\railalias{ampersand}{\&}
-\railalias{doubleampersand}{\&\&}
-\railalias{etc}{$\cdots$}
-\railalias{xorhat}{$\wedge$}
-\railterm{lbrace,rbrace,dollar,percent,ampersand,backslash,underscore,tilde,ampersand,doubleampersand,xorhat}
-\usepackage{qtree}
 \newcommand{\np}{\ensuremath{\mathcal{NP}}}
 \renewcommand{\O}{\ensuremath{\mathcal{O}}}
 

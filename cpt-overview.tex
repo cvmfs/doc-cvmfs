@@ -35,7 +35,7 @@ For instance, running and compiling software might easily overload \nfs\ or \pro
 
 \begin{figure}
 	\begin{center}
-		\resizebox{\textwidth}{!}{\input{concept-generic}}
+		\resizebox{\textwidth}{!}{\input{figures/concept-generic}}
 	\end{center}
 	\caption{Building blocks of \cernvm\ 2. \cernvm\ is built around a minimal SL5. Experiment software is loaded file by file on demand and is locally cached.}
 	\label{fig:concept}
@@ -43,7 +43,7 @@ For instance, running and compiling software might easily overload \nfs\ or \pro
 
 \begin{figure}
 	\begin{center}
-		\input{comparsion}
+		\input{figures/comparison}
 	\end{center}
 	\caption{Classification of \cvmfs\ and several alternative options for software installation.}
 	\label{fig:classification}
@@ -51,7 +51,7 @@ For instance, running and compiling software might easily overload \nfs\ or \pro
 
 \begin{figure}
 	\begin{center}
-		\input{fuse}
+		\input{figures/fuse}
 	\end{center}
 	\caption{Process of opening a file. \cvmfs\ resolves the name by means of an SQLite catalog, which is prepended by a memory cache. Downloaded files are verified against the cryptographic hash of the corresponding catalog entry. The \texttt{read()} and the \texttt{stat()} system call can be entirely served from the in-kernel file system buffers.}
 	\label{fig:fuse}

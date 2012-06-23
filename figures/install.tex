@@ -40,9 +40,9 @@
 	\draw[dirtree] (0,-1) -- (0,-3.8);
 
 	\node[anchor=west,fill,rounded corners,draw,blue!75] (checksum) at (0.5, -5.1) {\texttt{\textcolor{white}{806fbb67373e9\dots}}};
-	\node[anchor= north] (cache) at (0, -7) {\includegraphics[width=1.5cm]{cache}};
+	\node[anchor= north] (cache) at (0, -7) {\includegraphics[width=1.5cm]{figures/cache}};
 	\node[anchor= north] at (0,-9) {\footnotesize Data Store};
-	\node[anchor= north] (sqlite) at (4, -7.25) {\includegraphics[height=1cm]{sqlite}};
+	\node[anchor= north] (sqlite) at (4, -7.25) {\includegraphics[height=1cm]{figures/sqlite}};
 	\node[anchor= north] at (4,-9) {\footnotesize File Catalog};
 	
 	\draw[process,curve to,out=240,in=90] (ChangeLog) to node[near end,fill=gray!10] {\footnotesize Compression, SHA1} (checksum); 

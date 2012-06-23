@@ -1,20 +1,50 @@
 
-.PHONY: clean draft preview open 
-SOURCES = cvmfstech.tex packages.tex apx-rpms.tex cpt-install.tex apx-crowdcache.tex cpt-overview.tex cpt-quickstart.tex cpt-details.tex cpt-benchmarks.tex apx-releasemgr.tex install.tex comparsion.tex concept.tex cvmfs-scvmfs.tex cvmfs-blocks.tex cernlogo.tex buildserver.pdf reposerver.pdf webserver.pdf infra.pdf cvmfs.pdf cvmfs-wo-memcached.pdf cvmfs-wi-memcached.pdf switch.pdf memcached-step1.tex memcached-step2.tex memcached-step3.tex mem.pdf crowdcache.tex vfsfilter.tex warmcache.tex references.bib cdrom-orange.pdf releasemanager.pdf memcache.png sqlite.pdf cache.pdf cernvm.png fingerprint.pdf sign-cert.pdf sign.pdf
+.PHONY: clean draft preview 
+
+BIBSRC = references.bib
+PKGSRC = packages.tex
+TEXSRC = cvmfstech.tex \
+  cpt-overview.tex \
+  cpt-quickstart.tex \
+  cpt-install.tex \
+  cpt-squid.tex \
+  cpt-repo.tex \
+  cpt-details.tex \
+  apx-rpms.tex
+FIGSRC = figures/cernlogo.tex \
+  figures/cvmfs.pdf \
+  figures/cdrom-orange.pdf \
+  figures/webserver.pdf \
+  figures/releasemanager.pdf \
+  figures/sqlite.pdf \
+  figures/cache.pdf \
+  figures/memcache.png \
+  figures/cernvm.png \
+  figures/fingerprint.pdf \
+  figures/sign-cert.pdf \
+  figures/sign.pdf
+TIKZSRC = figures/concept-generic.tex \
+  figures/comparison.tex \
+  figures/fuse.tex \
+  figures/install.tex \
+  figures/cvmfs-blocks.tex \
+  figures/nestedcatalogs.tex \
+  figures/security.tex \
+  figures/cvmfs-keepalive.tex \
+  figures/vfsfilter.tex
+SOURCES = $(TEXSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
+MAINFILE = cvmfstech
 
 all: cvmfstech.pdf
 
 cvmfstech.pdf: $(SOURCES) 
-	pdflatex -interaction=batchmode cvmfstech > /dev/null
-	bibtex cvmfstech | grep -i warning || true
-	makeindex cvmfstech.idx
-	pdflatex -interaction=batchmode cvmfstech > /dev/null
-	pdflatex -interaction=batchmode cvmfstech | grep -i 'overful|underful' || true
-	#thumbpdf cvmfstech
-	#pdflatex -interaction=batchmode cvmfstech > /dev/null
-	#pdfopt cvmfstech.pdf cvmfstech.pdf.opt
-	#rm -f cvmfstech.pdf
-	#mv cvmfstech.pdf.opt cvmfstech.pdf
+	pdflatex -interaction=batchmode $(MAINFILE) > /dev/null
+	bibtex $(MAINFILE) | grep -i warning || true
+	makeindex $(MAINFILE).idx
+	pdflatex -interaction=batchmode $(MAINFILE) > /dev/null
+	pdflatex -interaction=batchmode $(MAINFILE) | grep -i 'overful|underful' || true
+	thumbpdf $(MAINFILE)
+	pdflatex -interaction=batchmode $(MAINFILE) > /dev/null
 
 draft: $(SOURCES) 
 	head -n 1 cvmfstech.tex | sed s/final/draft/ > cvmfstech.draft.tex
@@ -41,13 +71,18 @@ preview: $(SOURCES)
 	mv cvmfstech.preview.pdf.opt cvmfstech.preview.pdf
 
 	
-open: cvmfstech.pdf
-	open cvmfstech.pdf
-
 clean:
-	rm -f cvmfstech.pdf cvmfstech.synctex.gz cvmfstech.tpt cvmfstech.aux cvmfstech.bbl cvmfstech.blg cvmfstech.log cvmfstech.out cvmfstech.toc cvmfstech.idx cvmfstech.ind cvmfstech.ilg packages.aux packages.log flow-mount.aux flow-mount.log flow-mount.out flow-mount.synctex.gz flow-mount.pdf cvmfstech.rai
-	rm -f cvmfstech.draft.tex cvmfstech.draft.aux cvmfstech.draft.log cvmfstech.draft.out cvmfstech.draft.toc cvmfstech.draft.blg cvmfstech.draft.bbl cvmfstech.draft.idx cvmfstech.draft.ind cvmfstech.draft.ilg cvmfstech.draft.pdf cvmfstech.draft.rai
-	rm -f cvmfstech.preview.tex cvmfstech.preview.synctex.gz cvmfstech.preview.tpt cvmfstech.preview.aux cvmfstech.preview.bbl cvmfstech.preview.blg cvmfstech.preview.log cvmfstech.preview.out cvmfstec.preview.toc cvmfstech.preview.idx cvmfstech.preview.ind cvmfstech.preview.ilg cvmfstech.preview.rai
-	rm -f bandwidth.tex latency.tex
-	rm -f *.aux
+	rm -f  $(MAINFILE).pdf \
+  $(MAINFILE).synctex.gz \
+  $(MAINFILE).rai \
+  $(MAINFILE).tpt \
+  $(MAINFILE).aux \
+  $(MAINFILE).bbl \
+  $(MAINFILE).blg \
+  $(MAINFILE).log \
+  $(MAINFILE).out \
+  $(MAINFILE).toc \
+  $(MAINFILE).idx \
+  $(MAINFILE).ind \
+  $(MAINFILE).ilg	
 	
