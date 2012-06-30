@@ -32,7 +32,7 @@ TIKZSRC = figures/concept-generic.tex \
   figures/security.tex \
   figures/cvmfs-keepalive.tex \
   figures/vfsfilter.tex
-SOURCES = $(TEXSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
+SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
 MAINFILE = cvmfstech
 
 all: cvmfstech.pdf
