@@ -12,6 +12,7 @@
 \providecommand{\cvmfs}{{\scshape CernVM-FS}}
 \providecommand{\redirfs}{{\scshape redirfs}}
 \providecommand{\nfs}{{\scshape nfs}}
+\providecommand{\afs}{{\scshape AFS}}
 \providecommand{\cernvmfs}{{\scshape CernVM File System}}
 \providecommand{\zep}{{\scshape zeppelin}}
 \providecommand{\scvmfs}{{{\itshape\scshape s}\scshape cvmfs}}
@@ -25,7 +26,7 @@
 
 \begin{document}
 \selectlanguage{english}
-\renewcommand\today{June 2012}
+\renewcommand\today{December 2012}
 
 \pagestyle{empty}
 \begin{titlepage}
@@ -48,7 +49,7 @@
 		}
 		\vspace*{2.5cm}
  
-  		{\large \scshape Portable Analysis Environment using Virtualization Technology (WP9)}\\[0.5cm]
+  		%{\large \scshape PH-SFT}\\[0.5cm]
   		\HRule\\[0.4cm]
 		\huge The CernVM File System\\
 		\HRule\\[1.5cm]
@@ -56,10 +57,11 @@
 		\includegraphics[height=4cm]{figures/cvmfs}\\[1.5cm]
   
 		\large Jakob Blomer \qquad Predrag Buncic\\[0.4cm]
+		\url{jblomer@cern.ch}
 		%\today
   
   		\vfill
-		 \large Revision 2.0-7\\[1ex]
+		 \large Revision ---VERSION---\\[1ex]
   
 		\vfill
 		\large Technical Report\\
@@ -74,19 +76,20 @@
 
 
 \abstract{
-	The \cernvmfs\ is a client-server file system developed to deliver software stacks onto virtual machines in a fast, scalable, and reliable way.
-	\cvmfs\ is implemented as a FUSE module.
-	It makes a specially prepared directory tree stored on a web server look like a local read-only file system on the virtual machine. 
+	The \cernvmfs\ (\cvmfs) provides a scalable, reliable and low-maintenance software distribution service.
+	It was developed to assist High Energy Physics (HEP) collaborations to deploy their software on the worldwide-distributed computing infrastructure used to run their data processing applications.
+	\cvmfs\ is implemented as a POSIX read-only file system in user space (a FUSE module).
+	Files and directories are hosted on standard web servers and mounted in the universal namespace \texttt{/cvmfs}. 
+	Internally, it uses content-addressable storage and Merkle trees in order to maintain file data and meta-data.
 	\cvmfs\ uses outgoing HTTP connections only, thereby it avoids most of the firewall issues of other network file systems.
-	It transfers data file by file on demand, verifying the content by SHA-1 keys.
+	It transfers data and meta-data on demand and verifies data integrity by cryptographic a hash.
 	
-	By means of aggressive caching and reduction of latency, we focus specifically for the software use case.
-	Volumes hosting software consist usually of many small files that are frequently opened and read as a whole.
-	Furthermore, we see frequent looking for files in multiple directories when search paths are examined.
+	By means of aggressive caching and reduction of latency, \cvmfs\ focuses specifically on the software use case.
+	Software usually comprises many small files that are frequently opened and read as a whole.
+	Furthermore, the software use case includes frequent look-ups for files in multiple directories when search paths are examined.
 	
-	We currently use \cvmfs\ as part of the \cernvm\ project.
-	ATLAS and LHCb experiments use it to distribute software and conditions data to Grid sites.
-	We host and distribute several hundred gigabytes of software, amongst others experiment software for ATLAS, CMS, LHCb, NA61 as well as software for the LCD collaboration.
+	\cvmfs\ is actively used by small and large HEP collaborations.
+	In many cases, it replaces package managers and shared software areas on cluster file systems as means to distribute the software used to process experiment data.
 }
 
 \tableofcontents
@@ -96,32 +99,23 @@
 
 \include{cpt-overview}
 
-\include{cpt-quickstart}
+%\include{cpt-quickstart}
 
-\include{cpt-install}
+%\include{cpt-configure}
 
-\include{cpt-squid}
+%\include{cpt-squid}
 
 %\include{cpt-replica}
 
-\include{cpt-repo}
+%\include{cpt-repo}
 
-\include{cpt-details}
+%\include{cpt-details}
 
 %\chapter{Sample Infrastructure Setup}
 
-%\begin{figure}
-%	\begin{center}
-%		\includegraphics[width=0.8\linewidth]{infra}
-%	\end{center}
-%	\caption{Schematic infrastructure setup}
-%	\label{fig:infrastructure}
-%\end{figure}
-
 \appendix
-\include{apx-rpms}
 %\include{apx-releasemgr}
-%\include{apx-crowdcache}
+%\include{apx-rpms}
 
 \pagestyle{plain}
 \bibliographystyle{alpha}

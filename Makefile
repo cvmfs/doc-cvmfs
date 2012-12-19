@@ -1,19 +1,20 @@
 
 .PHONY: clean draft preview 
 
+VERSION = 2.1-0
+
 BIBSRC = references.bib
 PKGSRC = packages.tex
 TEXSRC = cvmfstech.tex \
   cpt-overview.tex \
   cpt-quickstart.tex \
-  cpt-install.tex \
+  cpt-configure.tex \
   cpt-squid.tex \
   cpt-repo.tex \
   cpt-details.tex \
   apx-rpms.tex
 FIGSRC = figures/cernlogo.tex \
   figures/cvmfs.pdf \
-  figures/cdrom-orange.pdf \
   figures/webserver.pdf \
   figures/releasemanager.pdf \
   figures/sqlite.pdf \
@@ -24,7 +25,6 @@ FIGSRC = figures/cernlogo.tex \
   figures/sign-cert.pdf \
   figures/sign.pdf
 TIKZSRC = figures/concept-generic.tex \
-  figures/comparison.tex \
   figures/fuse.tex \
   figures/install.tex \
   figures/cvmfs-blocks.tex \
@@ -35,55 +35,32 @@ TIKZSRC = figures/concept-generic.tex \
 SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
 MAINFILE = cvmfstech
 
-all: cvmfstech.pdf
+all: $(MAINFILE)-$(VERSION).pdf
 
-cvmfstech.pdf: $(SOURCES) 
-	pdflatex -interaction=batchmode $(MAINFILE) > /dev/null
-	bibtex $(MAINFILE) | grep -i warning || true
-	makeindex $(MAINFILE).idx
-	pdflatex -interaction=batchmode $(MAINFILE) > /dev/null
-	pdflatex -interaction=batchmode $(MAINFILE) | grep -i 'overful|underful' || true
-	thumbpdf $(MAINFILE)
-	pdflatex -interaction=batchmode $(MAINFILE) > /dev/null
+$(MAINFILE)-$(VERSION).pdf: $(SOURCES)
+	sed 's/---VERSION---/$(VERSION)/' $(MAINFILE).tex > $(MAINFILE).tmp.tex
+	pdflatex -interaction=batchmode $(MAINFILE).tmp > /dev/null
+	bibtex $(MAINFILE).tmp | grep -i warning || true
+	makeindex $(MAINFILE).tmp.idx
+	pdflatex -interaction=batchmode $(MAINFILE).tmp > /dev/null
+	pdflatex -interaction=batchmode $(MAINFILE).tmp | grep -i 'overful|underful' || true
+	thumbpdf $(MAINFILE).tmp
+	pdflatex -interaction=batchmode $(MAINFILE).tmp > /dev/null
+	mv $(MAINFILE).tmp.pdf $(MAINFILE)-$(VERSION).pdf
 
-draft: $(SOURCES) 
-	head -n 1 cvmfstech.tex | sed s/final/draft/ > cvmfstech.draft.tex
-	tail +2 cvmfstech.tex | sed 's/%_DRAFT//' >> cvmfstech.draft.tex
-	pdflatex -interaction=batchmode cvmfstech.draft.tex > /dev/null 
-	bibtex cvmfstech.draft | grep -i warning || true
-	makeindex cvmfstech.draft.idx
-	pdflatex -interaction=batchmode cvmfstech.draft.tex > /dev/null
-	pdflatex -interaction=batchmode cvmfstech.draft.tex | grep -i 'overful|underful' || true
-	mv cvmfstech.draft.pdf cvmfstech.pdf
-	open cvmfstech.pdf
-	
-preview: $(SOURCES) 
-	cat cvmfstech.tex | sed 's/%_DRAFT//' >> cvmfstech.preview.tex
-	pdflatex -interaction=batchmode cvmfstech.preview.tex > /dev/null 
-	bibtex cvmfstech.preview | grep -i warning || true
-	makeindex cvmfstech.preview.idx
-	pdflatex -interaction=batchmode cvmfstech.preview > /dev/null
-	pdflatex -interaction=batchmode cvmfstech.preview | grep -i 'overful|underful' || true
-	#thumbpdf cvmfstech.preview
-	#pdflatex -interaction=batchmode cvmfstech.preview > /dev/null
-	pdfopt cvmfstech.preview.pdf cvmfstech.preview.pdf.opt
-	rm -f cvmfstech.preview.pdf
-	mv cvmfstech.preview.pdf.opt cvmfstech.preview.pdf
-
-	
 clean:
 	rm -f *.aux *.log figures/*.log
-	rm -f $(MAINFILE).pdf \
-  $(MAINFILE).synctex.gz \
-  $(MAINFILE).rai \
-  $(MAINFILE).tpt \
-  $(MAINFILE).aux \
-  $(MAINFILE).bbl \
-  $(MAINFILE).blg \
-  $(MAINFILE).log \
-  $(MAINFILE).out \
-  $(MAINFILE).toc \
-  $(MAINFILE).idx \
-  $(MAINFILE).ind \
-  $(MAINFILE).ilg	
+	rm -f $(MAINFILE).tmp* $(MAINFILE)*.pdf \
+  $(MAINFILE)*.synctex.gz \
+  $(MAINFILE)*.rai \
+  $(MAINFILE)*.tpt \
+  $(MAINFILE)*.aux \
+  $(MAINFILE)*.bbl \
+  $(MAINFILE)*.blg \
+  $(MAINFILE)*.log \
+  $(MAINFILE)*.out \
+  $(MAINFILE)*.toc \
+  $(MAINFILE)*.idx \
+  $(MAINFILE)*.ind \
+  $(MAINFILE)*.ilg	
 	

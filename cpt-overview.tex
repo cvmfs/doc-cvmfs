@@ -1,58 +1,59 @@
 \chapter{Overview}
 
-The \cernvmfs\ (\cvmfs) is a client-server file system developed to deliver software distributions onto virtual machines in a fast, scalable, and reliable way.
-The delivered software is intended to reside in the form of \indexed{binaries} on a \indexed{repository server}, \ie the repository server reflects usually the result of a \texttt{make install}.
+The \cernvmfs\ (\cvmfs) is a read-only file system designed to deliver high energy physics (HEP) experiment analysis software onto virtual machines and Grid worker nodes in a fast, scalable, and reliable way.
+\cvmfs\ decouples the underlying operating system from the experiment defined software stack.
+Files and file metadata are aggressively cached and downloaded on demand.
+For the distribution of files, \cvmfs\ uses a standard HTTP transport, which allows exploitation of a variety of web caches, including commercial content delivery networks.
+\cvmfs\ ensures data authenticity and integrity over possibly untrusted caches and connections while keeping all distributed data cacheable.
 
-\cvmfs\ is implemented as \indexed{File System in User Space} (FUSE\index{FUSE|see{File System in User Space}})~\cite{fuse} module. 
-Figure~\ref{fig:concept} shows general idea of distributing software with \cernvm\ and \cvmfs.
+The \cvmfs\ software comprises client-side software to mount ``\cvmfs\ repositories'' (volumes) as well as a server-side toolkit to create such distributable \cvmfs\ repositories.
+Figure~\ref{fig:concept} shows an overview of software distribution with \cvmfs.
 Figure~\ref{fig:fuse} shows how \cvmfs\ interlocks with Fuse and a web server in order to deliver files.
-It has been designed to make a directory tree stored on a \indexed{web server} look like a local read-only file system on the virtual machine. 
-On the client side it requires only outgoing \indexed{HTTP} connectivity to a web server and/or an HTTP proxy server. 
-Assuming that the files are read only, \cvmfs\ does aggressive file level caching. 
-Both files and file metadata are cached on the local disk as well as on \indexed{proxy server}s, allowing the file system to scale to a very large number of clients.
 
-The first implementation of \cvmfs\ was based on \product{grow-fs}~\cite{parrot, growfs09}, which was originally provided as one of the private file system options available in \indexed{Parrot}. 
+The first implementation of \cvmfs\ was based on \product{grow-fs}~\cite{parrot05, growfs09}, which was originally provided as one of the private file system options available in \indexed{Parrot}. 
 Parrot traps the system I/O calls and that is resulting in a performance penalty and occasional compatibility problems with some applications. 
-The principal new features in \cvmfs\ compared to \product{grow-fs} are:
+The principal differences of \cvmfs\ compared to \product{grow-fs} are:
 \begin{itemize}
 	\item Using FUSE kernel module allows for in-kernel caching of file data and file attributes.
 	\item Use of content addressable storage format resulting in immutable files and automatic file de-duplication
 	\item Capability to work in \indexed{offline mode} providing that all required files are cached.
-	\item Possibility to split a directory hierarchy into sub catalogues.
+	\item Possibility to split a directory hierarchy into sub catalogues at user-defined levels.
 	\item Transparent file compression/decompression.
 	\item Dynamical expansion of environment variables embedded in \indexed{symbolic link}s\index{symlink|see{symbolic link}}.
-	\item Capability to cope with digitally signed (\indexed{X.509}) file catalogs.
+	\item Digitally signed repositories.
 	\item Automatic updates of file catalogs controlled by a \indexed{time to live}\index{TTL|see{time to live}} stored inside file catalogs
-	\item Automatic selection of mirror servers based on network round trip time.
+	\item Automatic server selection.
 	\item Random selection from a set of forward proxy servers, which results in automatic load-balancing of proxy servers
 \end{itemize}
 
-Architectural-wise, \cvmfs\ is comparable to a network file system (Figure~\ref{fig:classification}).
-Though the task of installing software is done remotely on the repository side, software is still executed locally under control of the user.
-This is in contrast to software as a service where control is completely handed over to a third party.
-In contrast to general purpose network file systems such as \nfs, \cvmfs\ is particularly crafted for fast and scalable software distribution.
+%\cvmfs\ can be seen as network file system (Figure~\ref{fig:classification}).
+%Though the task of installing software is done remotely on the repository side, software is still executed locally under control of the user.
+%This is in contrast to software as a service where control is completely handed over to a third party.
+In contrast to general purpose network file systems such as \nfs\ or \afs, \cvmfs\ is particularly crafted for fast and scalable software distribution.
 For instance, running and compiling software might easily overload \nfs\ or \product{Lustre}~\cite{lustre03} shared software areas.
+
+In order to create and update a \cvmfs\ repository, a distinguished machine, the so-called \emph{Release Manager Machine}, is used.
+On such a release manager machine, a \cvmfs\ repository is mounted in read/write mode by means of a union file system~\cite{unionfs04}.
+The union file system overlays the \cvmfs\ read-only mount point by a writable scratch area.
+The \cvmfs\ server tool kit merges changes written to the scratch area into the \cvmfs\ repository.
+Merging and publishing changes can be triggered at user-defined points in time; it is an atomic operation.
+As such, a \cvmfs\ repository is similar to a repository in the sense of a versioning system.
 
 \begin{figure}
 	\begin{center}
 		\resizebox{\textwidth}{!}{\input{figures/concept-generic}}
 	\end{center}
-	\caption{Building blocks of \cernvm\ 2. \cernvm\ is built around a minimal SL5. Experiment software is loaded file by file on demand and is locally cached.}
+	\caption{A \cvmfs\ client provides a virtual file system that loads data only on access.  
+		In this example, all releases of a sofware package (such as an HEP experiment framework) are hosted as a \cvmfs\ repository on a web server.}
 	\label{fig:concept}
-\end{figure}
-
-\begin{figure}
-	\begin{center}
-		\input{figures/comparison}
-	\end{center}
-	\caption{Classification of \cvmfs\ and several alternative options for software installation.}
-	\label{fig:classification}
 \end{figure}
 
 \begin{figure}
 	\begin{center}
 		\input{figures/fuse}
 	\end{center}
-	\caption{Process of opening a file. \cvmfs\ resolves the name by means of an SQLite catalog, which is prepended by a memory cache. Downloaded files are verified against the cryptographic hash of the corresponding catalog entry. The \texttt{read()} and the \texttt{stat()} system call can be entirely served from the in-kernel file system buffers.}
+	\caption{Process of opening a file. \cvmfs\ resolves the name by means of an SQLite catalog, which is prepended by a memory cache. 
+		Downloaded files are verified against the cryptographic hash of the corresponding catalog entry. 
+		The \texttt{read()} and the \texttt{stat()} system call can be entirely served from the in-kernel file system buffers.}
 	\label{fig:fuse}
 \end{figure}
