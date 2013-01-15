@@ -24,7 +24,8 @@ FIGSRC = figures/cernlogo.tex \
   figures/fingerprint.pdf \
   figures/sign-cert.pdf \
   figures/sign.pdf
-TIKZSRC = figures/concept-generic.tex \
+TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex \
+  figures/concept-generic.tex \
   figures/fuse.tex \
   figures/install.tex \
   figures/cvmfs-blocks.tex \

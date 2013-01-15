@@ -1,52 +1,22 @@
 \chapter{Getting Started}
 \label{sct:start}
 
-This section describes how to install \cvmfs\ on Scientific Linux 5/6 for use with \cernvm\ repositories.
-For a list of currently hosted repositories at \cern\ see Table~\ref{tbl:repos}.
-\begin{table}[t]
-	\begin{center}
-		\begin{tabular}{l|l}
-			\bf Repository & \bf Description \\\hline
-			atlas.cern.ch & ATLAS experiment software \\
-			atlas-condb.cern.ch & ATLAS conditions database \\
-			atlas-nightlies.cern.ch & ATLAS nightly builds \\
-			cms.cern.ch & CMS experiment software \\
-			lhcb.cern.ch & LHCb experiment software \\
-			lhcb-conddb.cern.ch & LHCb conditions database \\
-			na61.cern.ch & NA61 experiment software \\
-			hone.cern.ch & H1 experiment software \\
-			boss.cern.ch & BES experiment software \\
-			lcd.cern.ch & Software of the Linear Collider Studies collaboration \\
-			grid.cern.ch & Grid User Interface \\
-			sft.cern.ch & LCG application's area software \\
-			geant4.cern.ch & Geant4 software \\ 
-		\end{tabular}
-	\end{center}
-	\caption{Repositories hosted at \cern}
-	\label{tbl:repos}
-\end{table}
-\cvmfs\ comes as a source tarball and as an rpm for Scientific Linux on x86 and x86\_64 architectures.
-Current versions are available from \url{https://cernvm.cern.ch/portal/downloads}.
+This section describes how to install the \cvmfs\ client.
+\cvmfs\ is supported on Scientific Linux 5 and 6, Ubuntu 12.04, openSuSE 12.2, Fedora 17, and Mac OS X.
 
-\section{Setting up yum for \cvmfs}
-If you want to use yum, there is a repository available at \url{http://cvmrepo.web.cern.ch/cvmrepo/yum}.
-The \texttt{cvmfs-release} package can be used to add the \cvmfs\ repository to your local yum.
-Use the following script to download and install the \texttt{cvmfs-release} RPM:
+\section{Getting the Software}
+The \cvmfs\ source code and binary packages are available under \url{https://cernvm.cern.ch/portal/downloads}.
+Binary packages are produced for \rpm, \dpkg, and Mac OS X (.pkg).
+\yum\ repositories for \SI{64}{\bit} and \SI{32}{\bit} Scientific Linux 5 and 6 are available under \url{http://cvmrepo.web.cern.ch/cvmrepo/yum}.
+The \texttt{cvmfs-release} packages can be used to add a \cvmfs\ repository to the local \yum\ installation.
+The \texttt{cvmfs-release} packages are available under \url{https://cernvm.cern.ch/portal/downloads}.
+
+The \cvmfs\ client is not relocatable and needs to be installed under /usr.
+In order to compiling from sources, use the following \cmake\ command:
 \begin{verbatim}
-RELEASE=$(rpm -q --queryformat '%{version}\n' sl-release)
-RELEASE_MAJOR=$(echo $RELEASE | cut -d. -f1)
-ARCH=$(uname -m)
-wget http://cvmrepo.web.cern.ch/cvmrepo/yum/cvmfs/EL/$RELEASE/$ARCH/\
-cvmfs-release-2-2.el${RELEASE_MAJOR}.noarch.rpm
-sudo rpm -i cvmfs-release-2-2.el${RELEASE_MAJOR}.noarch.rpm
+  cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .
 \end{verbatim}
-For Ubuntu and SuSE, compile from sources using the following configure options: 
-\begin{verbatim}
-  --enable-sqlite3-builtin --enable-libcurl-builtin \
-  --enable-libfuse-builtin --enable-libfuse-builtin \
-  --enable-zlib-builtin --enable-mount-scripts --disable-server \
-  --prefix=/usr
-\end{verbatim}
+
 
 \section{Installation}
 To install, proceed according to the following steps:
