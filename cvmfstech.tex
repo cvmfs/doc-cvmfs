@@ -11,6 +11,9 @@
 \providecommand{\cernvm}{{\scshape CernVM}}
 \providecommand{\cvmfs}{{\scshape CernVM-FS}}
 \providecommand{\redirfs}{{\scshape redirfs}}
+\providecommand{\autofs}{{\scshape autofs}}
+\providecommand{\fuse}{{\scshape Fuse}}
+\providecommand{\fusex}{{\scshape Fuse4X}}
 \providecommand{\nfs}{{\scshape nfs}}
 \providecommand{\afs}{{\scshape AFS}}
 \providecommand{\rpm}{{\scshape rpm}}
@@ -30,7 +33,7 @@
 
 \begin{document}
 \selectlanguage{english}
-\renewcommand\today{December 2012}
+\renewcommand\today{January 2013}
 
 \pagestyle{empty}
 \begin{titlepage}
@@ -81,7 +84,7 @@
 
 \abstract{
 	The \cernvmfs\ (\cvmfs) provides a scalable, reliable and low-maintenance software distribution service.
-	It was developed to assist High Energy Physics (HEP) collaborations to deploy their software on the worldwide-distributed computing infrastructure used to run their data processing applications.
+	It was developed to assist High Energy Physics (HEP) collaborations to deploy software on the worldwide-distributed computing infrastructure used to run data processing applications.
 	\cvmfs\ is implemented as a POSIX read-only file system in user space (a FUSE module).
 	Files and directories are hosted on standard web servers and mounted in the universal namespace \texttt{/cvmfs}. 
 	Internally, it uses content-addressable storage and Merkle trees in order to maintain file data and meta-data.

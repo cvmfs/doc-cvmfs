@@ -1,12 +1,12 @@
 \chapter{Overview}
 
-The \cernvmfs\ (\cvmfs) is a read-only file system designed to deliver high energy physics (HEP) experiment analysis software onto virtual machines and Grid worker nodes in a fast, scalable, and reliable way.
-\cvmfs\ decouples the underlying operating system from the experiment defined software stack.
-Files and file metadata are aggressively cached and downloaded on demand.
+The \cernvmfs\ (\cvmfs) is a read-only file system designed to deliver high energy physics (HEP) experiment analysis software onto virtual machines and grid worker nodes in a fast, scalable, and reliable way.
+%\cvmfs\ decouples the underlying operating system from the experiment defined software stack.
+Files and file metadata are downloaded on demand and aggressively cached.
 For the distribution of files, \cvmfs\ uses a standard HTTP transport, which allows exploitation of a variety of web caches, including commercial content delivery networks.
-\cvmfs\ ensures data authenticity and integrity over possibly untrusted caches and connections while keeping all distributed data cacheable.
+\cvmfs\ ensures data authenticity and integrity over these possibly untrusted caches and connections. %while keeping all distributed data cacheable.
 
-The \cvmfs\ software comprises client-side software to mount ``\cvmfs\ repositories'' (volumes) as well as a server-side toolkit to create such distributable \cvmfs\ repositories.
+The \cvmfs\ software comprises client-side software to mount ``\cvmfs\ repositories'' (similar to AFS volumes) as well as a server-side toolkit to create such distributable \cvmfs\ repositories.
 Figure~\ref{fig:concept} shows an overview of software distribution with \cvmfs.
 Figure~\ref{fig:fuse} shows how \cvmfs\ interlocks with Fuse and a web server in order to deliver files.
 
@@ -14,8 +14,8 @@ The first implementation of \cvmfs\ was based on \product{grow-fs}~\cite{parrot0
 Parrot traps the system I/O calls and that is resulting in a performance penalty and occasional compatibility problems with some applications. 
 The principal differences of \cvmfs\ compared to \product{grow-fs} are:
 \begin{itemize}
-	\item Using FUSE kernel module allows for in-kernel caching of file data and file attributes.
-	\item Use of content addressable storage format resulting in immutable files and automatic file de-duplication
+	\item Use of the the Fuse kernel module~\cite{fuse} that comes with in-kernel caching of file data and file attributes.
+	\item Use of a content addressable storage format resulting in immutable files and automatic file de-duplication
 	\item Capability to work in \indexed{offline mode} providing that all required files are cached.
 	\item Possibility to split a directory hierarchy into sub catalogues at user-defined levels.
 	\item Transparent file compression/decompression.
@@ -30,7 +30,8 @@ The principal differences of \cvmfs\ compared to \product{grow-fs} are:
 %Though the task of installing software is done remotely on the repository side, software is still executed locally under control of the user.
 %This is in contrast to software as a service where control is completely handed over to a third party.
 In contrast to general purpose network file systems such as \nfs\ or \afs, \cvmfs\ is particularly crafted for fast and scalable software distribution.
-For instance, running and compiling software might easily overload \nfs\ or \product{Lustre}~\cite{lustre03} shared software areas.
+Running and compiling software that is hosted on shared areas is typically hard for general purpose network file systems.
+%For instance, running and compiling software might easily overload \nfs\ or \product{Lustre}~\cite{lustre03} shared software areas.
 
 In order to create and update a \cvmfs\ repository, a distinguished machine, the so-called \emph{Release Manager Machine}, is used.
 On such a release manager machine, a \cvmfs\ repository is mounted in read/write mode by means of a union file system~\cite{unionfs04}.
@@ -52,7 +53,7 @@ As such, a \cvmfs\ repository is similar to a repository in the sense of a versi
 	\begin{center}
 		\input{figures/fuse}
 	\end{center}
-	\caption{Process of opening a file. \cvmfs\ resolves the name by means of an SQLite catalog, which is prepended by a memory cache. 
+	\caption{Opening a file on \cvmfs. \cvmfs\ resolves the name by means of an SQLite catalog, which is prepended by a memory cache. 
 		Downloaded files are verified against the cryptographic hash of the corresponding catalog entry. 
 		The \texttt{read()} and the \texttt{stat()} system call can be entirely served from the in-kernel file system buffers.}
 	\label{fig:fuse}
