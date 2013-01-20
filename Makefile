@@ -12,7 +12,8 @@ TEXSRC = cvmfstech.tex \
   cpt-squid.tex \
   cpt-repo.tex \
   cpt-details.tex \
-  apx-rpms.tex
+  apx-rpms.tex \
+  apx-parameters.tex
 FIGSRC = figures/cernlogo.tex \
   figures/cvmfs.pdf \
   figures/webserver.pdf \

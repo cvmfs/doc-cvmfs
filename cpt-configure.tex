@@ -1,67 +1,183 @@
 \chapter{Client Configuration}
-\label{sct:install}
-This section describes how to manually install the \cvmfs\ client from the source tarball.
-Current versions are available from \url{https://cernvm.cern.ch/portal/downloads}.
-In order to compile \cvmfs\ from the tarball, you need a Linux system having installed the packets listed in Table \ref{tab:requirements}.
-\begin{table}
-	\begin{center}
-		\begin{tabular}{l|ccc}
-			\centering\bf Package & \bf Client & \bf Server & \bf Compile \\\hline
-			kernel built tree & & & \checkmark \\
-			Fuse kernel module & \checkmark & & \checkmark\\
-			fusermount utility & \checkmark & & \\
-			autofs & \checkmark & & \\
-			openssl $\geq 0.9.7\text{a}$ & \checkmark & \checkmark & \checkmark\\
-			libz $\geq 1.23$ & (\checkmark) & (\checkmark) & (\checkmark)\\
-			libcurl $\geq 7.15$ & (\checkmark) & & (\checkmark)\\
-			sqlite3 $\geq 3.3.9$ & (\checkmark) & (\checkmark) & (\checkmark)\\
-			libgomp $\geq 4.4.0$ & & \checkmark & \checkmark \\
-			gcc, g++ $\geq 4.1$ &  & & \checkmark\\
-			autotools & & & \checkmark\\
-			pkg-config & & & \checkmark\\
-		\end{tabular}
-	\end{center}
-	\caption{System requirements for \cvmfs. Packages with checkmarks in parantheses are shipped with \cvmfs\ and can be compiled and linked statically.}
-	\label{tab:requirements}
-\end{table}
 
-\section{Installation of the \cvmfs\ Fuse Module}
-
-Download and uncompress the source tarball.
-The \cvmfs\ build system is created with \product{automake}.
-So compilation is done by the usual configure, make, make install procedure.
-We recommend to configure using
-\begin{lstlisting}[language=bash]
-./configure --prefix=/usr --disable-server \
-  --enable-sqlite3-builtin --enable-libcurl-builtin \
-  --enable-zlib-builtin --enable-mount-scripts
-\end{lstlisting}
-The package installs the \texttt{cvmfs2}, \texttt{cvmfs2\_debug}, \texttt{cvmfs\_fsck}, \texttt{cvmfs\_config}, and \texttt{cvmfs-talk} executables.
-In addition, it installs configuration files to /etc/cvmfs as well as the mount helpers \texttt{mount.cvmfs} and \texttt{umount.cvmfs} to /sbin and the \product{autofs} map \texttt{auto.cvmfs} to /etc.
-
-
-\section{Configuration of \cvmfs}
-
-In the default configuration, you do not have to mount or un-mount \cvmfs\ repositories manually; this is done by \product{automount}.
-Starting from the base directory /cvmfs the repositories are mounted on first access (ref.~Section~\ref{sct:start}).
-The local configuration of \cvmfs\ is controlled by a couple of files in \texttt{/etc/cvmfs} listed in Table~\ref{tbl:configfiles}.
-For every .conf file except for site.conf you can create a .local file having the same prefix in order to customize the configuration.
+\section{Structure of /etc/cvmfs}
+The local configuration of \cvmfs\ is controlled by several files in \texttt{/etc/cvmfs} listed in Table~\ref{tbl:configfiles}.
+For every .conf file except for site.conf you can create a corresponding .local file having the same prefix in order to customize the configuration.
 The .local file will be sourced after the corresponding .conf file.
+
+In a typical installation, a handful of parameters need to be set in /etc/cvmfs/default.local.
+Most likely, this is the list of repositories (\texttt{CVMFS\_REPOSITORIES}), HTTP proxies (see Section~\ref{sct:config:network}), and perhaps the cache directory and the cache quota (see Section~\ref{sct:config:cache})
+In a few cases, one might change a parameter for a specific domain or a specific repository, \eg provide an exclusive cache for a specific repository (see Section~\ref{sct:config:cache}).
+
+The .conf and .local configuration files are key-value pairs in the form \texttt{PARAMETER=value}.
+They are sourced by /bin/sh.
+Hence, a limited set of shell commands can be used inside these files including comments, \texttt{if} clauses, parameter evaluation, and shell math (\texttt{\$((\dots))}).
+Special characters have to be quoted.
+For instance, instead of \texttt{CVMFS\_HTTP\_PROXY=p1;p2}, write \texttt{CVMFS\_HTTP\_PROXY='p1;p2'} in order to avoid parsing errors.
+For a list of all parameters, see Appendix~\ref{apx:parameters}.
+
 \begin{table}
 	\begin{center}
 		\begin{tabularx}{\linewidth}{l|X}
 			{\bf\centering File} & {\bf\centering Purpose} \\\hline
-			\texttt{config.sh} & Set of helper functions for the events mount, un-mount, and initialization of a repository \\
+			\texttt{config.sh} & Set of internal helper functions \\
 			\texttt{default.conf} & Set of parameters reflecting the standard configuration \\
-			\texttt{site.conf} & Site specific set of parameters that overwrites the standard configuration.  Do not touch.  This file is used by the \cernvm\ web interface. \\
+			\texttt{site.conf} & Site specific set of parameters that overwrites the standard configuration.  
+				This file is used by the \cernvm\ contextualization. \\
 			\texttt{domain.d/\$domain.conf} & Domain-specific parameters and implementations of the functions in \texttt{config.sh} \\
 			\texttt{config.d/\$repository.conf} & Repository-specific parameters and implementations of the functions in \texttt{config.sh} \\
-			\texttt{keys/\$domain.pub} & Public keys used to verify the digital signature of file catalogs \\
+			\texttt{keys/*.pub} & Public keys used to verify the digital signature of file catalogs \\
 		\end{tabularx}
 	\end{center}
 	\caption{List of configuration files for \cvmfs\ in \texttt{/etc/cvmfs}}
 	\label{tbl:configfiles}
 \end{table}
+
+
+\section{Cache Settings}
+\label{sct:config:cache}
+Downloaded files will be stored in a local cache directory.
+The \cvmfs\ cache has a soft quota; as a safety margin, the partition hosting the cache should provide \SI{10}{\percent} more space than the soft quota limit.
+Once the quota limit is reached, \cvmfs\ will automatically remove files from the cache according to the least recently used policy~\cite{lru06}.
+Removal of files is performed bunch-wise until half of the maximum cache size has been freed.
+Currently, \cvmfs\ is not able to access files in the repository that are larger than half of the cache quota.
+The quota limit can be set in Megabytes by \texttt{CVMFS\_QUOTA\_LIMIT}.
+For typical repositories, a few Gigabytes make a good quota limit.
+For repositories hosted at \cern, quota recommendations can be found under \url{http://cernvm.cern.ch/portal/cvmfs/examples}.
+
+The cache directory needs to be on a local file system in order to allow each host the accurate accounting of the cache contents; on a network file system, the cache can potentially be modified by other hosts.
+Furthermore, the cache directory is used to create (transient) sockets and pipes, which is usually only supported by a local file system such as ext3 or XFS.
+The location of the cache directory can be set by \texttt{CVMFS\_CACHE\_BASE}.
+
+Each repository can either have an exclusive cache or join the \cvmfs\ shared cache.
+The shared cache enforces a common quota for all repositories used on the host.
+File duplicates across repositories are stored only once in the shared cache.
+The quota limit of the shared directory should be at least the maximum of the recommended limits of its participating repositories.
+In order to have a repository not join the shared cache but use an exclusive cache, set \texttt{CVMFS\_SHARED\_CACHE=no}.
+
+\section{Network Settings}
+\label{sct:config:network}
+\cvmfs\ uses HTTP~\cite{rfc1945,rfc2616} for data transfer.
+Repository data can be replicated to multiple web servers and cached by standard web proxies such as Squid.
+In a typical setup, repositories are replicated to a handful of web servers in different locations.
+These replicas form the \cvmfs\ Stratum 1 service, whereas the replication source server is the \cvmfs\ Stratum 0 server.
+On every cluster of machines, there should be two or more web proxy servers that \cvmfs\ can use (see Section~\ref{sct:squid}).
+These site-local web proxies reduce the network latency for the \cvmfs\ clients and they reduce the load for the Stratum 1 service.
+\cvmfs\ supports choosing a random proxy for load-balancing and automatic fail-over to other hosts and proxies in case of network errors.
+Roaming clients can connect directly to the Stratum 1 service.
+
+\subsection{Stratum 1 List}
+Tp specify the Stratum 1 servers, set \texttt{CVMFS\_SERVER\_URL} to a semicolon-separated list of known replica servers (enclose in quotes). 
+The so defined URLs are organized as a ring buffer.
+Whenever download of files fails from a server, \cvmfs\ automatically switches to the next mirror server.
+For repositories under the cern.ch domain, the Stratum 1 servers are specified in /etc/cvmfs/domain.d/cern.ch.conf.
+
+It is recommended to adjust the order of Stratum 1 server so that the closest servers are used with priority.
+For roaming clients (\ie clients not using a proxy server), the Stratum 1 servers can be automatically sorted according to round trip time by \texttt{cvmfs\_talk host probe} (see Section~\ref{sct:tools}).
+Otherwise, the proxy server would invalidate round trip time measurement.
+
+\subsection{Proxy Lists}
+\cvmfs\ uses a dedicated HTTP proxy configuration, independent from system-wide settings.
+Instead of a single proxy, \cvmfs\ uses a \emph{chain of load-balanced proxy groups}.
+Proxies within the same proxy group are considered as a load-balance group and a proxy is selected randomly.
+If a proxy fails, \cvmfs\ automatically switches to another proxy from the current group.
+If all proxies from a group have failed, \cvmfs\ switches to the next proxy group.
+After probing the last proxy group in the chain, the first proxy is probed again.
+To avoid endless loops, for each file download the number of switches is restricted by the total number of proxies.
+
+The chain of proxy groups is specified by a string of semicolon separated entries, each group is a list of pipe separated hostnames\footnote{The usual proxy notation rules apply, like \texttt{http://proxy1:8080|http://proxy2:8080;DIRECT}}.
+The \texttt{DIRECT} keyword for a hostname avoids using proxies.
+
+Multiple proxy groups are often organized as a primary proxy group at the local site and backup proxy groups at remote sites.
+In order to avoid \cvmfs\ being stuck with proxies at a remote site after a fail-over, \cvmfs\ will automatically retry to use proxies from the primary group after some time.
+The delay for re-trying a proxies from the primary group is set in seconds by \texttt{CVMFS\_PROXY\_RESET\_AFTER}.
+The distinction of primary and backup proxy groups can be turned off by setting this parameter to 0.
+
+\subsection{Timeouts}
+\cvmfs\ tries to gracefully recover from broken network links and temporarily overloaded paths.
+The timeout for connection attempts and for very slow downloads can be set by \texttt{CVMFS\_TIMEOUT} and \texttt{CVMFS\_TIMEOUT\_DIRECT}.
+The two timeout parameters apply to a connection with a proxy server and to a direct connection to a Stratum 1 server, respectively.
+A download is considered to be ``very slow'' if the transfer rate is below 100 Bytes/second for more than the timeout interval.
+A very slow download is treated like a broken connection.
+
+On timeout errors and on connection failures (but not on name resolving failures), \cvmfs\ will retry the path using an exponential backoff.
+This introduces a jitter to many concurrent requests of a cluster, allowing a proxy server or web server to serve all the clients.
+\texttt{CVMFS\_MAX\_RETRIES} sets the number of retries on a given path before \cvmfs\ tries to switch to another proxy or host. 
+The overall number of requests with a given proxy/host combination is \texttt{\$CVMFS\_MAX\_RETRIES}+1.
+\texttt{CVMFS\_BACKOFF\_INIT} sets
+
+CVMFS_BACKOFF_INIT
+Seconds for the maximum initial backoff.  The actual initial backoff is picked with milliseconds precision randomly in the interval [1, $CVMFS_BACKOFF_INIT*1000]
+With every retry, the backoff is then doubled.
+
+CVMFS_BACKOFF_MAX
+Maximum backoff in seconds.  This is to stop the exponential growth of the backoff at some point.
+
+The default parameters in /etc/cvmfs/default.conf are probably too low for the NFS use case.  It probably also makes sense to set the initial backoff anywhere near the network timeout, although from the top of my head I don't know of any rule to back up my guts feeling.
+
+Btw, retrying will only be done if the network connection couldn't be established or if it timed out.  It will not take place in case of other network failure, e.g. if the host/proxy name is unresolvable.  
+
+On timeout, \cvmfs\ switches to the next proxy server and/or host if defined.
+Otherwise it returns with an EIO error to the application.
+\cvmfs\ distinguishes between a proxied connection and a direct connetion and allows different timouts for the two cases.
+
+\cvmfs\ uses exponential backoff for download failures.
+That prevents request storms to web servers from applications trying to open a file in an endless loop.
+The backoff is triggered by consequtive download errors within 10 seconds.
+
+\section{NFS Server Mode}
+In case there is no local hard disk space available on a cluster of worker nodes, a single \cvmfs\ client can be exported via NFS~\cite{rfc1813,rfc3530} to these worker nodes.
+This mode of deployment will inevitably introduce a performance bottleneck and a single point of failure and should be only used if necessary.
+
+NFS export requires Linux kernel >= 2.6.27 on the NFS server. 
+It works for Scientific Linux 6 but not for Scientific Linux 5. 
+NFS clients can run both SL5 and SL6.
+
+For proper NFS support, set \texttt{CVMFS\_NFS\_SOURCE=yes}. 
+When this option is enabled, upon mount an additionally directory nfs\_maps.\$repository\_name appears in the \cvmfs\ cache directory.
+These \emph{NFS maps} store the virtual inode \cvmfs\ issues for any accessed path.
+The virtual inode may be requested by NFS clients anytime later.
+As the NFS server has no control over the lifetime of client caches, entries in the NFS maps cannot be removed.
+
+Typically, every entry in the NFS maps requires some 150-200 Bytes. 
+A recursive \texttt{find} on /cvmfs/atlas.cern.ch with 25 million entries, for instance, would add up \SI{5}{\giga\byte} in the cache directory. 
+For a \cvmfs\ instance that is exported via NFS, the safety margin for the NFS maps needs be taken into account.
+It also might be necessary to monitor the actual space consumption.
+
+For decent performance, the amount of memory given to the meta-data cache should be increased. 
+By default, this is 16M.
+It can be increased, for instance, to 256M by setting \texttt{CVMFS\_MEMCACHE\_SIZE} to 256.
+
+A sample entry /etc/exports
+\begin{verbatim}
+  /cvmfs/atlas.cern.ch 172.16.192.0/24(ro,sync,no_root_squash,\
+    no_subtree_check,fsid=101)
+\end{verbatim}
+A sample entry /etc/fstab entry on a client:
+\begin{verbatim}
+  172.16.192.210:/cvmfs/atlas.cern.ch /cvmfs/atlas.cern.ch nfs \
+    nfsvers=3,noatime,ac,actimeo=60 0 0
+\end{verbatim}
+
+
+\section{Private File System Mountpoints}
+privately by users (in private location)
+not considered by tools (cvmfs\_talk, cvmfs\_config)
+appears as fuse fs name (like sshfs)
+
+
+\section{Auxiliary Tools}
+\label{sct:tools}
+
+\subsection{cvmfs\_fsck}
+
+\subsection{cvmfs\_config}
+
+\subsection{cvmfs\_talk}
+
+\subsection{Other}
+df -h -i, 
+Nagios check
 
 The variables you can set in /etc/cvmfs/default.local roughly correspond to mount options of the Fuse module.
 See Section~\ref{sct:mount} for a comprehensive list of mount options.
