@@ -101,29 +101,12 @@ A download is considered to be ``very slow'' if the transfer rate is below 100 B
 A very slow download is treated like a broken connection.
 
 On timeout errors and on connection failures (but not on name resolving failures), \cvmfs\ will retry the path using an exponential backoff.
-This introduces a jitter to many concurrent requests of a cluster, allowing a proxy server or web server to serve all the clients.
+This introduces a jitter in case there are many concurrent requests by a cluster of nodes, allowing a proxy server or web server to serve all the nodes consecutively.
 \texttt{CVMFS\_MAX\_RETRIES} sets the number of retries on a given path before \cvmfs\ tries to switch to another proxy or host. 
 The overall number of requests with a given proxy/host combination is \texttt{\$CVMFS\_MAX\_RETRIES}+1.
-\texttt{CVMFS\_BACKOFF\_INIT} sets
-
-CVMFS_BACKOFF_INIT
-Seconds for the maximum initial backoff.  The actual initial backoff is picked with milliseconds precision randomly in the interval [1, $CVMFS_BACKOFF_INIT*1000]
+\texttt{CVMFS\_BACKOFF\_INIT} sets the maximum initial backoff in seconds.  
+The actual initial backoff is picked with milliseconds precision randomly in the interval $[1, \text{\$CVMFS\_BACKOFF\_INIT}\cdot 1000]$.
 With every retry, the backoff is then doubled.
-
-CVMFS_BACKOFF_MAX
-Maximum backoff in seconds.  This is to stop the exponential growth of the backoff at some point.
-
-The default parameters in /etc/cvmfs/default.conf are probably too low for the NFS use case.  It probably also makes sense to set the initial backoff anywhere near the network timeout, although from the top of my head I don't know of any rule to back up my guts feeling.
-
-Btw, retrying will only be done if the network connection couldn't be established or if it timed out.  It will not take place in case of other network failure, e.g. if the host/proxy name is unresolvable.  
-
-On timeout, \cvmfs\ switches to the next proxy server and/or host if defined.
-Otherwise it returns with an EIO error to the application.
-\cvmfs\ distinguishes between a proxied connection and a direct connetion and allows different timouts for the two cases.
-
-\cvmfs\ uses exponential backoff for download failures.
-That prevents request storms to web servers from applications trying to open a file in an endless loop.
-The backoff is triggered by consequtive download errors within 10 seconds.
 
 \section{NFS Server Mode}
 In case there is no local hard disk space available on a cluster of worker nodes, a single \cvmfs\ client can be exported via NFS~\cite{rfc1813,rfc3530} to these worker nodes.
@@ -147,6 +130,7 @@ It also might be necessary to monitor the actual space consumption.
 For decent performance, the amount of memory given to the meta-data cache should be increased. 
 By default, this is 16M.
 It can be increased, for instance, to 256M by setting \texttt{CVMFS\_MEMCACHE\_SIZE} to 256.
+Furthermore, the maximum number of download retries should be increased to at least 2 for the NFS use case. 
 
 A sample entry /etc/exports
 \begin{verbatim}
