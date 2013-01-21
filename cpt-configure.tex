@@ -194,6 +194,8 @@ Make sure to use absolute path names for the mount point and for the cache direc
 Use \texttt{fusermount -u} in order to unmount a privately mounted \cvmfs\ repository.
 
 \section{Hotpatching and Reloading}
+\label{sct:hotpatch}
+
 By hotpatching a running \cvmfs\ instance, most of the code can be reloaded without unmounting the file system.
 The current active code is unloaded and the code from the currently installed binaries is reloaded.
 Hotpatching is logged to syslog.
@@ -243,13 +245,39 @@ Supported options are:
 \end{tabularx}
 
 \subsection{cvmfs\_config}
+The \texttt{cvmfs\_config} utility provides commands in order to setup the system for use with \cvmfs.
+\begin{description}
+	\item[setup] The \texttt{setup} takes care of basic setup tasks, such as creating the cvmfs user and allowing access to \cvmfs\ mount points by all users.
+	\item[chksetup] The \texttt{chksetup} command inspects the system and the \cvmfs\ configuration in /etc/cvmfs for common problems.
+	\item [showconfig] The \texttt{showconfig} command prints the \cvmfs\ parameters for all repositories or for the specific repository given as argument.
+	\item [stat] The \texttt{stat} command prints file system and network statistics for currently mounted repositories.
+	\item [status] The \texttt{status} command shows all currently mounted repositories and the process id (PID) of the \cvmfs\ processes managing a mount point.
+	\item [probe] The \texttt{probe} command tries to access /cvmfs/\$repository for all repositories specified in \texttt{CVMFS\_REPOSITORIES}.
+	\item [reload] The \texttt{reload} command is used to reload or hotpatch \cvmfs\ instances (see Section~\ref{sct:hotpatch}).
+	\item [unmount] The \texttt{unmount} command unmounts all currently mounted \cvmfs\ repositories, which will only succeed if there are no open file handles on the repositories.
+	\item [wipecache] The \texttt{wipecache} command tries to unmount all currenlty mounted \cvmfs\ repositories and, in case of success, removes all files in the \cvmfs\ cache.
+	\item [bugreport] The \texttt{bugreport} command creates a tarball with collected system information which helps to debug a problem (see Section~\ref{sct:debugginghints}). 
+\end{description}
 
 \subsection{cvmfs\_talk}
+The \texttt{cvmfs\_talk} command provides a way to control a currently running \cvmfs\ process and to extract information about the status of the corresponding mount point.
+Most of the commands are for special purposes only or covered by more convenient commands, such as \texttt{cvmfs\_config showconfig} or \texttt{cvmfs\_config stat}.
+Two commands might be of particular interest though.
+\begin{verbatim}
+  cvmfs_talk cleanup 0
+\end{verbatim}
+will, without interruption of service, immediately cleanup the cache from all files that are not currently pinned in the cache.
+\begin{verbatim}
+  cvmfs_talk internal affairs
+\end{verbatim}
+prints the internal status information and performance counters.
+It can be helpful for performance engineering.
 
 \subsection{Other}
-df -h -i, 
-Nagios check
+Information about the current cache usage can be gathered using the \texttt{df} utility.
+For repositories created with the \cvmfs\ 2.1 toolchain, information about the overall number of file system entries in the repository as well as the number of entries covered by currently loaded meta-data can be gathered by \texttt{df -i}.
 
+For the Nagios monitoring system, a Nagios check is available under \url{http://cernvm.cern.ch/portal/filesystem/downloads}.
 
 \section{Debug Logs}
 The \texttt{cvmfs2} binary forks a watchdog process on start.
