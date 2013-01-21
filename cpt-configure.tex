@@ -106,11 +106,11 @@ This introduces a jitter to many concurrent requests of a cluster, allowing a pr
 The overall number of requests with a given proxy/host combination is \texttt{\$CVMFS\_MAX\_RETRIES}+1.
 \texttt{CVMFS\_BACKOFF\_INIT} sets
 
-CVMFS_BACKOFF_INIT
-Seconds for the maximum initial backoff.  The actual initial backoff is picked with milliseconds precision randomly in the interval [1, $CVMFS_BACKOFF_INIT*1000]
+CVMFS\_BACKOFF\_INIT
+Seconds for the maximum initial backoff.  The actual initial backoff is picked with milliseconds precision randomly in the interval [1, $CVMFS\_BACKOFF\_INIT*1000$]
 With every retry, the backoff is then doubled.
 
-CVMFS_BACKOFF_MAX
+CVMFS\_BACKOFF\_MAX
 Maximum backoff in seconds.  This is to stop the exponential growth of the backoff at some point.
 
 The default parameters in /etc/cvmfs/default.conf are probably too low for the NFS use case.  It probably also makes sense to set the initial backoff anywhere near the network timeout, although from the top of my head I don't know of any rule to back up my guts feeling.
