@@ -3,6 +3,34 @@
 
 \section{Client parameters}
 Parameters recognized in configuration files under /etc/cvmfs:
- 
+
+To make changes to the parameters effective, the cvmfs service has to be restarted by \lstinline{service cvmfs restart}.
+\begin{table}
+	\begin{center}
+		\begin{tabularx}{\linewidth}{lX}
+			{\bf\centering Parameter} & {\bf\centering Meaning} \\\hline
+			\tt CVMFS\_REPOSITORIES & Comma-separated list of fully qualified repository names that shall be mountable under /cvmfs.\\
+			\tt CVMFS\_HTTP\_PROXY & Sets the \texttt{proxies} mount option. \cvmfs\ supports random selection of a listed proxy server in order to balance their load load. See Section~\ref{sct:proxies} on how to use lists of proxy servers.  This parameter is required.\\
+			\tt CVMFS\_TIMEOUT & Timout in seconds for HTTP requests with a proxy server.\\
+			\tt CVMFS\_TIMEOUT\_DIRECT & Timout in seconds for HTTP requests without a proxy server.\\
+			\tt CVMFS\_NFILES & Sets the \texttt{nofiles} mount option.\\
+			\tt CVMFS\_CACHE\_BASE & Sets the parent directory of the \texttt{cachedir} mount option. The \texttt{\$CVMFS\_USER} has to be owner of this directory.\\
+			\tt CVMFS\_SERVER\_URL & Sets the repository url having \texttt{@org@} as placeholder for the repository. Usually set for a domain. Example: \url{http://cernvm-webfs.cern.ch/opt/@org@} \\
+			\tt CVMFS\_PUBLIC\_KEY & Sets \texttt{pubkey} mount option.  Usually set for a domain. \\
+			\tt CVMFS\_STRICT\_MOUNT & If set to yes, only repositories listed in \texttt{CVMFS\_REPOSITORIES} can be mounted. \\
+			\tt CVMFS\_FORCE\_SIGNING & If set to yes, only digitally signed repositories can be mounted. \\
+			\tt CVMFS\_SYSLOG\_LEVEL & Sets the \texttt{syslog\_level} mount option. \\
+			\tt CVMFS\_TRACEFILE & Sets the \texttt{tracefile} mount option.\\
+			\tt CVMFS\_DEBUGLOG & Specifies a debug log file.  Having this variable set, \cvmfs\ runs in debug mode which causes high load.  The debug log is different from normal log messages written to syslog.\\
+			\tt CVMFS\_MAX\_TTL & Sets the \texttt{max\_ttl} mount option.\\
+			\tt CVMFS\_USER & Sets the \texttt{gid} and \texttt{uid} mount options. Don't touch or overwrite.\\
+			\tt CVMFS\_OPTIONS & Set of standard Fuse options that are added. Don't touch or overwrite. \\
+			\tt CVMFS\_MOUNT\_DIR & Sets the \cvmfs root directory. Don't touch or overwrite. \\
+		\end{tabularx}
+	\end{center}
+	\caption{List of recognized parameters in \texttt{/etc/cvmfs/default.local}. For \cvmfs\ mount options see Section~\ref{sct:mount}.}
+	\label{tbl:parameters}
+\end{table}
+
 
 \section{Server parameters}
