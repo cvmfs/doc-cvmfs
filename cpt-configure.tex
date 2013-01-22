@@ -37,6 +37,53 @@ For a list of all parameters, see Appendix~\ref{apx:parameters}.
 \end{table}
 
 
+\section{Mounting}
+Typically, mounting of \cvmfs\ repositories is handled by \autofs.
+Just by accessing a repository directory under /cvmfs (\eg /cvmfs/atlas.cern.ch), \autofs\ will take care of mounting.
+\autofs\ will also automatically unmount a repository if it is not used for a while.
+
+Instead of using \autofs, \cvmfs\ repositories can be mounted manually with the system's \texttt{mount} command.
+In order to do so, use the \texttt{cvmfs} file system type, like
+\begin{verbatim}
+  mount -t cvmfs atlas /cvmfs/atlas.cern.ch
+\end{verbatim}
+Likewise, \cvmfs\ repositories can be mounted through entries in /etc/fstab.
+A sample entry in /etc/fstab:
+\begin{verbatim}
+  atlas.cern.ch /mnt/test cvmfs defaults 0 0
+\end{verbatim}
+
+Every mount point corresponds to a \cvmfs\ process.
+Using \autofs\ or the system's mount command, every repository can only be mounted once.
+Otherwise multiple \cvmfs\ processes would collide in the same cache location.
+If a repository is needed under several paths, use a \emph{bind mount} or use a private file system mount point (see Section~\ref{sct:privatemount}).
+
+\subsection{Private Mount Points}
+\label{sct:privatemount}
+In contrast to the system's \texttt{mount} command which requires root privileges, \cvmfs\ can also be mounted like other Fuse file systems by normal users.
+In this case, \cvmfs\ uses parameters from one or several user-provided config files instead of using the files under /etc/cvmfs.
+\cvmfs\ private mount points do not appear as \texttt{cvmfs2} file systems but as \texttt{fuse} file systems.
+The \texttt{cvmfs\_config} and \texttt{cvmfs\_talk} commands do not affect privately mounted \cvmfs\ repositories.
+On an interactive machine, private mount points are for instance unaffected by an administrator unmounting all system's \cvmfs\ mount points by \texttt{cvmfs\_config unmount}.
+
+In order to mount \cvmfs\ privately, use the \texttt{cvmfs2} command like
+\begin{verbatim}
+  cvmfs2 -o config=myparams.conf atlas.cern.ch /home/user/myatlas
+\end{verbatim}
+A minimal sample myparams.conf file could look like this:
+\begin{verbatim}
+  CVMFS_CACHE_BASE=/home/user/mycache
+  CVMFS_SERVER_URL=http://cvmfs-stratum-one.cern.ch/opt/atlas
+  CVMFS_HTTP_PROXY=DIRECT
+  CVMFS_PUBLIC_KEY=/etc/cvmfs/keys/cern.ch.pub:\
+    /etc/cvmfs/keys/cern-it1.cern.ch.pub:\
+    /etc/cvmfs/keys/cern-it3.cern.ch.pub
+\end{verbatim}
+
+Make sure to use absolute path names for the mount point and for the cache directory.
+Use \texttt{fusermount -u} in order to unmount a privately mounted \cvmfs\ repository.
+
+
 \section{Cache Settings}
 \label{sct:config:cache}
 Downloaded files will be stored in a local cache directory.
@@ -147,52 +194,6 @@ A sample entry /etc/fstab entry on a client:
 \end{verbatim}
 
 
-\section{Mounting}
-Typically, mounting of \cvmfs\ repositories is handled by \autofs.
-Just by accessing a repository directory under /cvmfs (\eg /cvmfs/atlas.cern.ch), \autofs\ will take care of mounting.
-\autofs\ will also automatically unmount a repository if it is not used for a while.
-
-Instead of using \autofs, \cvmfs\ repositories can be mounted manually with the system's \texttt{mount} command.
-In order to do so, use the \texttt{cvmfs} file system type, like
-\begin{verbatim}
-  mount -t cvmfs atlas /cvmfs/atlas.cern.ch
-\end{verbatim}
-Likewise, \cvmfs\ repositories can be mounted through entries in /etc/fstab.
-A sample entry in /etc/fstab:
-\begin{verbatim}
-  atlas.cern.ch /mnt/test cvmfs defaults 0 0
-\end{verbatim}
-
-Every mount point corresponds to a \cvmfs\ process.
-Using \autofs\ or the system's mount command, every repository can only be mounted once.
-Otherwise multiple \cvmfs\ processes would collide in the same cache location.
-If a repository is needed under several paths, use a \emph{bind mount} or use a private file system mount point (see Section~\ref{sct:privatemount}).
-
-\subsection{Private Mount Points}
-\label{sct:privatemount}
-In contrast to the system's \texttt{mount} command which requires root privileges, \cvmfs\ can also be mounted like other Fuse file systems by normal users.
-In this case, \cvmfs\ uses parameters from one or several user-provided config files instead of using the files under /etc/cvmfs.
-\cvmfs\ private mount points do not appear as \texttt{cvmfs2} file systems but as \texttt{fuse} file systems.
-The \texttt{cvmfs\_config} and \texttt{cvmfs\_talk} commands do not affect privately mounted \cvmfs\ repositories.
-On an interactive machine, private mount points are for instance unaffected by an administrator unmounting all system's \cvmfs\ mount points by \texttt{cvmfs\_config unmount}.
-
-In order to mount \cvmfs\ privately, use the \texttt{cvmfs2} command like
-\begin{verbatim}
-  cvmfs2 -o config=myparams.conf atlas.cern.ch /home/user/myatlas
-\end{verbatim}
-A minimal sample myparams.conf file could look like this:
-\begin{verbatim}
-  CVMFS_CACHE_BASE=/home/user/mycache
-  CVMFS_SERVER_URL=http://cvmfs-stratum-one.cern.ch/opt/atlas
-  CVMFS_HTTP_PROXY=DIRECT
-  CVMFS_PUBLIC_KEY=/etc/cvmfs/keys/cern.ch.pub:\
-    /etc/cvmfs/keys/cern-it1.cern.ch.pub:\
-    /etc/cvmfs/keys/cern-it3.cern.ch.pub
-\end{verbatim}
-
-Make sure to use absolute path names for the mount point and for the cache directory.
-Use \texttt{fusermount -u} in order to unmount a privately mounted \cvmfs\ repository.
-
 \section{Hotpatching and Reloading}
 \label{sct:hotpatch}
 
@@ -277,7 +278,7 @@ It can be helpful for performance engineering.
 Information about the current cache usage can be gathered using the \texttt{df} utility.
 For repositories created with the \cvmfs\ 2.1 toolchain, information about the overall number of file system entries in the repository as well as the number of entries covered by currently loaded meta-data can be gathered by \texttt{df -i}.
 
-For the Nagios monitoring system, a Nagios check is available under \url{http://cernvm.cern.ch/portal/filesystem/downloads}.
+For the \nagios\footnote{\url{http://www.nagios.org}}~\cite{nagios08} monitoring system, a checker plugin is available under \url{http://cernvm.cern.ch/portal/filesystem/downloads}.
 
 \section{Debug Logs}
 The \texttt{cvmfs2} binary forks a watchdog process on start.
