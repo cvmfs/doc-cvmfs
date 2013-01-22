@@ -1,36 +1,50 @@
 \chapter{Setting up a Local Squid Proxy}
 \label{sct:squid}
 
-If you setup \cvmfs\ on your local cluster, we strongly recommend to setup a Squid forward proxy server as well.
-This is for two reasons: it will reduce the latency for the local worker nodes, which is critical for cold cache performance. 
-And it reduces the load on our backend server.
+For clusters of nodes with \cvmfs, we strongly recommend to setup two or more \squid\footnote{\url{http://www.squid-cache.org}} forward proxy servers~\cite{squid99, bloomsquid00} as well.
+The forward proxies will reduce the latency for the local worker nodes, which is critical for cold cache performance. 
+They also reduce the load on the Stratum 1 servers.
 
-From what we have seen, a Squid server on commodity hardware scales well for at least a couple of hundred worker nodes.
+From what we have seen, a \squid\ server on commodity hardware scales well for at least a couple of hundred worker nodes.
 The more RAM and hard disk you can devote for caching the better.
-We have good experience with 4-8\,GB of memory cache and 50-100\,GB of hard disk cache.
-We suggest to setup two identical Squids for reliability and load-balancing.
-Assuming the two servers are A and B, adjust your \cvmfs\ client configuration as follows:
-\begin{lstlisting}[language=bash]
-CVMFS_HTTP_PROXY="http://A:3128|http://B:3128"
-\end{lstlisting}
+We have good experience with \SIrange{4}{8}{\giga\byte} of memory cache and \SIrange{50}{100}{\giga\byte} of hard disk cache.
+We suggest to setup two identical \squid\ servers for reliability and load-balancing.
+Assuming the two servers are A and B, set
+\begin{verbatim}
+  CVMFS_HTTP_PROXY="http://A:3128|http://B:3128"
+\end{verbatim}
 
-Squid is very powerful and has lots of configuration and tuning options.
+\squid\ is very powerful and has lots of configuration and tuning options.
 For \cvmfs\ we require only the very basic static content caching.
-Starting from a standard Scientific Linux 5 Squid, all we have to do is to adjust the cache size.
-If you're using ACLs, add ACLs allow rules for the Stratum 1 servers\footnote{For Cern repositories Stratum 1 servers are \url{http://cvmfs-stratum-one.cern.ch:8000} (CERN), \url{http://cernvmfs.gridpp.rl.ac.uk:8000} (RAL), and \url{http://cvmfs.racf.bnl.gov:8000} (BNL).}.
-Browse through your /etc/squid/squid.conf and make sure the following lines appear accordingly
-\begin{lstlisting}[language=bash]
-collapsed_forwarding on
-max_filedesc 8192
-maximum_object_size 1024 MB
+If you already have a \emph{Frontier Squid}\footnote{\url{http://frontier.cern.ch}}~\cite{frontier08, frontier10} installed you can use it as well for \cvmfs.
 
-# 4 GB memory cache
-cache_mem 4096 MB
-maximum_object_size_in_memory 128 KB
-# 50 GB disk cache
-cache_dir ufs /var/spool/squid 50000 16 256
-\end{lstlisting}
+Otherwise, cache sizes and access control needs to be configured in order to use the \squid\ server with \cvmfs.
+In order to do so, browse through your /etc/squid/squid.conf and make sure the following lines appear accordingly
+\begin{verbatim}
+  collapsed_forwarding on
+  max_filedesc 8192
+  maximum_object_size 1024 MB
 
-Check your Squid configuration with \texttt{squid -k parse}.
-Create the hard disk cache area with \texttt{squid -z}.
-In order to make the increased number of file descriptors effective for Squid, execute \texttt{ulimit -n 8192} prior to starting the Squid service.
+  # 4 GB memory cache
+  cache_mem 4096 MB
+  maximum_object_size_in_memory 128 KB
+  # 50 GB disk cache
+  cache_dir ufs /var/spool/squid 50000 16 256
+\end{verbatim}
+
+Furthermore, \squid\ needs to allow access to all Stratum 1 servers.
+This is controlled through \squid\ ACLs.
+For the Stratum 1 servers for the cern.ch domain, add the following lines to you \squid\ configuration:
+\begin{verbatim}
+  acl cvmfs dst cvmfs-stratum-one.cern.ch
+  acl cvmfs dst cernvmfs.gridpp.rl.ac.uk
+  acl cvmfs dst cvmfs.racf.bnl.gov
+  acl cvmfs dst cvmfs02.grid.sinica.edu.tw
+  acl cvmfs dst cvmfs.fnal.gov
+  acl cvmfs dst cvmfs-atlas-nightlies.cern.ch
+  http_access allow cvmfs
+\end{verbatim}
+
+The \squid\ configuration can be verified by \texttt{squid -k parse}.
+Before the first service start, the cache space on the hard disk needs to be prepared by \texttt{squid -z}.
+In order to make the increased number of file descriptors effective for Squid, execute \texttt{ulimit -n 8192} prior to starting the squid service.
