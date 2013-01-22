@@ -36,7 +36,8 @@ TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex 
   figures/security.tex \
   figures/cvmfs-keepalive.tex \
   figures/vfsfilter.tex \
-  figures/stratum1.tex
+  figures/stratum1.tex \
+  figures/tabparameters.tex
 SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
 MAINFILE = cvmfstech
 
