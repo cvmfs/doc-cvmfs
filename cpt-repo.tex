@@ -11,10 +11,8 @@ For instance, many firewalls block an HTTP request to a file called \texttt{root
 Figure~\ref{fig:installwebserver} outlines the repository generation.
 
 \begin{figure}[h]
-	\begin{center}
-		\includegraphics[width=0.8\textwidth]{figures/update_process}
-	\end{center}
-	\caption{Updating a mounted \cvmfs\ repository by overlaying it with a copy-on-write \aufs\ volume. Any changes will be accumulated in a writable volume (yellow) and can be synchronized into the file catalogs afterwards. The file catalog contains the directory structure as well as file metadata, symbolic links, and secure hash keys of regular files. Regular files are compressed and renamed to their cryptographic content hash before copied into the data store. (NOTE: bitmap will be replaced by vector graphic once I managed to export it)}
+		\includegraphics[width=\textwidth]{figures/update_process.png}
+	\caption{Updating a mounted \cvmfs\ repository by overlaying it with a copy-on-write \aufs\ volume. Any changes will be accumulated in a writable volume (yellow) and can be synchronized into the file catalogs afterwards. The file catalog contains the directory structure as well as file metadata, symbolic links, and secure hash keys of regular files. Regular files are compressed and renamed to their cryptographic content hash before copied into the data store.}
 	\label{fig:installwebserver}
 \end{figure}
 
