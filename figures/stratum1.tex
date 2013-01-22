@@ -1,0 +1,88 @@
+%\documentclass[a4paper, 11pt]{article}\usepackage{tikz,ifthen}\usetikzlibrary{circuits.logic.US,arrows,positioning,shapes,topaths,calc,fit,backgrounds,matrix,shadows,decorations.pathreplacing,decorations.text,trees}\usepackage[margin=2cm]{geometry}\begin{document}\sf
+
+
+\begin{tikzpicture}
+	\colorlet{rwcolor}{blue}
+	\colorlet{publiccolor}{blue}
+	\colorlet{mirrorcolor}{black}
+	\colorlet{proxycolor}{gray}
+	\tikzset{
+		rw/.style={very thick,rwcolor},
+		public/.style={very thick, publiccolor},
+		mirror/.style={thick, mirrorcolor, fill=white},
+		replication/.style={thick, ->},
+		repltree/.style={%edge from parent fork down, 
+			fill=red!30,rounded corners,
+			edge from parent={red,-o,thick,draw}}
+%		raa/.style={component, draw= contextcolor, text= contextcolor},
+%		slc/.style={component, draw=cernvmcolor, text=cernvmcolor},
+%		kernel/.style={component, draw=cernvmcolor, text=cernvmcolor},
+%		fuse/.style={component, draw=cernvmcolor, text=cernvmcolor},
+%		context/.style={component, draw= contextcolor, text=contextcolor},
+%		cvmfs/.style={component, draw=cvmfscolor, text=cvmfscolor},
+%		httpd/.style={anchor=south west},
+%		key/.style={font=\footnotesize}
+	}
+
+	\def\rinner{2.25cm}
+	\def\router{4cm}
+	\def\rmirror{1.5cm}
+
+	
+	\begin{scope}
+		[grow cyclic, thick, proxycolor,
+			level 1/.style={level distance=16mm,sibling angle=60}, 
+			level 2/.style={level distance=8mm,sibling angle=45}, 
+			level 3/.style={level distance=4mm,sibling angle=30}]
+		
+		\coordinate[rotate=-90, yshift=\router+\rmirror*0.5] % going down 
+			child foreach \x in {1,2,3}
+				{child foreach \x in {1,2,3} 
+					{child foreach \x in {1,2,3}}};
+	\end{scope}
+	
+	\begin{scope}
+		[rotate=180,
+		  grow cyclic, thick, proxycolor,
+			level 1/.style={level distance=16mm,sibling angle=60}, 
+			level 2/.style={level distance=8mm,sibling angle=45}, 
+			level 3/.style={level distance=4mm,sibling angle=30}]
+		
+		\coordinate[rotate=-90, yshift=-\router-\rmirror*0.5] % going down 
+			child foreach \x in {1,2,3}
+				{child foreach \x in {1,2,3} 
+					{child foreach \x in {1,2,3}}};
+	\end{scope} 
+
+
+	\node (rw) at (0,0) {\parbox{3cm}{\centering\small\includegraphics[height=\rinner]{figures/reposerver}\\\emph{Stratum 0 R/W}}};
+	\draw[public] (0,0) circle (\router);
+	
+	\node[mirror] (cern) at (0,\router) {\parbox{\rmirror}{\small\centering CERN\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	%\draw[mirror] (cern) circle (\rmirror);
+	\node[mirror] (ral) at (\router,0) {\parbox{\rmirror}{\small\centering United Kingdom\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	%\draw[mirror] (ral) circle (\rmirror);
+	\node[mirror] (bnl) at (-\router,0) {\parbox{\rmirror}{\small\centering United States\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	%\draw[mirror] (bnl) circle (\rmirror);
+	\node[mirror] (other) at (0,-\router) {\parbox{\rmirror}{\small\centering \emph{Taiwan}\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	%\draw[mirror] (other) circle (\rmirror);
+	
+	
+	\draw[decorate,decoration={text along path,text color=blue,text={~~~~~~~~~~~~~~~~~~~|\small\it|Stratum 1||~}}] (-\router-0.3cm,0) arc (180:90:\router+0.3cm);
+	\draw[decorate,decoration={text along path,text color=blue,text={~~~~~~~~~~~~~|\small|Public Mirrors||~}}] (-\router+0.5cm,0) arc (180:90:\router-0.5cm);
+	%\draw (0,0) .. controls +(up:2cm) and +(left:2cm) .. (1,3) {node[public,sloped,above]{\emph{Stratum 1} Public Mirrors}};
+	
+	%\node[red,thick,fill=white,draw,cloud,aspect=1.5,xshift=\router+\rmirror+2cm] (tier1) {\parbox{2.2cm}{\centering\footnotesize\emph{Stratum 2}\\Private Replicas\\(Tier 1)}};
+	
+	\draw[replication] (rw) -- (cern);
+	\draw[replication] (rw) -- (ral);
+	\draw[replication] (rw) -- (bnl);
+	\draw[replication] (rw) -- (other);
+	%\draw[replication,red] (ral) -- ($(tier1)-(1.8cm,0)$);
+	
+	\node[proxycolor,fill=white] at (-1.6*\router,0) {\parbox{1.5cm}{\centering\small Proxy\\Hierarchy}};
+	\node[proxycolor,fill=white] at (1.6*\router,0) {\parbox{1.5cm}{\centering\small Proxy\\Hierarchy}};
+	
+\end{tikzpicture}
+
+%\end{document}

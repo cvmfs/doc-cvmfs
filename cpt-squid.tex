@@ -19,7 +19,7 @@ For \cvmfs\ we require only the very basic static content caching.
 If you already have a \emph{Frontier Squid}\footnote{\url{http://frontier.cern.ch}}~\cite{frontier08, frontier10} installed you can use it as well for \cvmfs.
 
 Otherwise, cache sizes and access control needs to be configured in order to use the \squid\ server with \cvmfs.
-In order to do so, browse through your /etc/squid/squid.conf and make sure the following lines appear accordingly
+In order to do so, browse through your /etc/squid/squid.conf and make sure the following lines appear accordingly:
 \begin{verbatim}
   collapsed_forwarding on
   max_filedesc 8192

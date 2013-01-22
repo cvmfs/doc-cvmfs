@@ -6,17 +6,15 @@ The \cvmfs\ software is available in form of several RPM packages:
 	\item[cvmfs-release] Adds the \cvmfs\ yum repository.
 	\item[cvmfs-keys] Contains the public key for signature verification of repositories in the cern.ch domain.
 	\item[cvmfs] Contains the Fuse module and additional client tools.  It has dependencies to cvmfs-keys, fuse, and autofs.
-	\item[cvmfs-init-scripts] Contains compatibility scripts for specific repositories.  
-		Mainly, the symlinks from /opt/\emph{repository} to /cvmfs/\emph{repository}.cern.ch are maintained.
-		All repositories are supposed to migrate to the /cvmfs namespace in the near future.
+	\item[cvmfs-init-scripts] Contains special settings for some of the repositories.
+		For instance, the ATLAS nightly builds are provided by a URL other than the other repositories in cern.ch.
 		Depends on cvmfs.
 	\item[cvmfs-auto-setup] Only available through yum. 
-		This is a wrapper for \lstinline{cvmfs_config setup}. 
+		This is a wrapper for \texttt{cvmfs\_config setup}. 
 		This is supposed to provide automatic configuration for the ATLAS Tier3s.
 		Depends on cvmfs.
-	\item[cvmfs-replica] Contains the tools to replicate \cvmfs\ repositories.
-	\item[cvmfs-server] Contains the \cvmfs\ server tools for creating new repositories.
+	\item[cvmfs-server] Contains the \cvmfs\ server tool kit for maintaining Stratum~0 and Stratum~1 servers.
 		Depends on cvmfs-keys and httpd.
-	\item[redirfs, kmod-redirfs] Kernel module framework used by the CernVM-FS file system change log filter. 
-	\item[cvmfsflt, kmod-cvmfsflt] The CernVM-FS file system change log filter.
+	\item[kernel-aufs21-$\cdots$] Scientific Linux 6 kernel with aufs.
+		Required for SL6 based Stratum~0 servers.
 \end{description}

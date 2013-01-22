@@ -10,6 +10,7 @@ TEXSRC = cvmfstech.tex \
   cpt-quickstart.tex \
   cpt-configure.tex \
   cpt-squid.tex \
+  cpt-replica.tex \
   cpt-repo.tex \
   cpt-details.tex \
   apx-rpms.tex \
@@ -24,7 +25,7 @@ FIGSRC = figures/cernlogo.tex \
   figures/cernvm.png \
   figures/fingerprint.pdf \
   figures/sign-cert.pdf \
-  figures/sign.pdf
+  figures/sign.pdf 
 TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex \
   figures/concept-generic.tex \
   figures/fuse.tex \
@@ -33,7 +34,8 @@ TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex 
   figures/nestedcatalogs.tex \
   figures/security.tex \
   figures/cvmfs-keepalive.tex \
-  figures/vfsfilter.tex
+  figures/vfsfilter.tex \
+  figures/stratum1.tex
 SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
 MAINFILE = cvmfstech
 

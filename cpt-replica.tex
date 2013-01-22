@@ -1,3 +1,12 @@
-\chapter{Setting up a replica server}
+\chapter{Setting up a Replica Server (Stratum 1)}
 \label{sct:replica}
 
+\begin{figure}
+	\begin{center}
+		\resizebox{\textwidth}{!}{\input{figures/stratum1}}
+	\end{center}
+	\caption{\cvmfs\ content distribution network for the cern.ch domain: Stratum 1 replica servers are located in Europe, the U.S.\ and Asia.  
+		One protected r/w instance (Stratum 0) is feeding up the public, distributed mirror servers. 
+		A distributed hierarchy of proxy servers fetches content from the closest public mirror server.}
+	\label{fig:stratum1}
+\end{figure}
