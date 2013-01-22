@@ -25,7 +25,8 @@ FIGSRC = figures/cernlogo.tex \
   figures/cernvm.png \
   figures/fingerprint.pdf \
   figures/sign-cert.pdf \
-  figures/sign.pdf 
+  figures/sign.pdf \
+  figures/stratum1front.pdf
 TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex \
   figures/concept-generic.tex \
   figures/fuse.tex \
