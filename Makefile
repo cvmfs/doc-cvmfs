@@ -26,7 +26,8 @@ FIGSRC = figures/cernlogo.tex \
   figures/fingerprint.pdf \
   figures/sign-cert.pdf \
   figures/sign.pdf \
-  figures/stratum1front.pdf
+  figures/stratum1front.pdf \
+  figures/folder.pdf
 TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex \
   figures/concept-generic.tex \
   figures/fuse.tex \
@@ -37,8 +38,10 @@ TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex 
   figures/cvmfs-keepalive.tex \
   figures/vfsfilter.tex \
   figures/stratum1.tex \
-  figures/tabparameters.tex
-SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC)
+  figures/sharedcache.tex \
+  figures/overlay.tex
+TABSRC = figures/tabparameters.tex
+SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC) $(TABSRC)
 MAINFILE = cvmfstech
 
 all: $(MAINFILE)-$(VERSION).pdf

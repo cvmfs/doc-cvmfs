@@ -1,0 +1,47 @@
+%\documentclass[a4paper, 11pt]{article}\usepackage{tikz,ifthen}\usetikzlibrary{arrows,positioning,shapes,topaths,calc,fit,backgrounds,matrix,shadows}\begin{document}
+
+\newsavebox{\tikzfilesystemovl}
+\savebox{\tikzfilesystemovl}{
+\begin{tikzpicture}
+	[
+		dirent/.style={
+			circle,
+			draw=green!50!black!50,
+			fill=green!50!black!50,
+			scale=0.35pt
+		}
+	]
+	\node[dirent] (root) at (0,1.6) {};
+	\node[dirent,red!50!black!50,fill=red!50!black!50] (d1) at (0.4, 1.2) {};
+	\node[dirent] (d2) at (0.4, 0.8) {};
+	\node[dirent,red!50!black!50,fill=red!50!black!50] (d21) at (0.8, 0.4) {};
+	\node[dirent] (d22) at (0.8, 0) {};
+	
+	\draw (root) -- (0,1.2) -- (d1);
+	\draw (0,1.2) -- (0,0.8) -- (d2) -- (0.4, 0.4) -- (d21);
+	\draw (0.4,0.4) -- (0.4,0) -- (d22);
+	\draw (0,0.8) -- (0,0);		
+	
+	\node at (-0.2,0.1) {\includegraphics[height=1cm]{figures/folder}};
+\end{tikzpicture}
+}
+
+\begin{tikzpicture}
+	\tikzstyle{every node}=[font=\large]
+	\colorlet{colrepo}{blue!50}
+	\colorlet{colscratch}{red!40}
+	\colorlet{colunion}{blue!50!black}
+
+	\node[fill=colrepo, semitransparent, trapezium, trapezium left angle=30, trapezium right angle=-30, minimum width=9.5cm] (repository) {};
+	\node[blue, anchor=south, xshift=0.5cm] at (repository.bottom side) {CernVM-FS Read-Only};
+	
+	\node[fill=colscratch, semitransparent, drop shadow, trapezium, trapezium left angle=30, trapezium right angle=-30, minimum width=9.25cm] (scratch) at ($(repository)+(0.75, 0.75)$) {};
+	\node[red!80!black, anchor=south, xshift=0.5cm] at (scratch.bottom side) {Read/Write Scratch Area};
+	
+	\draw[colunion, ->, line width=1ex, rounded corners] (4,-0.5) -- node[fill=white] {\parbox{4.5cm}{\centering AUFS\\(Union File System)}} ++(0,-2) -- ++(-3.75,0);
+	
+	\node[draw, rectangle, very thick, colunion, rounded corners, minimum width=4.75cm, minimum height=2.75cm] at (-2.5, -3) {};
+	\node[label={[colunion, label distance=-0.5cm]left:\parbox{2.5cm}{Read/Write\\ Interface}}] at (-1.25, -3) {\usebox{\tikzfilesystemovl}};
+\end{tikzpicture}
+
+%\end{document}

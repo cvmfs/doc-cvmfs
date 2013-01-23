@@ -1,8 +1,8 @@
-\chapter{Setting up a Replica Server (Stratum 1)}
+\chapter{Setting up a Replica Server (Stratum~1)}
 \label{sct:replica}
 
-While a \cvmfs\ Stratum 0 repository server is able to serve clients directly, a large number of clients is better be served by a set of Stratum 1 replica servers.
-Multiple Stratum 1 servers improve the reliability, reduce the load, and protect the Stratum 0 master copy of the repository from direct accesses.
+While a \cvmfs\ Stratum 0 repository server is able to serve clients directly, a large number of clients is better be served by a set of Stratum~1 replica servers.
+Multiple Stratum~1 servers improve the reliability, reduce the load, and protect the Stratum 0 master copy of the repository from direct accesses.
 Stratum~0 server, Stratum~1 servers and the site-local proxy servers can be seen as content distribution network.
 Figure~\ref{fig:stratum1} shows the situation for the repositories hosted in the cern.ch domain.
 
@@ -10,7 +10,7 @@ Figure~\ref{fig:stratum1} shows the situation for the repositories hosted in the
 	\begin{center}
 		\resizebox{\textwidth}{!}{\input{figures/stratum1}}
 	\end{center}
-	\caption{\cvmfs\ content distribution network for the cern.ch domain: Stratum 1 replica servers are located in Europe, the U.S.\ and Asia.  
+	\caption{\cvmfs\ content distribution network for the cern.ch domain: Stratum~1 replica servers are located in Europe, the U.S.\ and Asia.  
 		One protected r/w instance (Stratum 0) is feeding up the public, distributed mirror servers. 
 		A distributed hierarchy of proxy servers fetches content from the closest public mirror server.}
 	\label{fig:stratum1}

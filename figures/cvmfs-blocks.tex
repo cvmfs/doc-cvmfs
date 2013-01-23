@@ -46,9 +46,9 @@
    \edef\numofelemsperline{3}
 
    % Bulding Blocks
-   \edef\numofelems{8} 
+   \edef\numofelems{9} 
    \pgfmathparse{floor(\numofelems/\numofelemsperline)*\numofelemsperline}\edef\fitsuntil{\pgfmathresult}
-   \foreach \i / \name in {0 / SHA1, 1 / MD5, 2 / zlib, 3 / SQLite, 4 / libcurl, 5 / libcrypto, 6 / Fuse, 7 / redirfs}
+   \foreach \i / \name in {0 / sparsehash, 1 / libcrypto, 2 / zlib, 3 / leveldb, 4 / libcurl, 5 / c-ares, 6 / Fuse, 7 / SQLite, 8 / aufs}
    {
       \ifthenelse{\i<\fitsuntil}{\edef\offset{0}}{
          \pgfmathparse{((\numofelemsperline-mod(\numofelems,\numofelemsperline))/2)*(\blockwidth+\spacesep)}\edef\offset{\pgfmathresult}}
@@ -72,7 +72,7 @@
    \pgfmathparse{\extremy+2*\spacesep}\edef\yoffset{\pgfmathresult}
    \edef\numofelems{5}
    \pgfmathparse{floor(\numofelems/\numofelemsperline)*\numofelemsperline}\edef\fitsuntil{\pgfmathresult}
-   \foreach \i / \name in {0 / Catalog, 1 / Cache, 2 / {Quota / LRU}, 3 / Trace Capturing, 4 / {VFS Filter}}
+   \foreach \i / \name in {0 / Catalog Mgr, 1 / Cache Mgr, 2 / Quota, 3 / Download Mgr, 4 / Spooler}
    {
       \ifthenelse{\i<\fitsuntil}{\edef\offset{0}}{
          \pgfmathparse{((\numofelemsperline-mod(\numofelems,\numofelemsperline))/2)*(\blockwidth+\spacesep)}\edef\offset{\pgfmathresult}}
@@ -93,9 +93,9 @@
    
    %fuse
    \pgfmathparse{\extremy+2*\spacesep}\edef\yoffset{\pgfmathresult}
-   \edef\numofelems{2}
+   \edef\numofelems{3}
    \pgfmathparse{floor(\numofelems/\numofelemsperline)*\numofelemsperline}\edef\fitsuntil{\pgfmathresult}
-   \foreach \i / \name in {0 / \cvmfs, 1 / cvmfs\_sync}
+   \foreach \i / \name in {0 / \cvmfs, 1 / libcvmfs, 2 / cvmfs\_server}
    {
       \ifthenelse{\i<\fitsuntil}{\edef\offset{0}}{
          \pgfmathparse{((\numofelemsperline-mod(\numofelems,\numofelemsperline))/2)*(\blockwidth+\spacesep)}\edef\offset{\pgfmathresult}}

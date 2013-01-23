@@ -126,6 +126,11 @@ It is recommended to adjust the order of Stratum 1 server so that the closest se
 For roaming clients (\ie clients not using a proxy server), the Stratum 1 servers can be automatically sorted according to round trip time by \texttt{cvmfs\_talk host probe} (see Section~\ref{sct:tools}).
 Otherwise, the proxy server would invalidate round trip time measurement.
 
+The special sequence \texttt{@org@} in the \texttt{CVMFS\_SERVER\_URL} string is replaced by the repository name (not fully qualified).
+That allows to use the same parameter for many repositories hosted under the same domain.
+For instance, \texttt{http://cvmfs-stratum-one.cern.ch/opt/@org@} can resolve to \url{http://cvmfs-stratum-one.cern.ch/opt/atlas}, \url{http://cvmfs-stratum-one.cern.ch/opt/cms}, and so on depending on the repository that is being mounted.
+The same works for the sequence \texttt{@fqrn@} with fully qualified repository names (\eg atlas.cern.cn, cms.cern.ch, \dots).
+
 \subsection{Proxy Lists}
 \cvmfs\ uses a dedicated HTTP proxy configuration, independent from system-wide settings.
 Instead of a single proxy, \cvmfs\ uses a \emph{chain of load-balanced proxy groups}.
