@@ -117,7 +117,7 @@ These site-local web proxies reduce the network latency for the \cvmfs\ clients 
 Roaming clients can connect directly to the Stratum 1 service.
 
 \subsection{Stratum 1 List}
-Tp specify the Stratum 1 servers, set \texttt{CVMFS\_SERVER\_URL} to a semicolon-separated list of known replica servers (enclose in quotes). 
+To specify the Stratum 1 servers, set \texttt{CVMFS\_SERVER\_URL} to a semicolon-separated list of known replica servers (enclose in quotes). 
 The so defined URLs are organized as a ring buffer.
 Whenever download of files fails from a server, \cvmfs\ automatically switches to the next mirror server.
 For repositories under the cern.ch domain, the Stratum 1 servers are specified in /etc/cvmfs/domain.d/cern.ch.conf.
@@ -132,8 +132,10 @@ For instance, \texttt{http://cvmfs-stratum-one.cern.ch/opt/@org@} can resolve to
 The same works for the sequence \texttt{@fqrn@} with fully qualified repository names (\eg atlas.cern.cn, cms.cern.ch, \dots).
 
 \subsection{Proxy Lists}
-\cvmfs\ uses a dedicated HTTP proxy configuration, independent from system-wide settings.
+\cvmfs\ uses a dedicated HTTP proxy configuration, independent from system-wide settings. 
 Instead of a single proxy, \cvmfs\ uses a \emph{chain of load-balanced proxy groups}.
+The \cvmfs\ proxies are set by the \texttt{CVMFS\_HTTP\_PROXY} parameter.
+
 Proxies within the same proxy group are considered as a load-balance group and a proxy is selected randomly.
 If a proxy fails, \cvmfs\ automatically switches to another proxy from the current group.
 If all proxies from a group have failed, \cvmfs\ switches to the next proxy group.
@@ -142,6 +144,8 @@ To avoid endless loops, for each file download the number of switches is restric
 
 The chain of proxy groups is specified by a string of semicolon separated entries, each group is a list of pipe separated hostnames\footnote{The usual proxy notation rules apply, like \texttt{http://proxy1:8080|http://proxy2:8080;DIRECT}}.
 The \texttt{DIRECT} keyword for a hostname avoids using proxies.
+Note that the \texttt{CVMFS\_HTTP\_PROXY} parameter is necessary in order to mount.
+If you don't use proxies, set the parameter to \texttt{DIRECT}.
 
 Multiple proxy groups are often organized as a primary proxy group at the local site and backup proxy groups at remote sites.
 In order to avoid \cvmfs\ being stuck with proxies at a remote site after a fail-over, \cvmfs\ will automatically retry to use proxies from the primary group after some time.
@@ -170,9 +174,10 @@ This mode of deployment will inevitably introduce a performance bottleneck and a
 NFS export requires Linux kernel >= 2.6.27 on the NFS server. 
 It works for Scientific Linux 6 but not for Scientific Linux 5. 
 NFS clients can run both SL5 and SL6.
-
 For proper NFS support, set \texttt{CVMFS\_NFS\_SOURCE=yes}. 
-When this option is enabled, upon mount an additionally directory nfs\_maps.\$repository\_name appears in the \cvmfs\ cache directory.
+Also, \autofs\ for \cvmfs\ needs to be turned off and repositories need to be mounted manually\footnote{The \texttt{cvmfs\_config chksetup} utility will print a warning when \autofs\ is disabled.  The warning can be ignored in case of the NFS mode.}.
+
+In the NFS mode, upon mount an additionally directory nfs\_maps.\$repository\_name appears in the \cvmfs\ cache directory.
 These \emph{NFS maps} store the virtual inode \cvmfs\ issues for any accessed path.
 The virtual inode may be requested by NFS clients anytime later.
 As the NFS server has no control over the lifetime of client caches, entries in the NFS maps cannot be removed.
