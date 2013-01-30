@@ -4,13 +4,13 @@
 		\toprule
 		{\bf\centering Parameter} 			& {\bf\centering Meaning}\\
 		\midrule
-		\tt CVMFS\_REPOSITORY\_NAME			& The fully qualified name of the specific repository\\
-		\tt CVMFS\_REPOSITORY\_TYPE			& Defines if the repository is a master copy (\texttt{stratum0}) or a replica (\texttt{stratum1})\\
-		\tt CVMFS\_SPOOL\_DIR					& Location of the upstream spooler scratch directories (i.e. the read-only \cvmfs\ moint point and copy-on-write storage reside here)\\
-		\tt CVMFS\_UPSTREAM\_STORAGE			& Upstream spooler description defining the basic upstream storage type and configuration\\
-		\tt CVMFS\_STRATUM0					& URL of the master copy (\texttt{stratum0}) of this specific repository\\
-		\tt CVMFS\_UNION\_DIR					& Mount point of the union file system between \cvmfs\ and \aufs\. Changes while repository updates go here (see Section \ref{sct:repocreateandupdate}) \\
-		\tt CVMFS\_USER						& The user name that owns and manipulates the files inside the repository\\
+		\tt CVMFS\_REPOSITORY\_NAME			& The fully qualified name of the specific repository.\\
+		\tt CVMFS\_REPOSITORY\_TYPE			& Defines if the repository is a master copy (\texttt{stratum0}) or a replica (\texttt{stratum1}).\\
+		\tt CVMFS\_SPOOL\_DIR					& Location of the upstream spooler scratch directories; the read-only \cvmfs\ moint point and copy-on-write storage reside here.\\
+		\tt CVMFS\_UPSTREAM\_STORAGE			& Upstream spooler description defining the basic upstream storage type and configuration.\\
+		\tt CVMFS\_STRATUM0					& URL of the master copy (\texttt{stratum0}) of this specific repository.\\
+		\tt CVMFS\_UNION\_DIR					& Mount point of the union file system between \cvmfs\ and \aufs. Here, changes to the repository are performed (see Section \ref{sct:repocreateandupdate}).\\
+		\tt CVMFS\_USER							& The user name that owns and manipulates the files inside the repository.\\
 		\bottomrule
 	\end{longtable}
 %\end{longtable}

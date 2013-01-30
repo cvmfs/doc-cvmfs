@@ -6,6 +6,7 @@ The \cvmfs\ software is available in form of several RPM packages:
 	\item[cvmfs-release] Adds the \cvmfs\ yum repository.
 	\item[cvmfs-keys] Contains the public key for signature verification of repositories in the cern.ch domain.
 	\item[cvmfs] Contains the Fuse module and additional client tools.  It has dependencies to cvmfs-keys, fuse, and autofs.
+	\item[cvmfs-devel] Contains the \texttt{libcvmfs.a} static library and the \texttt{libcvmfs.h} header file for use of \cvmfs\ with Parrot\cite{parrot05}.
 	\item[cvmfs-init-scripts] Contains special settings for some of the repositories.
 		For instance, the ATLAS nightly builds are provided by a URL other than the other repositories in cern.ch.
 		Depends on cvmfs.
