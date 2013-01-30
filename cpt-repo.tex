@@ -78,6 +78,7 @@ Once created, you should see your repository mounted under \texttt{/cvmfs/my.rep
 Following this step, you can produce the first revision by going through the repository update procedure described in the next section.
 
 \subsection{Repository Update}
+\label{sct:repoupdateprocedure}
 Typically a repository publisher does the following steps in order to create a new revision of a repository:
 \begin{enumerate}
 	\item Run \texttt{cvmfs\_server transaction} to switch to a copy-on-write enabled \cvmfs\ volume
@@ -94,3 +95,47 @@ Typically a repository publisher does the following steps in order to create a n
 \cvmfs\ supports to have more than one repository on a single server machine.
 In case of a multi-repository host, you need to specify which repository you want to operate on, when running the \texttt{cvmfs\_server} utility commands.
 Additionally you should run \texttt{cvmfs\_server resign} every 30 days to update the signatures of the repository.
+
+\subsection{Customizable Actions Using Server Hooks}
+The \texttt{cvmfs\_server} utility allows release managers to trigger custom actions before and after crucial repository manipulation steps. This can be useful for example for logging purposes, establishing backend storage connections automatically or other workflow triggers, depending on the application.
+
+There are six designated server hooks that are potentially invoked during the repository update procedure described in Section \ref{sct:repoupdateprocedure}:
+\begin{itemize}
+	\item When running \texttt{cvmfs\_server transaction}:
+	\begin{itemize}
+		\item \emph{before} the given repository is transitioned into transaction mode
+		\item \emph{after} the transition was successful
+	\end{itemize}
+	\item When running \texttt{cvmfs\_server publish}:
+	\begin{itemize}
+		\item \emph{before} the publish procedure for the given repository is started
+		\item \emph{after} it was published and remounted successfully
+	\end{itemize}
+	\item When running \texttt{cvmfs\_server abort}:
+	\begin{itemize}
+		\item \emph{before} the unpublished changes will be erased for the given repository
+		\item \emph{after} the repository was successfully reverted to the last published state
+	\end{itemize}
+\end{itemize}
+All server hooks must be defined in a single shell script file called:
+\begin{verbatim}
+/etc/cvmfs/cvmfs_server_hooks.sh
+\end{verbatim}
+The \texttt{cvmfs\_server} utility will check the existence of this script and source it.
+To subscribe to the described hooks one needs to define one or more of the following shell script functions:
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\item \texttt{transaction\_before\_hook()}
+	\item \texttt{transaction\_after\_hook()}
+\end{itemize}
+\begin{itemize}
+	\item \texttt{publish\_before\_hook()}
+	\item \texttt{publish\_after\_hook()}
+\end{itemize}
+\begin{itemize}
+	\item \texttt{abort\_before\_hook()}
+	\item \texttt{abort\_after\_hook()}
+\end{itemize}
+The defined functions get called at the specified positions in the repository update process and are provided with the fully qualified repository name as their only parameter~(\texttt{\$1}).
+Undefined functions automatically default to a NO-OP.
+You might consult the example script located at \texttt{cvmfs/cvmfs\_server\_hooks.sh.demo} in the \cvmfs\ sources.
