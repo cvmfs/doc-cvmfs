@@ -73,6 +73,7 @@ In order to mount \cvmfs\ privately, use the \texttt{cvmfs2} command like
 A minimal sample myparams.conf file could look like this:
 \begin{verbatim}
   CVMFS_CACHE_BASE=/home/user/mycache
+  CVMFS_RELOAD_SOCKETS=/home/user/mycache
   CVMFS_SERVER_URL=http://cvmfs-stratum-one.cern.ch/opt/atlas
   CVMFS_HTTP_PROXY=DIRECT
   CVMFS_PUBLIC_KEY=/etc/cvmfs/keys/cern.ch.pub:\
