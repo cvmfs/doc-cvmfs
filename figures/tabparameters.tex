@@ -4,6 +4,7 @@
 		\toprule
 		{\bf\centering Parameter} 			& {\bf\centering Meaning}\\
 		\midrule
+		\tt CVMFS\_64BIT\_INODES			& If set to ``yes'', use \SI{64}{\bit} inodes which are less likely to overflow. \SI{32}{\bit} software might be incompatible with this setting.\\
 		\tt CVMFS\_AUTO\_UPDATE			& If set to ``no'', disables the automatic update of file catalogs.\\
 		\tt CVMFS\_BACKOFF\_INIT			& Seconds for the maximum initial backoff when retrying to download data.\\ 
 		\tt CVMFS\_BACKOFF\_MAX			& Maximum backoff in seconds when retrying to download data.\\
@@ -14,6 +15,7 @@
 		\tt CVMFS\_HTTP\_PROXY				& Chain of HTTP proxy groups used by \cvmfs. Necessary. Set to \texttt{DIRECT} if you don't use proxies.\\
 		\tt CVMFS\_IGNORE\_SIGNATURE		& When set to ``yes'', don't verify \cvmfs\ file catalog signatures.\\
 		\tt CVMFS\_KCACHE\_TIMEOUT			& Timeout for path names and file attributes in the kernel file system buffers.\\
+		\tt CVMFS\_KEYS\_DIR				& Directory containing *.pub files used as repository signing keys.  If set, this parameter has precedence over \texttt{CVMFS\_PUBLIC\_KEY}.\\
 		\tt CVMFS\_MAX\_RETRIES			& Maximum number of retries for a given proxy/host combination.\\
 		\tt CVMFS\_MAX\_TTL				& Maximum file catalog TTL in minutes.  Can overwrite the TTL stored in the catalog.\\
 		\tt CVMFS\_MEMCACHE\_SIZE			& Size of the \cvmfs\ meta-data memory cache in Megabyte.\\
