@@ -173,10 +173,10 @@ NFS export requires Linux kernel >= 2.6.27 on the NFS server.
 It works for Scientific Linux 6 but not for Scientific Linux 5. 
 NFS clients can run both SL5 and SL6.
 For proper NFS support, set \texttt{CVMFS\_NFS\_SOURCE=yes}. 
-Also, \autofs\ for \cvmfs\ needs to be turned off and repositories need to be mounted manually\footnote{The \texttt{cvmfs\_config chksetup} utility will print a warning when \autofs\ is disabled.  The warning can be ignored in case of the NFS mode.}.
+Also, \autofs\ for \cvmfs\ needs to be turned off and repositories need to be mounted manually.
 
 In the NFS mode, upon mount an additionally directory nfs\_maps.\$repository\_name appears in the \cvmfs\ cache directory.
-These \emph{NFS maps} store the virtual inode \cvmfs\ issues for any accessed path.
+These \emph{NFS maps} use \leveldb\ to store the virtual inode \cvmfs\ issues for any accessed path.
 The virtual inode may be requested by NFS clients anytime later.
 As the NFS server has no control over the lifetime of client caches, entries in the NFS maps cannot be removed.
 
@@ -185,12 +185,27 @@ A recursive \texttt{find} on /cvmfs/atlas.cern.ch with 25 million entries, for i
 For a \cvmfs\ instance that is exported via NFS, the safety margin for the NFS maps needs be taken into account.
 It also might be necessary to monitor the actual space consumption.
 
+\subsection{Tuning}
 For decent performance, the amount of memory given to the meta-data cache should be increased. 
 By default, this is 16M.
 It can be increased, for instance, to 256M by setting \texttt{CVMFS\_MEMCACHE\_SIZE} to 256.
-Furthermore, the maximum number of download retries should be increased to at least 2 for the NFS use case. 
+Furthermore, the maximum number of download retries should be increased to at least 2 for the NFS use case.
 
-A sample entry /etc/exports
+The number of NFS daemons should be increased as well.
+A value of 128 NFS daemons has shown perform well.
+In Scientific Linux, the number of NFS daemons is set by the \texttt{RPCNFSDCOUNT} parameter in /etc/sysconfig/nfs.
+
+The performance will benefit from large RAM on the NFS server ($\geq\SI{16}{\giga\byte}$) and \cvmfs\ caches hosted on an SSD hard drive.
+
+\subsection{Shared NFS Maps (HA-NFS)}
+As an alternative to the existing, \leveldb\ managed NFS maps, the NFS maps can optionally be managed out of the \cvmfs\ cache directory by \sqlite.
+This allows the NFS maps to be placed on shared storage and accessed by multiple \cvmfs\ NFS export nodes simultaneously for clustering and active high-availablity setups.
+In order to enable shared NFS maps, set \texttt{CVMFS\_NFS\_SHARED} to the path that should be used to host the \sqlite\ database.  
+If the path is on shared storage, the shared storage has to support POSIX file locks.
+The drawback of the \sqlite\ managed NFS maps is a significant performance penalty which in practice can be covered by the memory caches.
+
+\subsection{Sample}
+A sample entry /etc/exports (note: the fsid needs to be different for every exported \cvmfs\ repository)
 \begin{verbatim}
   /cvmfs/atlas.cern.ch 172.16.192.0/24(ro,sync,no_root_squash,\
     no_subtree_check,fsid=101)
@@ -198,7 +213,7 @@ A sample entry /etc/exports
 A sample entry /etc/fstab entry on a client:
 \begin{verbatim}
   172.16.192.210:/cvmfs/atlas.cern.ch /cvmfs/atlas.cern.ch nfs \
-    nfsvers=3,noatime,ac,actimeo=60 0 0
+    ro,nfsvers=3,noatime,nodiratime,ac,actimeo=60,lookupcache=all 0 0
 \end{verbatim}
 
 
