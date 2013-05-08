@@ -169,9 +169,10 @@ With every retry, the backoff is then doubled.
 In case there is no local hard disk space available on a cluster of worker nodes, a single \cvmfs\ client can be exported via NFS~\cite{rfc1813,rfc3530} to these worker nodes.
 This mode of deployment will inevitably introduce a performance bottleneck and a single point of failure and should be only used if necessary.
 
-NFS export requires Linux kernel >= 2.6.27 on the NFS server. 
-It works for Scientific Linux 6 but not for Scientific Linux 5. 
+NFS export requires Linux kernel >= 2.6.27 on the NFS server.
+It works for Scientific Linux 6 but not for Scientific Linux 5.
 NFS clients can run both SL5 and SL6.
+The NFS server should run a lock server as well.
 For proper NFS support, set \texttt{CVMFS\_NFS\_SOURCE=yes}. 
 Also, \autofs\ for \cvmfs\ needs to be turned off and repositories need to be mounted manually.
 
