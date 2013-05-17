@@ -4,7 +4,6 @@
 		\toprule
 		{\bf\centering Parameter} 			& {\bf\centering Meaning}\\
 		\midrule
-		\tt CVMFS\_64BIT\_INODES			& If set to ``yes'', use \SI{64}{\bit} inodes which are less likely to overflow. \SI{32}{\bit} software might be incompatible with this setting.\\
 		\tt CVMFS\_AUTO\_UPDATE			& If set to ``no'', disables the automatic update of file catalogs.\\
 		\tt CVMFS\_BACKOFF\_INIT			& Seconds for the maximum initial backoff when retrying to download data.\\ 
 		\tt CVMFS\_BACKOFF\_MAX			& Maximum backoff in seconds when retrying to download data.\\
@@ -19,6 +18,7 @@
 		\tt CVMFS\_MAX\_RETRIES			& Maximum number of retries for a given proxy/host combination.\\
 		\tt CVMFS\_MAX\_TTL				& Maximum file catalog TTL in minutes.  Can overwrite the TTL stored in the catalog.\\
 		\tt CVMFS\_MEMCACHE\_SIZE			& Size of the \cvmfs\ meta-data memory cache in Megabyte.\\
+		\tt CVMFS\_MOUNT\_RW				& Mount \cvmfs\ as a read/write file system.  Write operations will fail but this option can workaround faulty \texttt{open()} flags.\\
 		\tt CVMFS\_NFILES					& Maximum number of open file descriptors that can be used by the \cvmfs\ process.\\
 		\tt CVMFS\_NFS\_SOURCE				& If set to ``yes'', act as a source for the NFS daemon (NFS export).\\
 		\tt CVMFS\_NFS\_SHARED				& If set a path, used to store the NFS maps in an SQlite database, instead of the usual LevelDB storage in the cache directory.\\
