@@ -28,6 +28,7 @@
 		\tt CVMFS\_QUOTA\_LIMIT			& Soft-limit of the cache in Megabyte.\\
 		\tt CVMFS\_RELOAD\_SOCKETS			& Directory of the sockets used by the \cvmfs\ loader to trigger hotpatching/reloading.\\
 		\tt CVMFS\_REPOSITORIES			& Comma-separated list of fully qualified repository names that shall be mountable under /cvmfs.\\
+		\tt CVMFS\_REPOSITORY\_TAG			& Select a named repository snapshot that should be mounted instead of \texttt{trunk}.\\
 		\tt CVMFS\_ROOT\_HASH				& Hash of the root file catalog, implies \texttt{CVMFS\_AUTO\_UPDATE=no}.\\
 		\tt CVMFS\_SERVER\_URL				& Semicolon-separated chain of Stratum~1 servers.\\
 		\tt CVMFS\_SHARED\_CACHE			& If set to ``no'', makes a repository use an exclusive cache.\\
@@ -38,6 +39,7 @@
 		\tt CVMFS\_TIMEOUT\_DIRECT 		& Timeout in seconds for HTTP requests without a proxy server.\\
 		\tt CVMFS\_TRACEFILE				& If set, enables the tracer and trace file system calls to the given file.\\
 		\tt CVMFS\_USER						& Sets the \texttt{gid} and \texttt{uid} mount options. Don't touch or overwrite.\\
+		\tt CVMFS\_USYSLOG					& All messages that normally are logged to syslog are re-directed to the given file.  This file can grow up to \SI{500}{\kilo\byte} and there is one step of log rotation.  Required for $\mu$CernVM.\\
 		\bottomrule
 	\end{longtable}
 %\end{longtable}
