@@ -81,6 +81,9 @@ A minimal sample myparams.conf file could look like this:
 Make sure to use absolute path names for the mount point and for the cache directory.
 Use \texttt{fusermount -u} in order to unmount a privately mounted \cvmfs\ repository.
 
+The private mount points can also be used to use the \cvmfs\ Fuse module where it has not been installed under /usr and /etc.
+If the public keys are not installed under /etc/cvmfs/keys, the directory of the keys needs to be specified in the config file by \texttt{CVMFS\_KEYS\_DIR=<directory>}.
+If the libcvmfs\_fuse.so library is not installed in one of the standard search paths, the \texttt{LD\_LIBRARY\_PATH} variable has to be set accordingly for the \texttt{cvmfs2} command.
 
 \section{Cache Settings}
 \label{sct:config:cache}
