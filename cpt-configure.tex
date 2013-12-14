@@ -132,6 +132,18 @@ In order to avoid \cvmfs\ being stuck with proxies at a remote site after a fail
 The delay for re-trying a proxies from the primary group is set in seconds by \texttt{CVMFS\_PROXY\_RESET\_AFTER}.
 The distinction of primary and backup proxy groups can be turned off by setting this parameter to 0.
 
+\subsubsection{Automatic Proxy Configuration}
+The proxy settings can be automatically gathered through WPAD.
+The special proxy server ``auto'' in \texttt{CVMFS\_HTTP\_PROXY} is resolved according to the proxy server specification loaded from a PAC file.
+PAC files can be on a file system or accessible via HTTP.
+\cvmfs\ looks for PAC files in the following order:
+\begin{enumerate}
+	\item Semicolon separated URLs in the \texttt{PAC\_URLS} environment variable
+	\item \url{http://wpad/wpad.dat}
+	\item \url{http://wlcg-wpad.cern.ch/wpad.dat}
+\end{enumerate}
+
+
 \subsection{Timeouts}
 \cvmfs\ tries to gracefully recover from broken network links and temporarily overloaded paths.
 The timeout for connection attempts and for very slow downloads can be set by \texttt{CVMFS\_TIMEOUT} and \texttt{CVMFS\_TIMEOUT\_DIRECT}.
