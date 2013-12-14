@@ -1,9 +1,14 @@
 \chapter{Creating a Repository (Stratum~0)}
 \label{sct:createrepo}
 
+% Introduction
+% Components
+% Installation / Requirements
+% Cvmfs server and cvmfs swissknife
+
 \cvmfs\ is a file system with a single source of (new) data.
-This single source, the repository \emph{Stratum 0}, is maintained by a dedicated \emph{release manager machine}.
-A read-writable copy of the repository is available on the release manager machine.
+This single source, the repository \emph{Stratum 0}, is maintained by a dedicated \emph{release manager machine} or \emph{installation box}.
+A read-writable copy of the repository is accessible on the release manager machine.
 The \cvmfs\ server tool kit is used to \emph{publish} the current state of the repository on the release manager machine.
 Publishing is an atomic operation.
 
@@ -31,7 +36,6 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 Since the repositories may contain many file system objects\footnote{For ATLAS, for example, ``many'' means order of $10^7$ file system objects (\ie number of regular files, symbolic links, and directories).}, we cannot afford to generate an entire repository from scratch for every update.
 Instead, we add a writable file system layer on top of a mounted read-only \cvmfs\ repository using the union file system \aufs~\cite{aufs}.
 This renders a read-only \cvmfs\ mount point writable to the user, while all performed changes are stored in a special writable scratch area managed by \aufs.
-%One could see the result as a virtual version of the \emph{shadow tree} we used for updating repositories in previous versions of \cvmfs.
 A similar approach is used by Linux Live Distributions that are shipped on read-only media, but allow \emph{virtual} editing of files where changes are stored on a RAM disk.
 
 If a file in the \cvmfs\ repository gets changed, \aufs\ first copies it to the writable volume and applies any changes to this copy (copy-on-write semantics).
@@ -47,14 +51,9 @@ Therefore, any unsuccessful updates to a repository can be rolled back by simply
 
 In order to create a repository, the server and client part of \cvmfs\ must be installed on the release manager machine.
 Furthermore your machine should provide an \aufs\ enabled Kernel as well as a running \texttt{Apache2} web server.
-Currently we support Scientific Linux 5 and 6 as well as Ubuntu 12.04 distributions.
+Currently we support Scientific Linux 6 and Ubuntu 12.04 distributions.
 Please note, that Scientific Linux 6 \emph{does not} ship with an \aufs\ enabled kernel, therefore we provide a compatible patched kernel as RPMs (see Appendix~\ref{apx:rpms}).
 
-%Special care should be taken for the mount point of \cvmfs\ repositories.
-%From the point of view of the file system, repositories are relocatable.
-%However, many software installation tools hard-code the full path and therefore break relocatability on the application level.
-%In effect, repositories have to be mounted at the same location that was used to install it on the release manager machine.
-%By convention, \cvmfs\ repositories are mounted using their fully qualified repository name under \texttt{/cvmfs}, for instance at \texttt{/cvmfs/atlas.cern.ch}.
 
 \section{\cvmfs\ Repository Creation and Updating}
 \label{sct:repocreateandupdate}
@@ -139,3 +138,126 @@ To subscribe to the described hooks one needs to define one or more of the follo
 The defined functions get called at the specified positions in the repository update process and are provided with the fully qualified repository name as their only parameter~(\texttt{\$1}).
 Undefined functions automatically default to a NO-OP.
 You might consult the example script located at \texttt{cvmfs/cvmfs\_server\_hooks.sh.demo} in the \cvmfs\ sources.
+
+
+\section{Maintaining a CernVM-FS Repository}
+
+\cvmfs\ is a versioning, snapshot-based file system. 
+Similar to versioning systems, changes to /cvmfs/\dots are temporary until they are committed (\texttt{cvmfs\_server publish}) or discarded (\texttt{cvmfs\_server abort}). 
+That allows you to test and verify your changes, for instance to test a newly installed release before publishing it to clients.
+Whenever changes are published (committed), a new file system snapshot of the current state is created. 
+These file system snapshots can be tagged with a name, which makes them \emph{named snapshots}. 
+A named snapshot is meant to stay in the file system. 
+You can rollback to named snapshots and you can, on client side, decide to mount any of the named snapshots in lieu of the newest available snapshot.
+
+Two named snapshots are managed automatically by \cvmfs, \texttt{trunk} and \texttt{trunk-previous}. 
+This allows for easy unpublishing of a mistake, by rolling back to the \texttt{trunk-previous} tag.
+
+\subsection{Check Integrity}
+\cvmfs\ provides an integrity checker for repositories.
+Run the integrity checker using
+\begin{verbatim}
+cvmfs_server check
+\end{verbatim}
+
+The integrity checker verifies the sanity of file catalogs and verifies that referenced data chunks are present.
+Ideally, run the integrity checker after every publish operation.
+Where this is not affordable due to the size of the repositories, run the integrity checker regularly.
+
+\subsection{Manage Named Snapshots}
+
+At the point of publishing, the resulting snapshot can be named. 
+To do so, use the -a option like
+\begin{verbatim}
+cvmfs_server transaction
+# Changes
+cvmfs_server publish -a release-1.0
+\end{verbatim}
+
+As a tag name, use an identifier without spaces and special characters. 
+You can list all named snapshots by 
+\begin{verbatim}
+cvmfs_server lstags
+\end{verbatim}
+
+In order to remove (unpublish) a named snapshot, use the -r option like
+\begin{verbatim}
+cvmfs_server transaction
+cvmfs_server publish -r release-1.0
+\end{verbatim}
+
+Use named snapshots whenever you do larger modifications to the repository, for instance when you install a new software release. 
+Only with named snapshots you have the ability to easily undo modifications and to preserve the state of the file system for the future. 
+Nevertheless, do not use named snapshots excessively. 
+Start cleaning up unneccesary snapshots once you have more than $\approx 50$.
+
+\subsection{Rollbacks}
+
+You can rollback your repository to any of the named snapshots. 
+Technically, this means that the given snapshot is re-published, while all intermediate snapshots are removed from the history.
+
+In order to rollback, do
+\begin{verbatim}
+cvmfs_server transaction
+cvmfs_server rollback -t release-1.0
+\end{verbatim}
+
+A rollback is, like restoring from backups, not something you would do often. 
+Use caution. 
+A rollback is irreversible.
+
+\subsection{Manage Nested Catalogs}
+
+\cvmfs\ stores meta-data (path names, file sizes, \dots) in file catalogs. 
+When a client accesses a repository, it has to download the file catalog first and then it downloads the files as they are opened. 
+A single file catalog for an entire repository can quickly become large and impractical. 
+At the same time, clients typically to not need all of the repository's meta-data at the same time. 
+For instance, clients using software release 1.0 do not need to know about the contents of software release 2.0.
+
+With nested catalogs, \cvmfs\ has a mechansim to partition the directory tree of a repository into many catalogs. 
+Repository maintainers are responsible for sensible cutting of the directory trees into nested catalogs. 
+They can do so by creating and removing the magic file \texttt{.cvmfscatalog}.
+
+For example, in order to create a nested catalog for software relase 1.0 in the hypothetical repository experiment.cern.ch, do
+\begin{verbatim}
+cvmfs_transaction
+touch /cvmfs/experiment.cern.ch/software/1.0/.cvmfscatalog
+cvmfs_server publish
+\end{verbatim}
+
+If you want to merge a nested catalog with its parent catalog, remove the corresponing .cvmfscatalog file. 
+Nested catalogs can be nested on aritrary many levels.
+
+\subsection{Recommendations for Nested Catalogs}
+Nested catalogs should be created having in mind which files and directories are accessed together. 
+This is typically the case for software releases, but can be also on the directory level that separates platforms. 
+For instance, for a directory layout like
+\begin{verbatim}
+/cvmfs/experiment.cern.ch
+  |- /software
+  |    |- /i686
+  |    |    |- 1.0
+  |    |    |- 2.0
+  |    `    |- common
+  |    |- /x86_64
+  |    |    |- 1.0
+  |    `    |- common  
+  |- /grid-certificates
+  |- /scripts 
+\end{verbatim}
+it makes sense to have nested catalogs at
+\begin{verbatim}
+/cvmfs/experiment.cern.ch/software/i686
+/cvmfs/experiment.cern.ch/software/x86_64
+/cvmfs/experiment.cern.ch/software/i686/1.0
+/cvmfs/experiment.cern.ch/software/i686/2.0
+/cvmfs/experiment.cern.ch/software/x86_64/1.0 
+\end{verbatim}
+
+It could also make sense to have a nested catalog under grid-certificates, if the certificates are updated much more frequently than the other directories. 
+It would not make sense to create a nested catalog under /cvmfs/experiment.cern.ch/software/i686/common, because this directory needs to be accessed anyway whenever its parent directory is needed.
+As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than ~200\,000 files.
+
+Restructuring the repository's directory tree is an expensive operation in CernVM-FS. 
+Moreover, it can easily break clients when they switch to a restructured file system snapshot. 
+Therefore, your software directory tree layout should be relatively stable before you start filling the CernVM-FS repository.
