@@ -15,6 +15,7 @@ Parrot traps the system I/O calls and that is resulting in a performance penalty
 The principal differences of \cvmfs\ compared to \product{grow-fs} are:
 \begin{itemize}
 	\item Use of the the Fuse kernel module~\cite{fuse} that comes with in-kernel caching of file data and file attributes
+	\item Cache quota management
 	\item Use of a content addressable storage format resulting in immutable files and automatic file de-duplication
 	\item Possibility to split a directory hierarchy into sub catalogues at user-defined levels
 	\item Automatic updates of file catalogs controlled by a \indexed{time to live}\index{TTL|see{time to live}} stored inside file catalogs
@@ -28,7 +29,7 @@ The principal differences of \cvmfs\ compared to \product{grow-fs} are:
 	\item Automatic load-balancing of proxy servers
 	\item Support for WPAD/PAC auto-configuration of proxy servers
 	\item Efficient replication of repositories
-	\item Possibility to use a key-value store instead of a file system as repository storage
+	\item Possibility to use S3 compatible storage instead of a file system as repository storage
 \end{itemize}
 
 %\cvmfs\ can be seen as network file system (Figure~\ref{fig:classification}).
