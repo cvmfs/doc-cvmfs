@@ -150,7 +150,7 @@ With every retry, the backoff is then doubled.
 \section{Cache Settings}
 \label{sct:config:cache}
 Downloaded files will be stored in a local cache directory.
-The \cvmfs\ cache has a soft quota; as a safety margin, the partition hosting the cache should provide \SI{10}{\percent} more space than the soft quota limit.
+The \cvmfs\ cache has a soft quota; as a safety margin, the partition hosting the cache should provide \SI{15}{\percent} more space than the soft quota limit.
 Once the quota limit is reached, \cvmfs\ will automatically remove files from the cache according to the least recently used policy~\cite{lru06}.
 Removal of files is performed bunch-wise until half of the maximum cache size has been freed.
 Currently, \cvmfs\ is not able to access files in the repository that are larger than half of the cache quota.
@@ -168,6 +168,34 @@ File duplicates across repositories are stored only once in the shared cache.
 The quota limit of the shared directory should be at least the maximum of the recommended limits of its participating repositories.
 In order to have a repository not join the shared cache but use an exclusive cache, set \texttt{CVMFS\_SHARED\_CACHE=no}.
 
+\subsection{Alien Cache}
+An ``alien cache'' provides the possibility to use a data cache outside the control of \cvmfs.
+This can be necessary in HPC environments where local disk space is not available or scarce but powerful cluster file systems are available.
+The alien cache directory is a directory in addition to the ordinary cache directory.
+The ordinary cache directory is still used to store control files.
+
+The alien cache directory is set by the \texttt{CVMFS\_ALIEN\_CACHE} option.
+It can be located anywhere including cluster and network file systems
+If configured, all data chunks are stored there.
+\cvmfs\ ensures atomic access to the cache directory.
+It is safe to have the alien directory shared by multiple \cvmfs\ processes and it is safe to unlink files from the alien cache directory anytime.
+The contents of files, however, must not be touched by third-party programs.
+
+In contrast to normal cache mode where files are store in mode 0600, in the alien cache files are stored in mode 0660.  
+So all users being part of the alien cache directory's owner group can use it.
+
+The skeleton of the alien cache directory should be created upfront.
+Otherwise, the first \cvmfs\ process accessing the alien cache determines the ownership.
+The \texttt{cvmfs2} binary can create such a skeleton using
+\begin{verbatim}
+cvmfs2 __MK_ALIEN_CACHE__ $alien_cachedir $owner_uid $owner_gid
+\end{verbatim}
+
+Since the alien cache is unmanaged, there is no automatic quota management provided by \cvmfs; the alien cache directory is ever-growing.
+The \texttt{CVMFS\_ALIEN\_CACHE} requires \texttt{CVMFS\_QUOTA\_LIMIT=-1} and \texttt{CVMFS\_SHARED\_CHACE=no}.
+
+The alien cache might be used in combination with a special repository replication mode that preloads a cache directory (\cf Section~\ref{sct:replica}).
+This allows to propagate an entire repository into the cache of a cluster file system for HPC setups that do not allow outgoing connectivity.
 
 \section{NFS Server Mode}
 In case there is no local hard disk space available on a cluster of worker nodes, a single \cvmfs\ client can be exported via NFS~\cite{rfc1813,rfc3530} to these worker nodes.
@@ -209,8 +237,8 @@ In order to enable shared NFS maps, set \texttt{CVMFS\_NFS\_SHARED} to the path 
 If the path is on shared storage, the shared storage has to support POSIX file locks.
 The drawback of the \sqlite\ managed NFS maps is a significant performance penalty which in practice can be covered by the memory caches.
 
-\subsection{Sample}
-A sample entry /etc/exports (note: the fsid needs to be different for every exported \cvmfs\ repository)
+\subsection{Example}
+An example entry /etc/exports (note: the fsid needs to be different for every exported \cvmfs\ repository)
 \begin{verbatim}
   /cvmfs/atlas.cern.ch 172.16.192.0/24(ro,sync,no_root_squash,\
     no_subtree_check,fsid=101)
