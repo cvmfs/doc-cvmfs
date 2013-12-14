@@ -14,16 +14,21 @@ The first implementation of \cvmfs\ was based on \product{grow-fs}~\cite{parrot0
 Parrot traps the system I/O calls and that is resulting in a performance penalty and occasional compatibility problems with some applications. 
 The principal differences of \cvmfs\ compared to \product{grow-fs} are:
 \begin{itemize}
-	\item Use of the the Fuse kernel module~\cite{fuse} that comes with in-kernel caching of file data and file attributes.
+	\item Use of the the Fuse kernel module~\cite{fuse} that comes with in-kernel caching of file data and file attributes
 	\item Use of a content addressable storage format resulting in immutable files and automatic file de-duplication
-	\item Capability to work in \indexed{offline mode} providing that all required files are cached.
-	\item Possibility to split a directory hierarchy into sub catalogues at user-defined levels.
-	\item Transparent file compression/decompression.
-	\item Dynamical expansion of environment variables embedded in \indexed{symbolic link}s\index{symlink|see{symbolic link}}.
-	\item Digitally signed repositories.
+	\item Possibility to split a directory hierarchy into sub catalogues at user-defined levels
 	\item Automatic updates of file catalogs controlled by a \indexed{time to live}\index{TTL|see{time to live}} stored inside file catalogs
-	\item Automatic server selection.
-	\item Random selection from a set of forward proxy servers, which results in automatic load-balancing of proxy servers
+	\item Digitally signed repositories
+	\item Transparent file compression/decompression and transparent file chunking
+	\item Capability to work in \indexed{offline mode} providing that all required files are cached
+	\item File system versioning
+	\item File system hotpatching
+	\item Dynamical expansion of environment variables embedded in \indexed{symbolic link}s\index{symlink|see{symbolic link}}
+	\item Automatic server selection
+	\item Automatic load-balancing of proxy servers
+	\item Support for WPAD/PAC auto-configuration of proxy servers
+	\item Efficient replication of repositories
+	\item Possibility to use a key-value store instead of a file system as repository storage
 \end{itemize}
 
 %\cvmfs\ can be seen as network file system (Figure~\ref{fig:classification}).

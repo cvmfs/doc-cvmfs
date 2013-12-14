@@ -85,27 +85,6 @@ The private mount points can also be used to use the \cvmfs\ Fuse module where i
 If the public keys are not installed under /etc/cvmfs/keys, the directory of the keys needs to be specified in the config file by \texttt{CVMFS\_KEYS\_DIR=<directory>}.
 If the libcvmfs\_fuse.so library is not installed in one of the standard search paths, the \texttt{LD\_LIBRARY\_PATH} variable has to be set accordingly for the \texttt{cvmfs2} command.
 
-\section{Cache Settings}
-\label{sct:config:cache}
-Downloaded files will be stored in a local cache directory.
-The \cvmfs\ cache has a soft quota; as a safety margin, the partition hosting the cache should provide \SI{10}{\percent} more space than the soft quota limit.
-Once the quota limit is reached, \cvmfs\ will automatically remove files from the cache according to the least recently used policy~\cite{lru06}.
-Removal of files is performed bunch-wise until half of the maximum cache size has been freed.
-Currently, \cvmfs\ is not able to access files in the repository that are larger than half of the cache quota.
-The quota limit can be set in Megabytes by \texttt{CVMFS\_QUOTA\_LIMIT}.
-For typical repositories, a few Gigabytes make a good quota limit.
-For repositories hosted at \cern, quota recommendations can be found under \url{http://cernvm.cern.ch/portal/cvmfs/examples}.
-
-The cache directory needs to be on a local file system in order to allow each host the accurate accounting of the cache contents; on a network file system, the cache can potentially be modified by other hosts.
-Furthermore, the cache directory is used to create (transient) sockets and pipes, which is usually only supported by a local file system such as ext3 or XFS.
-The location of the cache directory can be set by \texttt{CVMFS\_CACHE\_BASE}.
-
-Each repository can either have an exclusive cache or join the \cvmfs\ shared cache.
-The shared cache enforces a common quota for all repositories used on the host.
-File duplicates across repositories are stored only once in the shared cache.
-The quota limit of the shared directory should be at least the maximum of the recommended limits of its participating repositories.
-In order to have a repository not join the shared cache but use an exclusive cache, set \texttt{CVMFS\_SHARED\_CACHE=no}.
-
 \section{Network Settings}
 \label{sct:config:network}
 \cvmfs\ uses HTTP~\cite{rfc1945,rfc2616} for data transfer.
@@ -167,6 +146,28 @@ The overall number of requests with a given proxy/host combination is \texttt{\$
 \texttt{CVMFS\_BACKOFF\_INIT} sets the maximum initial backoff in seconds.  
 The actual initial backoff is picked with milliseconds precision randomly in the interval $[1, \text{\$CVMFS\_BACKOFF\_INIT}\cdot 1000]$.
 With every retry, the backoff is then doubled.
+
+\section{Cache Settings}
+\label{sct:config:cache}
+Downloaded files will be stored in a local cache directory.
+The \cvmfs\ cache has a soft quota; as a safety margin, the partition hosting the cache should provide \SI{10}{\percent} more space than the soft quota limit.
+Once the quota limit is reached, \cvmfs\ will automatically remove files from the cache according to the least recently used policy~\cite{lru06}.
+Removal of files is performed bunch-wise until half of the maximum cache size has been freed.
+Currently, \cvmfs\ is not able to access files in the repository that are larger than half of the cache quota.
+The quota limit can be set in Megabytes by \texttt{CVMFS\_QUOTA\_LIMIT}.
+For typical repositories, a few Gigabytes make a good quota limit.
+For repositories hosted at \cern, quota recommendations can be found under \url{http://cernvm.cern.ch/portal/cvmfs/examples}.
+
+The cache directory needs to be on a local file system in order to allow each host the accurate accounting of the cache contents; on a network file system, the cache can potentially be modified by other hosts.
+Furthermore, the cache directory is used to create (transient) sockets and pipes, which is usually only supported by a local file system such as ext3 or XFS.
+The location of the cache directory can be set by \texttt{CVMFS\_CACHE\_BASE}.
+
+Each repository can either have an exclusive cache or join the \cvmfs\ shared cache.
+The shared cache enforces a common quota for all repositories used on the host.
+File duplicates across repositories are stored only once in the shared cache.
+The quota limit of the shared directory should be at least the maximum of the recommended limits of its participating repositories.
+In order to have a repository not join the shared cache but use an exclusive cache, set \texttt{CVMFS\_SHARED\_CACHE=no}.
+
 
 \section{NFS Server Mode}
 In case there is no local hard disk space available on a cluster of worker nodes, a single \cvmfs\ client can be exported via NFS~\cite{rfc1813,rfc3530} to these worker nodes.

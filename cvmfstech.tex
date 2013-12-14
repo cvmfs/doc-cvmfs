@@ -18,6 +18,7 @@
 \providecommand{\squid}{{\scshape Squid}}
 \providecommand{\fuse}{{\scshape Fuse}}
 \providecommand{\fusex}{{\scshape Fuse4X}}
+\providecommand{\osxfuse}{{\scshape OSXFuse}}
 \providecommand{\aufs}{{\scshape AUFS}}
 \providecommand{\nfs}{{\scshape nfs}}
 \providecommand{\afs}{{\scshape AFS}}
@@ -38,7 +39,7 @@
 
 \begin{document}
 \selectlanguage{english}
-\renewcommand\today{March 2013}
+\renewcommand\today{December 2013}
 
 \pagestyle{empty}
 \begin{titlepage}
@@ -92,9 +93,9 @@
 	It was developed to assist High Energy Physics (HEP) collaborations to deploy software on the worldwide-distributed computing infrastructure used to run data processing applications.
 	\cvmfs\ is implemented as a POSIX read-only file system in user space (a FUSE module).
 	Files and directories are hosted on standard web servers and mounted in the universal namespace \texttt{/cvmfs}. 
-	Internally, it uses content-addressable storage and Merkle trees in order to maintain file data and meta-data.
+	Internally, \cvmfs\ uses content-addressable storage and Merkle trees in order to maintain file data and meta-data.
 	\cvmfs\ uses outgoing HTTP connections only, thereby it avoids most of the firewall issues of other network file systems.
-	It transfers data and meta-data on demand and verifies data integrity by cryptographic a hash.
+	It transfers data and meta-data on demand and verifies data integrity by cryptographic hashes.
 	
 	By means of aggressive caching and reduction of latency, \cvmfs\ focuses specifically on the software use case.
 	Software usually comprises many small files that are frequently opened and read as a whole.

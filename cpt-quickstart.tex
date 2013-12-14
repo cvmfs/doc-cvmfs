@@ -2,7 +2,7 @@
 \label{sct:start}
 
 This section describes how to install the \cvmfs\ client.
-\cvmfs\ is supported on Scientific Linux 5 and 6, Ubuntu 12.04, openSuSE 12.2, Fedora 17, and Mac OS X.
+\cvmfs\ is supported on Scientific Linux 5 and 6, Ubuntu 12.04, openSuSE 11.1 and 12.2, Fedora 17 and 19, and Mac OS X.
 
 \section{Getting the Software}
 The \cvmfs\ source code and binary packages are available under \url{https://cernvm.cern.ch/portal/downloads}.
@@ -12,7 +12,7 @@ The \texttt{cvmfs-release} packages can be used to add a these \yum\ repositorie
 The \texttt{cvmfs-release} packages are available under \url{https://cernvm.cern.ch/portal/downloads}.
 
 The \cvmfs\ client is not relocatable and needs to be installed under /usr.
-It compiles on x86, x86\_64, and ARMv6 architectures (on ARM it requires at least gcc 4.7).
+It compiles on x86, x86\_64 (as of gcc 4.2), and ARMv6 architectures (as of gcc 4.7).
 In order to compile and install from sources, use the following \cmake\ command:
 \begin{verbatim}
   cmake .
@@ -51,8 +51,8 @@ To install, proceed according to the following steps:
 \end{description}
 
 \subsection{Mac OS X}
-On Mac OS X, \cvmfs\ is based on \fusex\footnote{\url{http://fuse4x.github.com}}. 
-It is not yet integrated with \autofs.
+On Mac OS X, \cvmfs\ is based on \osxfuse\footnote{\url{http://osxfuse.github.io}}. 
+It is not integrated with \autofs.
 In order to install, proceed according to the following steps:
 \begin{description}
 	\item[Step 1] Install the \cvmfs\ package by opening the .pkg file.
