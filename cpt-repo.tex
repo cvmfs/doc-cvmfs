@@ -94,6 +94,7 @@ Typically a repository publisher does the following steps in order to create a n
 \cvmfs\ supports to have more than one repository on a single server machine.
 In case of a multi-repository host, you need to specify which repository you want to operate on, when running the \texttt{cvmfs\_server} utility commands.
 Additionally you should run \texttt{cvmfs\_server resign} every 30 days to update the signatures of the repository.
+Most \texttt{cvmfs\_server} commands allow for wildcards to do manipulations on more than one repository at once, i.e. \texttt{cvmfs\_server migrate *.cern.ch} would migrate all present repositories ending with \texttt{.cern.ch}.
 
 \subsection{Customizable Actions Using Server Hooks}
 The \texttt{cvmfs\_server} utility allows release managers to trigger custom actions before and after crucial repository manipulation steps. This can be useful for example for logging purposes, establishing backend storage connections automatically or other workflow triggers, depending on the application.
