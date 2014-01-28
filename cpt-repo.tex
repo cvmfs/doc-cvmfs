@@ -165,6 +165,9 @@ The integrity checker verifies the sanity of file catalogs and verifies that ref
 Ideally, run the integrity checker after every publish operation.
 Where this is not affordable due to the size of the repositories, run the integrity checker regularly.
 
+Optionally \texttt{cvmfs\_server check} can also verify the data integrity (command line flag \texttt{-i}) of each data object in the repository.
+However this is a time consuming process and we recommend it only for diagnostic purposes.
+
 \subsection{Manage Named Snapshots}
 
 At the point of publishing, the resulting snapshot can be named. 
