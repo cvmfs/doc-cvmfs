@@ -215,7 +215,7 @@ A rollback is irreversible.
 \cvmfs\ stores meta-data (path names, file sizes, \dots) in file catalogs. 
 When a client accesses a repository, it has to download the file catalog first and then it downloads the files as they are opened. 
 A single file catalog for an entire repository can quickly become large and impractical. 
-At the same time, clients typically to not need all of the repository's meta-data at the same time. 
+At the same time, clients typically do not need all of the repository's meta-data at the same time. 
 For instance, clients using software release 1.0 do not need to know about the contents of software release 2.0.
 
 With nested catalogs, \cvmfs\ has a mechansim to partition the directory tree of a repository into many catalogs. 
