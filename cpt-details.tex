@@ -73,7 +73,7 @@ Flags indicate the type of an directory entry (see Table~\ref{tab:catalog}).
 A file catalog contains a \emph{time to live} (TTL), stored in seconds.
 The catalog TTL advises clients to check for a new version of the catalog, when expired.
 Checking for a new catalog version takes place with the first file system operation on a \cvmfs\ volume after the TTL has expired.
-The default TTL is one hour.
+The default TTL is 15 minutes.
 If a new catalog is available, \cvmfs\ delays it's loading for the period of the \cvmfs\ kernel cache life time (default: 1 minute).
 During this drain-out period, the kernel caching is turned off.
 The first file system operation on a \cvmfs\ volume after that additional delay will apply a new file catalog and kernel caching is turned back on.
