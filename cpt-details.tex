@@ -129,14 +129,72 @@ The following counters are maintained for both a catalog itself and for the subt
 %They are implemented as SQlite catalogs as well having the same structure as normal catalogs.
 %The SHA-1 content hashes of the $\mu$-catalogs are stored in the hash field of the directory entries in the catalog table.
 
+\pagebreak
+\section{Repository Manifest (.cvmfspublished)}
+\label{sct:cvmfspublished}
+Every \cvmfs\ repository contains a repository manifest file that serves as entry point into the repository's catalog structure.
+The repository manifest is the first file accessed by the \cvmfs\ client at mount time and therefore must be accessible via HTTP on the repository root URL.
+It is always called \textbf{.cvmfspublished} and contains fundamental repository meta data like the root catalogs's SHA-1 hash and the repository revision number as a key-value list.
 
-\subsection{Catalog Signature}
-In order to provide authoritative information about a repository publisher, file catalogs are signed by an X.509 certificate.
-The \cvmfs\ server tool kit uses a X.509 certificate together with its private key in order to sign a catalog and its nested catalogs.
-It is important to note that it is sufficient to sign just the file catalog.
-Since every file is listed with its SHA-1 content hash inside the catalog, we gain a secure chain and may speak of a ``signed repository''.
+\subsection{Internal Manifest Structure}
+Below is an example of a typical manifest file.
+Each line starts with a capital letter specifying the meta data field, followed by the actual data string.
+The list of meta information is ended by a separator line (\texttt{-{}-}) followed by signature information further described in Section~\ref{sct:cvmfspublished:signature}.
+Please refer to table~\ref{tbl:manifestfields} for detailed information about each of the meta data fields.
 
-In order to validate file catalog signatures, \cvmfs\ uses a white-list of valid publisher certificates.
+\begin{table}
+	\begin{center}
+		\begin{tabularx}{\linewidth}{lX}
+			\toprule
+			{\bf\centering Field} & {\bf\centering Meta Data Description} \\
+			\midrule
+			\texttt{C} & SHA-1 hash of the repository's current root catalog \\
+			\texttt{R} & \begin{tabular}[t]{@{}l@{}}MD5 hash of the repository's root path\\(usually always \texttt{d41d8cd98f00b204e9800998ecf8427e})\end{tabular} \\
+			\texttt{B} & File size of the root catalog in bytes \\
+			\texttt{X} & SHA-1 hash of the signing certificate \\
+			\texttt{H} & SHA-1 hash of the repository's named tag history database \\
+			\texttt{T} & Unix timestamp of this particular revision \\
+			\texttt{D} & Time To Live (TTL) of the root catalog \\
+			\texttt{S} & Revision number of this published revision \\
+			\texttt{N} & The full name of the manifested repository \\
+			\texttt{L} & currently unused (reserved for micro catalogs) \\
+			\bottomrule
+		\end{tabularx}
+	\end{center}
+	\caption{Meaning of Repository Manifest Meta Data Fields}
+	\label{tbl:manifestfields}
+\end{table}
+
+\begin{verbatim}
+    C64551dccfbe0a48de7618dd7deb290200b474759
+    B1442336
+    Rd41d8cd98f00b204e9800998ecf8427e
+    D900
+    S42
+    Nexample.cern.ch
+    X731cca9476eb882f5a3f24aaa38001105a0e35eb
+    T1390301299
+    --
+    edde5308e502dd5e8fe405c56f5700f7477dc319
+    [...]
+\end{verbatim}
+
+\subsection{Repository Signature}
+\label{sct:cvmfspublished:signature}
+In order to provide authoritative information about a repository publisher, the repository manifest is signed by an X.509 certificate together with its private key.
+
+\subsubsection{Signing a Repository}
+It is important to note that it is sufficient to sign just the manifest file itself to gain a secure chain of the whole repository.
+The manifest refers to the SHA-1 content hash of the root catalog which in turn recursively references all sub-catalogs with their SHA-1 content hashes.
+Each catalog lists its files along with their SHA-1 content hashes.
+This concept is called a merkle tree and eventually provides a single hash that depends on the \textit{complete} content of the repository.
+
+The top level hash used for the repository signature can be found in the repository manifest right below the separator line (\texttt{-{}-} / see above).
+It is the SHA-1 hash of the manifest's meta data lines excluding the separator line.
+Following the top level hash is the actual signature produced by the X.509 certificate signing procedure in binary form.
+
+\subsubsection{Signature Validation}
+In order to validate repository manifest signatures, \cvmfs\ uses a white-list of valid publisher certificates.
 The white-list contains the SHA-1 fingerprints of known publisher certificates and a timestamp.
 A white-list is valid for 30 days.
 It is signed by a private RSA key, which we refer to as \emph{master key}.
@@ -164,6 +222,7 @@ Figure~\ref{fig:security} shows the trust chain with a signed repository.
 %\section{Repository Layout}
 %\label{sct:repository}
 
+\pagebreak
 \section{Use of HTTP}
 The particular way of using the \indexed{HTTP} protocol has significant impact on the performance and usability of \cvmfs.
 If possible, \cvmfs\ tries to benefit from the HTTP/1.1 features keep-alive and cache-control.
