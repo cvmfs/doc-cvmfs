@@ -67,7 +67,7 @@ Hardlinks are emulated by \cvmfs.
 The hardlink count is stored in the lower 32bit of the hardlinks field, a \emph{hardlink group} is stored in the higher 32 bit.
 If the hardlink group is greater than zero, all files with the same hardlink group will get the same inode issued by the \cvmfs\ Fuse client.
 The emulated hardlinks work within the same directory, only.
-The SHA-1~\cite{rfc3175} content hash referrs to the zlib-compressed~\cite{rfc1950} version of the file.
+The SHA-1~\cite{rfc3174} content hash refers to the zlib-compressed~\cite{rfc1950} version of the file.
 Flags indicate the type of an directory entry (see Table~\ref{tab:catalog}).
 
 A file catalog contains a \emph{time to live} (TTL), stored in seconds.
