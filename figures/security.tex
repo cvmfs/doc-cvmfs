@@ -10,7 +10,7 @@
 	\node[block,green!50!black,very thick] (cvmfs) at (6cm,-9cm) {\parbox{3.5cm}{\centering{\scshape CernVM-FS +\\CernVM} public key}};
 	
 	\draw[->,gray,very thick] (release manager.west) -- node[gray,fill=white] {\parbox{2cm}{\centering\includegraphics[width=1cm]{figures/fingerprint}\\ fingerprint}} (whitelist.north);
-	\draw[->,gray,very thick] (release manager.east) -- node[gray,fill=white] {\parbox{2cm}{\centering\includegraphics[width=1cm]{figures/sign-cert}\\ sign catalog}} (web server.north);
+	\draw[->,gray,very thick] (release manager.east) -- node[gray,fill=white] {\parbox{2cm}{\centering\includegraphics[width=1cm]{figures/sign-cert}\\ sign repository}} (web server.north);
 	\draw[->,gray,very thick] (whitelist.east) -- node[white,fill] {\parbox{2cm}{\centering\includegraphics[width=1cm]{figures/sign}\\ \textcolor{gray}{sign whitelist}}} ($(whitelist.east) + (8.75,0)$);
 	
 	\draw[->,very thick,blue!75,curve to,out=200,in=90] (web server.south west) to node[blue!75,fill=white] {\parbox{3cm}{\centering {\tikz \node[fill,draw,circle,inner sep=1pt]{\textcolor{white}1};}\\download\\signed catalog +\\signed whitelist}} (cvmfs.north);
