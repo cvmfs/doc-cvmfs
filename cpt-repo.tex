@@ -94,6 +94,40 @@ Typically a repository publisher does the following steps in order to create a n
 \cvmfs\ supports to have more than one repository on a single server machine.
 In case of a multi-repository host, you need to specify which repository you want to operate on, when running the \texttt{cvmfs\_server} utility commands.
 Additionally you should run \texttt{cvmfs\_server resign} every 30 days to update the signatures of the repository.
+Most \texttt{cvmfs\_server} commands allow for wildcards to do manipulations on more than one repository at once, i.e. \texttt{cvmfs\_server migrate *.cern.ch} would migrate all present repositories ending with \texttt{.cern.ch}.
+
+\subsection{Repository Import}
+The \cvmfs\ 2.1 server tools support the import of a \cvmfs\ file storage together with its corresponding signing keychain.
+With \texttt{cvmfs\_server import} both \cvmfs\ 2.0 and 2.1 compliant repository file storages can be imported.
+
+\texttt{cvmfs\_server import} works similar to \texttt{cvmfs\_server mkfs} (see \ref{sct:repocreation}) except it uses the provided data storage instead of creating a fresh (and empty) storage.
+In case of a \cvmfs\ 2.0 file storage \texttt{cvmfs\_server import} also takes care of the file catalog migration into the \cvmfs\ 2.1 schema.
+
+\subsubsection{Legacy Repository Import}
+We strongly recommend to install \cvmfs\ 2.1 on a fresh or at least a properly cleaned  machine without any traces of the \cvmfs\ 2.0 installation before installing \cvmfs\ 2.1 server tools.
+
+The command \texttt{cvmfs\_server import} requires the full \cvmfs\ 2.0 data storage which is located at /srv/cvmfs by default as well as the repository's signing keys.
+Since the \cvmfs\ 2.1 server backend supports multiple repositories in contrast to its 2.0 counterpart, we recommend to move the repository's data storage to /srv/cvmfs/<FQRN> upfront to avoid later inconsistencies.
+
+\vspace*\baselineskip
+In order to transform a repository from \cvmfs\ 2.0 into 2.1 you should roughly follow the following steps. As an example we are using a repository called \textbf{legacy.cern.ch}.
+\begin{enumerate}
+	\item Make sure that you have backups of both the repository's backend storage and its signing keys
+	\item Install and test the \cvmfs\ 2.1 server tools on the machine you are going to use as your Stratum 0 maintenance machine
+	\item Place the repository's backend storage data in /srv/cvmfs/\textit{legacy.cern.ch} \\ (default storage location)
+	\item Transfer the repository's signing keychain to the machine (f.e. to \textapprox/legacy\_keys/)
+	\item Run \texttt{cvmfs\_server import} roughly like this:
+\begin{verbatim}
+    cvmfs_server import
+      -o <username of repo maintainer> \
+      -k ~/legacy_keys \
+      -l               \ # for 2.0.x file catalog migration
+      -s               \ # for further repository statistics
+      legacy.cern.ch
+\end{verbatim}
+    \item Check the imported repository with \texttt{cvmfs\_server check legacy.cern.ch} for integrity (see \ref{sct:checkintegrity})
+\end{enumerate}
+
 
 \subsection{Customizable Actions Using Server Hooks}
 The \texttt{cvmfs\_server} utility allows release managers to trigger custom actions before and after crucial repository manipulation steps. This can be useful for example for logging purposes, establishing backend storage connections automatically or other workflow triggers, depending on the application.
@@ -154,6 +188,7 @@ Two named snapshots are managed automatically by \cvmfs, \texttt{trunk} and \tex
 This allows for easy unpublishing of a mistake, by rolling back to the \texttt{trunk-previous} tag.
 
 \subsection{Check Integrity}
+\label{sct:checkintegrity}
 \cvmfs\ provides an integrity checker for repositories.
 Run the integrity checker using
 \begin{verbatim}
@@ -163,6 +198,9 @@ cvmfs_server check
 The integrity checker verifies the sanity of file catalogs and verifies that referenced data chunks are present.
 Ideally, run the integrity checker after every publish operation.
 Where this is not affordable due to the size of the repositories, run the integrity checker regularly.
+
+Optionally \texttt{cvmfs\_server check} can also verify the data integrity (command line flag \texttt{-i}) of each data object in the repository.
+However this is a time consuming process and we recommend it only for diagnostic purposes.
 
 \subsection{Manage Named Snapshots}
 
@@ -211,22 +249,22 @@ A rollback is irreversible.
 \cvmfs\ stores meta-data (path names, file sizes, \dots) in file catalogs. 
 When a client accesses a repository, it has to download the file catalog first and then it downloads the files as they are opened. 
 A single file catalog for an entire repository can quickly become large and impractical. 
-At the same time, clients typically to not need all of the repository's meta-data at the same time. 
+At the same time, clients typically do not need all of the repository's meta-data at the same time. 
 For instance, clients using software release 1.0 do not need to know about the contents of software release 2.0.
 
 With nested catalogs, \cvmfs\ has a mechansim to partition the directory tree of a repository into many catalogs. 
 Repository maintainers are responsible for sensible cutting of the directory trees into nested catalogs. 
 They can do so by creating and removing the magic file \texttt{.cvmfscatalog}.
 
-For example, in order to create a nested catalog for software relase 1.0 in the hypothetical repository experiment.cern.ch, do
+For example, in order to create a nested catalog for software release 1.0 in the hypothetical repository experiment.cern.ch, do
 \begin{verbatim}
 cvmfs_transaction
 touch /cvmfs/experiment.cern.ch/software/1.0/.cvmfscatalog
 cvmfs_server publish
 \end{verbatim}
 
-If you want to merge a nested catalog with its parent catalog, remove the corresponing .cvmfscatalog file. 
-Nested catalogs can be nested on aritrary many levels.
+If you want to merge a nested catalog with its parent catalog, remove the corresponding \texttt{.cvmfscatalog} file. 
+Nested catalogs can be nested on arbitrary many levels.
 
 \subsection{Recommendations for Nested Catalogs}
 Nested catalogs should be created having in mind which files and directories are accessed together. 
@@ -261,3 +299,17 @@ As a rule of thumb, a single file catalog should contain more than 1000 files an
 Restructuring the repository's directory tree is an expensive operation in CernVM-FS. 
 Moreover, it can easily break clients when they switch to a restructured file system snapshot. 
 Therefore, your software directory tree layout should be relatively stable before you start filling the CernVM-FS repository.
+
+\subsection{Migrate File Catalogs}
+In rare cases the further development of \cvmfs\ makes it necessary to change the internal structure of file catalogs.
+Updating the \cvmfs\ installation on a Stratum 0 machine might require a migration of the file catalogs.
+
+It is recommended that \texttt{cvmfs\_server list} is issued after any \cvmfs\ update to review if any of the maintained repositories need a migration.
+Outdated repositories will be marked as \textbf{INCOMPATIBLE} and \texttt{cvmfs\_server} refuses all actions on these repositories until the file catalogs have been updated.
+
+In order to run a file catalog migration use \texttt{cvmfs\_server migrate} for each of the outdated repositories.
+This will essentially create a new repository revision that contains the exact same  file structure as the current revision.
+However, all file catalogs will be recreated from scratch using the updated internal structure.
+Note that historic file catalogs of all previous repository revisions stay untouched and are not migrated.
+
+After \texttt{cvmfs\_server migrate} has successfully updated all file catalogs repository maintenance can continue as usual.
