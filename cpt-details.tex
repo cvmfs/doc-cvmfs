@@ -334,6 +334,10 @@ Once the last \cvmfs\ instance that uses the shared cache is unmounted, the comm
 	\label{fig:sharedcache}
 \end{figure}
 
+The \cvmfs\ cache supports two classes of files with respect to the cache replacement strategy: \emph{normal} files and \emph{volatile} files.
+The sequence numbers of volatile files have bit 63 set.
+Hence they are interpreted as negative numbers and have precedence over normal files when it comes to cache cleanup.
+On automatic rebuild the volatile property of entries in the cache database is lost.
 
 \section{File System Traces}\index{traces}\index{file system traces|see{traces}}
 \cvmfs\ has an optional file system operations tracer.

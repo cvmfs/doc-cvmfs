@@ -76,6 +76,14 @@ In case you want to use a separate hard disk, you should mount it there upfront.
 Once created, you should see your repository mounted under \texttt{/cvmfs/my.repo.name} containing only a single file called \texttt{new\_repository}.
 Following this step, you can produce the first revision by going through the repository update procedure described in the next section.
 
+\subsubsection{Repositories for Volatile Files}
+Repositories can be flagged as containing \emph{volatile} files using the \texttt{-v} option:
+\begin{verbatim}
+  cvmfs_server mkfs -v my.repo.name
+\end{verbatim}
+When \cvmfs\ clients perform a cache cleanup, they treat files from volatile repositories with priority.
+Such volatile repositories can be useful, for instance, for experiment conditions data.
+
 \subsection{Repository Update}
 \label{sct:repoupdateprocedure}
 Typically a repository publisher does the following steps in order to create a new revision of a repository:
