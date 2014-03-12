@@ -21,7 +21,6 @@ If you already have a \emph{Frontier Squid}\footnote{\url{http://frontier.cern.c
 Otherwise, cache sizes and access control needs to be configured in order to use the \squid\ server with \cvmfs.
 In order to do so, browse through your /etc/squid/squid.conf and make sure the following lines appear accordingly:
 \begin{verbatim}
-  collapsed_forwarding on
   max_filedesc 8192
   maximum_object_size 1024 MB
 
