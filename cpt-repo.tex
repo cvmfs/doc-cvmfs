@@ -295,21 +295,13 @@ it makes sense to have nested catalogs at
 \begin{verbatim}
 /cvmfs/experiment.cern.ch/software/i686
 /cvmfs/experiment.cern.ch/software/x86_64
-\end{verbatim}
-or
-\begin{verbatim}
 /cvmfs/experiment.cern.ch/software/i686/1.0
 /cvmfs/experiment.cern.ch/software/i686/2.0
 /cvmfs/experiment.cern.ch/software/x86_64/1.0 
 \end{verbatim}
 
-A nested catalog at the top level of each software package release as in
-the second list is generally the best approach because once package
-releases are installed they tend to never change, which reduces churn
-and garbage generated in the repository from old catalogs that have
-changed.  In addition, each run only tends to access one version of any
-package so having a separate catalog per version avoids loading catalog
-information that will not be used.
+A nested catalog at the top level of each supported platform and each software package release is generally the best approach because once package releases are installed they tend to never change, which reduces churn and garbage generated in the repository from old catalogs that have changed.  
+In addition, each run only tends to access one version of any package so having a separate catalog per version avoids loading catalog information that will not be used.
 
 It could also make sense to have a nested catalog under grid-certificates, if the certificates are updated much more frequently than the other directories. 
 It would not make sense to create a nested catalog under /cvmfs/experiment.cern.ch/software/i686/common, because this directory needs to be accessed anyway whenever its parent directory is needed.
@@ -320,30 +312,25 @@ Moreover, it can easily break client applications when they switch to a restruct
 Therefore, your software directory tree layout should be relatively stable before you start filling the CernVM-FS repository.
 
 \subsection{Managing nested catalogs with \texttt{.cvmfsdirtab}}
-Rather than managing \texttt{.cvmfscatalog} files by hand, a repository
-administrator may create a file called \texttt{.cvmfsdirtab}, in the top
-directory of the repository, which contains a list of paths relative to
-the top of the repository where \texttt{.cvmfscatalog} files will be
-created.  Those paths may contain shell wildcards such as asterisk
-(\texttt{*}) and question mark (\texttt{?}).  This is useful for
-specifying patterns for creating nested catalogs as new files are
-installed.  A very good use of the patterns is to identify directories
-where software releases will be installed.  
+Rather than managing \texttt{.cvmfscatalog} files by hand, a repository administrator may create a file called \texttt{.cvmfsdirtab}, in the top directory of the repository, which contains a list of paths relative to the top of the repository where \texttt{.cvmfscatalog} files will be created. 
+Those paths may contain shell wildcards such as asterisk (\texttt{*}) and question mark (\texttt{?}).
+This is useful for specifying patterns for creating nested catalogs as new files are installed. 
+A very good use of the patterns is to identify directories where software releases will be installed.  
 
-In addition, lines in \texttt{.cvmfscatalog} that begin with an
-exclamation point (\texttt{!}) are shell patterns that will be excluded
-from those matched by lines without an exclamation point.  For example
-a \texttt{.cvmfscatalog} might contain these lines for the repository of
-the previous subsection:
+In addition, lines in \texttt{.cvmfscatalog} that begin with an exclamation point (\texttt{!}) are shell patterns that will be excluded from those matched by lines without an exclamation point.
+For example a \texttt{.cvmfscatalog} might contain these lines for the repository of the previous subsection:
 \begin{verbatim}
+/software/*
 /software/*/*
 ! */common
 /grid-certificates
 \end{verbatim}
 This will create nested catalogs at
 \begin{verbatim}
+/cvmfs/experiment.cern.ch/software/i686
 /cvmfs/experiment.cern.ch/software/i686/1.0
 /cvmfs/experiment.cern.ch/software/i686/2.0
+/cvmfs/experiment.cern.ch/software/x86_64
 /cvmfs/experiment.cern.ch/software/x86_64/1.0 
 /cvmfs/experiment.cern.ch/grid-certificates
 \end{verbatim}
@@ -363,107 +350,64 @@ Note that historic file catalogs of all previous repository revisions stay untou
 After \texttt{cvmfs\_server migrate} has successfully updated all file catalogs repository maintenance can continue as usual.
 
 \section{Limitations on Repository Content}
-Because CernVM-FS provides what appears to be a POSIX filesystem to
-clients, it is easy to think that it is a general purpose filesystem and
-that it will work well with all kinds of files.  That is not the case,
-however, because CernVM-FS is optimized for particular types of files
-and usage.  This section contains guidelines for limitations on the
-content of repositories for best operation.
+Because \cvmfs\ provides what appears to be a POSIX filesystem to clients, it is easy to think that it is a general purpose filesystem and that it will work well with all kinds of files.
+That is not the case, however, because \cvmfs\ is optimized for particular types of files and usage.  
+This section contains guidelines for limitations on the content of repositories for best operation.
 
 \subsection{Data files}
-First and foremost, CernVM-FS is designed to distribute executable code
-that is shared between a large number of jobs that run together at grid
-sites.  Worker node cache sizes and squid bandwidth are generally
-engineered to accomodate that application.  The total amount read per
-job is expected to be roughly limited by the amount of RAM per job slot.
-The same files are also expected to be read from the worker node cache
-multiple times for the same type of job, and read from the squid cache
-by multiple worker nodes.
+First and foremost, \cvmfs\ is designed to distribute executable code that is shared between a large number of jobs that run together at grid sites, clouds, or clusters.
+Worker node cache sizes and web proxy bandwidth are generally engineered to accommodate that application.
+The total amount read per job is expected to be roughly limited by the amount of RAM per job slot.
+The same files are also expected to be read from the worker node cache multiple times for the same type of job, and read from a caching web proxy by multiple worker nodes.
 
-If there are data files distributed by CernVM-FS that follow similar
-access patterns and size limits as executable code, it will probably
-work fine.  In addition, if there are files that are larger but read
-slowly throughout long jobs, as opposed to all at once at the beginning,
-that can also work well if the same files are read by many jobs.  That
-is because the squids have to be engineered for handling bursts at the
-beginning of jobs and so they tend to be lightly loaded a majority of
-the time.
+If there are data files distributed by \cvmfs\ that follow similar access patterns and size limits as executable code, it will probably work fine.
+In addition, if there are files that are larger but read slowly throughout long jobs, as opposed to all at once at the beginning, that can also work well if the same files are read by many jobs.
+That is because web proxies have to be engineered for handling bursts at the beginning of jobs and so they tend to be lightly loaded a majority of the time.
 
-In general, a good rule of thumb is to calculate the maximum rate at
-which jobs typically start and limit the amount of data that might be
-read from a squid to 100 Megabytes per second per thousand jobs,
-assuming a reasonable amount of overlap of jobs onto the same worker
-nodes.  Also, limit the amount of data that will be put into any one
-worker node cache to 5 Gigabytes.  Of course, if you have a special
-arrangement with particular sites to have large caches and bandwidths
-available, these limits can be made higher at those sites.  Squid
-servers may also need to be engineered with faster disks if the data
-causes their cache hit ratios to be reduced.
+In general, a good rule of thumb is to calculate the maximum rate at which jobs typically start and limit the amount of data that might be read from a web proxy to \SI{100}{\mega\byte\per\second} per thousand jobs, assuming a reasonable amount of overlap of jobs onto the same worker nodes.
+Also, limit the amount of data that will be put into any one worker node cache to 5 Gigabytes.
+Of course, if you have a special arrangement with particular sites to have large caches and bandwidths available, these limits can be made higher at those sites.
+Web proxies may also need to be engineered with faster disks if the data causes their cache hit ratios to be reduced.
 
-Also, keep in mind that the total amount of data distributed is not
-unlimited.  The files are stored and distributed compressed, and files
-with the same content stored in multiple places in the same repository
-are collapsed to the same file in storage, but the storage space is used
-not only on the original repository server, it is also replicated onto
-multiple Stratum 1 servers.  Generally if only executable code is
-distributed, there is no problem with the space taken on Stratum 1s, but
-if many large data files are distributed they may exceed the Stratum 1
-storage capacity.  Data files also tend to not compress as well, and
-that is especially the case of course if they are already compressed
-before installation.
+Also, keep in mind that the total amount of data distributed is not unlimited.
+The files are stored and distributed compressed, and files with the same content stored in multiple places in the same repository are collapsed to the same file in storage, but the storage space is used not only on the original repository server, it is also replicated onto multiple Stratum 1 servers. 
+Generally if only executable code is distributed, there is no problem with the space taken on Stratum 1s, but if many large data files are distributed they may exceed the Stratum 1
+storage capacity.
+Data files also tend to not compress as well, and that is especially the case of course if they are already compressed before installation.
 
 \subsection{Rapid creation of repository garbage}
-When files are deleted from a CernVM-FS filesystem, they are not
-automatically deleted from the repository storage; they become "garbage"
-if they are no longer referenced from any catalog.  This happens because
-files are stored in repositories under a hash of their content, and the
-same content may be referenced from multiple catalogs so it is very
-difficult for CernVM-FS to know whether or not a file removed from one
-catalog might still be referenced from another catalog.
+When files are deleted from a \cvmfs\ filesystem, they are not automatically deleted from the repository storage; they become ``garbage'' if they are no longer referenced from any catalog.
+This happens because files are stored in repositories under a hash of their content, and the same content may be referenced from multiple catalogs so it is very difficult for \cvmfs\ to know whether or not a file removed from one catalog might still be referenced from another catalog.
 
-For this reason, applications that frequently install files into a
-repository and delete older ones, for example the output from nightly
-software builds, do not work well with CernVM-FS.  They leave a lot of
-garbage behind, in the original repository installation and in Stratum
-1s that replicate the repository.  Depending on how fast that garbage
-collects and how much spare disk space there is, it may need to be
-frequently cleaned out.  Currently that is a time-consuming manual
-process and should be avoided.
+For this reason, applications that frequently install files into a repository and delete older ones, for example the output from nightly software builds, do not work well on the same \cvmfs\ infrastructure that is also used to distribute production software.
+They leave a lot of garbage behind, in the original repository installation and in Stratum 1s that replicate the repository.
+Depending on how fast that garbage collects and how much spare disk space there is, it may need to be frequently cleaned out.
+Currently that is a time-consuming manual process and should be avoided.
+Automatic garbage collection is planned for a future release of \cvmfs.
 
 \subsection{Tarballs, zip files, and other archive files}
-If the contents of a tarball, zip file, or some other type of archive
-file is desired to be distributed by CernVM-FS, it is usually better to
-first unpack it into its separate pieces first.  This is because it
-allows better sharing of content between multiple releases of the file;
-some pieces inside the archive file might change and other pieces might
-not in the next release, and pieces that don't change will be stored as
-the same file in the repository.  CernVM-FS will compress the content of
-the individual pieces, so even if there's no sharing between releases it
-shouldn't take much more space.
+If the contents of a tarball, zip file, or some other type of archive file is desired to be distributed by \cvmfs, it is usually better to first unpack it into its separate pieces first.
+This is because it allows better sharing of content between multiple releases of the file;
+some pieces inside the archive file might change and other pieces might not in the next release, and pieces that don't change will be stored as the same file in the repository.
+\cvmfs\ will compress the content of the individual pieces, so even if there's no sharing between releases it shouldn't take much more space.
 
 \subsection{File permissions}
-Care should be taken to make all the files in a repository readable by
-"other".  This is because permissions on files in the original
-repository are generally the same as those seen by end clients, except
-the files are owned by the "cvmfs" user and group.  The write
-permissions are ignored by the client since it is a read-only
-filesystem.  However, unless the client has set
+Care should be taken to make all the files in a repository readable by ``other''.
+This is because permissions on files in the original repository are generally the same as those seen by end clients, except the files are owned by the ``cvmfs'' user and group.
+The write permissions are ignored by the client since it is a read-only filesystem.
+However, unless the client has set
 \begin{verbatim}
   CVMFS_CHECK_PERMISSIONS=no
 \end{verbatim}
-(and most do not), unprivileged users will not be able to read files
-unless they are readable by "other" and all their parent directories
-have at least "execute" permissions.  It makes little sense to publish
-files in CernVM-FS if they won't be able to be read by anyone.
+(and most do not), unprivileged users will not be able to read files unless they are readable by ``other'' and all their parent directories have at least ``execute'' permissions.
+It makes little sense to publish files in \cvmfs\ if they won't be able to be read by anyone.
 
 \subsection{Hardlinks}
-By default CernVM-FS does not allow hardlinks of a file to be in
-different directories.  If there might be any such hardlinks in a
-repository, set the option
+By default CernVM-FS does not allow hardlinks of a file to be in different directories.
+If there might be any such hardlinks in a repository, set the option
 \begin{verbatim}
     CVMFS_IGNORE_XDIR_HARDLINKS=yes
 \end{verbatim}
-in the repository's \texttt{server.conf}.  The file will not appear to
-be hardlinked to the client, but it will still be stored as only one
-file in the repository just like any other files that have identical
-content.
+in the repository's \texttt{server.conf}. 
+The file will not appear to be hardlinked to the client, but it will still be stored as only one file in the repository just like any other files that have identical content.
+Note that if, in a subsequent publish operation, you change only one of these cross-directory hardlinks, the other hardlinks remain unchanged (the hardlink got ``broken'').
