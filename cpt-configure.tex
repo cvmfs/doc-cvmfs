@@ -204,7 +204,7 @@ cvmfs2 __MK_ALIEN_CACHE__ $alien_cachedir $owner_uid $owner_gid
 \end{verbatim}
 
 Since the alien cache is unmanaged, there is no automatic quota management provided by \cvmfs; the alien cache directory is ever-growing.
-The \texttt{CVMFS\_ALIEN\_CACHE} requires \texttt{CVMFS\_QUOTA\_LIMIT=-1} and \texttt{CVMFS\_SHARED\_CHACE=no}.
+The \texttt{CVMFS\_ALIEN\_CACHE} requires \texttt{CVMFS\_QUOTA\_LIMIT=-1} and \texttt{CVMFS\_SHARED\_CACHE=no}.
 
 The alien cache might be used in combination with a special repository replication mode that preloads a cache directory (\cf Section~\ref{sct:replica}).
 This allows to propagate an entire repository into the cache of a cluster file system for HPC setups that do not allow outgoing connectivity.
