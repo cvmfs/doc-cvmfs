@@ -20,7 +20,7 @@ A Stratum~1 server is a standard web server that uses the \cvmfs\ server toolkit
 To this end, the \texttt{cvmfs\_server} utility provides the \texttt{add-replica} command.
 This command will register the Stratum~0 URL and prepare the local web server.
 Periodical synchronization has to be scheduled, for instance with \texttt{cron}, using the \texttt{cvmfs\_server snapshot} command.
-The advantage over general purpose mirroring tools such as \product{rSync} is that all \cvmfs\ file integrity verifications mechansims from the \fuse\ client are reused.
+The advantage over general purpose mirroring tools such as \product{rSync} is that all \cvmfs\ file integrity verifications mechanisms from the \fuse\ client are reused.
 Additionally, by the aid of the \cvmfs\ file catalogs, the \texttt{cvmfs\_server} utility knows beforehand (without remote listing) which files to transfer.
 
 In order to prevent accidental synchronization from a repository, the Stratum~0 repository maintainer has to create a \texttt{.cvmfs\_master\_replica} file in the HTTP root directory.

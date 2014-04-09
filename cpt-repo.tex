@@ -260,7 +260,7 @@ A single file catalog for an entire repository can quickly become large and impr
 Also, clients typically do not need all of the repository's meta-data at the same time. 
 For instance, clients using software release 1.0 do not need to know about the contents of software release 2.0.
 
-With nested catalogs, \cvmfs\ has a mechansim to partition the directory tree of a repository into many catalogs. 
+With nested catalogs, \cvmfs\ has a mechanism to partition the directory tree of a repository into many catalogs. 
 Repository maintainers are responsible for sensible cutting of the directory trees into nested catalogs. 
 They can do so by creating and removing the magic file \texttt{.cvmfscatalog}.
 
@@ -300,8 +300,9 @@ it makes sense to have nested catalogs at
 /cvmfs/experiment.cern.ch/software/x86_64/1.0 
 \end{verbatim}
 
-A nested catalog at the top level of each supported platform and each software package release is generally the best approach because once package releases are installed they tend to never change, which reduces churn and garbage generated in the repository from old catalogs that have changed.  
+A nested catalog at the top level of each software package release is generally the best approach because once package releases are installed they tend to never change, which reduces churn and garbage generated in the repository from old catalogs that have changed. 
 In addition, each run only tends to access one version of any package so having a separate catalog per version avoids loading catalog information that will not be used.
+A nested catalog at the top level of each platform may make sense if there is a significant number of platform-specific files that aren't included in other catalogs.
 
 It could also make sense to have a nested catalog under grid-certificates, if the certificates are updated much more frequently than the other directories. 
 It would not make sense to create a nested catalog under /cvmfs/experiment.cern.ch/software/i686/common, because this directory needs to be accessed anyway whenever its parent directory is needed.
@@ -334,6 +335,7 @@ This will create nested catalogs at
 /cvmfs/experiment.cern.ch/software/x86_64/1.0 
 /cvmfs/experiment.cern.ch/grid-certificates
 \end{verbatim}
+Note that unlike the regular lines that add catalogs, asterisks in the exclamation point exclusion lines can span the slashes separating directory levels.
 
 \subsection{Migrate File Catalogs}
 In rare cases the further development of \cvmfs\ makes it necessary to change the internal structure of file catalogs.
