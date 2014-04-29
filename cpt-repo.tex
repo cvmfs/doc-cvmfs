@@ -98,7 +98,7 @@ The following table provides an overview of important configuration files and in
 
 \section{\cvmfs\ Repository Creation and Updating}
 \label{sct:repocreateandupdate}
-The \cvmfs\ server tool kit provide the versatile \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
+The \cvmfs\ server tool kit provides the versatile \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
 Please run it without any parameters to get a short documentation of its commands.
 
 \subsection{Repository Creation}
@@ -110,7 +110,7 @@ A new repository is created by \texttt{cvmfs\_server mkfs}:
 \end{verbatim}
 The utility will then ask you for a user that should act as the owner of the repository and afterwards create all the infrastructure for the new \cvmfs\ repository.
 Additionally it will create a reasonable default configuration and generate a new release manager certificate and software signing key. 
-You'll have to distribute the public key in /etc/cvmfs/keys/my.repo.name.pub to all your client machines.
+You'll have to distribute the public key in \texttt{/etc/cvmfs/keys/my.repo.name.pub} to all your client machines.
 The \texttt{cvmfs\_server} utility will use \texttt{/srv/cvmfs} as storage location.
 In case you want to use a separate hard disk, you should mount it there upfront.
 
