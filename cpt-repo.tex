@@ -113,6 +113,7 @@ Additionally it will create a reasonable default configuration and generate a ne
 You'll have to distribute the public key in \texttt{/etc/cvmfs/keys/my.repo.name.pub} to all your client machines.
 The \texttt{cvmfs\_server} utility will use \texttt{/srv/cvmfs} as storage location.
 In case you want to use a separate hard disk, you should mount it there upfront or create a symlink.
+Please refer to Section~\ref{sct:repoanatomy} for further details.
 
 Once created, you should see your repository mounted under \texttt{/cvmfs/my.repo.name} containing only a single file called \texttt{new\_repository}.
 Following this step, you can produce the first revision by going through the repository update procedure described in the next section.
