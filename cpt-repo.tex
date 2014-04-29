@@ -275,6 +275,7 @@ If you want to merge a nested catalog with its parent catalog, remove the corres
 Nested catalogs can be nested on arbitrary many levels.
 
 \subsection{Recommendations for Nested Catalogs}
+\label{sct:nestedcatalogrecommendations}
 Nested catalogs should be created having in mind which files and directories are accessed together. 
 This is typically the case for software releases, but can be also on the directory level that separates platforms. 
 For instance, for a directory layout like
@@ -306,13 +307,14 @@ A nested catalog at the top level of each platform may make sense if there is a 
 
 It could also make sense to have a nested catalog under grid-certificates, if the certificates are updated much more frequently than the other directories. 
 It would not make sense to create a nested catalog under /cvmfs/experiment.cern.ch/software/i686/common, because this directory needs to be accessed anyway whenever its parent directory is needed.
-As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than ~200\,000 files.
+As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than $\approx$200\,000 files.
+Section~\ref{sct:inspectnestedcatalogs} describes how to find catalogs that do not satisfy this recommendation.
 
 Restructuring the repository's directory tree is an expensive operation in CernVM-FS. 
 Moreover, it can easily break client applications when they switch to a restructured file system snapshot. 
 Therefore, your software directory tree layout should be relatively stable before you start filling the CernVM-FS repository.
 
-\subsection{Managing nested catalogs with \texttt{.cvmfsdirtab}}
+\subsection{Managing Nested Catalogs with \texttt{.cvmfsdirtab}}
 Rather than managing \texttt{.cvmfscatalog} files by hand, a repository administrator may create a file called \texttt{.cvmfsdirtab}, in the top directory of the repository, which contains a list of paths relative to the top of the repository where \texttt{.cvmfscatalog} files will be created. 
 Those paths may contain shell wildcards such as asterisk (\texttt{*}) and question mark (\texttt{?}).
 This is useful for specifying patterns for creating nested catalogs as new files are installed. 
@@ -336,6 +338,19 @@ This will create nested catalogs at
 /cvmfs/experiment.cern.ch/grid-certificates
 \end{verbatim}
 Note that unlike the regular lines that add catalogs, asterisks in the exclamation point exclusion lines can span the slashes separating directory levels.
+
+\subsection{Inspecting Nested Catalog Structure}
+\label{sct:inspectnestedcatalogs}
+To visualize the current nested file catalog layout of a repository use the following command.
+
+\begin{verbatim}
+cvmfs_server list-catalogs
+\end{verbatim}
+
+Additionally this command allows to spot degenerated nested catalogs.
+As stated in Section~\ref{sct:nestedcatalogrecommendations} the recommended maximal file entry count of a single catalog should not exceed $\approx$200\,000.
+One can use the switch \texttt{list-catalogs -e} to inspect the current nested catalog entry counts in the repository.
+Furthermore \texttt{list-catalgos -s} will print the file sizes of the catalogs in bytes.
 
 \subsection{Migrate File Catalogs}
 In rare cases the further development of \cvmfs\ makes it necessary to change the internal structure of file catalogs.
