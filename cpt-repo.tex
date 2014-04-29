@@ -55,6 +55,47 @@ Currently we support Scientific Linux 6 and Ubuntu 12.04 distributions.
 Please note, that Scientific Linux 6 \emph{does not} ship with an \aufs\ enabled kernel, therefore we provide a compatible patched kernel as RPMs (see Appendix~\ref{apx:rpms}).
 
 
+\pagebreak
+\section{Notable \cvmfs\ Server Locations and Files}
+\label{sct:repoanatomy}
+There are a number of possible customisations in the \cvmfs\ server installation.
+The following table provides an overview of important configuration files and intrinsical paths together with some customisation hints.
+
+\begin{table}[h]
+	\begin{center}
+		\begin{tabularx}{\linewidth}{lX}
+			\toprule
+			{\bf\centering File Path} & {\bf\centering Description} \\
+			\midrule
+			\texttt{/srv/cvmfs} & \textbf{Central repository storage location} \newline
+			Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. \\
+			\addlinespace
+
+			\texttt{/srv/cvmfs/<fqrn>} & \textbf{Storage location of a specfic repository} \newline
+			Can be symlinked to somewhere else \emph{before} creating the repository \texttt{<fqrn>}. \\
+			\addlinespace
+
+			\texttt{/var/spool/cvmfs} & \textbf{Internal states of the repositories} \newline
+			Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. Hosts the scratch area described in Section~\ref{sct:repoupdate} thus might consume notable disk space during repository updates. \\			\addlinespace
+
+			\texttt{/etc/cvmfs} & \textbf{Configuration files and keychains} \newline
+			Similar to the structure described in Table~\ref{tbl:configfiles}. Please don't symlink this directory. \\
+			\addlinespace
+
+			\texttt{/etc/cvmfs/cvmfs\_server\_hooks.sh} & \textbf{Customisable server behaviour} \newline
+			See Section~\ref{sct:serverhooks} for further details. \\
+			\addlinespace
+
+			\texttt{/etc/cvmfs/repositories.d} & \textbf{Repository configuration location} \newline
+			Contains repository server specific configuration files.
+			 \\
+			\bottomrule
+		\end{tabularx}
+	\end{center}
+	\caption{List of configuration files and directories for the \cvmfs\ server installation}
+	\label{tbl:serveranatomyelements}
+\end{table}
+
 \section{\cvmfs\ Repository Creation and Updating}
 \label{sct:repocreateandupdate}
 The \cvmfs\ server tool kit provide the versatile \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
@@ -138,6 +179,7 @@ In order to transform a repository from \cvmfs\ 2.0 into 2.1 you should roughly 
 
 
 \subsection{Customizable Actions Using Server Hooks}
+\label{sct:serverhooks}
 The \texttt{cvmfs\_server} utility allows release managers to trigger custom actions before and after crucial repository manipulation steps. This can be useful for example for logging purposes, establishing backend storage connections automatically or other workflow triggers, depending on the application.
 
 There are six designated server hooks that are potentially invoked during the repository update procedure described in Section \ref{sct:repoupdateprocedure}:
