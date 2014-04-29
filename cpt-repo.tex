@@ -307,7 +307,7 @@ A nested catalog at the top level of each platform may make sense if there is a 
 
 It could also make sense to have a nested catalog under grid-certificates, if the certificates are updated much more frequently than the other directories. 
 It would not make sense to create a nested catalog under /cvmfs/experiment.cern.ch/software/i686/common, because this directory needs to be accessed anyway whenever its parent directory is needed.
-As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than ~200\,000 files.
+As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than $\approx$200\,000 files.
 Section~\ref{sct:inspectnestedcatalogs} describes how to find catalogs that do not satisfy this recommendation.
 
 Restructuring the repository's directory tree is an expensive operation in CernVM-FS. 
@@ -348,7 +348,7 @@ cvmfs_server list-catalogs
 \end{verbatim}
 
 Additionally this command allows to spot degenerated nested catalogs.
-As stated in Section~\ref{sct:nestedcatalogrecommendations} the recommended maximal file entry count of a single catalog should not exceed ~200\,000.
+As stated in Section~\ref{sct:nestedcatalogrecommendations} the recommended maximal file entry count of a single catalog should not exceed $\approx$200\,000.
 One can use the switch \texttt{list-catalogs -e} to inspect the current nested catalog entry counts in the repository.
 Furthermore \texttt{list-catalgos -s} will print the file sizes of the catalogs in bytes.
 
