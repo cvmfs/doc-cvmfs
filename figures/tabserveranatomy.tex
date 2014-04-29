@@ -1,0 +1,34 @@
+%\begin{center}
+%\begin{longtable}
+\begin{longtable}{lX}
+	\toprule
+	{\bf\centering File Path} & {\bf\centering Description} \\
+	\midrule
+	\texttt{/srv/cvmfs} & \textbf{Central repository storage location} \newline
+	Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. \\
+	\addlinespace
+
+	\texttt{/srv/cvmfs/<fqrn>} & \textbf{Storage location of a specfic repository} \newline
+	Can be symlinked to somewhere else \emph{before} creating the repository \texttt{<fqrn>}. \\
+	\addlinespace
+
+	\texttt{/var/spool/cvmfs} & \textbf{Internal states of the repositories} \newline
+	Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. Hosts the scratch area described in Section~\ref{sct:repoupdate} thus might consume notable disk space during repository updates. \\			\addlinespace
+
+	\texttt{/etc/cvmfs} & \textbf{Configuration files and keychains} \newline
+	Similar to the structure described in Table~\ref{tbl:configfiles}. Please don't symlink this directory. \\
+	\addlinespace
+
+	\texttt{/etc/cvmfs/cvmfs\_server\_hooks.sh} & \textbf{Customisable server behaviour} \newline
+	See Section~\ref{sct:serverhooks} for further details. \\
+	\addlinespace
+
+	\texttt{/etc/cvmfs/repositories.d} & \textbf{Repository configuration location} \newline
+	Contains repository server specific configuration files.
+	 \\
+	\bottomrule
+	\caption{List of configuration files and directories for the \cvmfs\ server installation}
+	\label{tbl:serveranatomyelements}
+\end{longtable}
+%\end{longtable}
+%\end{center}

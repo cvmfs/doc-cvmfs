@@ -60,41 +60,8 @@ Please note, that Scientific Linux 6 \emph{does not} ship with an \aufs\ enabled
 \label{sct:repoanatomy}
 There are a number of possible customisations in the \cvmfs\ server installation.
 The following table provides an overview of important configuration files and intrinsical paths together with some customisation hints.
+\LTXtable{\textwidth}{figures/tabserveranatomy.tex}
 
-\begin{table}[h]
-	\begin{center}
-		\begin{tabularx}{\linewidth}{lX}
-			\toprule
-			{\bf\centering File Path} & {\bf\centering Description} \\
-			\midrule
-			\texttt{/srv/cvmfs} & \textbf{Central repository storage location} \newline
-			Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. \\
-			\addlinespace
-
-			\texttt{/srv/cvmfs/<fqrn>} & \textbf{Storage location of a specfic repository} \newline
-			Can be symlinked to somewhere else \emph{before} creating the repository \texttt{<fqrn>}. \\
-			\addlinespace
-
-			\texttt{/var/spool/cvmfs} & \textbf{Internal states of the repositories} \newline
-			Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. Hosts the scratch area described in Section~\ref{sct:repoupdate} thus might consume notable disk space during repository updates. \\			\addlinespace
-
-			\texttt{/etc/cvmfs} & \textbf{Configuration files and keychains} \newline
-			Similar to the structure described in Table~\ref{tbl:configfiles}. Please don't symlink this directory. \\
-			\addlinespace
-
-			\texttt{/etc/cvmfs/cvmfs\_server\_hooks.sh} & \textbf{Customisable server behaviour} \newline
-			See Section~\ref{sct:serverhooks} for further details. \\
-			\addlinespace
-
-			\texttt{/etc/cvmfs/repositories.d} & \textbf{Repository configuration location} \newline
-			Contains repository server specific configuration files.
-			 \\
-			\bottomrule
-		\end{tabularx}
-	\end{center}
-	\caption{List of configuration files and directories for the \cvmfs\ server installation}
-	\label{tbl:serveranatomyelements}
-\end{table}
 
 \section{\cvmfs\ Repository Creation and Updating}
 \label{sct:repocreateandupdate}
