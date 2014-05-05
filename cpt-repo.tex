@@ -55,9 +55,17 @@ Currently we support Scientific Linux 6 and Ubuntu 12.04 distributions.
 Please note, that Scientific Linux 6 \emph{does not} ship with an \aufs\ enabled kernel, therefore we provide a compatible patched kernel as RPMs (see Appendix~\ref{apx:rpms}).
 
 
+\pagebreak
+\section{Notable \cvmfs\ Server Locations and Files}
+\label{sct:repoanatomy}
+There are a number of possible customisations in the \cvmfs\ server installation.
+The following table provides an overview of important configuration files and intrinsical paths together with some customisation hints.
+\LTXtable{\textwidth}{figures/tabserveranatomy.tex}
+
+
 \section{\cvmfs\ Repository Creation and Updating}
 \label{sct:repocreateandupdate}
-The \cvmfs\ server tool kit provide the versatile \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
+The \cvmfs\ server tool kit provides the versatile \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
 Please run it without any parameters to get a short documentation of its commands.
 
 \subsection{Repository Creation}
@@ -69,9 +77,10 @@ A new repository is created by \texttt{cvmfs\_server mkfs}:
 \end{verbatim}
 The utility will then ask you for a user that should act as the owner of the repository and afterwards create all the infrastructure for the new \cvmfs\ repository.
 Additionally it will create a reasonable default configuration and generate a new release manager certificate and software signing key. 
-You'll have to distribute the public key in /etc/cvmfs/keys/my.repo.name.pub to all your client machines.
+You'll have to distribute the public key in \texttt{/etc/cvmfs/keys/my.repo.name.pub} to all your client machines.
 The \texttt{cvmfs\_server} utility will use \texttt{/srv/cvmfs} as storage location.
-In case you want to use a separate hard disk, you should mount it there upfront.
+In case you want to use a separate hard disk, you should mount it there upfront or create a symlink.
+Please refer to Section~\ref{sct:repoanatomy} for further details.
 
 Once created, you should see your repository mounted under \texttt{/cvmfs/my.repo.name} containing only a single file called \texttt{new\_repository}.
 Following this step, you can produce the first revision by going through the repository update procedure described in the next section.
@@ -138,6 +147,7 @@ In order to transform a repository from \cvmfs\ 2.0 into 2.1 you should roughly 
 
 
 \subsection{Customizable Actions Using Server Hooks}
+\label{sct:serverhooks}
 The \texttt{cvmfs\_server} utility allows release managers to trigger custom actions before and after crucial repository manipulation steps. This can be useful for example for logging purposes, establishing backend storage connections automatically or other workflow triggers, depending on the application.
 
 There are six designated server hooks that are potentially invoked during the repository update procedure described in Section \ref{sct:repoupdateprocedure}:
@@ -223,7 +233,7 @@ cvmfs_server publish -a release-1.0
 As a tag name, use an identifier without spaces and special characters. 
 You can list all named snapshots by 
 \begin{verbatim}
-cvmfs_server lstags
+cvmfs_server list-tags
 \end{verbatim}
 
 In order to remove (unpublish) a named snapshot, use the -r option like
@@ -275,6 +285,7 @@ If you want to merge a nested catalog with its parent catalog, remove the corres
 Nested catalogs can be nested on arbitrary many levels.
 
 \subsection{Recommendations for Nested Catalogs}
+\label{sct:nestedcatalogrecommendations}
 Nested catalogs should be created having in mind which files and directories are accessed together. 
 This is typically the case for software releases, but can be also on the directory level that separates platforms. 
 For instance, for a directory layout like
@@ -306,13 +317,14 @@ A nested catalog at the top level of each platform may make sense if there is a 
 
 It could also make sense to have a nested catalog under grid-certificates, if the certificates are updated much more frequently than the other directories. 
 It would not make sense to create a nested catalog under /cvmfs/experiment.cern.ch/software/i686/common, because this directory needs to be accessed anyway whenever its parent directory is needed.
-As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than ~200\,000 files.
+As a rule of thumb, a single file catalog should contain more than 1000 files and directories but not contain more than $\approx$200\,000 files.
+Section~\ref{sct:inspectnestedcatalogs} describes how to find catalogs that do not satisfy this recommendation.
 
 Restructuring the repository's directory tree is an expensive operation in CernVM-FS. 
 Moreover, it can easily break client applications when they switch to a restructured file system snapshot. 
 Therefore, your software directory tree layout should be relatively stable before you start filling the CernVM-FS repository.
 
-\subsection{Managing nested catalogs with \texttt{.cvmfsdirtab}}
+\subsection{Managing Nested Catalogs with \texttt{.cvmfsdirtab}}
 Rather than managing \texttt{.cvmfscatalog} files by hand, a repository administrator may create a file called \texttt{.cvmfsdirtab}, in the top directory of the repository, which contains a list of paths relative to the top of the repository where \texttt{.cvmfscatalog} files will be created. 
 Those paths may contain shell wildcards such as asterisk (\texttt{*}) and question mark (\texttt{?}).
 This is useful for specifying patterns for creating nested catalogs as new files are installed. 
@@ -336,6 +348,19 @@ This will create nested catalogs at
 /cvmfs/experiment.cern.ch/grid-certificates
 \end{verbatim}
 Note that unlike the regular lines that add catalogs, asterisks in the exclamation point exclusion lines can span the slashes separating directory levels.
+
+\subsection{Inspecting Nested Catalog Structure}
+\label{sct:inspectnestedcatalogs}
+To visualize the current nested file catalog layout of a repository use the following command.
+
+\begin{verbatim}
+cvmfs_server list-catalogs
+\end{verbatim}
+
+Additionally this command allows to spot degenerated nested catalogs.
+As stated in Section~\ref{sct:nestedcatalogrecommendations} the recommended maximal file entry count of a single catalog should not exceed $\approx$200\,000.
+One can use the switch \texttt{list-catalogs -e} to inspect the current nested catalog entry counts in the repository.
+Furthermore \texttt{list-catalgos -s} will print the file sizes of the catalogs in bytes.
 
 \subsection{Migrate File Catalogs}
 In rare cases the further development of \cvmfs\ makes it necessary to change the internal structure of file catalogs.
