@@ -235,7 +235,7 @@ cvmfs_server publish -r release-1.0
 Use named snapshots whenever you do larger modifications to the repository, for instance when you install a new major software release.
 Only with named snapshots do you have the ability to easily undo modifications and to preserve the state of the file system for the future. 
 Nevertheless, do not use named snapshots excessively. 
-Start cleaning up unneccesary snapshots once you have more than $\approx 50$.
+Start cleaning up unnecessary snapshots once you have more than $\approx 50$.
 
 \subsection{Rollbacks}
 
@@ -367,7 +367,7 @@ In addition, if there are files that are larger but read slowly throughout long 
 That is because web proxies have to be engineered for handling bursts at the beginning of jobs and so they tend to be lightly loaded a majority of the time.
 
 In general, a good rule of thumb is to calculate the maximum rate at which jobs typically start and limit the amount of data that might be read from a web proxy to \SI{100}{\mega\byte\per\second} per thousand jobs, assuming a reasonable amount of overlap of jobs onto the same worker nodes.
-Also, limit the amount of data that will be put into any one worker node cache to 5 Gigabytes.
+Also, limit the amount of data that will be put into any one worker node cache to \SI{5}{\giga\byte}.
 Of course, if you have a special arrangement with particular sites to have large caches and bandwidths available, these limits can be made higher at those sites.
 Web proxies may also need to be engineered with faster disks if the data causes their cache hit ratios to be reduced.
 
@@ -405,7 +405,7 @@ However, unless the client has set
 It makes little sense to publish files in \cvmfs\ if they won't be able to be read by anyone.
 
 \subsection{Hardlinks}
-By default CernVM-FS does not allow hardlinks of a file to be in different directories.
+By default \cvmfs\ does not allow hardlinks of a file to be in different directories.
 If there might be any such hardlinks in a repository, set the option
 \begin{verbatim}
     CVMFS_IGNORE_XDIR_HARDLINKS=yes

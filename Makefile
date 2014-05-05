@@ -40,7 +40,8 @@ TIKZSRC = gnuplot-lua-tikz.tex gnuplot-lua-tikz.sty gnuplot-lua-tikz-common.tex 
   figures/stratum1.tex \
   figures/sharedcache.tex \
   figures/overlay.tex
-TABSRC = figures/tabparameters.tex
+TABSRC = figures/tabparameters.tex \
+  tabserverparameters.tex
 SOURCES = $(TEXSRC) $(PKGSRC) $(BIBSRC) $(TIKZSRC) $(FIGSRC) $(TABSRC)
 MAINFILE = cvmfstech
 
