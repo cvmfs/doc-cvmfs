@@ -433,7 +433,7 @@ It makes little sense to publish files in \cvmfs\ if they won't be able to be re
 By default \cvmfs\ does not allow hardlinks of a file to be in different directories.
 If there might be any such hardlinks in a repository, set the option
 \begin{verbatim}
-    CVMFS_IGNORE_XDIR_HARDLINKS=yes
+    CVMFS_IGNORE_XDIR_HARDLINKS=true
 \end{verbatim}
 in the repository's \texttt{server.conf}. 
 The file will not appear to be hardlinked to the client, but it will still be stored as only one file in the repository just like any other files that have identical content.
