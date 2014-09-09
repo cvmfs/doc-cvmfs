@@ -1,0 +1,15 @@
+	\begin{longtable}{lX}
+		\toprule
+		{\bf\centering Parameter} 			& {\bf\centering Meaning}\\
+		\midrule
+                \tt CVMFS\_S3\_ACCOUNTS & Number of S3 accounts to be used, e.g. 1. With some S3 servers use of multiple accounts can increase the upload speed significantly\\
+                \tt CVMFS\_S3\_ACCESS\_KEY & S3 account access keys separated with ``:'', e.g. AA..A:BB...B:CC...\\
+                \tt CVMFS\_S3\_SECRET\_KEY & S3 account secret keys separated with ``:'', e.g. AA..A:BB...B:CC...\\
+                \tt CVMFS\_S3\_BUCKETS\_PER\_ACCOUNT & S3 buckets used per account, e.g. 1. With some S3 servers use of multiple buckets can increase the upload speed significantly\\
+                \tt CVMFS\_S3\_HOST & S3 server hostname, e.g. swift.cern.ch\\
+                \tt CVMFS\_S3\_BUCKET & S3 bucket base name. Account and bucket index are appended to the bucket base name. If you use just one account and one bucket, e.g. named ``cernbucket'', then you need to create only one bucket called ``cernbucket-1-1''\\
+                \tt \begin{tabular}[t]{@{}l@{}}CVMFS\_S3\_MAX\_NUMBER\_OF\_\\PARALLELL\_CONNECTIONS\end{tabular} & Number of parallell uploads to the S3 server, e.g. 400\\
+		\bottomrule
+	\caption{List of parameters for defining S3 compatible storage backend}
+	\label{tbl:s3confparameters}
+	\end{longtable}
