@@ -173,7 +173,10 @@ For repositories hosted at \cern, quota recommendations can be found under \url{
 The cache directory needs to be on a local file system in order to allow each host the accurate accounting of the cache contents; on a network file system, the cache can potentially be modified by other hosts.
 Furthermore, the cache directory is used to create (transient) sockets and pipes, which is usually only supported by a local file system such as ext3 or XFS.
 The location of the cache directory can be set by \texttt{CVMFS\_CACHE\_BASE}.
-The cache directory and its content need to be labeled as \texttt{cvmfs\_cache\_t} (i.e. run~\texttt{chcon~-Rv~-{}-type=cvmfs\_cache\_t~\$CVMFS\_CACHE\_BASE}) to grant the \cvmfs\ client the necessary permissions on SELinux enabled systems.
+
+On SELinux enabled systems, the cache directory and its content need to be labeled as \texttt{cvmfs\_cache\_t}.
+During the installation of \cvmfs\ RPMs, this label is set for the default cache directory /var/lib/cvmfs.
+For other directories, the label needs to be set manually by \texttt{chcon~-Rv~-{}-type=cvmfs\_cache\_t~\$CVMFS\_CACHE\_BASE}.
 
 Each repository can either have an exclusive cache or join the \cvmfs\ shared cache.
 The shared cache enforces a common quota for all repositories used on the host.
