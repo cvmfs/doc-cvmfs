@@ -278,6 +278,32 @@ This way, the corrupted file gets replaced in the proxy server by a fresh copy f
 If you have set the \cernvm\ GUID, this GUID is also transmitted.
 %In \cernvm\ we use this header to rewrite URL's to the respective repository format for \cvmfs\ version 1 or \cvmfs\ version 2.
 
+\section{Name Resolving}
+Round-robin DNS entries for proxy servers are treated specially by \cvmfs.
+Multiple IP addresses for the same proxy name are automatically transformed into multiple proxy servers within the same load-balance group.
+So the usual rules for load-balancing and fail-over apply to the different servers in a round-robin entry.
+\cvmfs\ resolves all the proxy servers at once (and in parallel) at mount time.
+From that point on, proxy server names are resolved on demand, when a download takes place and the TTL of the active proxy expired.
+\cvmfs\ resolves using /etc/host (resp. the file referenced in the \texttt{HOST\_ALIASES} environment variable) or, if a host name is not resolvable locally, it uses the c-ares resolver.
+Proxy servers given in IP notation remain unchanged.
+
+\cvmfs\ uses the TTLs that come from DNS servers. 
+However, there is a cutoff at 1 minute minimum TTL and 1 day maximum TTL.
+Locally resolved host names get a TTL of 1 minutes.
+The host alias file is re-read with every attempt to resolve a name.
+Failed attempts to resolve a name remain cached for 1 minute, too.
+If a name has been successfully resolved previously, this result stays active until another successful attempt is done.
+If the DNS entries change for a host name, \cvmfs\ adjust the corresponding load-balance group and picks a new server from the group at random.
+
+The name resolving silently ignores errors in individual records.
+Only if no valid IP address is returned at all it counts as an error.
+IPv6 addresses have precedence if available, unless the \texttt{CVMFS\_IPV4\_ONLY} environment variable is set.
+In this case, \cvmfs\ does not try to resolve IPv6 records.
+
+The timeout for name resolving is hard-coded to 2 attempts with a timeout of 3 seconds each.
+This is independent from the \texttt{CVMFS\_TIMEOUT} and \texttt{CVMFS\_TIMEOUT(\_DIRECT)} settings.
+The effective timeout can be a bit longer than 6 seconds because of the backoff.
+
 \section{Disk Cache}
 \label{sct:mamangedcache}
 Each running \cvmfs\ instance requires a local cache directory.
