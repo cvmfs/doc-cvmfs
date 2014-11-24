@@ -136,13 +136,9 @@ The distinction of primary and backup proxy groups can be turned off by setting 
 The proxy settings can be automatically gathered through WPAD.
 The special proxy server ``auto'' in \texttt{CVMFS\_HTTP\_PROXY} is resolved according to the proxy server specification loaded from a PAC file.
 PAC files can be on a file system or accessible via HTTP.
-\cvmfs\ looks for PAC files in the following order:
-\begin{enumerate}
-	\item Semicolon separated URLs in the \texttt{PAC\_URLS} environment variable
-	\item \url{http://wpad/wpad.dat}
-	\item \url{http://wlcg-wpad.cern.ch/wpad.dat}
-\end{enumerate}
-
+\cvmfs\ looks for PAC files in the order given by the semicolon separated URLs in the \texttt{CVMFS\_PAC\_URLS} environment variable.
+This variable defaults to \url{http://wpad/wpad.dat}.
+The \texttt{auto} keyword used as a URL in \texttt{CVMFS\_PAC\_URLS} is resolved to \url{http://wpad/wpad.dat}, too, in order to be compatible with Frontier.
 
 \subsection{Timeouts}
 \cvmfs\ tries to gracefully recover from broken network links and temporarily overloaded paths.
