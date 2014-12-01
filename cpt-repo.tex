@@ -319,7 +319,7 @@ They can do so by creating and removing the magic file \texttt{.cvmfscatalog}.
 
 For example, in order to create a nested catalog for software release 1.0 in the hypothetical repository experiment.cern.ch, do
 \begin{verbatim}
-cvmfs_transaction
+cvmfs_server transaction
 touch /cvmfs/experiment.cern.ch/software/1.0/.cvmfscatalog
 cvmfs_server publish
 \end{verbatim}
