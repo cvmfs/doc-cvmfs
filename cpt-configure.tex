@@ -188,7 +188,7 @@ The alien cache directory is a directory in addition to the ordinary cache direc
 The ordinary cache directory is still used to store control files.
 
 The alien cache directory is set by the \texttt{CVMFS\_ALIEN\_CACHE} option.
-It can be located anywhere including cluster and network file systems
+It can be located anywhere including cluster and network file systems.
 If configured, all data chunks are stored there.
 \cvmfs\ ensures atomic access to the cache directory.
 It is safe to have the alien directory shared by multiple \cvmfs\ processes and it is safe to unlink files from the alien cache directory anytime.
