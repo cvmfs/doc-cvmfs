@@ -202,7 +202,7 @@ It is signed by a private RSA key, which we refer to as \emph{master key}.
 %So the security of the master key is ensured by 2-factor authentication (possession of the smart card and knowledge of the pin).
 %The smart card is used with a smart card reader with pin pad.
 %Neither the key nor the pin are ever exposed outside the scope of those secure devices.
-The public RSA key that corresponds to the master key is distributed with the \cvmfs\ sources and the \texttt{cvmfs-keys} RPM as well as with every instance of \cernvm.
+The public RSA key that corresponds to the master key is distributed with the \texttt{cvmfs-config-$\cdots$} RPMs as well as with every instance of \cernvm.
 
 In addition, \cvmfs\ checks certificate fingerprints against the local blacklist /etc/cvmfs/blacklist.
 The blacklisted fingerprints have to be in the same format than the fingerprints on the white-list.

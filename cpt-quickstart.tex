@@ -26,14 +26,14 @@ To install, proceed according to the following steps:
 \begin{description}
 	\item[Step 1] Install the \cvmfs\ packages.  With yum, run
 \begin{verbatim}
-  yum install cvmfs-keys cvmfs cvmfs-init-scripts.
+  yum install cvmfs cvmfs-config-egi.
 \end{verbatim}
-			      If yum does not show the latest packages, clean the yum cache by \texttt{yum clean all}.
-			      Use \texttt{rpm -vi} to install the packages using just \rpm.
-			      On Ubuntu, use \texttt{dpkg -i} on the cvmfs .deb package.
-    \item[Step 2] For the base setup, run \texttt{cvmfs\_config setup}.
-    				Alternatively, you can do the base setup by hand: ensure that \texttt{user\_allow\_other} is set in /etc/fuse.conf and ensure that \texttt{/cvmfs /etc/auto.cvmfs} is set in /etc/auto.master.
-					If you migrate from a previous version of \cvmfs, check the release notes if there is anything special to do for migration.
+		If yum does not show the latest packages, clean the yum cache by \texttt{yum clean all}.
+		Use \texttt{rpm -vi} to install the packages using just \rpm.
+		On Ubuntu, use \texttt{dpkg -i} on the cvmfs, cvmfs-config-cern, and cvmfs-config-egi .deb packages.
+	\item[Step 2] For the base setup, run \texttt{cvmfs\_config setup}.
+		Alternatively, you can do the base setup by hand: ensure that \texttt{user\_allow\_other} is set in /etc/fuse.conf, ensure that \texttt{/cvmfs /etc/auto.cvmfs} is set in /etc/auto.master and that the autofs service is running.
+		If you migrate from a previous version of \cvmfs, check the release notes if there is anything special to do for migration.
 	\item[Step 3] Create /etc/cvmfs/default.local and open the file for editing.
 	\item[Step 4] Select the desired repositories by setting \texttt{CVMFS\_REPOSITORIES=repo1,repo2,...}.
 		For ATLAS, for instance, set 
