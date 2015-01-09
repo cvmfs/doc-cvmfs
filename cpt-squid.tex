@@ -32,7 +32,7 @@ In order to do so, browse through your /etc/squid/squid.conf and make sure the f
 
 Furthermore, \squid\ needs to allow access to all Stratum 1 servers.
 This is controlled through \squid\ ACLs.
-For the Stratum 1 servers for the cern.ch domain, add the following lines to you \squid\ configuration:
+For the Stratum 1 servers for the cern.ch, egi.eu, and opensciencegrid.org domains, add the following lines to you \squid\ configuration:
 \begin{verbatim}
   acl cvmfs dst cvmfs-stratum-one.cern.ch
   acl cvmfs dst cernvmfs.gridpp.rl.ac.uk
