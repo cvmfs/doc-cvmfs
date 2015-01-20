@@ -303,8 +303,8 @@ If the DNS entries change for a host name, \cvmfs\ adjust the corresponding load
 
 The name resolving silently ignores errors in individual records.
 Only if no valid IP address is returned at all it counts as an error.
-IPv6 addresses have precedence if available, unless the \texttt{CVMFS\_IPV4\_ONLY} environment variable is set.
-In this case, \cvmfs\ does not try to resolve IPv6 records.
+IPv4 addresses have precedence if available.
+If the \texttt{CVMFS\_IPV4\_ONLY} environment variable is set,\cvmfs\ does not even try to resolve IPv6 records.
 
 The timeout for name resolving is hard-coded to 2 attempts with a timeout of 3 seconds each.
 This is independent from the \texttt{CVMFS\_TIMEOUT} and \texttt{CVMFS\_TIMEOUT(\_DIRECT)} settings.
