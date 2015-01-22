@@ -13,6 +13,8 @@
 		\tt CVMFS\_CLAIM\_OWNERSHIP		& If set to ``yes'', allows \cvmfs\ to claim ownership of files and directories.\\
 		\tt CVMFS\_DEBUGLOG				& If set, run \cvmfs\ in debug mode and write a verbose log the the specified file.\\
 		\tt CVMFS\_DEFAULT\_DOMAIN			& The default domain will be automatically appended to repository names when given without a domain.\\
+		\tt CVMFS\_FALLBACK\_PROXY		& List of HTTP proxies similar to \texttt{CVMFS\_HTTP\_PROXY}. The fallback proxies are ordered according to geographic location and added to the normal proxies.\\
+		\tt CVMFS\_FOLLOW\_REDIRECTS		& Follow up to 4 HTTP redirects in requests.\\
 		\tt CVMFS\_HOST\_RESET\_AFTER		& See \texttt{CVMFS\_PROXY\_RESET\_AFTER}.\\
 		\tt CVMFS\_HTTP\_PROXY				& Chain of HTTP proxy groups used by \cvmfs. Necessary. Set to \texttt{DIRECT} if you don't use proxies.\\
 		\tt CVMFS\_IGNORE\_SIGNATURE		& When set to ``yes'', don't verify \cvmfs\ file catalog signatures.\\
