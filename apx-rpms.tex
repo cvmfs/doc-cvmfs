@@ -4,8 +4,7 @@
 The \cvmfs\ software is available in form of several RPM packages:
 \begin{description}
 	\item[cvmfs-release] Adds the \cvmfs\ yum repository.
-	\item[cvmfs-config-cern] Contains the configuration parameters and public keys for nodes in the Worldwide LHC Computing Grid (\ie for repositories in the cern.ch domain).
-	\item[cvmfs-config-egi] Contains the configuration parameters and public keys for nodes in the European Grid Infrastructure.  It depends on cvmfs-config-cern.
+	\item[cvmfs-config-default] Contains a configuration and public keys suitable \eg for nodes in the Worldwide LHC Computing Grid.  Provides access to repositories in the cern.ch, egi.eu, and opensciencegrid.org domains.
 	\item[cvmfs-config-none] Empty package to satisfy the cvmfs-config requirement of the cvmfs package without actually installing any configuration.
 	\item[cvmfs] Contains the Fuse module and additional client tools.  It has dependencies to at least one of the cvmfs-config-$\cdots$ packages.
 	\item[cvmfs-devel] Contains the \texttt{libcvmfs.a} static library and the \texttt{libcvmfs.h} header file for use of \cvmfs\ with Parrot\cite{parrot05}.

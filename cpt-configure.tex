@@ -24,8 +24,7 @@ For a list of all parameters, see Appendix~\ref{apx:parameters}.
 			\midrule
 			\texttt{config.sh} & Set of internal helper functions \\
 			\texttt{default.conf} & Set of parameters reflecting the standard configuration \\
-			\texttt{site.conf} & Site specific set of parameters that overwrites the standard configuration.  
-				This file is used by the \cernvm\ contextualization. \\
+			\texttt{default.d/\$config.conf} & Adjustments to the default.conf configuration, usually installed by a cvmfs-config-$\cdots$ package.  Read before default.local.\\
 			\texttt{domain.d/\$domain.conf} & Domain-specific parameters and implementations of the functions in \texttt{config.sh} \\
 			\texttt{config.d/\$repository.conf} & Repository-specific parameters and implementations of the functions in \texttt{config.sh} \\
 			\texttt{keys/*.pub} & Public keys used to verify the digital signature of file catalogs \\
