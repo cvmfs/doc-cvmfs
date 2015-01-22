@@ -278,11 +278,12 @@ This way, the corrupted file gets replaced in the proxy server by a fresh copy f
 If you have set the \cernvm\ GUID, this GUID is also transmitted.
 %In \cernvm\ we use this header to rewrite URL's to the respective repository format for \cvmfs\ version 1 or \cvmfs\ version 2.
 
-%\subsection{Ordering of Stratum~1 Servers according to Geographic Proximity}
-%\cvmfs\ Stratum 1 servers provide a RESTful service under \url{http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo}.
-%Clients can request \url{http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy address as seen by cvmfs client>/<alphabetical list of stratums separated by comma>}.
-%The list of proxy addresses can be replaced by a UUID if no proxies are used.
-%The result is an ordered list of indexes of the input host names.
+\subsection{Redirects}
+Normally, the Stratum-1 servers directly respond to HTTP requests so
+\cvmfs\ has no need to support HTTP redirect response codes.  However,
+there are some high-bandwidth applications where HTTP redirects are used
+to transfer requests to multiple data servers.  To enable support for
+redirects in the \cvmfs\ client, set \texttt{CVMFS\_FOLLOW\_REDIRECTS=yes}.
 
 \section{Name Resolving}
 Round-robin DNS entries for proxy servers are treated specially by \cvmfs.
