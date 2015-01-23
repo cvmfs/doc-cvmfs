@@ -28,16 +28,10 @@ Also keep in mind that replication will thrash any caches that might be between 
 A direct connection is therefore preferable.
 
 \section{Recommended Setup}
-The vast majority of HTTP requests will be served by the site's local proxy servers.
-Being a publicly available service, however, we recommend to install caching \squid\ frontends in front of the Stratum~1 web server.
-This setup is shown in Figure~\ref{fig:stratum1front}
-
-\begin{figure}
-	\centering
-	\includegraphics{figures/stratum1front}
-	\caption{Recommended setup: 2 DNS load-balanced (round-robin) \squid\ machines in a reverse proxy mode in front of a single storage and web server.}
-	\label{fig:stratum1front}
-\end{figure}
+The vast majority of HTTP requests will be served by the site's local
+proxy servers.
+Being a publicly available service, however, we recommend to install
+a \squid\ frontend in front of the Stratum~1 web server.
 
 We suggest the following key parameters:
 \begin{description}
@@ -49,38 +43,53 @@ We suggest the following key parameters:
 		A standard Apache server.
 		Directory listing is not required.
 		In addition, it is a good practice to exclude search engines from the replica web server by an appropriate robots.txt.
-		The work load is mainly covered by the \squid\ servers, hence performance of the web server is not critical.
-		However, the webserver should be close to the storage in terms of latency.
+		The webserver should be close to the storage in terms of latency.
 	\item[Squid frontend.]
-		At least 2 \squid\ servers configured in load-balance mode as reverse proxies for the web server.
-		The Squid frontends should listen on ports 80 and 8000.
-		The more RAM \squid\ can use for caching, the better.
+		\squid\ should be used as a frontend to Apache, configured
+		as a reverse proxy.  It is recommended to run it on the
+		same machine as Apache to reduce the number of points of
+		failure.  Alternatively, separate \squid\ server machines
+		may be configured in load-balance mode forwarding to the
+		Apache server, but note that if any of them are down
+		the entire service will be considered down by \cvmfs\
+		clients.
+		The Squid frontend should listen on ports 80 and 8000.
+		The more RAM that the operating system can use for file
+		system caching, the better.
 \end{description}
 
 \section{Squid Configuration}
-The \squid\ configuration differs from the site-local Squids because the Stratum~1 \squid\ servers are transparent to the clients (\emph{reverse proxy}).
-The Squid server is configured as reverse proxy for the web server.
-Concurrent requests for the same URL should be collapsed into one request to the backend.
-Additionally, the cache sizes have to be set.
-As the expiry rules are set by the web server, \squid\ cache expiry rules remain unchanged.
+The \squid\ configuration differs from the site-local Squids
+because the Stratum~1 \squid\ servers are transparent to the clients
+(\emph{reverse proxy}).
+As the expiry rules are set by the web server, \squid\ cache expiry
+rules remain unchanged.
 
 The following lines should appear accordingly in /etc/squid/squid.conf:
 \begin{verbatim}
   http_port 80 accel
   http_port 8000 accel
   http_access allow all
-  cache_peer <APACHE_HOSTNAME> parent 80 0 no-query originserver
-  collapsed_forwarding on
-
-  max_filedesc 8192
+  cache_peer <APACHE_HOSTNAME> parent <APACHE_PORT> 0 no-query originserver
 
   cache_mem <MEM_CACHE_SIZE> MB
-  cache_dir aufs /var/spool/squid <DISK_CACHE_SIZE in MB> 32 256
+  cache_dir ufs /var/spool/squid <DISK_CACHE_SIZE in MB> 16 256
   maximum_object_size 1024 MB
-  maximum_object_size_in_memory 8 MB
+  maximum_object_size_in_memory 128 KB
 \end{verbatim}
 \quad\\
 Note that \texttt{http\_access allow all} has to be inserted before (or instead of) the line \texttt{http\_access deny all}.
+If Apache is running on the same host, the \texttt{APACHE\_HOSTNAME}
+will be \texttt{localhost}.  Also, in that case there is not a
+performance advantage for squid to cache files that came from the same
+machine, so you can configure squid to not cache files.  Do that with
+the following lines:
+\begin{verbatim}
+  acl CVMFSAPI urlpath_regex ^/cvmfs/[^/]*/api/
+  cache deny !CVMFSAPI
+\end{verbatim}
+Then the squid will only cache API calls.  You can then set
+\texttt{MEM\_CACHE\_SIZE} and \texttt{DISK\_CACHE\_SIZE} quite small.
 
 Check the configuration syntax by \texttt{squid -k parse}.
 Create the hard disk cache area with \texttt{squid -z}. 
