@@ -156,16 +156,13 @@ automatically reordered; see the next section.
 
 \subsection{Ordering of Servers according to Geographic Proximity}
 \label{sct:geoapi}
-\cvmfs\ Stratum 1 servers provide a RESTful service for geographic
-ordering.  Clients can request 
-\url{http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy_address>/<server_list>}.
-The proxy address can be replaced by a UUID if no proxies are used,
-and the \cvmfs\ client does that if there are no regular proxies.
-The server list is comma-separated.  The result is an ordered list
-of indexes of the input host names.  Use of this API can be enabled
-in a \cvmfs\ client with \texttt{CVMFS\_USE\_GEOAPI=yes}.  That will
-geographically sort both the servers set by \texttt{CVMFS\_SERVER\_URL}
-and the fallback proxies set by \textt{CVMFS\_FALLBACK\_PROXY}.
+\cvmfs\ Stratum 1 servers provide a RESTful service for geographic ordering.
+Clients can request \url{http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy_address>/<server_list>}.
+The proxy address can be replaced by a UUID if no proxies are used, and the \cvmfs\ client does that if there are no regular proxies.
+The server list is comma-separated.
+The result is an ordered list of indexes of the input host names.
+Use of this API can be enabled in a \cvmfs\ client with \texttt{CVMFS\_USE\_GEOAPI=yes}.
+That will geographically sort both the servers set by \texttt{CVMFS\_SERVER\_URL} and the fallback proxies set by \texttt{CVMFS\_FALLBACK\_PROXY}.
 
 \subsection{Timeouts}
 \cvmfs\ tries to gracefully recover from broken network links and temporarily overloaded paths.
