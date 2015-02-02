@@ -420,6 +420,21 @@ Note that historic file catalogs of all previous repository revisions stay untou
 
 After \texttt{cvmfs\_server migrate} has successfully updated all file catalogs repository maintenance can continue as usual.
 
+
+
+\section{Repository Garbage Collection}
+\label{sct:garbagecollection}
+Since \cvmfs\ is a versioning file system it is following an insert-only policy regarding its backend storage.
+When files are deleted from a \cvmfs\ repository, they are not automatically deleted from the underlying storage.
+Therefore legacy revisions stay intact and usable forever (cf. Section~\ref{sct:namedsnapshots}) at the expense of an ever-growing storage volume both on the Stratum~0 and the Stratum~1s.
+
+For this reason, applications that frequently install files into a repository and delete older ones -- for example the output from nightly software builds -- might quickly fill up the repository's backend storage.
+Furthermore these applications might actually never make use of the aforementioned long-term revision preservation rendering most of the stored objects ``garbage''.
+
+\cvmfs\ supports automatic garbage collection\footnote{introduced with \cvmfs\~2.1.20} to remove unreferenced data objects and free storage space.
+This feature needs to be enabled on the Stratum~0 and automatically scans the repository's catalog structure for unreferenced objects both on the Stratum~0 and the Stratum~1 installations on every publish respectively snapshot operation.
+
+
 \section{Limitations on Repository Content}
 Because \cvmfs\ provides what appears to be a POSIX filesystem to clients, it is easy to think that it is a general purpose filesystem and that it will work well with all kinds of files.
 That is not the case, however, because \cvmfs\ is optimized for particular types of files and usage.
