@@ -445,16 +445,6 @@ Generally if only executable code is distributed, there is no problem with the s
 storage capacity.
 Data files also tend to not compress as well, and that is especially the case of course if they are already compressed before installation.
 
-\subsection{Rapid creation of repository garbage}
-When files are deleted from a \cvmfs\ filesystem, they are not automatically deleted from the repository storage; they become ``garbage'' if they are no longer referenced from any catalog.
-This happens because files are stored in repositories under a hash of their content, and the same content may be referenced from multiple catalogs so it is very difficult for \cvmfs\ to know whether or not a file removed from one catalog might still be referenced from another catalog.
-
-For this reason, applications that frequently install files into a repository and delete older ones, for example the output from nightly software builds, do not work well on the same \cvmfs\ infrastructure that is also used to distribute production software.
-They leave a lot of garbage behind, in the original repository installation and in Stratum 1s that replicate the repository.
-Depending on how fast that garbage collects and how much spare disk space there is, it may need to be frequently cleaned out.
-Currently that is a time-consuming manual process and should be avoided.
-Automatic garbage collection is planned for a future release of \cvmfs.
-
 \subsection{Tarballs, zip files, and other archive files}
 If the contents of a tarball, zip file, or some other type of archive file is desired to be distributed by \cvmfs, it is usually better to first unpack it into its separate pieces first.
 This is because it allows better sharing of content between multiple releases of the file;
