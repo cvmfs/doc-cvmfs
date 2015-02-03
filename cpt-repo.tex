@@ -443,6 +443,22 @@ Revisions that are referenced by named snapshots (cf. Section~\ref{sct:namedsnap
 By default this time-based threshold is \emph{three days} but can be changed using the configuration variable \texttt{CVMFS\_AUTO\_GC\_TIMESPAN} both on Stratum~0 and Stratum~1.
 The value of this variable is expected to be parseable by the \texttt{date} command, for example \texttt{'3 days ago'} or \texttt{'1 week ago'}.
 
+\subsection{Enabling Garbage Collection}
+\label{sct:enablegc}
+
+\subsubsection{Creating a Garbage Collectable Repository}
+Repositories can be created as \emph{garbage-collectable} from the start by adding \texttt{-z} to the \texttt{cvmfs\_server mkfs} command (cf. Section~\ref{sct:repocreation}).
+It is generally recommended to also add \texttt{-g} to switch off automatic tagging in a garbage collectable repository.
+
+\subsubsection{Enabling Garbage Collection on an Existing Repository (Stratum 0)}
+Existing repositories can be reconfigured to be garbage collectable by adding\\ \texttt{CVMFS\_GARBAGE\_COLLECTION=true} and \texttt{CVMFS\_AUTO\_GC=true} to the \texttt{server.conf} of the repository.
+Furthermore it is recommended to switch off automatic tagging by setting \texttt{CVMFS\_AUTO\_TAG=false} for a garbage collectable repository.
+The garbage collection will be enabled with the next published transaction.
+
+\subsubsection{Enabling Garbage Collection on an Existing Replication (Stratum 1)}
+In order to use automatic garbage collection on a stratum 1 replica \texttt{CVMFS\_AUTO\_GC=true} needs to be added in the \texttt{server.conf} file of the stratum 1 installation.
+This will only work if the upstream stratum 0 repository has garbage collection enabled.
+
 \section{Limitations on Repository Content}
 Because \cvmfs\ provides what appears to be a POSIX filesystem to clients, it is easy to think that it is a general purpose filesystem and that it will work well with all kinds of files.
 That is not the case, however, because \cvmfs\ is optimized for particular types of files and usage.
