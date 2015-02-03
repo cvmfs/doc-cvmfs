@@ -434,6 +434,14 @@ Furthermore these applications might actually never make use of the aforemention
 \cvmfs\ supports automatic garbage collection\footnote{introduced with \cvmfs\~2.1.20} to remove unreferenced data objects and free storage space.
 This feature needs to be enabled on the Stratum~0 and automatically scans the repository's catalog structure for unreferenced objects both on the Stratum~0 and the Stratum~1 installations on every publish respectively snapshot operation.
 
+\subsection{Garbage Sweeping Policy}
+The garbage collector of \cvmfs\ is using a mark-and-sweep algorithm to detect unused files in the internal catalog graph.
+For this it classifies all available repository revisions into \emph{preserved} and \emph{condemned} revisions.
+All stored objects that are referenced only in the condemned but \emph{not} in the preserved revisions -- including catalog files -- are considered garbage and will be removed.
+
+Revisions that are referenced by named snapshots (cf. Section~\ref{sct:namedsnapshots}) or that are recent enough are preserved while all other revisions are condemned to be removed.
+By default this time-based threshold is \emph{three days} but can be changed using the configuration variable \texttt{CVMFS\_AUTO\_GC\_TIMESPAN} both on Stratum~0 and Stratum~1.
+The value of this variable is expected to be parseable by the \texttt{date} command, for example \texttt{'3 days ago'} or \texttt{'1 week ago'}.
 
 \section{Limitations on Repository Content}
 Because \cvmfs\ provides what appears to be a POSIX filesystem to clients, it is easy to think that it is a general purpose filesystem and that it will work well with all kinds of files.
