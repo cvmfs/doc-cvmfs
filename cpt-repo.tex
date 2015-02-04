@@ -264,6 +264,7 @@ Optionally \texttt{cvmfs\_server check} can also verify the data integrity (comm
 However this is a time consuming process and we recommend it only for diagnostic purposes.
 
 \subsection{Manage Named Snapshots}
+\label{sct:namedsnapshots}
 
 At the point of publishing, the resulting snapshot can be named.
 To do so, use the -a option like
@@ -419,6 +420,45 @@ Note that historic file catalogs of all previous repository revisions stay untou
 
 After \texttt{cvmfs\_server migrate} has successfully updated all file catalogs repository maintenance can continue as usual.
 
+
+
+\section{Repository Garbage Collection}
+\label{sct:garbagecollection}
+Since \cvmfs\ is a versioning file system it is following an insert-only policy regarding its backend storage.
+When files are deleted from a \cvmfs\ repository, they are not automatically deleted from the underlying storage.
+Therefore legacy revisions stay intact and usable forever (cf. Section~\ref{sct:namedsnapshots}) at the expense of an ever-growing storage volume both on the Stratum~0 and the Stratum~1s.
+
+For this reason, applications that frequently install files into a repository and delete older ones -- for example the output from nightly software builds -- might quickly fill up the repository's backend storage.
+Furthermore these applications might actually never make use of the aforementioned long-term revision preservation rendering most of the stored objects ``garbage''.
+
+\cvmfs\ supports automatic garbage collection\footnote{introduced with \cvmfs\~2.1.20} to remove unreferenced data objects and free storage space.
+This feature needs to be enabled on the Stratum~0 and automatically scans the repository's catalog structure for unreferenced objects both on the Stratum~0 and the Stratum~1 installations on every publish respectively snapshot operation.
+
+\subsection{Garbage Sweeping Policy}
+The garbage collector of \cvmfs\ is using a mark-and-sweep algorithm to detect unused files in the internal catalog graph.
+For this it classifies all available repository revisions into \emph{preserved} and \emph{condemned} revisions.
+All stored objects that are referenced only in the condemned but \emph{not} in the preserved revisions -- including catalog files -- are considered garbage and will be removed.
+
+Revisions that are referenced by named snapshots (cf. Section~\ref{sct:namedsnapshots}) or that are recent enough are preserved while all other revisions are condemned to be removed.
+By default this time-based threshold is \emph{three days} but can be changed using the configuration variable \texttt{CVMFS\_AUTO\_GC\_TIMESPAN} both on Stratum~0 and Stratum~1.
+The value of this variable is expected to be parseable by the \texttt{date} command, for example \texttt{'3 days ago'} or \texttt{'1 week ago'}.
+
+\subsection{Enabling Garbage Collection}
+\label{sct:enablegc}
+
+\subsubsection{Creating a Garbage Collectable Repository}
+Repositories can be created as \emph{garbage-collectable} from the start by adding \texttt{-z} to the \texttt{cvmfs\_server mkfs} command (cf. Section~\ref{sct:repocreation}).
+It is generally recommended to also add \texttt{-g} to switch off automatic tagging in a garbage collectable repository.
+
+\subsubsection{Enabling Garbage Collection on an Existing Repository (Stratum 0)}
+Existing repositories can be reconfigured to be garbage collectable by adding\\ \texttt{CVMFS\_GARBAGE\_COLLECTION=true} and \texttt{CVMFS\_AUTO\_GC=true} to the \texttt{server.conf} of the repository.
+Furthermore it is recommended to switch off automatic tagging by setting \texttt{CVMFS\_AUTO\_TAG=false} for a garbage collectable repository.
+The garbage collection will be enabled with the next published transaction.
+
+\subsubsection{Enabling Garbage Collection on an Existing Replication (Stratum 1)}
+In order to use automatic garbage collection on a stratum 1 replica \texttt{CVMFS\_AUTO\_GC=true} needs to be added in the \texttt{server.conf} file of the stratum 1 installation.
+This will only work if the upstream stratum 0 repository has garbage collection enabled.
+
 \section{Limitations on Repository Content}
 Because \cvmfs\ provides what appears to be a POSIX filesystem to clients, it is easy to think that it is a general purpose filesystem and that it will work well with all kinds of files.
 That is not the case, however, because \cvmfs\ is optimized for particular types of files and usage.
@@ -444,16 +484,6 @@ The files are stored and distributed compressed, and files with the same content
 Generally if only executable code is distributed, there is no problem with the space taken on Stratum 1s, but if many large data files are distributed they may exceed the Stratum 1
 storage capacity.
 Data files also tend to not compress as well, and that is especially the case of course if they are already compressed before installation.
-
-\subsection{Rapid creation of repository garbage}
-When files are deleted from a \cvmfs\ filesystem, they are not automatically deleted from the repository storage; they become ``garbage'' if they are no longer referenced from any catalog.
-This happens because files are stored in repositories under a hash of their content, and the same content may be referenced from multiple catalogs so it is very difficult for \cvmfs\ to know whether or not a file removed from one catalog might still be referenced from another catalog.
-
-For this reason, applications that frequently install files into a repository and delete older ones, for example the output from nightly software builds, do not work well on the same \cvmfs\ infrastructure that is also used to distribute production software.
-They leave a lot of garbage behind, in the original repository installation and in Stratum 1s that replicate the repository.
-Depending on how fast that garbage collects and how much spare disk space there is, it may need to be frequently cleaned out.
-Currently that is a time-consuming manual process and should be avoided.
-Automatic garbage collection is planned for a future release of \cvmfs.
 
 \subsection{Tarballs, zip files, and other archive files}
 If the contents of a tarball, zip file, or some other type of archive file is desired to be distributed by \cvmfs, it is usually better to first unpack it into its separate pieces first.

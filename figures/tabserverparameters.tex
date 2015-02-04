@@ -17,6 +17,9 @@
 		\tt CVMFS\_MIN\_CHUNK\_SIZE			& Minimal size of a file chunk in bytes \newline (depends on \texttt{CVMFS\_USE\_FILE\_CHUNKING})\\
 		\tt CVMFS\_AVG\_CHUNK\_SIZE			& Desired Average size of a file chunk in bytes \newline (depends on \texttt{CVMFS\_USE\_FILE\_CHUNKING})\\
 		\tt CVMFS\_MAX\_CHUNK\_SIZE			& Maximal size of a file chunk in bytes \newline (depends on \texttt{CVMFS\_USE\_FILE\_CHUNKING})\\
+		\tt CVMFS\_GARBAGE\_COLLECTION			& Allows garbage collection on this repository \newline (Stratum~0 only | if set to \texttt{true})\\
+		\tt CVMFS\_AUTO\_GC			& Enables the automatic garbage collection on \texttt{publish} and \texttt{snapshot}\\
+		\tt CVMFS\_AUTO\_GC\_TIMESPAN			& Date-threshold for automatic garbage collection \newline (For example: \texttt{3 days ago}, \texttt{1 week ago}, ...)\\
 		\bottomrule
 	\end{longtable}
 %\end{longtable}
