@@ -296,8 +296,8 @@ Rolling back is achieved through the command \texttt{cvmfs\_server rollback -t r
 A rollback is, like restoring from backups, not something one would do often.
 Use caution, a rollback is irreversible.
 
-
-\subsection{Managing Nested Catalogs}
+\subsection{Manage Nested Catalogs}
+\label{sct:nestedcatalogs}
 
 \cvmfs\ stores meta-data (path names, file sizes, \dots) in file catalogs.
 When a client accesses a repository, it has to download the file catalog first and then it downloads the files as they are opened.
@@ -360,6 +360,7 @@ Moreover, it can easily break client applications when they switch to a restruct
 Therefore, the software directory tree layout should be relatively stable before filling the CernVM-FS repository.
 
 \subsection{Managing Nested Catalogs with \texttt{.cvmfsdirtab}}
+\label{sct:dirtab}
 Rather than managing \texttt{.cvmfscatalog} files by hand, a repository administrator may create a file called \texttt{.cvmfsdirtab}, in the top directory of the repository, which contains a list of paths relative to the top of the repository where \texttt{.cvmfscatalog} files will be created.
 Those paths may contain shell wildcards such as asterisk (\texttt{*}) and question mark (\texttt{?}).
 This is useful for specifying patterns for creating nested catalogs as new files are installed.
