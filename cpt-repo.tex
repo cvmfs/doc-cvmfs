@@ -78,9 +78,12 @@ A new repository is created by \texttt{cvmfs\_server mkfs}:
 The utility will then ask you for a user that should act as the owner of the repository and afterwards create all the infrastructure for the new \cvmfs\ repository.
 Additionally it will create a reasonable default configuration and generate a new release manager certificate and software signing key.
 You'll have to distribute the public key in \texttt{/etc/cvmfs/keys/my.repo.name.pub} to all your client machines.
-The \texttt{cvmfs\_server} utility will use \texttt{/srv/cvmfs} as storage location.
+
+The \texttt{cvmfs\_server} utility will use \texttt{/srv/cvmfs} as storage location by default.
 In case you want to use a separate hard disk, you should mount it there upfront or create a symlink.
 Please refer to Section~\ref{sct:repoanatomy} for further details.
+Besides local storage it is possible to use an S3 compatible storage service as data backend.
+Please refer to Section~\ref{sct:s3storagesetup} for details.
 
 Once created, you should see your repository mounted under \texttt{/cvmfs/my.repo.name} containing only a single file called \texttt{new\_repository}.
 Following this step, you can produce the first revision by going through the repository update procedure described in the next section.
@@ -94,34 +97,25 @@ When \cvmfs\ clients perform a cache cleanup, they treat files from volatile rep
 Such volatile repositories can be useful, for instance, for experiment conditions data.
 
 \subsubsection{S3 Compatible Storage Systems}
+\label{sct:s3storagesetup}
 
-The \cvmfs\ can store files directly to S3 compatible storage
-systems, such as Amazon S3, Huawei UDS and OpenStack SWIFT. The S3 storage
-settings are given as parameter to \texttt{cvmfs\_server mkfs}:
+The \cvmfs\ can store files directly to S3 compatible storage systems, such as Amazon S3, Huawei UDS and OpenStack SWIFT.
+The S3 storage settings are given as parameter to \texttt{cvmfs\_server mkfs}:
 \begin{verbatim}
-  cvmfs_server mkfs -u S3,/my/tmp/dir,myprefix@mys3.conf \
-    -w http://my.s3.storage:PORT/myprefix my.repo.name
+  cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
+    -w http://my.s3.storage:PORT/mybucket my.repo.name
 \end{verbatim}
 
-The ``/my/tmp/dir'' is a directory where files are stored temporarily
-before being uploaded, e.g. /tmp/. The ``myprefix'' is a prefix,
-e.g. ``data'' or ``test'', that is added in front of each uploaded
-filename. This prefix can be used to separate repositories if multiple
-repositories are using the same S3 buckets. The ``mys3.conf'' is
-configuration file that defines S3 settings, see the list in
-Table~\ref{tbl:s3confparameters}. The ``-w'' option is used define a
-S3 server URL, e.g. http://localhost:3128, which is used for
-downloading files. Note that this URL can be different than the S3
-server address that is used for uploads, e.g. if a proxy server is
-deployed in front of the server.
+The ``mys3.conf'' is configuration file that defines S3 settings, see the list in Table~\ref{tbl:s3confparameters}.
+The ``-w'' option is used define the S3 server URL, e.g. http://localhost:3128, which is used for accessing the repository's backend storage on S3.
+Note that this URL can be different than the S3 server address that is used for uploads, e.g. if a proxy server is deployed in front of the server.
 
 \LTXtable{\textwidth}{figures/tabs3confparameters.tex}
 
-In addition, if the S3 backend is configured to use multiple accounts or buckets,
-a proxy server is needed to map HTTP requests to correct buckets.
-This mapping is needed because \cvmfs\ does not support buckets but assumes
-that all files are stored in a flat namespace. The recommendation is to use Squid proxy
-server (version $\geq 3.1.10$). The squid.conf might look e.g. like this:
+In addition, if the S3 backend is configured to use multiple accounts or buckets, a proxy server is needed to map HTTP requests to correct buckets.
+This mapping is needed because \cvmfs\ does not support buckets but assumes that all files are stored in a flat namespace.
+The recommendation is to use Squid proxy server (version $\geq 3.1.10$).
+The squid.conf might look e.g. like this:
 \begin{verbatim}
 http_access allow all
 http_port 127.0.0.1:3128 intercept
@@ -130,7 +124,8 @@ url_rewrite_program /usr/bin/s3_squid_rewrite.py
 cache deny all
 \end{verbatim}
 
-The bucket mapping logic is implemented in s3\_squid\_rewrite.py file. This python script needs to read requests from stdin and write mapped URLs to stdout, e.g.:
+The bucket mapping logic is implemented in s3\_squid\_rewrite.py file.
+This python script needs to read requests from stdin and write mapped URLs to stdout, e.g.:
 \begin{verbatim}
 in: http://localhost:3128/data/.cvmfswhitelist
 out: http://swift.cern.ch/cernbucket-9-91/data/.cvmfswhitelist
