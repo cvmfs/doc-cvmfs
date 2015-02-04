@@ -21,6 +21,58 @@ It furthermore simplifies data verification and it allows for file system snapsh
 In order to provide a writable \cvmfs\ repository, \cvmfs\ uses a union file system that combines a read-only \cvmfs\ mount point with a writable scratch area~\cite{unionfs04,aufs}.
 Figure~\ref{fig:installwebserver} outlines the process of publishing a repository.
 
+\pagebreak
+
+\section{\cvmfs\ Server Quick-Start Guide}
+\label{sct:quickstart}
+
+\subsection{System Requirements}
+\begin{itemize}
+\item Apache HTTP server \emph{OR} S3 compatible storage service
+\item AUFS union file system in the kernel
+\item Officially supported platforms
+\begin{itemize}
+    \item Scientific Linux 5 (64 bit)
+    \item Scientific Linux 6 (64 bit - with custom AUFS enabled kernel)
+    \item Ubuntu 13.10 and above (64 bit - with installed AUFS kernel module)
+\end{itemize}
+\end{itemize}
+
+\subsection{Installation}
+\begin{enumerate}
+\item Install \texttt{cvmfs} and \texttt{cvmfs-server} packages
+\item Ensure enough disk space in \texttt{/var/spool/cvmfs} (\textgreater 50GiB)
+\item For local storage: Ensure enough disk space in \texttt{/srv/cvmfs}
+\item Create a repository with \texttt{cvmfs\_server mkfs} (See Section~\ref{sct:repocreation})
+\end{enumerate}
+
+\subsection{Content Publishing}
+\begin{enumerate}
+\item \texttt{cvmfs\_server transaction <repository name>}
+\item Install content into \texttt{/cvmfs/<repository name>}
+\item Create nested catalogs at proper locations
+\begin{itemize}
+    \item Create \texttt{.cvmfscatalog} files (See Section~\ref{sct:nestedcatalogs}) or
+    \item Consider using a \texttt{.cvmfsdirtab} file (See Section~\ref{sct:dirtab})
+\end{itemize}
+\item \texttt{cvmfs\_server publish <repository name>}
+\end{enumerate}
+
+\subsection{Backup Policy}
+\begin{itemize}
+\item Create backups of signing key files in \texttt{/etc/cvmfs/keys}
+\item Entire repository content
+\begin{itemize}
+   \item For local storage: \texttt{/srv/cvmfs}
+   \item Stratum~1s can serve as last-ressort backup of repository content
+\end{itemize}
+\end{itemize}
+
+\pagebreak
+
+\section{Publishing a new Repository Revision}
+\label{sct:repoupdate}
+
 \begin{figure}[h]
 	\includegraphics[width=\textwidth]{figures/update_process.png}
 	\caption{Updating a mounted \cvmfs\ repository by overlaying it with a copy-on-write \aufs\ volume.
@@ -30,10 +82,7 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 	\label{fig:installwebserver}
 \end{figure}
 
-\section{Publishing a new Repository Revision}
-\label{sct:repoupdate}
-
-Since the repositories may contain many file system objects\footnote{For the ATLAS experiment at the LHC, for example, ``many'' means order of $10^7$ file system objects (\ie number of regular files, symbolic links, and directories).}, we cannot afford to generate an entire repository from scratch for every update.
+Since the repositories may contain many file system objects\footnote{For ATLAS, for example, ``many'' means order of $10^7$ file system objects (\ie number of regular files, symbolic links, and directories).}, we cannot afford to generate an entire repository from scratch for every update.
 Instead, we add a writable file system layer on top of a mounted read-only \cvmfs\ repository using the union file system \aufs~\cite{aufs}.
 This renders a read-only \cvmfs\ mount point writable to the user, while all performed changes are stored in a special writable scratch area managed by \aufs.
 A similar approach is used by Linux Live Distributions that are shipped on read-only media, but allow \emph{virtual} editing of files where changes are stored on a RAM disk.
