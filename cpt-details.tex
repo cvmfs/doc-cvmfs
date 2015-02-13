@@ -8,7 +8,7 @@ Most of these libraries are shipped with the \cvmfs\ sources and are linked stat
 	\begin{center}
 		\input{figures/cvmfs-blocks}
 	\end{center}
-	\caption{\cvmfs\ block diagram.}
+	\caption{\cvmfs\ building blocks.}
 	\label{fig:cvmfsblocks}
 \end{figure}
 
@@ -62,27 +62,35 @@ The table layout is shown in Table~\ref{tab:catalog}.
 In order to save space we do not store absolute paths.
 Instead we store MD5~\cite{rfc1321,rfc6151} hash values of the absolute path names.
 Symbolic links are kept in the catalog.
-Symbolic links may contain environment variables in the form \texttt{\$(VAR\_NAME)} that will be dynamically resolved by \cvmfs\ on access.
+Symbolic links may contain environment variables in the form \texttt{\$(VAR\_NAME)} or \texttt{\$(VAR\_NAME:-/default/path)}  that will be dynamically resolved by \cvmfs\ on access.
 Hardlinks are emulated by \cvmfs.
 The hardlink count is stored in the lower 32bit of the hardlinks field, a \emph{hardlink group} is stored in the higher 32 bit.
 If the hardlink group is greater than zero, all files with the same hardlink group will get the same inode issued by the \cvmfs\ Fuse client.
 The emulated hardlinks work within the same directory, only.
-The SHA-1~\cite{rfc3174} content hash refers to the zlib-compressed~\cite{rfc1950} version of the file.
+The cryptographic content hash refers to the zlib-compressed~\cite{rfc1950} version of the file.
 Flags indicate the type of an directory entry (see Table~\ref{tab:catalog}).
 
 A file catalog contains a \emph{time to live} (TTL), stored in seconds.
 The catalog TTL advises clients to check for a new version of the catalog, when expired.
 Checking for a new catalog version takes place with the first file system operation on a \cvmfs\ volume after the TTL has expired.
 The default TTL is 15 minutes.
-If a new catalog is available, \cvmfs\ delays it's loading for the period of the \cvmfs\ kernel cache life time (default: 1 minute).
+If a new catalog is available, \cvmfs\ delays the loading for the period of the \cvmfs\ kernel cache life time (default: 1~minute).
 During this drain-out period, the kernel caching is turned off.
 The first file system operation on a \cvmfs\ volume after that additional delay will apply a new file catalog and kernel caching is turned back on.
+
+\subsection{Content Hashes}
+\cvmfs\ can use SHA-1~\cite{rfc3174} or RIPEMD-160~\cite{ripemd160} as cryptographic hash function.
+The hash function can be changed on the Stratum 0 during the lifetime of repositories.
+On a change, new and updated files will use the new cryptographic hash while existing files remain unchanged.
+This is transparent to the clients since the hash function is stored in the flags field of file catalogs for each and every file.
+The default hash function is SHA-1.
+New software versions might introduce support for further cryptographic hash functions.
 
 \subsection{Nested Catalogs}
 In order to keep catalog sizes reasonable\footnote{As a rule of thumb, file catalogs up to \SI{25}{\mega\byte} (compressed) are reasonably small.}, repository subtrees may be cut and stored as separate \emph{nested catalogs}.
 There is no limit on the level of nesting.
 A reasonable approach is to store separate software versions as separate nested catalogs.
-Figure~\ref{fig:nested} shows the directory structure which we use for the ATLAS repository.
+Figure~\ref{fig:nested} shows the simplified directory structure which we use for the ATLAS repository.
 \begin{figure}
 	\begin{center}
 		\framebox{\input{figures/nestedcatalogs}}
@@ -106,7 +114,7 @@ While this usually avoids unnecessary catalogs to be loaded, recursive operation
 A \cvmfs\ file catalog maintains several counters about its contents and the contents of all of its nested catalogs. 
 The idea is that the catalogs know how many entries there are in their sub catalogs even without opening them.
 This way, one can immediately tell how many entries, for instance, the entire ATLAS repository has. 
-The numbers are shown using the number of inodes in \texttt{statvfs}. 
+Some of the numbers are shown using the number of inodes in \texttt{statvfs}. 
 So \texttt{df -i} shows the overall number of entries in the repository and (as number of used inodes) the number of entries of currently loaded catalogs. 
 Nested catalogs create an additional entry (the transition directory is stored in both the parent and the child catalog). 
 File hardlinks are still individual entries (inodes) in the cvmfs catalogs.
@@ -134,7 +142,7 @@ The following counters are maintained for both a catalog itself and for the subt
 \label{sct:cvmfspublished}
 Every \cvmfs\ repository contains a repository manifest file that serves as entry point into the repository's catalog structure.
 The repository manifest is the first file accessed by the \cvmfs\ client at mount time and therefore must be accessible via HTTP on the repository root URL.
-It is always called \textbf{.cvmfspublished} and contains fundamental repository meta data like the root catalogs's SHA-1 hash and the repository revision number as a key-value list.
+It is always called \textbf{.cvmfspublished} and contains fundamental repository meta data like the root catalog's cryptographic hash and the repository revision number as a key-value list.
 
 \subsection{Internal Manifest Structure}
 Below is an example of a typical manifest file.
@@ -148,11 +156,11 @@ Please refer to table~\ref{tbl:manifestfields} for detailed information about ea
 			\toprule
 			{\bf\centering Field} & {\bf\centering Meta Data Description} \\
 			\midrule
-			\texttt{C} & SHA-1 hash of the repository's current root catalog \\
+			\texttt{C} & Cryptographic hash of the repository's current root catalog \\
 			\texttt{R} & \begin{tabular}[t]{@{}l@{}}MD5 hash of the repository's root path\\(usually always \texttt{d41d8cd98f00b204e9800998ecf8427e})\end{tabular} \\
 			\texttt{B} & File size of the root catalog in bytes \\
-			\texttt{X} & SHA-1 hash of the signing certificate \\
-			\texttt{H} & SHA-1 hash of the repository's named tag history database \\
+			\texttt{X} & Cryptographic hash of the signing certificate \\
+			\texttt{H} & Cryptographic hash of the repository's named tag history database \\
 			\texttt{T} & Unix timestamp of this particular revision \\
 			\texttt{D} & Time To Live (TTL) of the root catalog \\
 			\texttt{S} & Revision number of this published revision \\
@@ -185,17 +193,17 @@ In order to provide authoritative information about a repository publisher, the 
 
 \subsubsection{Signing a Repository}
 It is important to note that it is sufficient to sign just the manifest file itself to gain a secure chain of the whole repository.
-The manifest refers to the SHA-1 content hash of the root catalog which in turn recursively references all sub-catalogs with their SHA-1 content hashes.
-Each catalog lists its files along with their SHA-1 content hashes.
+The manifest refers to the cryptographic content hash of the root catalog which in turn recursively references all sub-catalogs with their cryptographic content hashes.
+Each catalog lists its files along with their cryptographic content hashes.
 This concept is called a merkle tree and eventually provides a single hash that depends on the \textit{complete} content of the repository.
 
 The top level hash used for the repository signature can be found in the repository manifest right below the separator line (\texttt{-{}-} / see above).
-It is the SHA-1 hash of the manifest's meta data lines excluding the separator line.
+It is the cryptographic hash of the manifest's meta data lines excluding the separator line.
 Following the top level hash is the actual signature produced by the X.509 certificate signing procedure in binary form.
 
 \subsubsection{Signature Validation}
 In order to validate repository manifest signatures, \cvmfs\ uses a white-list of valid publisher certificates.
-The white-list contains the SHA-1 fingerprints of known publisher certificates and a timestamp.
+The white-list contains the cryptographic fingerprints of known publisher certificates and a timestamp.
 A white-list is valid for 30 days.
 It is signed by a private RSA key, which we refer to as \emph{master key}.
 %For the cern.ch repositories, the master key is kept offline on a secure smart card at \cern.
@@ -209,14 +217,14 @@ The blacklisted fingerprints have to be in the same format than the fingerprints
 The blacklist has precedence over the white-list.
 
 As crypto engine, \cvmfs\ uses \product{libcrypto} from the \product{OpenSSL} project~\cite{openssl}.
-Figure~\ref{fig:security} shows the trust chain with a signed repository.
-\begin{figure}
-	\begin{center}
-		\input{figures/security}
-	\end{center}
-	\caption{Trust chain with a signed repository.}
-	\label{fig:security}
-\end{figure}
+%Figure~\ref{fig:security} shows the trust chain with a signed repository.
+%\begin{figure}
+%	\begin{center}
+%		\input{figures/security}
+%	\end{center}
+%	\caption{Trust chain with a signed repository.}
+%	\label{fig:security}
+%\end{figure}
 
 
 %\section{Repository Layout}
@@ -259,22 +267,20 @@ The impact of the keep-alive feature is shown in Figure~\ref{fig:keepalive}.
 This feature, of course, somewhat sabotages a server-side load-balancing.
 However, exploiting the HTTP keep-alive feature does not affect scalability per se. 
 The servers and proxies may safely close idle connections anytime, in particular if they run out of resources.
-In practice, the maximum connection duration has to be set carefully for the HTTP deamon.
 
 \subsection{Cache Control}
 \label{sct:cachecontrol}
 In a limited way, \cvmfs\ advises intermediate web caches how to handle its requests.
 Therefor it uses the \texttt{Pragma:~no-cache} and the \texttt{Cache-Control:~no-cache} headers in certain cases.
 These cache control headers apply to both, forward proxies as well as reverse proxies.
-However, this is by no means a guarantee that intermediate proxies fetch a fresh original copy (though they should).
+This is not a guarantee that intermediate proxies fetch a fresh original copy (though they should).
 
 By including these headers, \cvmfs\ tries to not fetch outdated cache copies.
-This has to be handled with care, of course, in order to not overload the repository source server.
 Only in case \cvmfs\ downloads a corrupted file from a proxy server, it retries having the HTTP \texttt{no-cache} header set.
 This way, the corrupted file gets replaced in the proxy server by a fresh copy from the backend.
 
 \subsection{Identification Header}
-\cvmfs\ sends a custom header (\lstinline{X-CMFS2}) to be identified by the web server.
+\cvmfs\ sends a custom header (\lstinline{X-CVMFS2}) to be identified by the web server.
 If you have set the \cernvm\ GUID, this GUID is also transmitted.
 %In \cernvm\ we use this header to rewrite URL's to the respective repository format for \cvmfs\ version 1 or \cvmfs\ version 2.
 
@@ -296,7 +302,7 @@ Proxy servers given in IP notation remain unchanged.
 
 \cvmfs\ uses the TTLs that come from DNS servers. 
 However, there is a cutoff at 1 minute minimum TTL and 1 day maximum TTL.
-Locally resolved host names get a TTL of 1 minutes.
+Locally resolved host names get a TTL of 1 minute.
 The host alias file is re-read with every attempt to resolve a name.
 Failed attempts to resolve a name remain cached for 1 minute, too.
 If a name has been successfully resolved previously, this result stays active until another successful attempt is done.
@@ -305,17 +311,17 @@ If the DNS entries change for a host name, \cvmfs\ adjust the corresponding load
 The name resolving silently ignores errors in individual records.
 Only if no valid IP address is returned at all it counts as an error.
 IPv4 addresses have precedence if available.
-If the \texttt{CVMFS\_IPV4\_ONLY} environment variable is set,\cvmfs\ does not even try to resolve IPv6 records.
+If the \texttt{CVMFS\_IPV4\_ONLY} environment variable is set,\cvmfs\ does not try to resolve IPv6 records.
 
 The timeout for name resolving is hard-coded to 2 attempts with a timeout of 3 seconds each.
 This is independent from the \texttt{CVMFS\_TIMEOUT} and \texttt{CVMFS\_TIMEOUT(\_DIRECT)} settings.
-The effective timeout can be a bit longer than 6 seconds because of the backoff.
+The effective timeout can be a bit longer than 6 seconds because of a backoff.
 
 \section{Disk Cache}
 \label{sct:mamangedcache}
 Each running \cvmfs\ instance requires a local cache directory.
 Data are downloaded into a temporary files.
-Only at the very latest point they are renamed into their content-addressable SHA-1 names atomically by \texttt{rename()}.
+Only at the very latest point they are renamed into their content-addressable names atomically by \texttt{rename()}.
 
 The hard disk cache is managed, \ie \cvmfs\ maintains cache size restrictions and replaces files according to the \indexed{least recently used}\index{LRU|see{least recently used}} (LRU) strategy~\cite{lru06}.
 In order to keep track of files sizes and relative file access times, \cvmfs\ sets up another \sqlite\ database in the cache directory, the \emph{cache catalog}.
@@ -338,17 +344,17 @@ The cache catalog contains a single table; its structure is shown in Table~\ref{
 	\label{tab:cachecatalog}
 \end{table}
 
-\cvmfs\ does not strictly enforce a the cache limit.
+\cvmfs\ does not strictly enforce the cache limit.
 Instead \cvmfs\ works with two customizable soft limits, the \emph{cache quota} and the \emph{cache threshold}.
 When exceeding the cache quota, files are deleted until the overall cache size is less than or equal to the cache threshold.
 The cache threshold is currently hard-wired to half of the cache quota.
 The cache quota is for data files as well as file catalogs.
 Currently loaded catalogs are pinned in the cache, \ie they will not be deleted until unmount or until a new repository revision is applied.
 On unmount, pinned file catalogs are updated with the highest sequence number.
+As a pre-caution against a cache that is blocked by pinned catalogs, all catalogs except the root catalog are unpinned when the volume of pinned catalogs exceeds \SI{37.5}{\percent} of the overall cache volume.
 
 The cache catalog can be re-constructed from scratch on mount.
 Re-constructing the cache catalog is necessary when the managed cache is used for the first time and every time when ``unmanaged'' changes occurred to the cache directory, \eg when \cvmfs\ was terminated unexpectedly.
-Re-construction has to be triggered manually.
 
 In case of an exclusive cache, the cache manager runs as a separate thread of the \texttt{cvmfs2} process.
 This thread gets notified by the Fuse module whenever a file is opened or inserted.  
@@ -372,25 +378,25 @@ The sequence numbers of volatile files have bit 63 set.
 Hence they are interpreted as negative numbers and have precedence over normal files when it comes to cache cleanup.
 On automatic rebuild the volatile property of entries in the cache database is lost.
 
-\section{File System Traces}\index{traces}\index{file system traces|see{traces}}
-\cvmfs\ has an optional file system operations tracer.
-The tracer creates logs of usage, which can---for instance---be used as profiling information for pre-fetching.
-The trace file is created in \indexed{CSV} format (see Figure~\ref{fig:traces}).
-\begin{figure}
-	\centering
-	\begin{verbatim}
-"1481074921.015","1","/root/i686-pc-linux-gnu/include/TQObject.h","OPEN"
-"1481074931.030","1","/root/i686-pc-linux-gnu/include/KeySymbols.h","OPEN"
-"1481074931.220","3","/root/i686-pc-linux-gnu/include/KeySymbols.h","READ (TRY)"
-"1481074964.565","3","/root/i686-pc-linux-gnu/include/KeySymbols.h","READ 7407@0"
-"1481074965.005","1","/root/i686-pc-linux-gnu/include/TRootCanvas.h","OPEN"
-	\end{verbatim}
-	\caption{Example snippet of a trace log. The first columns stores time stamps as number of microseconds starting from the Unix epoch. The second column stores the event type. Negative event types are reserved for \cvmfs\ internal events.}
-	\label{fig:traces}
-\end{figure}
-
-The tracing runs in a separate thread and adapts the \emph{tread-safe trace buffer}, a technique used for multi-thread debugging~\cite[Chapter 8]{multicore06}.
-Since traces are kept in a memory ring buffer\footnote{Usually, each trace record requires two atomic \texttt{fetch-and-add} operations.} and written to disk in blocks of thousands of lines, the performance overhead for tracing is low.
+%\section{File System Traces}\index{traces}\index{file system traces|see{traces}}
+%\cvmfs\ has an optional file system operations tracer.
+%The tracer creates logs of usage, which can---for instance---be used as profiling information for pre-fetching.
+%The trace file is created in \indexed{CSV} format (see Figure~\ref{fig:traces}).
+%\begin{figure}
+%	\centering
+%	\begin{verbatim}
+%"1481074921.015","1","/root/i686-pc-linux-gnu/include/TQObject.h","OPEN"
+%"1481074931.030","1","/root/i686-pc-linux-gnu/include/KeySymbols.h","OPEN"
+%"1481074931.220","3","/root/i686-pc-linux-gnu/include/KeySymbols.h","READ (TRY)"
+%"1481074964.565","3","/root/i686-pc-linux-gnu/include/KeySymbols.h","READ 7407@0"
+%"1481074965.005","1","/root/i686-pc-linux-gnu/include/TRootCanvas.h","OPEN"
+%	\end{verbatim}
+%	\caption{Example snippet of a trace log. The first columns stores time stamps as number of microseconds starting from the Unix epoch. The second column stores the event type. Negative event types are reserved for \cvmfs\ internal events.}
+%	\label{fig:traces}
+%\end{figure}
+%
+%The tracing runs in a separate thread and adapts the \emph{tread-safe trace buffer}, a technique used for multi-thread debugging~\cite[Chapter 8]{multicore06}.
+%Since traces are kept in a memory ring buffer\footnote{Usually, each trace record requires two atomic \texttt{fetch-and-add} operations.} and written to disk in blocks of thousands of lines, the performance overhead for tracing is low.
 
 \section{NFS Maps}
 In normal mode, \cvmfs\ issues inodes based on the row number of an entry in the file catalog.
@@ -425,8 +431,7 @@ Open directory listings are stored in a Google dense\_hash that is saved and res
 \section{File System Interface}
 \label{sct:interface}
 
-Since \cvmfs\ is a read-only file system, there are only few non-trivial call-back functions to implement.
-These call-back functions provide the system interface.
+\cvmfs\ implements the following read-only file system call-backs.
 
 \subsection{\tt mount}
 On mount, the file catalog has to be loaded.
@@ -441,7 +446,7 @@ If there is no local copy of the manifest or the downloaded manifest and the cac
 Requests for file attributes are entirely served from the mounted catalogs, \ie there is no network traffic involved.
 This function is called as pre-requisite to other file system operations and therefore the most frequently called \fuse\ callback.
 In order to minimize relatively expensive \sqlite\ queries, \cvmfs\ uses a hash table to store negative and positive query results.
-The default size of \SI{16}{\mega\byte} for this memory cache is determined according to compilation benchmarks.
+The default size of \SI{16}{\mega\byte} for this memory cache is determined according to benchmarks with LHC experiment software.
 
 Additionally, the callback takes care of the catalog TTL.
 If the TTL is expired, the catalog is re-mounted on the fly.
@@ -453,7 +458,7 @@ Loading nested catalogs is transparent to the user.
 
 \subsection{\tt readlink}
 A symbolic link is served from the file catalog.
-As a special extension, \cvmfs\ detects environment variables in symlink strings written as \texttt{\$(VARIABLE)}.
+As a special extension, \cvmfs\ detects environment variables in symlink strings written as \texttt{\$(VARIABLE)} or \texttt{\$(VARIABLE:-/default/path)}.
 These variables are expanded by \cvmfs\ dynamically on access (in the context of the \texttt{cvmfs2} process).
 This way, a single symlink can point to different locations depending on the environment.
 This is helpful, for instance, to dynamically select software package versions residing in different directories.
@@ -481,13 +486,13 @@ There are two supported attributes:
 	\item[inode\_max]
 		Shows the highest possible inode with the current set of loaded catalogs.		
 	\item[hash]
-		Shows the SHA-1 hash of a regular file as listed in the file catalog.
+		Shows the cryptographic hash of a regular file as listed in the file catalog.
 	\item[host]
 		Shows the currently active HTTP server.
-	\item[host]
+	\item[host\_list]
 		Shows the ordered list of HTTP servers.
 	\item[lhash]
-		Shows the SHA-1 hash of a regular file as stored in the local cache, if available.
+		Shows the cryptographic hash of a regular file as stored in the local cache, if available.
 	\item[maxfd]
 		Shows the maximum number of file descriptors available to file system clients.
 	\item[nclg]
@@ -509,7 +514,7 @@ There are two supported attributes:
 	\item[revision]
 		Shows the file catalog revision of the mounted root catalog, an auto-increment counter increased on every repository publish.
 	\item[root\_hash]
-		Shows the SHA-1 hash of the root file catalog.
+		Shows the cryptographic hash of the root file catalog.
 	\item[rx]
 		Shows the overall amount of downloaded kilobytes.
 	\item[speed]
@@ -529,7 +534,7 @@ There are two supported attributes:
 \end{description}
 
 Extended attributes can be queried using the \texttt{attr} command.
-For instance, \texttt{attr -g hash /cvmfs/atlas.cern.ch/ChangeLog} returns the SHA-1 key of the file at hand.
+For instance, \texttt{attr -g hash /cvmfs/atlas.cern.ch/ChangeLog} returns the cryptographic hash of the file at hand.
 The extended attributes are used by the \texttt{cvmfs\_config stat} command in order to show a current overview of health and performance numbers.
 
 
@@ -551,6 +556,7 @@ Preserving POSIX semantics in union file systems is non-trivial; the first fully
 By now, union file systems are well established for ``Live CD'' builders, which use a RAM disk overlay on top of the read-only system partition in order to provide the illusion of a fully read-writable system.
 \cvmfs\ uses the AUFS union file system.
 Another union file system with similar semantics can be plugged in if necessary.
+OverlayFS is supported as an experimental alternative.
 
 Union file systems can be used to track changes on CernVM-FS repositories (Figure~\ref{fig:overlay}).
 In this case, the read-only file system interface of CernVM-FS is used in conjunction with a writable scratch area for changes.

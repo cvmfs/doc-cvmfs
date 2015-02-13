@@ -11,7 +11,7 @@ Figure~\ref{fig:stratum1} shows the situation for the repositories hosted in the
 		\resizebox{\textwidth}{!}{\input{figures/stratum1}}
 	\end{center}
 	\caption{\cvmfs\ content distribution network for the cern.ch domain: Stratum~1 replica servers are located in Europe, the U.S.\ and Asia.  
-		One protected r/w instance (Stratum 0) is feeding up the public, distributed mirror servers. 
+		One protected read/write instance (Stratum 0) is feeding up the public, distributed mirror servers. 
 		A distributed hierarchy of proxy servers fetches content from the closest public mirror server.}
 	\label{fig:stratum1}
 \end{figure}
@@ -24,7 +24,8 @@ The advantage over general purpose mirroring tools such as \product{rSync} is th
 Additionally, by the aid of the \cvmfs\ file catalogs, the \texttt{cvmfs\_server} utility knows beforehand (without remote listing) which files to transfer.
 
 In order to prevent accidental synchronization from a repository, the Stratum~0 repository maintainer has to create a \texttt{.cvmfs\_master\_replica} file in the HTTP root directory.
-Also keep in mind that replication will thrash any caches that might be between Stratum~1 and Stratum~0.
+This file is created by default when a new repository is created.
+Note that replication can thrash caches that might exist between Stratum~1 and Stratum~0.
 A direct connection is therefore preferable.
 
 \section{Recommended Setup}
@@ -98,8 +99,8 @@ In order to make the increased number of file descriptors effective for \squid, 
 \section{Monitoring}
 The \texttt{cvmfs\_server} utility reports status and problems to \texttt{stdout} and \texttt{stderr}.
 
-For the infrastructure, standard \nagios\ HTTP checks do the job.
-Configure it with the URL \url{http://$replica-server/cvmfs/$repository_name/.cvmfspublished}.
+For the web server infrastructure, we recommend standard \nagios\ HTTP checks.
+They should be configured with the URL \url{http://$replica-server/cvmfs/$repository_name/.cvmfspublished}.
 This file can also be used to monitor if the same repository revision is served by the Stratum~0 server and all the Stratum~1 servers.
 In order to tune the hardware and cache sizes, keep an eye on the Squid server's CPU and I/O load.
 

@@ -27,6 +27,7 @@
 	\def\rinner{2.25cm}
 	\def\router{4cm}
 	\def\rmirror{1.5cm}
+	\def\websize{1cm}
 
 	
 	\begin{scope}
@@ -58,13 +59,16 @@
 	\node (rw) at (0,0) {\parbox{3cm}{\centering\small\includegraphics[height=\rinner]{figures/reposerver}\\\emph{Stratum 0 R/W}}};
 	\draw[public] (0,0) circle (\router);
 	
-	\node[mirror] (cern) at (0,\router) {\parbox{\rmirror}{\small\centering CERN\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	\node[mirror] (cern) at (0,\router) {\parbox{\rmirror}{\small\centering CERN\\\includegraphics[height=\websize]{figures/webserver}}};
 	%\draw[mirror] (cern) circle (\rmirror);
-	\node[mirror] (ral) at (\router,0) {\parbox{\rmirror}{\small\centering United Kingdom\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	\node[mirror] (ral) at (\router,0) {\parbox{\rmirror}{\small\centering RAL (U.K.)\\\includegraphics[height=\websize]{figures/webserver}}};
 	%\draw[mirror] (ral) circle (\rmirror);
-	\node[mirror] (bnl) at (-\router,0) {\parbox{\rmirror}{\small\centering United States\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	\node[mirror] (bnl) at (-\router,0) {\parbox{\rmirror}{\small\centering FermiLab\\\includegraphics[height=\websize]{figures/webserver}}};
+	\node[mirror] (fermilab) at (canvas polar cs:angle=225,radius=\router) {\parbox{\rmirror}{\small\centering BNL\\\includegraphics[height=\websize]{figures/webserver}}};
+	\node[mirror] (desy) at (canvas polar cs:angle=-45,radius=\router) {\parbox{\rmirror}{\small\centering DESY\\\includegraphics[height=\websize]{figures/webserver}}};
+	\node[mirror] (nikhef) at (canvas polar cs:angle=45,radius=\router) {\parbox{\rmirror}{\small\centering NIKHEF\\\includegraphics[height=\websize]{figures/webserver}}};
 	%\draw[mirror] (bnl) circle (\rmirror);
-	\node[mirror] (other) at (0,-\router) {\parbox{\rmirror}{\small\centering \emph{Taiwan}\\\includegraphics[height=\rmirror]{figures/webserver}}};
+	\node[mirror] (other) at (0,-\router) {\parbox{\rmirror}{\small\centering \emph{ASGC (Taiwan)}\\\includegraphics[height=\websize]{figures/webserver}}};
 	%\draw[mirror] (other) circle (\rmirror);
 	
 	
@@ -77,6 +81,9 @@
 	\draw[replication] (rw) -- (cern);
 	\draw[replication] (rw) -- (ral);
 	\draw[replication] (rw) -- (bnl);
+	\draw[replication] (rw) -- (fermilab);
+	\draw[replication] (rw) -- (desy);
+	\draw[replication] (rw) -- (nikhef);
 	\draw[replication] (rw) -- (other);
 	%\draw[replication,red] (ral) -- ($(tier1)-(1.8cm,0)$);
 	
