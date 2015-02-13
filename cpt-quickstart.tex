@@ -2,17 +2,17 @@
 \label{sct:start}
 
 This section describes how to install the \cvmfs\ client.
-\cvmfs\ is supported on Scientific Linux 5 and 6, Ubuntu 12.04, openSuSE 11.1 and 12.2, Fedora 17 and 19, and Mac OS X.
+The \cvmfs\ client is supported on x86, x86\_64, and ARMv7 architectures running Scientific Linux~4--7, Ubuntu~$\geq12.04$, SLES~11 and openSuSE~13.1, Fedora~19--21, or Mac OS X~$\geq 10.8$.
 
 \section{Getting the Software}
 The \cvmfs\ source code and binary packages are available under \url{https://cernvm.cern.ch/portal/downloads}.
 Binary packages are produced for \rpm, \dpkg, and Mac OS X (.pkg).
-\yum\ repositories for \SI{64}{\bit} and \SI{32}{\bit} Scientific Linux 5 and 6 are available under \url{http://cvmrepo.web.cern.ch/cvmrepo/yum}.
+\yum\ repositories for \SI{64}{\bit} and \SI{32}{\bit} Scientific Linux 5 and 6 and \SI{64}{\bit} Scientific Linux 7 are available under \url{http://cvmrepo.web.cern.ch/cvmrepo/yum}.
 The \texttt{cvmfs-release} packages can be used to add a these \yum\ repositories to the local \yum\ installation.
 The \texttt{cvmfs-release} packages are available under \url{https://cernvm.cern.ch/portal/downloads}.
 
 The \cvmfs\ client is not relocatable and needs to be installed under /usr.
-It compiles on x86, x86\_64 (as of gcc 4.2), and ARMv6 architectures (as of gcc 4.7).
+On Intel architectures, it needs a \product{gcc}~$\geq 4.2$ compiler, on ARMv7  a \product{gcc}~$\geq 4.7$ compiler.
 In order to compile and install from sources, use the following \cmake\ command:
 \begin{verbatim}
   cmake .
@@ -24,12 +24,12 @@ In order to compile and install from sources, use the following \cmake\ command:
 \subsection{Linux}
 To install, proceed according to the following steps:
 \begin{description}
-	\item[Step 1] Install the \cvmfs\ packages.  With yum, run
+	\item[Step 1] Install the \cvmfs\ packages.  With \product{yum}, run
 \begin{verbatim}
-  yum install cvmfs cvmfs-config-default.
+  yum install cvmfs cvmfs-config-default
 \end{verbatim}
-		If yum does not show the latest packages, clean the yum cache by \texttt{yum clean all}.
-		Use \texttt{rpm -vi} to install the packages using just \rpm.
+		If \product{yum} does not show the latest packages, clean the yum cache by \texttt{yum clean all}.
+		Packages can be also installed with \rpm\ instead with the command \texttt{rpm -vi}.
 		On Ubuntu, use \texttt{dpkg -i} on the cvmfs and cvmfs-config-default .deb packages.
 	\item[Step 2] For the base setup, run \texttt{cvmfs\_config setup}.
 		Alternatively, you can do the base setup by hand: ensure that \texttt{user\_allow\_other} is set in /etc/fuse.conf, ensure that \texttt{/cvmfs /etc/auto.cvmfs} is set in /etc/auto.master and that the autofs service is running.
@@ -45,7 +45,7 @@ To install, proceed according to the following steps:
   CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
 \end{verbatim}
 		For the syntax of more complex HTTP proxy settings, see Section~\ref{sct:config:network}.
-		Make sure your local Squid servers allow access to all the Stratum 1 web servers~\ref{sct:squid}.
+		Make sure your local proxy servers allow access to all the Stratum 1 web servers~(see Section~\ref{sct:squid}).
 		For Cern repositories, the Stratum 1 web servers are listed in /etc/cvmfs/domain.d/cern.ch.conf.
 	\item[Step 5] Check if \cvmfs\ mounts the specified repositories by \texttt{cvmfs\_config probe}.
 \end{description}
@@ -83,7 +83,7 @@ For the ATLAS experiment software, for instance, the fully qualified repository 
 
 Mounting and un-mounting of the \cvmfs\ is controlled by \autofs\ and \product{automount}.
 That is, starting from the base directory /cvmfs different repositories are mounted automatically just by accessing them.
-For instance, running the command \texttt{ls /cvmfs/atlas.cern.ch} will mount the ATLAS software repository.
+For instance, running the command \texttt{ls /cvmfs/atlas.cern.ch} will mount the ATLAS software repository on the fly.
 This directory gets automatically unmounted after some \product{automount}-defined idle time.
 
 \section{Debugging Hints}
