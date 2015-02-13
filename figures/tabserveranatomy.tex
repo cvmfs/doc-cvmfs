@@ -6,23 +6,24 @@
 	\midrule
 
 	\texttt{/cvmfs} & \textbf{Repository mount points} \newline
-	Contains read-only \aufs\ mountpoints that become writable during repository updates. Don't symlink or manually mount anything here. \\
+	Contains read-only \aufs\ mountpoints that become writable during repository updates. Do not symlink or manually mount anything here. \\
 	\addlinespace
 
 	\texttt{/srv/cvmfs} & \textbf{Central repository storage location} \newline
-	Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. \\
+	Can be mounted or symlinked to another location \emph{before} creating the first repository. \\
 	\addlinespace
 
 	\texttt{/srv/cvmfs/<fqrn>} & \textbf{Storage location of a specfic repository} \newline
-	Can be symlinked to somewhere else \emph{before} creating the repository \texttt{<fqrn>}. \\
+	Can be symlinked to another location \emph{before} creating the repository \texttt{<fqrn>}. \\
 	\addlinespace
 
 	\texttt{/var/spool/cvmfs} & \textbf{Internal states of the repositories} \newline
-	Can be mounted or symlinked to somewhere else \emph{before} creating the first repository. Hosts the scratch area described in Section~\ref{sct:repoupdate} thus might consume notable disk space during repository updates. \\
+	Can be mounted or symlinked to another location \emph{before} creating the first repository. 
+	Hosts the scratch area described in Section~\ref{sct:repoupdate} thus might consume notable disk space during repository updates. \\
 	\addlinespace
 
 	\texttt{/etc/cvmfs} & \textbf{Configuration files and keychains} \newline
-	Similar to the structure described in Table~\ref{tbl:configfiles}. Please don't symlink this directory. \\
+	Similar to the structure described in Table~\ref{tbl:configfiles}. Do not symlink this directory. \\
 	\addlinespace
 
 	\texttt{/etc/cvmfs/cvmfs\_server\_hooks.sh} & \textbf{Customisable server behaviour} \newline

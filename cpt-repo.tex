@@ -33,7 +33,7 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 \section{Publishing a new Repository Revision}
 \label{sct:repoupdate}
 
-Since the repositories may contain many file system objects\footnote{For ATLAS, for example, ``many'' means order of $10^7$ file system objects (\ie number of regular files, symbolic links, and directories).}, we cannot afford to generate an entire repository from scratch for every update.
+Since the repositories may contain many file system objects\footnote{For the ATLAS experiment at the LHC, for example, ``many'' means order of $10^7$ file system objects (\ie number of regular files, symbolic links, and directories).}, we cannot afford to generate an entire repository from scratch for every update.
 Instead, we add a writable file system layer on top of a mounted read-only \cvmfs\ repository using the union file system \aufs~\cite{aufs}.
 This renders a read-only \cvmfs\ mount point writable to the user, while all performed changes are stored in a special writable scratch area managed by \aufs.
 A similar approach is used by Linux Live Distributions that are shipped on read-only media, but allow \emph{virtual} editing of files where changes are stored on a RAM disk.
@@ -43,7 +43,7 @@ If a file in the \cvmfs\ repository gets changed, \aufs\ first copies it to the 
 Additionally it creates special hidden files (called \emph{white-outs}) to keep track of file deletions in the \cvmfs\ repository.
 
 Eventually, all changes applied to the repository are stored in \aufs's scratch area and can be merged into the actual \cvmfs\ repository by a subsequent synchronization step.
-Before the actual synchronization step takes place, no changes are applied to the \cvmfs\ repository.
+Up until the actual synchronization step takes place, no changes are applied to the \cvmfs\ repository.
 Therefore, any unsuccessful updates to a repository can be rolled back by simply clearing the writable file system layer of \aufs.
 
 \section{Requirements for a new Repository}
@@ -65,8 +65,8 @@ The following table provides an overview of important configuration files and in
 
 \section{\cvmfs\ Repository Creation and Updating}
 \label{sct:repocreateandupdate}
-The \cvmfs\ server tool kit provides the versatile \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
-Please run it without any parameters to get a short documentation of its commands.
+The \cvmfs\ server tool kit provides the \texttt{cvmfs\_server} utility in order to perform all operations related to repository creation, updating, deletion, replication and inspection.
+Without any parameters it prints a short documentation of its commands.
 
 \subsection{Repository Creation}
 \label{sct:repocreation}
@@ -75,18 +75,16 @@ A new repository is created by \texttt{cvmfs\_server mkfs}:
 \begin{verbatim}
   cvmfs_server mkfs my.repo.name
 \end{verbatim}
-The utility will then ask you for a user that should act as the owner of the repository and afterwards create all the infrastructure for the new \cvmfs\ repository.
+The utility will ask for a user that should act as the owner of the repository and afterwards create all the infrastructure for the new \cvmfs\ repository.
 Additionally it will create a reasonable default configuration and generate a new release manager certificate and software signing key.
-You'll have to distribute the public key in \texttt{/etc/cvmfs/keys/my.repo.name.pub} to all your client machines.
+The public key in \texttt{/etc/cvmfs/keys/my.repo.name.pub} needs to be distributed to all client machines.
 
 The \texttt{cvmfs\_server} utility will use \texttt{/srv/cvmfs} as storage location by default.
-In case you want to use a separate hard disk, you should mount it there upfront or create a symlink.
-Please refer to Section~\ref{sct:repoanatomy} for further details.
-Besides local storage it is possible to use an S3 compatible storage service as data backend.
-Please refer to Section~\ref{sct:s3storagesetup} for details.
+In case a separate hard disk should be used, a partition can be mounted on /src/cvmfs or /srv/cvmfs can be symlinked to another location (see Section~\ref{sct:repoanatomy}).
+Besides local storage it is possible to use an S3 compatible storage service as data backend (see Section~\ref{sct:s3storagesetup}).
 
-Once created, you should see your repository mounted under \texttt{/cvmfs/my.repo.name} containing only a single file called \texttt{new\_repository}.
-Following this step, you can produce the first revision by going through the repository update procedure described in the next section.
+Once created, the repository is mounted under \texttt{/cvmfs/my.repo.name} containing only a single file called \texttt{new\_repository}.
+The next steps describe how to change the repository content.
 
 \subsubsection{Repositories for Volatile Files}
 Repositories can be flagged as containing \emph{volatile} files using the \texttt{-v} option:
@@ -99,23 +97,25 @@ Such volatile repositories can be useful, for instance, for experiment condition
 \subsubsection{S3 Compatible Storage Systems}
 \label{sct:s3storagesetup}
 
-The \cvmfs\ can store files directly to S3 compatible storage systems, such as Amazon S3, Huawei UDS and OpenStack SWIFT.
-The S3 storage settings are given as parameter to \texttt{cvmfs\_server mkfs}:
+\cvmfs\ can store files directly to S3 compatible storage systems, such as \product{Amazon S3}, \product{Huawei UDS} and \product{OpenStack SWIFT}.
+The S3 storage settings are given as parameters to \texttt{cvmfs\_server mkfs}:
 \begin{verbatim}
   cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
-    -w http://my.s3.storage:PORT/mybucket my.repo.name
+    -w http://s3.amazonaws.com/mybucket my.repo.name
 \end{verbatim}
 
-The ``mys3.conf'' is configuration file that defines S3 settings, see the list in Table~\ref{tbl:s3confparameters}.
+The file ``mys3.conf'' contains the S3 settings (see Table~\ref{tbl:s3confparameters}).
 The ``-w'' option is used define the S3 server URL, e.g. http://localhost:3128, which is used for accessing the repository's backend storage on S3.
 Note that this URL can be different than the S3 server address that is used for uploads, e.g. if a proxy server is deployed in front of the server.
+Note that the buckets need to exist before the repository is created.
+In the example above, a single bucket \texttt{mybucket-1-1} needs to be created beforehand.
 
 \LTXtable{\textwidth}{figures/tabs3confparameters.tex}
 
 In addition, if the S3 backend is configured to use multiple accounts or buckets, a proxy server is needed to map HTTP requests to correct buckets.
 This mapping is needed because \cvmfs\ does not support buckets but assumes that all files are stored in a flat namespace.
-The recommendation is to use Squid proxy server (version $\geq 3.1.10$).
-The squid.conf might look e.g. like this:
+The recommendation is to use a \squid\ proxy server (version $\geq 3.1.10$).
+The squid.conf can look like this:
 \begin{verbatim}
 http_access allow all
 http_port 127.0.0.1:3128 intercept
@@ -125,7 +125,7 @@ cache deny all
 \end{verbatim}
 
 The bucket mapping logic is implemented in s3\_squid\_rewrite.py file.
-This python script needs to read requests from stdin and write mapped URLs to stdout, e.g.:
+This python script needs to read requests from stdin and write mapped URLs to stdout, for instance:
 \begin{verbatim}
 in: http://localhost:3128/data/.cvmfswhitelist
 out: http://swift.cern.ch/cernbucket-9-91/data/.cvmfswhitelist
@@ -140,16 +140,15 @@ Typically a repository publisher does the following steps in order to create a n
 	\item Test the software installation
 	\item Do one of the following:
 	\begin{itemize}
-		\item Run \texttt{cvmfs\_server publish} to finalize your new repository revision \emph{or}
+		\item Run \texttt{cvmfs\_server publish} to finalize the new repository revision \emph{or}
 		\item Run \texttt{cvmfs\_server abort} to clear all changes and start over again
 	\end{itemize}
-	\item Make the web server serve the new version of the repository directory.
 \end{enumerate}
 
-\cvmfs\ supports to have more than one repository on a single server machine.
-In case of a multi-repository host, you need to specify which repository you want to operate on, when running the \texttt{cvmfs\_server} utility commands.
-Additionally you should run \texttt{cvmfs\_server resign} every 30 days to update the signatures of the repository.
-Most \texttt{cvmfs\_server} commands allow for wildcards to do manipulations on more than one repository at once, i.e. \texttt{cvmfs\_server migrate *.cern.ch} would migrate all present repositories ending with \texttt{.cern.ch}.
+\cvmfs\ supports having more than one repository on a single server machine.
+In case of a multi-repository host, the target repository of a command needs to be given as a parameter when running the \texttt{cvmfs\_server} utility.
+The \texttt{cvmfs\_server resign} command should run every 30 days to update the signatures of the repository.
+Most \texttt{cvmfs\_server} commands allow for wildcards to do manipulations on more than one repository at once, \eg \texttt{cvmfs\_server migrate *.cern.ch} would migrate all present repositories ending with \texttt{.cern.ch}.
 
 \subsection{Repository Import}
 The \cvmfs\ 2.1 server tools support the import of a \cvmfs\ file storage together with its corresponding signing keychain.
@@ -164,14 +163,13 @@ We strongly recommend to install \cvmfs\ 2.1 on a fresh or at least a properly c
 The command \texttt{cvmfs\_server import} requires the full \cvmfs\ 2.0 data storage which is located at /srv/cvmfs by default as well as the repository's signing keys.
 Since the \cvmfs\ 2.1 server backend supports multiple repositories in contrast to its 2.0 counterpart, we recommend to move the repository's data storage to /srv/cvmfs/<FQRN> upfront to avoid later inconsistencies.
 
-\vspace*\baselineskip
-In order to transform a repository from \cvmfs\ 2.0 into 2.1 you should roughly follow the following steps. As an example we are using a repository called \textbf{legacy.cern.ch}.
+The following steps describe the transformation of a repository from \cvmfs\ 2.0 into 2.1. As an example we are using a repository called \textbf{legacy.cern.ch}.
 \begin{enumerate}
 	\item Make sure that you have backups of both the repository's backend storage and its signing keys
-	\item Install and test the \cvmfs\ 2.1 server tools on the machine you are going to use as your Stratum 0 maintenance machine
+	\item Install and test the \cvmfs\ 2.1 server tools on the machine that is going to be used as new Stratum 0 maintenance machine
 	\item Place the repository's backend storage data in /srv/cvmfs/\textit{legacy.cern.ch} \\ (default storage location)
 	\item Transfer the repository's signing keychain to the machine (f.e. to \textapprox/legacy\_keys/)
-	\item Run \texttt{cvmfs\_server import} roughly like this:
+	\item Run \texttt{cvmfs\_server import} like this:
 \begin{verbatim}
     cvmfs_server import
       -o <username of repo maintainer> \
@@ -227,68 +225,67 @@ To subscribe to the described hooks one needs to define one or more of the follo
 \end{itemize}
 The defined functions get called at the specified positions in the repository update process and are provided with the fully qualified repository name as their only parameter~(\texttt{\$1}).
 Undefined functions automatically default to a NO-OP.
-You might consult the example script located at \texttt{cvmfs/cvmfs\_server\_hooks.sh.demo} in the \cvmfs\ sources.
+An example script is located at \texttt{cvmfs/cvmfs\_server\_hooks.sh.demo} in the \cvmfs\ sources.
 
 
 \section{Maintaining a CernVM-FS Repository}
 
 \cvmfs\ is a versioning, snapshot-based file system.
 Similar to versioning systems, changes to /cvmfs/\dots are temporary until they are committed (\texttt{cvmfs\_server publish}) or discarded (\texttt{cvmfs\_server abort}).
-That allows you to test and verify your changes, for instance to test a newly installed release before publishing it to clients.
+That allows you to test and verify changes, for instance to test a newly installed release before publishing it to clients.
 Whenever changes are published (committed), a new file system snapshot of the current state is created.
 These file system snapshots can be tagged with a name, which makes them \emph{named snapshots}.
 A named snapshot is meant to stay in the file system.
-You can rollback to named snapshots and you can, on the client side, decide to mount any of the named snapshots in lieu of the newest available snapshot.
+One can rollback to named snapshots and it is possible, on the client side, to mount any of the named snapshots in lieu of the newest available snapshot.
 
 Two named snapshots are managed automatically by \cvmfs, \texttt{trunk} and \texttt{trunk-previous}.
 This allows for easy unpublishing of a mistake, by rolling back to the \texttt{trunk-previous} tag.
 
-\subsection{Check Integrity}
+\subsection{Integrity Check}
 \label{sct:checkintegrity}
 \cvmfs\ provides an integrity checker for repositories.
-Run the integrity checker using
+It is invoked by
 \begin{verbatim}
 cvmfs_server check
 \end{verbatim}
 
 The integrity checker verifies the sanity of file catalogs and verifies that referenced data chunks are present.
-Ideally, run the integrity checker after every publish operation.
-Where this is not affordable due to the size of the repositories, run the integrity checker regularly.
+Ideally, the integrity checker is used after every publish operation.
+Where this is not affordable due to the size of the repositories, the integrity checker should run regularly.
 
 Optionally \texttt{cvmfs\_server check} can also verify the data integrity (command line flag \texttt{-i}) of each data object in the repository.
-However this is a time consuming process and we recommend it only for diagnostic purposes.
+This is a time consuming process and we recommend it only for diagnostic purposes.
 
-\subsection{Manage Named Snapshots}
+\subsection{Managing Named Snapshots}
 \label{sct:namedsnapshots}
 
-At the point of publishing, the resulting snapshot can be named.
-To do so, use the -a option like
+At the point of publishing, the resulting snapshot can be named using the -a option like
 \begin{verbatim}
 cvmfs_server transaction
 # Changes
 cvmfs_server publish -a release-1.0
 \end{verbatim}
 
-As a tag name, use an identifier without spaces and special characters.
-You can list all named snapshots by
+The tag name must not contain spaces or special characters.
+Named snapshots can be listed by
 \begin{verbatim}
 cvmfs_server list-tags
 \end{verbatim}
 
-In order to remove (unpublish) a named snapshot, use the -r option like
+Named snapshots can be removed (unpublish) with the -r option like
 \begin{verbatim}
 cvmfs_server transaction
 cvmfs_server publish -r release-1.0
 \end{verbatim}
 
-Use named snapshots whenever you do larger modifications to the repository, for instance when you install a new major software release.
-Only with named snapshots do you have the ability to easily undo modifications and to preserve the state of the file system for the future.
-Nevertheless, do not use named snapshots excessively.
-Start cleaning up unnecessary snapshots once you have more than $\approx 50$.
+Named snapshots are best to use for larger modifications to the repository, for instance when a new major software release is installed.
+Named snapshots provide the ability to easily undo modifications and to preserve the state of the file system for the future.
+Nevertheless, named snapshots should not be used excessively.
+Less than 50 named snapshots are a good number of named snapshots in many cases.
 
 \subsection{Rollbacks}
 
-You can rollback your repository to any of the named snapshots.
+A repository can be rolled back to any of the named snapshots.
 Technically, this means that the given snapshot is re-published, while all intermediate snapshots are removed from the history.
 
 In order to rollback, do
@@ -297,11 +294,10 @@ cvmfs_server transaction
 cvmfs_server rollback -t release-1.0
 \end{verbatim}
 
-A rollback is, like restoring from backups, not something you would do often.
-Use caution.
-A rollback is irreversible.
+A rollback is, like restoring from backups, not something one would do often.
+Use caution, a rollback is irreversible.
 
-\subsection{Manage Nested Catalogs}
+\subsection{Managing Nested Catalogs}
 
 \cvmfs\ stores meta-data (path names, file sizes, \dots) in file catalogs.
 When a client accesses a repository, it has to download the file catalog first and then it downloads the files as they are opened.
@@ -311,16 +307,16 @@ For instance, clients using software release 1.0 do not need to know about the c
 
 With nested catalogs, \cvmfs\ has a mechanism to partition the directory tree of a repository into many catalogs.
 Repository maintainers are responsible for sensible cutting of the directory trees into nested catalogs.
-They can do so by creating and removing the magic file \texttt{.cvmfscatalog}.
+They can do so by creating and removing magic files named \texttt{.cvmfscatalog}.
 
-For example, in order to create a nested catalog for software release 1.0 in the hypothetical repository experiment.cern.ch, do
+For example, in order to create a nested catalog for software release 1.0 in the hypothetical repository experiment.cern.ch, one would invoke
 \begin{verbatim}
 cvmfs_server transaction
 touch /cvmfs/experiment.cern.ch/software/1.0/.cvmfscatalog
 cvmfs_server publish
 \end{verbatim}
 
-If you want to merge a nested catalog with its parent catalog, remove the corresponding \texttt{.cvmfscatalog} file.
+In order to merge a nested catalog with its parent catalog, the corresponding \texttt{.cvmfscatalog} file needs to be removed.
 Nested catalogs can be nested on arbitrary many levels.
 
 \subsection{Recommendations for Nested Catalogs}
@@ -361,7 +357,7 @@ Section~\ref{sct:inspectnestedcatalogs} describes how to find catalogs that do n
 
 Restructuring the repository's directory tree is an expensive operation in CernVM-FS.
 Moreover, it can easily break client applications when they switch to a restructured file system snapshot.
-Therefore, your software directory tree layout should be relatively stable before you start filling the CernVM-FS repository.
+Therefore, the software directory tree layout should be relatively stable before filling the CernVM-FS repository.
 
 \subsection{Managing Nested Catalogs with \texttt{.cvmfsdirtab}}
 Rather than managing \texttt{.cvmfscatalog} files by hand, a repository administrator may create a file called \texttt{.cvmfsdirtab}, in the top directory of the repository, which contains a list of paths relative to the top of the repository where \texttt{.cvmfscatalog} files will be created.
@@ -390,7 +386,7 @@ Note that unlike the regular lines that add catalogs, asterisks in the exclamati
 
 \subsection{Inspecting Nested Catalog Structure}
 \label{sct:inspectnestedcatalogs}
-To visualize the current nested file catalog layout of a repository use the following command.
+The following command visualizes the current nested file catalog layout of a repository.
 
 \begin{verbatim}
 cvmfs_server list-catalogs
@@ -406,7 +402,7 @@ In rare cases the further development of \cvmfs\ makes it necessary to change th
 Updating the \cvmfs\ installation on a Stratum 0 machine might require a migration of the file catalogs.
 
 It is recommended that \texttt{cvmfs\_server list} is issued after any \cvmfs\ update to review if any of the maintained repositories need a migration.
-Outdated repositories will be marked as \textbf{INCOMPATIBLE} and \texttt{cvmfs\_server} refuses all actions on these repositories until the file catalogs have been updated.
+Outdated repositories will be marked as ``INCOMPATIBLE'' and \texttt{cvmfs\_server} refuses all actions on these repositories until the file catalogs have been updated.
 
 In order to run a file catalog migration use \texttt{cvmfs\_server migrate} for each of the outdated repositories.
 This will essentially create a new repository revision that contains the exact same  file structure as the current revision.
@@ -426,17 +422,17 @@ Therefore legacy revisions stay intact and usable forever (cf. Section~\ref{sct:
 For this reason, applications that frequently install files into a repository and delete older ones -- for example the output from nightly software builds -- might quickly fill up the repository's backend storage.
 Furthermore these applications might actually never make use of the aforementioned long-term revision preservation rendering most of the stored objects ``garbage''.
 
-\cvmfs\ supports automatic garbage collection\footnote{introduced with \cvmfs\~2.1.20} to remove unreferenced data objects and free storage space.
+\cvmfs\ supports garbage-collected repositories that automatically remove unreferenced data objects and free storage space.
 This feature needs to be enabled on the Stratum~0 and automatically scans the repository's catalog structure for unreferenced objects both on the Stratum~0 and the Stratum~1 installations on every publish respectively snapshot operation.
 
 \subsection{Garbage Sweeping Policy}
 The garbage collector of \cvmfs\ is using a mark-and-sweep algorithm to detect unused files in the internal catalog graph.
-For this it classifies all available repository revisions into \emph{preserved} and \emph{condemned} revisions.
-All stored objects that are referenced only in the condemned but \emph{not} in the preserved revisions -- including catalog files -- are considered garbage and will be removed.
-
+%For this it classifies all available repository revisions into \emph{preserved} and \emph{condemned} revisions.
+%All stored objects that are referenced only in the condemned but \emph{not} in the preserved revisions -- including catalog files -- are considered garbage and will be removed.
+%
 Revisions that are referenced by named snapshots (cf. Section~\ref{sct:namedsnapshots}) or that are recent enough are preserved while all other revisions are condemned to be removed.
 By default this time-based threshold is \emph{three days} but can be changed using the configuration variable \texttt{CVMFS\_AUTO\_GC\_TIMESPAN} both on Stratum~0 and Stratum~1.
-The value of this variable is expected to be parseable by the \texttt{date} command, for example \texttt{'3 days ago'} or \texttt{'1 week ago'}.
+The value of this variable is expected to be parseable by the \texttt{date} command, for example \texttt{3 days ago} or \texttt{1 week ago}.
 
 \subsection{Enabling Garbage Collection}
 \label{sct:enablegc}
@@ -505,4 +501,4 @@ If there might be any such hardlinks in a repository, set the option
 \end{verbatim}
 in the repository's \texttt{server.conf}.
 The file will not appear to be hardlinked to the client, but it will still be stored as only one file in the repository just like any other files that have identical content.
-Note that if, in a subsequent publish operation, you change only one of these cross-directory hardlinks, the other hardlinks remain unchanged (the hardlink got ``broken'').
+Note that if, in a subsequent publish operation, only one of these cross-directory hardlinks gets changed, the other hardlinks remain unchanged (the hardlink got ``broken'').

@@ -1,7 +1,7 @@
 \chapter{Setting up a Local Squid Proxy}
 \label{sct:squid}
 
-For clusters of nodes with \cvmfs, we strongly recommend to setup two or more \squid\footnote{\url{http://www.squid-cache.org}} forward proxy servers~\cite{squid99, bloomsquid00} as well.
+For clusters of nodes with \cvmfs\ clients, we strongly recommend to setup two or more \squid\footnote{\url{http://www.squid-cache.org}} forward proxy servers as well.
 The forward proxies will reduce the latency for the local worker nodes, which is critical for cold cache performance. 
 They also reduce the load on the Stratum 1 servers.
 
