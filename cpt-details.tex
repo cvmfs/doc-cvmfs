@@ -317,6 +317,9 @@ The timeout for name resolving is hard-coded to 2 attempts with a timeout of 3 s
 This is independent from the \texttt{CVMFS\_TIMEOUT} and \texttt{CVMFS\_TIMEOUT(\_DIRECT)} settings.
 The effective timeout can be a bit longer than 6 seconds because of a backoff.
 
+The name server used by \cvmfs\ is looked up only once on start.
+If the name server changes during the life time of a \cvmfs\ mount point, this change needs to be manually advertised to \cvmfs\ using \texttt{cvmfs\_talk nameserver set}.
+
 \section{Disk Cache}
 \label{sct:mamangedcache}
 Each running \cvmfs\ instance requires a local cache directory.
