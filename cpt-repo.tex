@@ -256,46 +256,46 @@ Where this is not affordable due to the size of the repositories, the integrity 
 Optionally \texttt{cvmfs\_server check} can also verify the data integrity (command line flag \texttt{-i}) of each data object in the repository.
 This is a time consuming process and we recommend it only for diagnostic purposes.
 
-\subsection{Managing Named Snapshots}
+
+\subsection{Named Snapshots}
 \label{sct:namedsnapshots}
 
-At the point of publishing, the resulting snapshot can be named using the -a option like
-\begin{verbatim}
-cvmfs_server transaction
-# Changes
-cvmfs_server publish -a release-1.0
-\end{verbatim}
-
-The tag name must not contain spaces or special characters.
-Named snapshots can be listed by
-\begin{verbatim}
-cvmfs_server list-tags
-\end{verbatim}
-
-Named snapshots can be removed (unpublish) with the -r option like
-\begin{verbatim}
-cvmfs_server transaction
-cvmfs_server publish -r release-1.0
-\end{verbatim}
+Named snapshots or \emph{tags} are an easy way to organise checkpoints in the file system history.
+\cvmfs\ clients can explicitly mount a repository at a specific named snapshot to expose the file system content published with this tag.
+It also allows for rollbacks to previously created and tagged file system revisions.
+Tag names need to be unique for each repository and are not allowed to contain spaces or spacial characters.
+Besides the actual tag's name they can also contain a free descriptive text and store a creation timestamp.
 
 Named snapshots are best to use for larger modifications to the repository, for instance when a new major software release is installed.
 Named snapshots provide the ability to easily undo modifications and to preserve the state of the file system for the future.
 Nevertheless, named snapshots should not be used excessively.
 Less than 50 named snapshots are a good number of named snapshots in many cases.
 
-\subsection{Rollbacks}
+By default, new repositories will automatically create a generic tag if no explicit tag is given during publish.
+The automatic tagging can be turned off using the -g option during repository creation or by setting \texttt{CVMFS\_AUTO\_TAG=false} in the /etc/cvmfs/repositories.d/\$repository/server.conf file.
 
-A repository can be rolled back to any of the named snapshots.
-Technically, this means that the given snapshot is re-published, while all intermediate snapshots are removed from the history.
-
-In order to rollback, do
+\subsubsection{Creating a Named Snapshot}
+Tags can be added while publishing a new file system revision.
+To do so, the -a and -m options for \texttt{cvmfs\_server publish} are used.
+The following command publishes a \cvmfs\ revision with a new revision that is tagged as ``release-1.0'':
 \begin{verbatim}
 cvmfs_server transaction
-cvmfs_server rollback -t release-1.0
+# Changes
+cvmfs_server publish -a release-1.0 -m "first stable release"
 \end{verbatim}
 
+\subsubsection{Managing Existing Named Snapshots}
+Management of existing tags is done by using the \texttt{cvmfs\_server tag} command.
+Without any command line parameters, it will print all currently available named snapshots.
+Snapshots can be inspected (\texttt{-i <tag name>}), removed (\texttt{-r <tag name>}) or created (\texttt{-a <tag name> -m <tag description> -h <catalog root hash>}).
+Furthermore machine readable modes for both listing (\texttt{-l -x}) as well as inspection (\texttt{-i <tag name> -x}) is available.
+
+\subsubsection{Rollbacks}
+A repository can be rolled back to any of the named snapshots.
+Rolling back is achieved through the command \texttt{cvmfs\_server rollback -t release-1.0}
 A rollback is, like restoring from backups, not something one would do often.
 Use caution, a rollback is irreversible.
+
 
 \subsection{Managing Nested Catalogs}
 
