@@ -104,7 +104,7 @@ This directory appears as empty directory in the parent catalog with flags set t
 The same path appears as root-directory in the nested catalog with flags set to 33.
 Because the MD5 hash values refer to full absolute paths, nested catalogs store the root path prefix.
 This prefix is prepended transparently by \cvmfs.
-The SHA-1 key of nested catalogs is stored in the parent catalog.
+The cryptographic hash of nested catalogs is stored in the parent catalog.
 Therefore, the root catalog fully defines an entire repository.
 
 Loading of nested catalogs happens on demand by \cvmfs\ on the first attempt to access of anything inside, \ie a user won't see the difference between a single large catalog and several nested catalogs.
