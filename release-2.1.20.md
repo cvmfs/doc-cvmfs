@@ -2,16 +2,13 @@
 
 CernVM-FS version 2.1.20 is out. Version 2.1.20 contains a number of new features and several bugfixes. We would like to thank our collegues from Fermilab and from CERN openlab for their many contributions!
 
-Together with CernVM-FS 2.1.20, we also release a new version of the [documentation](http://cernvm.cern.ch/portal/filesystem/techinformation), a new version of the [cvmfs-release RPM](https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/), and a new version of the [Nagios check](http://cernvm.cern.ch/portal/filesystem/downloads#nagios).
+Together with CernVM-FS 2.1.20, we also release a new version of the [documentation](http://cernvm.cern.ch/portal/filesystem/techinformation), a new version of the [cvmfs-release RPM](https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/), and a new version of the [Nagios check](http://cernvm.cern.ch/portal/filesystem/downloads#nagios).  The cvmfs-release package and the Nagios check can be updated independently of the cvmfs package.
 
 Substential improvements in this release are
 
-  - Better separation of the cvmfs software and its configuration.  The cvmfs-keys package is replaced by one or multiple packages providing the "cvmfs-config" capability (see below).
-
+  - Better separation of the CernVM-FS software and its configuration.  The cvmfs-keys package is replaced by one or multiple packages providing the "cvmfs-config" capability (see below).
   - Automatic selection of stratum 1 servers by the clients according to geographical location.
-
   - Support for S3 compatible storage as a backend for stratum 0 and stratum 1 servers.  Please see the updated documentation for details and configuration.
-
   - Support for garbage-collected repositories that can be used to host nightly build products in a way that is more gentle on resources. Please see the updated documentation for details and configuration.
 
 On the client side, new platforms are SL/CentOS 7, Fedora 21, and openSuSE 13.1.  Please note that support for SL/CentOS 7 for the stratum 0 is scheduled for the next release.
@@ -20,18 +17,19 @@ As in previous releases, upgrading should be seamless just by installing the new
 
 This release has been tested at two WLCG Tier 1 centers for the last couple of weeks.
 
-**Please note that some configuration recommendations change with this release. In particular the manual stratum 1 server ordering in the file /etc/cvmfs/domain.d/cern.ch.local should be removed. If the location of the keys has been copied from the /etc/cvmfs/domain.d/cern.ch.conf file (e.g. the file contains a line "CVMFS_PUBLIC_KEY=/etc/cvmfs/keys/cern.ch.pub"), it will overwrite the new location of the public keys from the cvmfs-config-default package and the hot patch will fail.  Setting CVMFS_PUBLIC_KEY in /etc/cvmfs/domain.d/cern.ch.local is not recommended but the parameter might be present nevertheless.**
+**Please note that some configuration recommendations change with this release. In particular the manual stratum 1 server ordering in the file /etc/cvmfs/domain.d/cern.ch.local should be removed (either before or after the RPM update). Secondly, if the location of the keys has been copied from the /etc/cvmfs/domain.d/cern.ch.conf file (e.g. the file contains a line "CVMFS_PUBLIC_KEY=/etc/cvmfs/keys/cern.ch.pub"), it will overwrite the new location of the public keys from the cvmfs-config-default package and the hot patch will fail. Setting CVMFS_PUBLIC_KEY in /etc/cvmfs/domain.d/cern.ch.local is not recommended but we have seen installations where the parameter is present nevertheless.**
 
-Below you'll find details on the new features and changes, followed by the usual list of bugfixes and smaller improvements.
-
+Please find below details on the larger new features and changes, followed by the usual list of bugfixes and smaller improvements.
 
 ## The cvmfs-config-... RPMs
 
-Following the request to separate the cvmfs software from the CERN configuration, the cvmfs package has now a clean vanilla configuration without references to CERN and without the corresponding public keys. As such the cvmfs package is not useful in most cases and should be accompanied by one or several cvmfs-config-... packages providing public keys and configuration files in /etc/cvmfs.  In RPM speak, these packages provide the "capability" cvmfs-config.  We provide two such packages.  The cvmfs-config-none package is empty and only satisfies the requirement of the cvmfs package.  The cvmfs-config-default packages provides access to repositories under the cern.ch, egi.eu, and opensciencegrid.org domains.  This package replaces the cvmfs-keys and the cvmfs-init-scripts packages.
+Following the request to separate the CernVM-FS software from the CERN configuration, the cvmfs package has now a clean vanilla configuration without references to CERN and without the corresponding public keys. As such the cvmfs package is not useful in most cases and should be accompanied by one or several cvmfs-config-... packages providing public keys and configuration files in /etc/cvmfs. In RPM speak, these packages provide the "capability" cvmfs-config. We provide two such packages. The cvmfs-config-none package is empty and only satisfies the requirement of the cvmfs package.  The cvmfs-config-default packages provides access to repositories under the cern.ch, egi.eu, and opensciencegrid.org domains. This package replaces the cvmfs-keys and the cvmfs-init-scripts packages.
+
+The cvmfs-config-none package is available in the cernvm-config yum repository provided the latest cvmfs-release RPM is installed.  To access the package, use the `--enablerepo=cernvm-config` yum option.
 
 On most systems, yum does the package migration automatically just by updating the cvmfs package from our testing repository. On Scientific Linux 5, the old cvmfs, cvmfs-keys, and cvmfs-init-scripts packages need to be manually removed (`yum erase ...`) before the new cvmfs and cvmfs-config-default can be installed.  The worker nodes do not need to be drained.  Repositories that are in use will not be unmounted by removing the old cvmfs rpm.  Installation of the new cvmfs rpm will then perform the hotpatch as ususal.
 
-Note that the cvmfs-config-default package places the keys for the different domains (cern.ch, egi.eu, opensciencegrid.org) in different sub directories as compared to the plain directory layout in /etc/cvmfs/keys use by the cvmfs-keys package.  This is transparent for clients but not for stratum 1 servers.  Stratum 1 servers that replicate repositories from one of these domains can either
+Note that the cvmfs-config-default package places the keys for the different domains (cern.ch, egi.eu, opensciencegrid.org) in different sub directories as compared to the plain directory layout in /etc/cvmfs/keys use by the cvmfs-keys package. This is transparent for clients but not for stratum 1 servers. Stratum 1 servers that replicate repositories from one of these domains can either
 
   1. continue to use the cvmfs-keys package if the cvmfs client package is not needed on the same machine
   2. Update to cvmfs-config-default and edit /etc/cvmfs/repositories.d/$repository/replica.conf and set CVMFS_PUBLIC_KEY accordingly
@@ -43,9 +41,9 @@ Related JIRA tickets: [CVM-617](https://sft.its.cern.ch/jira/browse/CVM-617), [C
 
 ## The "Config Repository"
 
-Clients can be configured with a single "config repository" such as cvmfs-config.cern.ch.  The config repository provides and additional location to store public keys and configuration using the same structure that exists under /etc/cvmfs.  This allows a stable set of keys and configuration to be distributed by cvmfs-config-... rpms, whereas smaller or more dynamic repositories can be maintained on the dedicated cvmfs config repository.  The config repository can be set by the CVMFS_CONFIG_REPOSITORY parameter.  In the cvmfs-config-default rpm, it is currently set to "cvmfs-config.cern.ch" but this might change in the future. The config repository is always mounted when any other repository gets mounted. On installations that do not use autofs, the config repository should be manually mounted.
+Clients can be configured with a single "config repository" such as cvmfs-config.cern.ch.  The config repository provides and additional location to store public keys and configuration using the same structure that exists under /etc/cvmfs.  This allows a stable set of keys and configuration to be distributed by cvmfs-config-... rpms, whereas smaller or more dynamic repositories can be maintained on the dedicated CernVM-FS config repository.  The config repository can be set by the CVMFS_CONFIG_REPOSITORY parameter.  In the cvmfs-config-default rpm, it is currently set to "cvmfs-config.cern.ch" but this might change in the future. The config repository is always mounted when any other repository gets mounted. On installations that do not use autofs, the config repository should be manually mounted.
 
-The autofs package on Debian/Ubuntu systems unfortunately suffers from a bug that prevents the cvmfs config repository from being automatically mounted.  We are looking into a workaround.
+The autofs package on Debian/Ubuntu systems unfortunately suffers from a bug that prevents the CernVM-FS config repository from being automatically mounted.  We are looking into a workaround.
 
 Related JIRA tickets: [CVM-616](https://sft.its.cern.ch/jira/browse/CVM-616), [CVM-618](https://sft.its.cern.ch/jira/browse/CVM-618), [CVM-619](https://sft.its.cern.ch/jira/browse/CVM-619), [CVM-771](https://sft.its.cern.ch/jira/browse/CVM-671)
 
@@ -61,7 +59,7 @@ Related JIRA tickets: [CVM-629](https://sft.its.cern.ch/jira/browse/CVM-629), [C
 
 ## Round-Robin DNS Aliases for Proxies
 
-DNS round-robin aliases used for proxy servers in CVMFS_HTTP_PROXY are now automatically resolved to a load-balancing group. That means cvmfs selects one of the IP addresses at random and tries all the other IP addresses in case of a failure. This feature removes the need to specify all the proxies manually.  For example:
+DNS round-robin aliases used for proxy servers in CVMFS_HTTP_PROXY are now automatically resolved to a load-balancing group. That means CernVM-FS selects one of the IP addresses at random and tries all the other IP addresses in case of a failure. This feature removes the need to specify all the proxies manually.  For example:
 
     CVMFS_HTTP_PROXY="http://ca-proxy.cern.ch:3128|http://ca11.cern.ch:3128|http://ca12.cern.ch:3128"
 
@@ -83,11 +81,11 @@ Related JIRA ticket: [CVM-457](https://sft.its.cern.ch/jira/browse/CVM-457)
 
 ### Bugfixes
 
-  - client: fix rebuilding cache database on XFS after a crash ([CVM-685](https://sft.its.cern.ch/jira/browse/CVM-685)). If your cache runs on an XFS partition, please clear the cache in order to ensure a clean start.
+  - client: fix rebuilding cache database on XFS after a crash ([CVM-685](https://sft.its.cern.ch/jira/browse/CVM-685)). If your cache runs on an XFS partition, please clear the cache (`cvmfs_config wipecache`) in order to ensure a clean start.
   - client: fix race when autofs unmounts a repository during reload
   - client: fix concurrent creation of cache sub directories ([CVM-672](https://sft.its.cern.ch/jira/browse/CVM-672))
   - client: fix concurrent access to alien cache on NFS (link/unlink instead of rename)
-  - client: support alien cache on hadoop-dfs-fuse which doesn't report file size immediately ([CVM-659](https://sft.its.cern.ch/jira/browse/CVM-659))
+  - client: support alien cache on hadoop-dfs-fuse which doesn't report file size instantaneously ([CVM-659](https://sft.its.cern.ch/jira/browse/CVM-659))
   - client: support alien cache on Lustre and other file systems where file locking is difficult
   - client: fix alien cache catalog updates ([CVM-653](https://sft.its.cern.ch/jira/browse/CVM-653))
   - client: fix error reporting when creating alien cache ([CVM-677](https://sft.its.cern.ch/jira/browse/CVM-677))
