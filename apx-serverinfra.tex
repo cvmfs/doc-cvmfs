@@ -11,6 +11,7 @@ A \cvmfs\ server installation depends on some environment setup and tools to be 
 \item Backend storage location available through HTTP
 \item \textbf{cvmfs} and \textbf{cvmfs-server} packages installed
 \end{itemize}
+\pagebreak
 
 \section{Local Backend Storage Infrastructure}
 \cvmfs\ stores the entire repository content (file content and meta-data catalogs) into a content addressable storage (CAS).
@@ -29,7 +30,8 @@ Note that the data volume of the spool area can grow very large for massive repo
 \pagebreak
 
 \section{Repository Configuration Directory}
-The authoritative configuration of a \cvmfs\ repository is located in \texttt{/etc/cvmfs/repositories.d} and should only be writable by the administrator.
+The authoritative configuration of a \cvmfs\ repository is located in \linebreak
+\texttt{/etc/cvmfs/repositories.d} and should only be writable by the administrator.
 Furthermore the repository's keychain is located in \texttt{/etc/cvmfs/keys} and follows the naming convention \texttt{<fqrn>.crt} for the certificate, \texttt{<fqrn>.key} for the repository's private key and \texttt{<fqrn>.pub} for the public key.
 All of those files can be symlinked somewhere else if necessary.
 
