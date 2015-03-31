@@ -11,3 +11,10 @@ A \cvmfs\ server installation depends on some environment setup and tools to be 
 \item Backend storage location available through HTTP
 \item \textbf{cvmfs} and \textbf{cvmfs-server} packages installed
 \end{itemize}
+
+\section{Local Backend Storage Infrastructure}
+\cvmfs\ stores the entire repository content (file content and meta-data catalogs) into a content addressable storage (CAS).
+This storage can either be a file system at \texttt{/srv/cvmfs} or an S3 compatible key-value storage system (see Section~\ref{sct:s3storagesetup} for details).
+In the former case the contents of \texttt{/srv/cvmfs} are as follows:
+
+\LTXtable{\textwidth}{figures/tablocalstorageanatomy.tex}
