@@ -5,19 +5,18 @@
 		{\bf\centering Parameter} 			& {\bf\centering Meaning}\\
 		\midrule
 		\tt CVMFS\_CREATOR\_VERSION			& The \cvmfs\ version that was used to create this repository (do not change manually).\\
-		\tt CVMFS\_IGNORE\_XDIR\_HARDLINKS		& If set to \texttt{yes}, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.\\
-		\tt CVMFS\_INCLUDE\_XATTRS	& Set to \texttt{true} to enable distribution of exended file attributes.\\
+		\tt CVMFS\_IGNORE\_XDIR\_HARDLINKS	& If set to \texttt{yes}, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.\\
 		\tt CVMFS\_REPOSITORY\_NAME			& The fully qualified name of the specific repository.\\
 		\tt CVMFS\_REPOSITORY\_TYPE			& Defines if the repository is a master copy (\texttt{stratum0}) or a replica (\texttt{stratum1}).\\
 		\tt CVMFS\_SPOOL\_DIR					& Location of the upstream spooler scratch directories; the read-only \cvmfs\ moint point and copy-on-write storage reside here.\\
-		\tt CVMFS\_UPSTREAM\_STORAGE			& Upstream spooler description defining the basic upstream storage type and configuration.\\
+		\tt CVMFS\_UPSTREAM\_STORAGE		& Upstream spooler description defining the basic upstream storage type and configuration.\\
 		\tt CVMFS\_STRATUM0					& URL of the master copy (\texttt{stratum0}) of this specific repository.\\
 		\tt CVMFS\_STRATUM1					& URL of the Stratum1 HTTP server for this specific repository.\\
 		\tt CVMFS\_AUTO\_REPAIR\_MOUNTPOINT	& Set to \texttt{true} to enable automatic recovery from bogus server mount states.\\
 		\tt CVMFS\_UNION\_DIR					& Mount point of the union file system between \cvmfs\ and \aufs. Here, changes to the repository are performed (see Section \ref{sct:repocreateandupdate}).\\
-		\tt CVMFS\_UNION\_FS\_TYPE	& Defines the union file system to be used for the repository. \newline (currently \aufs\ is fully supported)\\
+		\tt CVMFS\_UNION\_FS\_TYPE			& Defines the union file system to be used for the repository. \newline (currently \aufs\ is fully supported)\\
 		\tt CVMFS\_AUFS\_WARNING	& Set to \texttt{false} to silence \aufs\ kernel deadlock warning.\\
-		\tt CVMFS\_HASH\_ALGORITHM	& Define which secure hash algorithm should be used by \cvmfs\ for CAS objects \newline (supported are: \texttt{sha1} and \texttt{rmd160})\\
+		\tt CVMFS\_HASH\_ALGORITHM			& Define which secure hash algorithm should be used by \cvmfs\ for CAS objects \newline (supported are: \texttt{sha1} and \texttt{rmd160})\\
 		\tt CVMFS\_CATALOG\_ENTRY\_WARN\_THRESHOLD	& Threshold of catalog entry count before triggering a warning message.\\
 		\tt CVMFS\_USER						& The user name that owns and manipulates the files inside the repository.\\
 		\tt CVMFS\_USE\_FILE\_CHUNKING		& Allows backend to split big files into small chunks (\texttt{true} | \texttt{false})\\
@@ -25,12 +24,12 @@
 		\tt CVMFS\_AVG\_CHUNK\_SIZE			& Desired Average size of a file chunk in bytes \newline (see also \texttt{CVMFS\_USE\_FILE\_CHUNKING})\\
 		\tt CVMFS\_MAX\_CHUNK\_SIZE			& Maximal size of a file chunk in bytes \newline (see also \texttt{CVMFS\_USE\_FILE\_CHUNKING})\\
 		\tt CVMFS\_MAXIMAL\_CONCURRENT\_WRITES	& Maximal number of concurrently processed files during publishing.\\
-		\tt CVMFS\_NUM\_WORKERS	& Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).\\
-		\tt CVMFS\_PUBLIC\_KEY	& Path to the public key file of the repository to be replicated. (Stratum~1 only).\\
-		\tt CVMFS\_AUTO\_TAG	& Creates a generic revision tag for each published revision (if set to \texttt{true}).\\
-		\tt CVMFS\_GARBAGE\_COLLECTION			& Enables repository garbage collection \newline (Stratum~0 only | if set to \texttt{true})\\
-		\tt CVMFS\_AUTO\_GC			& Enables the automatic garbage collection on \texttt{publish} and \texttt{snapshot}\\
-		\tt CVMFS\_AUTO\_GC\_TIMESPAN			& Date-threshold for automatic garbage collection \newline (For example: \texttt{3 days ago}, \texttt{1 week ago}, ...)\\
+		\tt CVMFS\_NUM\_WORKERS				& Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).\\
+		\tt CVMFS\_PUBLIC\_KEY				& Path to the public key file of the repository to be replicated. (Stratum~1 only).\\
+		\tt CVMFS\_AUTO\_TAG					& Creates a generic revision tag for each published revision (if set to \texttt{true}).\\
+		\tt CVMFS\_GARBAGE\_COLLECTION		& Enables repository garbage collection \newline (Stratum~0 only | if set to \texttt{true})\\
+		\tt CVMFS\_AUTO\_GC					& Enables the automatic garbage collection on \texttt{publish} and \texttt{snapshot}\\
+		\tt CVMFS\_AUTO\_GC\_TIMESPAN		& Date-threshold for automatic garbage collection \newline (For example: \texttt{3 days ago}, \texttt{1 week ago}, ...)\\
 		\bottomrule
 	\end{longtable}
 %\end{longtable}
