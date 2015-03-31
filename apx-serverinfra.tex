@@ -35,3 +35,26 @@ All of those files can be symlinked somewhere else if necessary.
 
 \LTXtable{\textwidth}{figures/tabrepoconfiganatomy.tex}
 \pagebreak
+
+\section{Environment Setup}
+Apart from file and directory locations a \cvmfs\ server installation depends on a few environment configurations.
+Most notably the possibility to access the backend storage through HTTP and to allow for mounting of both the \cvmfs\ client at \texttt{/var/spool/cvmfs/<fqrn>/rdonly} and \aufs\ on \texttt{/cvmfs/<fqrn>}.
+
+Granting HTTP access can happen in various ways and depends on the chosen backend storage type.
+For an S3 hosted backend storage, the \cvmfs\ client can usually be directly pointed to the S3 bucket used for storage (see Section~\ref{sct:s3storagesetup} for details).
+In case of a local file system backend any web server can be used for this purpose.
+By default \cvmfs\ assumes Apache and uses that automatically.
+
+Internally the \cvmfs\ server uses a SUID binary (i.e. \texttt{cvmfs\_suid\_helper}) to manipulate its mount points.
+This is necessary, since transactional \cvmfs\ commands must be accessible to the repository owner that is usually different from root.
+Both the mount directives for \texttt{/var/spool/cvmfs/<fqrn>/rdonly} and \texttt{/cvmfs/<fqrn>} must be placed into \texttt{/etc/fstab} for this reason.
+By default \cvmfs\ uses the following entries for these mount points:
+
+\begin{verbatim}
+cvmfs2#<fqrn> /var/spool/cvmfs/<fqrn>/rdonly fuse \
+allow_other,config=/etc/cvmfs/repositories.d/<fqrn>/client.conf: \
+/var/spool/cvmfs/<fqrn>/client.local,cvmfs_suid 0 0
+
+aufs_<fqrn> /cvmfs/<fqrn> aufs br=/var/spool/cvmfs/<fqrn>/scratch=rw: \
+/var/spool/cvmfs/<fqrn>/rdonly=rr,udba=none,ro 0 0
+\end{verbatim}
