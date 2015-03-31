@@ -45,7 +45,7 @@ Clients can be configured with a single "config repository" such as cvmfs-config
 
 The autofs package on Debian/Ubuntu systems unfortunately suffers from a bug that prevents the CernVM-FS config repository from being automatically mounted.  We are looking into a workaround.
 
-Related JIRA tickets: [CVM-616](https://sft.its.cern.ch/jira/browse/CVM-616), [CVM-618](https://sft.its.cern.ch/jira/browse/CVM-618), [CVM-619](https://sft.its.cern.ch/jira/browse/CVM-619), [CVM-771](https://sft.its.cern.ch/jira/browse/CVM-671)
+Related JIRA tickets: [CVM-616](https://sft.its.cern.ch/jira/browse/CVM-616), [CVM-618](https://sft.its.cern.ch/jira/browse/CVM-618), [CVM-619](https://sft.its.cern.ch/jira/browse/CVM-619), [CVM-771](https://sft.its.cern.ch/jira/browse/CVM-771)
 
 
 ## Automatic Selection of Stratum 1 Servers
