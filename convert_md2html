@@ -1,0 +1,1 @@
+pandoc --normalize -S --ascii -o test.html <MARKDOWN>
