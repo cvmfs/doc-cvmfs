@@ -18,3 +18,11 @@ This storage can either be a file system at \texttt{/srv/cvmfs} or an S3 compati
 In the former case the contents of \texttt{/srv/cvmfs} are as follows:
 
 \LTXtable{\textwidth}{figures/tablocalstorageanatomy.tex}
+\pagebreak
+
+\section{Server Spool Area of a Repository (Stratum0)}
+The spool area of a repository contains transaction infrastructure and scratch area of a Stratum0 or specifically a release manager machine installation.
+It is always located inside \texttt{/var/spool/cvmfs} with directories for individual repositories.
+Note that the data volume of the spool area can grow very large for massive repository updates since it contains the writable AUFS branch and a \cvmfs\ client cache directory.
+
+\LTXtable{\textwidth}{figures/tabrepospoolanatomy.tex}
