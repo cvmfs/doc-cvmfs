@@ -90,6 +90,9 @@ This adds the CernVM yum repositories to your machine's configuration.
 \item Reboot the machine
 \end{enumerate}
 
+Once a new kernel version is released \texttt{yum update} will \emph{not} pick the upstream version but it will wait until the patched kernel with AUFS support is published by the CernVM team.
+We always try to follow the kernel updates as quick as possible.
+
 \section{Publishing a new Repository Revision}
 \label{sct:repoupdate}
 
