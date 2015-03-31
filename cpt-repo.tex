@@ -75,6 +75,21 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 \cvmfs\ uses the union file-system AUFS \cite{aufs} to efficiently determine file-system tree updates while publishing repository transactions on the server (see Figure~\ref{fig:installwebserver}).
 Note that this is \emph{only} required on a \cvmfs\ server and \emph{not} on the client machines.
 
+We provide customised kernel packages for SL6 and SL7 (see Appendix~\ref{apx:rpms}) and keep them up-to-date with upstream kernel updates.
+The kernel RPMs are published in the \texttt{cernvm-kernel} yum repository. \\
+
+\noindent Please follow these steps to install the provided customised kernel:
+\begin{enumerate}
+\item Download the latest cvmfs-release package from the CernVM website \footnote{CernVM-FS download page: http://cernvm.cern.ch/portal/filesystem/downloads}
+\item Install the cvmfs-release package: \texttt{yum install cvmfs-release*.rpm} \\
+This adds the CernVM yum repositories to your machine's configuration.
+\item Install the AUFS enabled kernel from \texttt{cernvm-kernel}: \\
+\texttt{yum -\--disablerepo="*" -\--enablerepo="cernvm-kernel" install kernel}
+\item Install the AUFS user utilities: \\
+\texttt{yum -\--enablerepo="cernvm-kernel" install aufs2-util}
+\item Reboot the machine
+\end{enumerate}
+
 \section{Publishing a new Repository Revision}
 \label{sct:repoupdate}
 
