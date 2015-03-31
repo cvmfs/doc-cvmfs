@@ -29,7 +29,7 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 \subsection{System Requirements}
 \begin{itemize}
 \item Apache HTTP server \emph{OR} S3 compatible storage service
-\item AUFS union file system in the kernel (see Section~\ref{sct:customkernelinstall})
+\item \aufs\ union file system in the kernel (see Section~\ref{sct:customkernelinstall})
 \item Officially supported platforms
 \begin{itemize}
     \item Scientific Linux 5 (64 bit)
@@ -72,7 +72,7 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 
 \section{Installing the AUFS-enabled Kernel on Scientific Linux 6}
 \label{sct:customkernelinstall}
-\cvmfs\ uses the union file-system AUFS \cite{aufs} to efficiently determine file-system tree updates while publishing repository transactions on the server (see Figure~\ref{fig:installwebserver}).
+\cvmfs\ uses the union file-system \aufs\ \cite{aufs} to efficiently determine file-system tree updates while publishing repository transactions on the server (see Figure~\ref{fig:installwebserver}).
 Note that this is \emph{only} required on a \cvmfs\ server and \emph{not} on the client machines.
 
 We provide customised kernel packages for SL6 and SL7 (see Appendix~\ref{apx:rpms}) and keep them up-to-date with upstream kernel updates.
@@ -83,14 +83,14 @@ The kernel RPMs are published in the \texttt{cernvm-kernel} yum repository. \\
 \item Download the latest cvmfs-release package from the CernVM website\footnote{CernVM-FS download page: http://cernvm.cern.ch/portal/filesystem/downloads}
 \item Install the cvmfs-release package: \texttt{yum install cvmfs-release*.rpm} \\
 This adds the CernVM yum repositories to your machine's configuration.
-\item Install the AUFS enabled kernel from \texttt{cernvm-kernel}: \\
+\item Install the \aufs\ enabled kernel from \texttt{cernvm-kernel}: \\
 \texttt{yum -\--disablerepo="*" -\--enablerepo="cernvm-kernel" install kernel}
-\item Install the AUFS user utilities: \\
+\item Install the \aufs\ user utilities: \\
 \texttt{yum -\--enablerepo="cernvm-kernel" install aufs2-util}
 \item Reboot the machine
 \end{enumerate}
 
-Once a new kernel version is released \texttt{yum update} will \emph{not} pick the upstream version but it will wait until the patched kernel with AUFS support is published by the CernVM team.
+Once a new kernel version is released \texttt{yum update} will \emph{not} pick the upstream version but it will wait until the patched kernel with \aufs\ support is published by the CernVM team.
 We always try to follow the kernel updates as quick as possible.
 
 \section{Publishing a new Repository Revision}
@@ -122,9 +122,9 @@ Therefore, any unsuccessful updates to a repository can be rolled back by simply
 \label{sct:newreporequirements}
 
 In order to create a repository, the server and client part of \cvmfs\ must be installed on the release manager machine.
-Furthermore your machine should provide an \aufs\ enabled Kernel as well as a running \texttt{Apache2} web server.
+Furthermore your machine should provide an \aufs\ enabled kernel as well as a running \texttt{Apache2} web server.
 Currently we support Scientific Linux 6 and Ubuntu 12.04 distributions.
-Please note, that Scientific Linux 6 \emph{does not} ship with an \aufs\ enabled kernel, therefore we provide a compatible patched kernel as RPMs (see Appendix~\ref{apx:rpms}).
+Please note, that Scientific Linux 6 \emph{does not} ship with an \aufs\ enabled kernel, therefore we provide a compatible patched kernel as RPMs (see Section~\ref{sct:customkernelinstall} for details).
 
 
 \pagebreak
