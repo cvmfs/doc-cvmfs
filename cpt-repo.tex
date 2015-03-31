@@ -70,6 +70,11 @@ Figure~\ref{fig:installwebserver} outlines the process of publishing a repositor
 
 \pagebreak
 
+\section{Installing AUFS-enabled Kernel on Scientific Linux}
+\label{sct:customkernelinstall}
+\cvmfs\ uses the union file-system AUFS \cite{aufs} to efficiently determine file-system tree updates while publishing repository transactions on the server (see Figure~\ref{fig:installwebserver}).
+Note that this is \emph{only} required on a \cvmfs\ server and \emph{not} on the client machines.
+
 \section{Publishing a new Repository Revision}
 \label{sct:repoupdate}
 
