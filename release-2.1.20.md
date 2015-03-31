@@ -2,7 +2,7 @@
 
 CernVM-FS version 2.1.20 is out. Version 2.1.20 contains a number of new features and several bugfixes. We would like to thank our collegues from Fermilab and from CERN openlab for their many contributions!
 
-Together with CernVM-FS 2.1.20, we also release a new version of the [documentation](http://cernvm.cern.ch/portal/filesystem/techinformation) and a new version of the [Nagios check](http://cernvm.cern.ch/portal/filesystem/downloads#nagios).
+Together with CernVM-FS 2.1.20, we also release a new version of the [documentation](http://cernvm.cern.ch/portal/filesystem/techinformation), a new version of the [cvmfs-release RPM](https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/), and a new version of the [Nagios check](http://cernvm.cern.ch/portal/filesystem/downloads#nagios).
 
 Substential improvements in this release are
 
