@@ -1,4 +1,13 @@
 \chapter{\cvmfs\ Server Infrastructure}
 \label{apx:serverinfrastructure}
 
-tbd
+This is trying to be a full documentation of a \cvmfs\ server setup including the infrastructure necessary for an individual repository.
+It is highly recommended to first consult Section~\ref{sct:repoanatomy} for a more general overview of the involved directory structure.
+
+\section{Prerequisites}
+A \cvmfs\ server installation depends on some environment setup and tools to be in place:
+\begin{itemize}
+\item \aufs\ support in the kernel (see Section~\ref{sct:customkernelinstall})
+\item Backend storage location available through HTTP
+\item \textbf{cvmfs} and \textbf{cvmfs-server} packages installed
+\end{itemize}
