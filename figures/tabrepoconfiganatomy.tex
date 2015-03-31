@@ -1,0 +1,29 @@
+\begin{longtable}{lX}
+	\toprule
+	{\bf\centering File Path} & {\bf\centering Description} \\
+	\midrule
+
+	\texttt{/etc/cvmfs/repositories.d} & \textbf{\cvmfs\ server config directory} \newline
+	This contains the configuration directories for individual \cvmfs\ repositories. Note that this path is shortened using \texttt{/.../repos.d/} in the rest of this table. \\
+	\addlinespace
+
+	\texttt{/.../repos.d/<fqrn>} & \textbf{Config directory for specific repo} \newline
+	This contains the configuration files for one specific \cvmfs\ repository server. \\
+	\addlinespace
+
+	\texttt{/.../repos.d/<fqrn>/server.conf} & \textbf{Server configuration file} \newline
+	Authoriative configuration file for the \cvmfs\ server tools. This file should only contain configuration variables found in Table~\ref{tab:serverparameters} as it controls the behaviour of the \cvmfs\ server operations like publishing, pulling and so forth. \\
+	\addlinespace
+
+	\texttt{/.../repos.d/<fqrn>/client.conf} & \textbf{Client configuration file} \newline
+	Authoriative configuration file for the \cvmfs\ client used to mount the latest revision of a Stratum~0 release manager machine. This file should only contain configuration variables as listed in Table~\ref{tab:clientparameters}. This file must not exist for Stratum~1 repositories. \\
+	\addlinespace
+
+	\texttt{/.../repos.d/<fqrn>/replica.conf} & \textbf{Replication configuration file} \newline
+	Contains configuration variables for Stratum~1 specific repositories. This file must not exist for Stratum~0 repositories. \\
+	\addlinespace
+
+	\bottomrule
+	\caption{Constituents of the repository spool area.}
+	\label{tbl:repoconfiganatomy}
+\end{longtable}

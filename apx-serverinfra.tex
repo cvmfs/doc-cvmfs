@@ -26,3 +26,12 @@ It is always located inside \texttt{/var/spool/cvmfs} with directories for indiv
 Note that the data volume of the spool area can grow very large for massive repository updates since it contains the writable AUFS branch and a \cvmfs\ client cache directory.
 
 \LTXtable{\textwidth}{figures/tabrepospoolanatomy.tex}
+\pagebreak
+
+\section{Repository Configuration Directory}
+The authoritative configuration of a \cvmfs\ repository is located in \texttt{/etc/cvmfs/repositories.d} and should only be writable by the administrator.
+Furthermore the repository's keychain is located in \texttt{/etc/cvmfs/keys} and follows the naming convention \texttt{<fqrn>.crt} for the certificate, \texttt{<fqrn>.key} for the repository's private key and \texttt{<fqrn>.pub} for the public key.
+All of those files can be symlinked somewhere else if necessary.
+
+\LTXtable{\textwidth}{figures/tabrepoconfiganatomy.tex}
+\pagebreak
