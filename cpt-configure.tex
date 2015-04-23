@@ -289,8 +289,8 @@ An example entry /etc/exports (note: the fsid needs to be different for every ex
 \end{verbatim}
 A sample entry /etc/fstab entry on a client:
 \begin{verbatim}
-  172.16.192.210:/cvmfs/atlas.cern.ch /cvmfs/atlas.cern.ch nfs \
-    ro,nfsvers=3,noatime,nodiratime,ac,actimeo=60,lookupcache=all 0 0
+  172.16.192.210:/cvmfs/atlas.cern.ch /cvmfs/atlas.cern.ch nfs4 \
+    ro,ac,actimeo=60,lookupcache=all,nolock,rsize=1048576,wsize=1048576 0 0
 \end{verbatim}
 
 
