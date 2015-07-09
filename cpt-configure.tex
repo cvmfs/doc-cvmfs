@@ -94,6 +94,42 @@ The private mount points can also be used to use the \cvmfs\ Fuse module in case
 If the public keys are not installed under /etc/cvmfs/keys, the directory of the keys needs to be specified in the config file by \texttt{CVMFS\_KEYS\_DIR=<directory>}.
 If the libcvmfs\_fuse.so library is not installed in one of the standard search paths, the \texttt{LD\_LIBRARY\_PATH} variable has to be set accordingly for the \texttt{cvmfs2} command.
 
+\subsection{Docker Containers}
+There are two options to mount \cvmfs\ in docker containers.
+The first option is to bind mount a mounted repository as a volume into the container.
+This has the advantage that the \cvmfs\ cache is shared among multiple containers.  
+The second option is to mount a repository inside a container, which requires a \emph{privileged} container.
+
+In both cases, \autofs\ should not be used.
+Docker has often issues with \autofs.
+
+\subsubsection{Bind mount from the host}
+
+In order to bind mount a repository from the host, turn off \autofs\ on the host and mount the repository manually, like:
+
+\begin{verbatim}
+service autofs stop  # systemd: systemctl stop autofs
+chkconfig autofs off  # systemd: systemctl disable autofs
+mkdir -p /cvmfs/sft.cern.ch
+mount -t cvmfs sft.cern.ch /cvmfs/sft.cern.ch
+\end{verbatim}
+
+Start the docker container with the \texttt{-v} option to mount the \cvmfs\ repository inside, like
+
+\begin{verbatim}
+docker run -i -t -v /cvmfs/sft.cern.ch:/cvmfs/sft.cern.ch centos /bin/bash
+\end{verbatim}
+
+The \texttt{-v} option can be used multiple times with different repositories.
+
+\subsubsection{Mount inside a container}
+
+In order to use \texttt{mount} inside a container, the container must be started in privileged mode, like
+\begin{verbatim}
+    docker run --privileged -i -t centos /bin/bash
+\end{verbatim}
+In such a container, \cvmfs\ can be installed and used the usual way provided that \autofs\ is turned off.
+
 \section{Network Settings}
 \label{sct:config:network}
 \cvmfs\ uses HTTP for the data transfer.
