@@ -1,11 +1,11 @@
 \chapter{\cvmfs\ Server Infrastructure}
 \label{apx:serverinfrastructure}
 
-This is trying to be a full documentation of a \cvmfs\ server setup including the infrastructure necessary for an individual repository.
+This section provides technical details on the \cvmfs\ server setup including the infrastructure necessary for an individual repository.
 It is highly recommended to first consult Section~\ref{sct:repoanatomy} for a more general overview of the involved directory structure.
 
 \section{Prerequisites}
-A \cvmfs\ server installation depends on some environment setup and tools to be in place:
+A \cvmfs\ server installation depends on the following environment setup and tools to be in place:
 \begin{itemize}
 \item \aufs\ support in the kernel (see Section~\ref{sct:customkernelinstall})
 \item Backend storage location available through HTTP
@@ -16,7 +16,7 @@ A \cvmfs\ server installation depends on some environment setup and tools to be 
 
 \section{Local Backend Storage Infrastructure}
 \cvmfs\ stores the entire repository content (file content and meta-data catalogs) into a content addressable storage (CAS).
-This storage can either be a file system at \texttt{/srv/cvmfs} or an S3 compatible key-value storage system (see Section~\ref{sct:s3storagesetup} for details).
+This storage can either be a file system at \texttt{/srv/cvmfs} or an S3 compatible object storage system (see Section~\ref{sct:s3storagesetup} for details).
 In the former case the contents of \texttt{/srv/cvmfs} are as follows:
 
 \LTXtable{\textwidth}{figures/tablocalstorageanatomy.tex}
@@ -49,7 +49,7 @@ In case of a local file system backend any web server can be used for this purpo
 By default \cvmfs\ assumes Apache and uses that automatically.
 
 Internally the \cvmfs\ server uses a SUID binary (i.e. \texttt{cvmfs\_suid\_helper}) to manipulate its mount points.
-This is necessary, since transactional \cvmfs\ commands must be accessible to the repository owner that is usually different from root.
+This is necessary since transactional \cvmfs\ commands must be accessible to the repository owner that is usually different from root.
 Both the mount directives for \texttt{/var/spool/cvmfs/<fqrn>/rdonly} and \texttt{/cvmfs/<fqrn>} must be placed into \texttt{/etc/fstab} for this reason.
 By default \cvmfs\ uses the following entries for these mount points:
 
