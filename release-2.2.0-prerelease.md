@@ -13,6 +13,7 @@ Updating the server is seamless through yum package upgrades.  Please ensure tha
 
   - Fix leak of temporary files in .cvmfsdirtab processing ([CVM-818](https://sft.its.cern.ch/jira/browse/CVM-818)). This renders the workaround described at [http://cernvm.cern.ch/portal/cvmfs/fix-leaked-dirtab-tmp-files](http://cernvm.cern.ch/portal/cvmfs/fix-leaked-dirtab-tmp-files) obsolete.
   - Fix crash in `cvmfs_swissknife dirtab` if .cvmfsdirtab contains `/*`
+  - Cleanup snapshot lock file on crash ([CVM-810](https://sft.its.cern.ch/jira/browse/CVM-810))
   - Fix several CentOS 7 issues in the cvmfs_server script ([CVM-737](https://sft.its.cern.ch/jira/browse/CVM-737))
   - Disable caching for mutable objects in S3 backend ([CVM-808](https://sft.its.cern.ch/jira/browse/CVM-808))
   - Follow HTTP redirects in S3 backend
