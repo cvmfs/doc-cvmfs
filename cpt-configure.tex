@@ -72,7 +72,7 @@ In contrast to the system's \texttt{mount} command which requires root privilege
 In this case, \cvmfs\ uses parameters from one or several user-provided config files instead of using the files under /etc/cvmfs.
 \cvmfs\ private mount points do not appear as \texttt{cvmfs2} file systems but as \texttt{fuse} file systems.
 The \texttt{cvmfs\_config} and \texttt{cvmfs\_talk} commands ignore privately mounted \cvmfs\ repositories.
-On an interactive machine, private mount points are for instance unaffected by an administrator unmounting all system's \cvmfs\ mount points by \texttt{cvmfs\_config unmount}.
+On an interactive machine, private mount points are for instance unaffected by an administrator unmounting all system's \cvmfs\ mount points by \texttt{cvmfs\_config umount}.
 
 In order to mount \cvmfs\ privately, use the \texttt{cvmfs2} command like
 \begin{verbatim}
@@ -427,7 +427,7 @@ The \texttt{cvmfs\_config} utility provides commands in order to setup the syste
 	\item [status] The \texttt{status} command shows all currently mounted repositories and the process id (PID) of the \cvmfs\ processes managing a mount point.
 	\item [probe] The \texttt{probe} command tries to access /cvmfs/\$repository for all repositories specified in \texttt{CVMFS\_REPOSITORIES}.
 	\item [reload] The \texttt{reload} command is used to reload or hotpatch \cvmfs\ instances (see Section~\ref{sct:hotpatch}).
-	\item [unmount] The \texttt{unmount} command unmounts all currently mounted \cvmfs\ repositories, which will only succeed if there are no open file handles on the repositories.
+	\item [umount] The \texttt{umount} command unmounts all currently mounted \cvmfs\ repositories, which will only succeed if there are no open file handles on the repositories.
 	\item [wipecache] The \texttt{wipecache} command is an alias for \texttt{reload -c}.
 	\item [bugreport] The \texttt{bugreport} command creates a tarball with collected system information which helps to debug a problem (see Section~\ref{sct:debugginghints}). 
 \end{description}
