@@ -457,12 +457,17 @@ Note that unlike the regular lines that add catalogs, asterisks in the exclamati
 
 \subsection{Automatic Management of Nested Catalogs}
 \label{sct:autocatalogs}
-An alternative to \texttt{.cvmfsdirtab} is the automatic catalog generation. In order to enable it, the \texttt{CVMFS\_AUTOCATALOGS} option must be set to ``true'' in the server configuration file.
-With this option enabled the system will automatically split a catalog whose weight (number of entries) is greater than a specified maximum threshold, or will remove a catalog whose weight is lesser than a specified minimum threshold. For a catalog to be handled by this feature must contain a \texttt{.cvmfsautocatalog} file in its root folder, so it is possible to have at the same time catalogs that are handled by either the user or the system, or even grant or remove ownerships of catalogs from the user to the system. The following conditions will be applied when processing a nested catalog:
+An alternative to \texttt{.cvmfsdirtab} is the automatic catalog generation.
+In order to enable it, the \texttt{CVMFS\_AUTOCATALOGS} option must be set to ``true'' in the server configuration file.
+With this option enabled the system will automatically split a catalog whose weight (number of entries) is greater than a specified maximum threshold, or will remove a catalog whose weight is lesser than a specified minimum threshold.
+For a catalog to be handled by this feature must contain a \texttt{.cvmfsautocatalog} file in its root folder, so it is possible to have at the same time catalogs that are handled by either the user or the system, or even grant or remove catalog ownerships between both.
+The following conditions will be applied when processing a nested catalog:
 \begin{itemize}
   \setlength{\itemsep}{1pt}
-  \item If the weight is greater than \texttt{CVMFS\_AUTOCATALOGS\_MAX\_WEIGHT} then this catalog will be \texttt{balanced}, being divided in smaller catalog that meet the maximum and minimum thresholds. The \texttt{CVMFS\_AUTOCATALOGS\_MAX\_WEIGHT} parameter should be specified in the server configuration file.
-  \item If the weight is lesser than \texttt{CVMFS\_AUTOCATALOGS\_MIN\_WEIGHT} then this catalog will be \texttt{deleted} and all its entries will be merged with its parent. The \texttt{CVMFS\_AUTOCATALOGS\_MIN\_WEIGHT} parameter should be specified in the server configuration file.
+  \item If the weight is greater than \texttt{CVMFS\_AUTOCATALOGS\_MAX\_WEIGHT} then this catalog will be \texttt{balanced}, being divided in smaller catalog that meet the maximum and minimum thresholds.
+  The \texttt{CVMFS\_AUTOCATALOGS\_MAX\_WEIGHT} parameter should be specified in the server configuration file.
+  \item If the weight is lesser than \texttt{CVMFS\_AUTOCATALOGS\_MIN\_WEIGHT} then this catalog will be \texttt{deleted} and all its entries will be merged with its parent.
+  The \texttt{CVMFS\_AUTOCATALOGS\_MIN\_WEIGHT} parameter should be specified in the server configuration file.
 \end{itemize}
 For instance, a possible configuration might be:
 \begin{verbatim}
