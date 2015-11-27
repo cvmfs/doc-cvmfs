@@ -195,7 +195,8 @@ cache deny all
 \end{verbatim}
 
 The bucket mapping logic is implemented in s3\_squid\_rewrite.py file.
-This python script needs to read requests from stdin and write mapped URLs to stdout, for instance:
+This script is not provided by \cvmfs\ but needs to be written by the repository owner.
+The script needs to read requests from stdin and write mapped URLs to stdout, for instance:
 \begin{verbatim}
 in: http://localhost:3128/data/.cvmfswhitelist
 out: http://swift.cern.ch/cernbucket-9-91/data/.cvmfswhitelist
