@@ -1,7 +1,7 @@
 
 .PHONY: clean draft preview
 
-VERSION = 2.1-8
+VERSION = 2.2-1
 
 BIBSRC = references.bib
 PKGSRC = packages.tex
