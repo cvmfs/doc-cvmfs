@@ -469,6 +469,25 @@ As stated in Section~\ref{sct:nestedcatalogrecommendations} the recommended maxi
 One can use the switch \texttt{list-catalogs -e} to inspect the current nested catalog entry counts in the repository.
 Furthermore \texttt{list-catalgos -s} will print the file sizes of the catalogs in bytes.
 
+\subsection{Syncing files into a repository with cvmfs\_rsync}
+
+A common method of publishing into \cvmfs\ is to first install all the files into a convenient shared filesystem, mount the shared filesystem on the publishing machine, and then sync the files into the repository during a transaction.
+The most common tool to do the syncing is \texttt{rsync}, but \texttt{rsync} by itself doesn't have a convenient mechanism for avoiding generated \texttt{.cvmfscatalog} and \texttt{.cvmfsautocatalog} files in the \cvmfs\ repository.
+Actually the \texttt{-{}-exclude} option is good for avoiding the extra files, but the problem is that if a source directory tree is removed, then \texttt{rsync} will not remove the corresponding copy of the directory tree in the repository if it contains a catalog, because the extra file remains in the repository.
+For this reason, a tool called \texttt{cvmfs\_rsync} is included in the \texttt{cvmfs-server} package.
+This is a small wrapper around \texttt{rsync} that adds the \texttt{-{}-exclude} options and removes \texttt{.cvmfscatalog} and \texttt{.cvmfsautocatalog} files from a repository when the corresponding source directory is removed.
+This is the usage:
+
+\begin{verbatim}
+  cvmfs_rsync [rsync_options] srcdir /cvmfs/reponame[/destsubdir]
+\end{verbatim}
+
+This is an example use case:
+
+\begin{verbatim}
+  $ cvmfs_rsync -av --delete /data/lhapdf /cvmfs/cms.cern.ch
+\end{verbatim}
+
 \subsection{Migrate File Catalogs}
 In rare cases the further development of \cvmfs\ makes it necessary to change the internal structure of file catalogs.
 Updating the \cvmfs\ installation on a Stratum 0 machine might require a migration of the file catalogs.
