@@ -57,6 +57,13 @@ We suggest the following key parameters:
 		The Squid frontend should listen on ports 80 and 8000.
 		The more RAM that the operating system can use for file
 		system caching, the better.
+
+	\item[DNS cache.]
+		A Stratum 1 does a lot of DNS lookups, so we recommend
+		installing a DNS caching mechanism on the machine such
+		as \texttt{dnsmasq} or \texttt{bind}.  We do not recommend
+		\texttt{nscd} since it does not honor the DNS Time-To-Live
+		protocol.
 \end{description}
 
 \section{Squid Configuration}
