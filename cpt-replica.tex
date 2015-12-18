@@ -46,24 +46,15 @@ We suggest the following key parameters:
 		In addition, it is a good practice to exclude search engines from the replica web server by an appropriate robots.txt.
 		The webserver should be close to the storage in terms of latency.
 	\item[Squid frontend.]
-		\squid\ should be used as a frontend to Apache, configured
-		as a reverse proxy.  It is recommended to run it on the
-		same machine as Apache to reduce the number of points of
-		failure.  Alternatively, separate \squid\ server machines
-		may be configured in load-balance mode forwarding to the
-		Apache server, but note that if any of them are down
-		the entire service will be considered down by \cvmfs\
-		clients.
+		\squid\ should be used as a frontend to Apache, configured as a reverse proxy.
+		It is recommended to run it on the same machine as Apache to reduce the number of points of failure.
+		Alternatively, separate \squid\ server machines may be configured in load-balance mode forwarding to the Apache server, but note that if any of them are down the entire service will be considered down by \cvmfs\ clients.
 		The Squid frontend should listen on ports 80 and 8000.
-		The more RAM that the operating system can use for file
-		system caching, the better.
+		The more RAM that the operating system can use for file system caching, the better.
 
 	\item[DNS cache.]
-		A Stratum 1 does a lot of DNS lookups, so we recommend
-		installing a DNS caching mechanism on the machine such
-		as \texttt{dnsmasq} or \texttt{bind}.  We do not recommend
-		\texttt{nscd} since it does not honor the DNS Time-To-Live
-		protocol.
+		A Stratum 1 does a lot of DNS lookups, so we recommend installing a DNS caching mechanism on the machine such as \texttt{dnsmasq} or \texttt{bind}.
+		We do not recommend \texttt{nscd} since it does not honor the DNS Time-To-Live protocol.
 \end{description}
 
 \section{Squid Configuration}
