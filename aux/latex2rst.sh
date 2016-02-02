@@ -23,15 +23,37 @@ DST_DIR="$2"
 CHAPTERS="cpt-overview.tex cpt-quickstart.tex cpt-configure.tex cpt-squid.tex \
           cpt-repo.tex cpt-replica.tex cpt-details.tex"
 
+INDEXDOC="cvmfstech.tex"
+
 for c in $CHAPTERS; do
   [ -e ${SRC_DIR}/$c ] || die "didn't find $c"
 done
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+echo -n "setting up environment... "
+cleanup() {
+  rm -f $PREAMBLE
+}
+
+trap cleanup EXIT HUP INT TERM
+PREAMBLE=$(mktemp)
+echo "done"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+echo -n "preparing preamble... "
+grep -e 'providecommand' ${SRC_DIR}/${INDEXDOC} > $PREAMBLE
+echo "done"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 for c in $CHAPTERS; do
   dst=$(basename -s .tex $c)
   echo -n "converting ${c} to ${dst}... "
   pandoc --from latex \
          --to   rst   \
+         $PREAMBLE    \
          ${SRC_DIR}/$c > ${DST_DIR}/$dst || die "fail"
   echo "done"
 done
