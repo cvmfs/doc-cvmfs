@@ -49,7 +49,7 @@ echo "done"
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 for c in $CHAPTERS; do
-  dst=$(basename -s .tex $c)
+  dst="$(basename -s .tex $c).rst"
   echo -n "converting ${c} to ${dst}... "
   pandoc --from latex \
          --to   rst   \
