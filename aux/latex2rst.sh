@@ -2,12 +2,19 @@
 
 set -e
 
+SCRIPT_LOCATION=$(cd "$(dirname "$0")"; pwd)
+
 die() {
   echo "$1" >&2
   exit 1
 }
 
-which pandoc > /dev/null 2>&1 || die "pandoc needs to be installed"
+has() {
+  which $1 > /dev/null 2>&1
+}
+
+has pandoc          || die "pandoc needs to be installed"
+has pandoc-citeproc || die "pandoc-citeproc needs to be installed"
 
 if [ $# -ne 2 ]; then
   echo "Usage: $0 <LaTeX source directory> <RST destination directory>"
@@ -24,6 +31,8 @@ CHAPTERS="cpt-overview.tex cpt-quickstart.tex cpt-configure.tex cpt-squid.tex \
           cpt-repo.tex cpt-replica.tex cpt-details.tex"
 
 INDEXDOC="cvmfstech.tex"
+BIBLIOGRAHPY="references.bib"
+CSL="${SCRIPT_LOCATION}/acm-sig-proceedings.csl"
 
 for c in $CHAPTERS; do
   [ -e ${SRC_DIR}/$c ] || die "didn't find $c"
@@ -51,9 +60,11 @@ echo "done"
 for c in $CHAPTERS; do
   dst="$(basename -s .tex $c).rst"
   echo -n "converting ${c} to ${dst}... "
-  pandoc --from latex \
-         --to   rst   \
-         $PREAMBLE    \
+  pandoc --from latex                              \
+         --to   rst                                \
+         --bibliography=${SRC_DIR}/${BIBLIOGRAHPY} \
+         --csl=$CSL                                \
+         $PREAMBLE                                 \
          ${SRC_DIR}/$c > ${DST_DIR}/$dst || die "fail"
   echo "done"
 done
