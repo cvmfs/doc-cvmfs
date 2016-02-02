@@ -20,8 +20,8 @@ DST_DIR="$2"
 [ -d $SRC_DIR ] || die "$SRC_DIR doesn't exist"
 [ -d $DST_DIR ] || die "$DST_DIR doesn't exist"
 
-CHAPTERS="cpt-benchmarks.tex cpt-details.tex cpt-quickstart.tex cpt-repo.tex \
-          cpt-configure.tex cpt-overview.tex cpt-replica.tex cpt-squid.tex"
+CHAPTERS="cpt-overview.tex cpt-quickstart.tex cpt-configure.tex cpt-squid.tex \
+          cpt-repo.tex cpt-replica.tex cpt-details.tex"
 
 for c in $CHAPTERS; do
   [ -e ${SRC_DIR}/$c ] || die "didn't find $c"
