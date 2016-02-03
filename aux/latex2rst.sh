@@ -17,26 +17,20 @@ has pandoc          || die "pandoc needs to be installed"
 has pandoc-citeproc || die "pandoc-citeproc needs to be installed"
 
 if [ $# -ne 2 ]; then
-  echo "Usage: $0 <LaTeX source directory> <RST destination directory>"
+  echo "Usage: $0 <LaTeX source file> <RST destination directory>"
   exit 2
 fi
 
-SRC_DIR="$1"
+SRC_FILE="$1"
 DST_DIR="$2"
+SRC_DIR=$(dirname $SRC_FILE)
 
-[ -d $SRC_DIR ] || die "$SRC_DIR doesn't exist"
-[ -d $DST_DIR ] || die "$DST_DIR doesn't exist"
-
-CHAPTERS="cpt-overview.tex cpt-quickstart.tex cpt-configure.tex cpt-squid.tex \
-          cpt-repo.tex cpt-replica.tex cpt-details.tex"
+[ -e $SRC_FILE ] || die "$SRC_FILE doesn't exist"
+[ -d $DST_DIR  ] || die "$DST_DIR doesn't exist"
 
 INDEXDOC="cvmfstech.tex"
 BIBLIOGRAHPY="references.bib"
 CSL="${SCRIPT_LOCATION}/acm-sig-proceedings.csl"
-
-for c in $CHAPTERS; do
-  [ -e ${SRC_DIR}/$c ] || die "didn't find $c"
-done
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -58,14 +52,12 @@ echo "done"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-for c in $CHAPTERS; do
-  dst="$(basename -s .tex $c).rst"
-  echo -n "converting ${c} to ${dst}... "
-  pandoc --from latex                              \
-         --to   rst                                \
-         --bibliography=${SRC_DIR}/${BIBLIOGRAHPY} \
-         --csl=$CSL                                \
-         $PREAMBLE                                 \
-         ${SRC_DIR}/$c > ${DST_DIR}/$dst || die "fail"
-  echo "done"
-done
+dst="$(basename -s .tex $SRC_FILE).rst"
+echo -n "converting ${SRC_FILE} to ${dst}... "
+pandoc --from latex                              \
+       --to   rst                                \
+       --bibliography=${SRC_DIR}/${BIBLIOGRAHPY} \
+       --csl=$CSL                                \
+       $PREAMBLE                                 \
+       ${SRC_FILE} > ${DST_DIR}/$dst || die "fail"
+echo "done"
