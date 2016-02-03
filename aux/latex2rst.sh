@@ -37,10 +37,12 @@ CSL="${SCRIPT_LOCATION}/acm-sig-proceedings.csl"
 echo -n "setting up environment... "
 cleanup() {
   rm -f $PREAMBLE
+  rm -f $FILTERED_SRC
 }
 
 trap cleanup EXIT HUP INT TERM
 PREAMBLE=$(mktemp)
+FILTERED_SRC=$(mktemp)
 echo "done"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -55,10 +57,12 @@ echo "done"
 
 dst="$(basename -s .tex $SRC_FILE).rst"
 echo -n "converting ${SRC_FILE} to ${dst}... "
+cat ${SRC_FILE} | sed -e 's/\\SI{\([0-9]*\)}{\\bit}/\1 bit/g' > $FILTERED_SRC
+
 pandoc --from latex                              \
        --to   rst                                \
        --bibliography=${SRC_DIR}/${BIBLIOGRAHPY} \
        --csl=$CSL                                \
        $PREAMBLE                                 \
-       ${SRC_FILE} > ${DST_DIR}/$dst || die "fail"
+       ${FILTERED_SRC} > ${DST_DIR}/$dst || die "fail"
 echo "done"
