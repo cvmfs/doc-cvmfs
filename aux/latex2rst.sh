@@ -52,7 +52,8 @@ echo "done"
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 echo -n "preparing preamble... "
-grep -e 'providecommand' ${SRC_DIR}/${INDEXDOC} > $PREAMBLE
+grep -e 'providecommand' ${SRC_DIR}/${INDEXDOC} >  $PREAMBLE
+echo "\renewcommand{\product}[1]{#1}"           >> $PREAMBLE
 echo "done"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
