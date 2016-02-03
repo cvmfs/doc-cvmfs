@@ -37,7 +37,7 @@ Linux
 
 To install, proceed according to the following steps:
 
-Step 1
+**Step 1**
     Install the CernVM-FS packages. With yum, run
 
     ::
@@ -49,7 +49,7 @@ Step 1
     with the command ``rpm -vi``. On Ubuntu, use ``dpkg -i`` on the
     cvmfs and cvmfs-config-default .deb packages.
 
-Step 2
+**Step 2**
     For the base setup, run ``cvmfs_config setup``. Alternatively, you
     can do the base setup by hand: ensure that ``user_allow_other`` is
     set in /etc/fuse.conf, ensure that ``/cvmfs /etc/auto.cvmfs`` is set
@@ -57,10 +57,10 @@ Step 2
     migrate from a previous version of CernVM-FS, check the release
     notes if there is anything special to do for migration.
 
-Step 3
+**Step 3**
     Create /etc/cvmfs/default.local and open the file for editing.
 
-Step 4
+**Step 4**
     Select the desired repositories by setting
     ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set
 
@@ -80,7 +80,7 @@ Step 4
     Section [sct:squid]). For Cern repositories, the Stratum 1 web
     servers are listed in /etc/cvmfs/domain.d/cern.ch.conf.
 
-Step 5
+**Step 5**
     Check if CernVM-FS mounts the specified repositories by
     ``cvmfs_config probe``.
 
@@ -91,13 +91,13 @@ On Mac OS X, CernVM-FS is based on OSXFuse\  [1]_. It is not integrated
 with autofs. In order to install, proceed according to the following
 steps:
 
-Step 1
+**Step 1**
     Install the CernVM-FS package by opening the .pkg file.
 
-Step 2
+**Step 2**
     Create /etc/cvmfs/default.local and open the file for editing.
 
-Step 3
+**Step 3**
     Select the desired repositories by setting
     ``CVMFS_REPOSITORIES=repo1,repo2,...``. For CMS, for instance, set
 
@@ -114,7 +114,7 @@ Step 3
     If you’re unsure about the proxy names, set
     ``CVMFS_HTTP_PROXY=DIRECT``.
 
-Step 4
+**Step 4**
     Mount your repositories like
 
     ::
