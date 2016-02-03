@@ -12,9 +12,6 @@ over these possibly untrusted caches and connections. The
 CernVM-FS software comprises client-side software to mount
 “CernVM-FS repositories” (similar to AFS volumes) as well as a
 server-side toolkit to create such distributable CernVM-FS repositories.
-Figure [fig:concept] shows an overview of software distribution with
-CernVM-FS. Figure [fig:fuse] shows how CernVM-FS interlocks with
-Fuse [5] and a web server in order to deliver files.
 
 .. figure:: _static/concept-generic.png
    :alt: General overview over CernVM-File System's Architecture
@@ -89,7 +86,7 @@ CernVM-FS repository is similar to a repository in the sense of a
 versioning system.
 
 On the client, only data and metadata of the software releases that are
-actually used are downloaded and cached. [fig:concept]
+actually used are downloaded and cached.
 
 .. figure:: _static/fuse.png
    :alt: CernVM-FS client architectural overview
