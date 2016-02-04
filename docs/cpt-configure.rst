@@ -345,7 +345,7 @@ Ordering of Servers according to Geographic Proximity
 
 CernVM-FS Stratum 1 servers provide a RESTful service for geographic
 ordering. Clients can request
-`http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy\_address>/<server\_list> <http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy_address>/<server_list>>`__.
+`http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy\_address>/<server\_list>`
 The proxy address can be replaced by a UUID if no proxies are used, and
 the CernVM-FS client does that if there are no regular proxies. The
 server list is comma-separated. The result is an ordered list of indexes
