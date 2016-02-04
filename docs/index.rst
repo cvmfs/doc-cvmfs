@@ -54,6 +54,8 @@ Additional Information
    :maxdepth: 1
 
    apx-parameters
+   apx-serverinfra
+   apx-rpms
 
 Indices and tables
 ==================
