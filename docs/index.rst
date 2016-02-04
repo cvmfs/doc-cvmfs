@@ -46,6 +46,15 @@ Contents
    cpt-replica
    cpt-details
 
+
+Additional Information
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 1
+
+   apx-parameters
+
 Indices and tables
 ==================
 
