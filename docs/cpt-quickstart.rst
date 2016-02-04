@@ -141,6 +141,8 @@ instance, running the command ``ls /cvmfs/atlas.cern.ch`` will mount the
 ATLAS software repository on the fly. This directory gets automatically
 unmounted after some automount-defined idle time.
 
+.. _sct_debugginghints:
+
 Debugging Hints
 ---------------
 

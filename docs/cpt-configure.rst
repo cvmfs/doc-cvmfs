@@ -13,13 +13,12 @@ corresponding .conf file.
 
 In a typical installation, a handful of parameters need to be set in
 /etc/cvmfs/default.local. Most likely, this is the list of repositories
-(``CVMFS_REPOSITORIES``), HTTP proxies (see
-Section [sct:config:network]), and perhaps the cache directory and the
-cache quota (see Section [sct:config:cache]) In a few cases, one might
-change a parameter for a specific domain or a specific repository,
-provide an exclusive cache for a specific repository (see
-Section [sct:config:cache]). For a list of all parameters, see
-Appendix [apx:parameters].
+(``CVMFS_REPOSITORIES``), HTTP proxies (see :ref:sct_network`),
+and perhaps the cache directory and the cache quota (see
+:ref:sct_cache`) In a few cases, one might change a parameter
+for a specific domain or a specific repository, provide an exclusive cache for
+a specific repository (see :ref:sct_cache`). For a list of all
+parameters, see Appendix [apx:parameters].
 
 The .conf and .local configuration files are key-value pairs in the form
 ``PARAMETER=value``. They are sourced by /bin/sh. Hence, a limited set
@@ -89,8 +88,9 @@ Every mount point corresponds to a CernVM-FS process. Using autofs or
 the system’s mount command, every repository can only be mounted once.
 Otherwise multiple CernVM-FS processes would collide in the same cache
 location. If a repository is needed under several paths, use a *bind
-mount* or use a private file system mount point (see
-Section [sct:privatemount]).
+mount* or use a :ref:`private file system mount point <sct_privatemount>`.
+
+.. _sct_privatemount:
 
 Private Mount Points
 ~~~~~~~~~~~~~~~~~~~~
@@ -234,6 +234,8 @@ different directory, use
 In order to share this directory among multiple users, the users have to
 belong to the same UNIX group.
 
+.. _sct_network:
+
 Network Settings
 ----------------
 
@@ -244,7 +246,7 @@ handful of web servers in different locations. These replicas form the
 CernVM-FS Stratum 1 service, whereas the replication source server is
 the CernVM-FS Stratum 0 server. In every cluster of client machines,
 there should be two or more web proxy servers that CernVM-FS can use
-(see Section [sct:squid]). These site-local web proxies reduce the
+(see :ref:`cpt_squid`). These site-local web proxies reduce the
 network latency for the CernVM-FS clients and they reduce the load for
 the Stratum 1 service. CernVM-FS supports WPAD/PAC proxy auto
 configuration [4], choosing a random proxy for load-balancing, and
@@ -261,13 +263,13 @@ files fails from a server, CernVM-FS automatically switches to the next
 mirror server. For repositories under the cern.ch domain, the Stratum 1
 servers are specified in /etc/cvmfs/domain.d/cern.ch.conf.
 
-It is recommended to adjust the order of Stratum 1 servers so that the
-closest servers are used with priority. This can be done automatically
-by using geographic ordering (see Section [sct:geoapi]). Alternatively,
-for roaming clients (clients not using a proxy server), the Stratum 1
-servers can be automatically sorted according to round trip time by
-``cvmfs_talk host probe`` (see Section [sct:tools]). Otherwise, the
-proxy server would invalidate round trip time measurement.
+It is recommended to adjust the order of Stratum 1 servers so that the closest
+servers are used with priority. This can be done automatically by :ref:`using
+geographic ordering <sct_geoapi>`. Alternatively, for roaming
+clients (clients not using a proxy server), the Stratum 1 servers can be
+automatically sorted according to round trip time by ``cvmfs_talk host probe``
+(see :ref:`sct_tools`). Otherwise, the proxy server would invalidate round
+trip time measurement.
 
 The special sequence ``@fqrn@`` in the ``CVMFS_SERVER_URL`` string is
 replaced by fully qualified repository name (atlas.cern.cn, cms.cern.ch,
@@ -340,6 +342,8 @@ previous section only sets the regular proxy list, not the fallback
 proxy list. Also the fallback proxy list can be automatically reordered;
 see the next section.
 
+.. _sct_geoapi:
+
 Ordering of Servers according to Geographic Proximity
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -379,6 +383,8 @@ initial backoff in seconds. The actual initial backoff is picked with
 milliseconds precision randomly in the interval
 :math:`[1, \text{\$CVMFS\_BACKOFF\_INIT}\cdot 1000]`. With every retry,
 the backoff is then doubled.
+
+.. _sct_cache:
 
 Cache Settings
 --------------
@@ -454,7 +460,7 @@ ever-growing. The ``CVMFS_ALIEN_CACHE`` requires
 
 The alien cache might be used in combination with a special repository
 replication mode that preloads a cache directory
-(Section [sct:replica]). This allows to propagate an entire repository
+(Section :ref:`cpt_replica`). This allows to propagate an entire repository
 into the cache of a cluster file system for HPC setups that do not allow
 outgoing connectivity.
 
@@ -539,6 +545,8 @@ A sample entry /etc/fstab entry on a client:
       172.16.192.210:/cvmfs/atlas.cern.ch /cvmfs/atlas.cern.ch nfs4 \
         ro,ac,actimeo=60,lookupcache=all,nolock,rsize=1048576,wsize=1048576 0 0
 
+.. _sct_hotpatch:
+
 Hotpatching and Reloading
 -------------------------
 
@@ -576,6 +584,8 @@ The currently loaded set of parameters can be shown by
       cvmfs_talk parameters
 
 The CernVM-FS packages use hotpatching in the package upgrade process.
+
+.. _sct_tools:
 
 Auxiliary Tools
 ---------------
@@ -640,8 +650,8 @@ system for use with CernVM-FS.
     repositories specified in ``CVMFS_REPOSITORIES``.
 
 **reload**
-    The ``reload`` command is used to reload or hotpatch
-    CernVM-FS instances (see Section [sct:hotpatch]).
+    The ``reload`` command is used to :ref:`reload or hotpatch
+    CernVM-FS instances <sct_hotpatch>`.
 
 **umount**
     The ``umount`` command unmounts all currently mounted
@@ -653,8 +663,7 @@ system for use with CernVM-FS.
 
 **bugreport**
     The ``bugreport`` command creates a tarball with collected system
-    information which helps to debug a problem (see
-    Section [sct:debugginghints]).
+    information which helps to :ref:`debug a problem <sct_debugginghints>`.
 
 cvmfs\_talk
 ~~~~~~~~~~~
@@ -701,11 +710,10 @@ signals (such as a segmentation fault) are received. The watchdog writes
 the stack trace into syslog as well as into a file ``stacktrace`` in the
 cache directory.
 
-In addition to the debugging hints in Section [sct:debugginghints],
-CernVM-FS can be started in debug mode. In the debug mode,
-CernVM-FS will log with high verbosity which makes the debug mode
-unsuitable for production use. In order to turn on the debug mode, set
-``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
+In addition to :ref:`these debugging hints <sct_debugginghints>`, CernVM-FS
+can be started in debug mode. In the debug mode, CernVM-FS will log with high
+verbosity which makes the debug mode unsuitable for production use. In order
+to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
 
 .. raw:: html
 

@@ -1,3 +1,5 @@
+.. _cpt_replica:
+
 Setting up a Replica Server (Stratum 1)
 =======================================
 

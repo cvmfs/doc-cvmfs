@@ -1,3 +1,5 @@
+.. _cpt_squid:
+
 Setting up a Local Squid Proxy
 ==============================
 
