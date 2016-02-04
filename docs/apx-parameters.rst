@@ -1,9 +1,13 @@
+.. _apx_paramters:
+
 CernVM-FS Parameters
 ====================
 
 .. |br| raw:: html
 
    <br />
+
+.. _apxsct_clientparameters:
 
 Client parameters
 -----------------
@@ -60,6 +64,9 @@ CVMFS_USE_GEOAPI                Request order of Stratum 1 servers and fallback 
 CVMFS_USER                      Sets the ``gid`` and ``uid`` mount options. Don't touch or overwrite.
 CVMFS_USYSLOG                   All messages that normally are logged to syslog are re-directed to the given file.  This file can grow up to 500kB and there is one step of log rotation.  Required for $\mu$CernVM.
 =============================== ====================================================================================================================================================================================
+
+
+.. _apxsct_serverparameters:
 
 Server parameters
 -----------------

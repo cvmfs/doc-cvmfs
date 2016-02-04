@@ -18,7 +18,7 @@ and perhaps the cache directory and the cache quota (see
 :ref:sct_cache`) In a few cases, one might change a parameter
 for a specific domain or a specific repository, provide an exclusive cache for
 a specific repository (see :ref:sct_cache`). For a list of all
-parameters, see Appendix [apx:parameters].
+parameters, see Appendix ":ref:`apxsct_clientparameters`".
 
 The .conf and .local configuration files are key-value pairs in the form
 ``PARAMETER=value``. They are sourced by /bin/sh. Hence, a limited set

@@ -38,7 +38,7 @@ System Requirements
    -  Scientific Linux 5 (64 bit)
 
    -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
-      Appendix [apx:rpms])
+      Appendix ":ref:`apx_rpms`")
 
    -  Ubuntu 13.10 and above (64 bit - with installed AUFS kernel
       module)
@@ -92,7 +92,7 @@ server (see Figure :ref:`below <fig_updateprocess>`). Note that this is *only*
 required on a CernVM-FS server and *not* on the client machines.
 
 | We provide customised kernel packages for Scientific Linux 6 (see
-  Appendix [apx:rpms]) and keep them up-to-date with upstream kernel
+  Appendix ":ref:`apx_rpms`") and keep them up-to-date with upstream kernel
   updates. The kernel RPMs are published in the ``cernvm-kernel`` yum
   repository.
 | Please follow these steps to install the provided customised kernel:
@@ -181,7 +181,7 @@ installation. The following table provides an overview of important
 configuration files and intrinsical paths together with some
 customisation hints. For an exhaustive description of the
 CernVM-FS server infrastructure please consult
-Appendix [apx:serverinfrastructure].
+Appendix ":ref:`apx_serverinfra`".
 
 ======================================== =======================================
 **File Path**                            **Description**
