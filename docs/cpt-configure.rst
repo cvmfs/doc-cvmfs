@@ -31,6 +31,8 @@ can use the ``CVMFS_FQRN`` parameter, which contains the fully qualified
 repository names that is being mounted. The current working directory is
 set to the parent directory of the configuration file at hand.
 
+.. _tab_configfiles:
+
 ============================== =================================================
 **File**                       **Purpose**
 ------------------------------ -------------------------------------------------

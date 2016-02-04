@@ -75,10 +75,10 @@ To install, proceed according to the following steps:
           CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
 
     For the syntax of more complex HTTP proxy settings, see
-    Section [sct:config:network]. Make sure your local proxy servers
-    allow access to all the Stratum 1 web servers (see
-    Section [sct:squid]). For Cern repositories, the Stratum 1 web
-    servers are listed in /etc/cvmfs/domain.d/cern.ch.conf.
+    :ref:`sct_network`. Make sure your local proxy servers allow access to all
+    the Stratum 1 web servers (more on :ref:`proxy configuration here <cpt_squid>`). For Cern
+    repositories, the Stratum 1 web servers are listed in
+    /etc/cvmfs/domain.d/cern.ch.conf.
 
 **Step 5**
     Check if CernVM-FS mounts the specified repositories by

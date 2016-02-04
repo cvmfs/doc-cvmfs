@@ -4,13 +4,15 @@ Setting up a Replica Server (Stratum 1)
 =======================================
 
 While a CernVM-FS Stratum 0 repository server is able to serve clients
-directly, a large number of clients is better be served by a set of
-Stratum 1 replica servers. Multiple Stratum 1 servers improve the
-reliability, reduce the load, and protect the Stratum 0 master copy of
-the repository from direct accesses. Stratum 0 server, Stratum 1 servers
-and the site-local proxy servers can be seen as content distribution
-network. Figure [fig:stratum1] shows the situation for the repositories
-hosted in the cern.ch domain.
+directly, a large number of clients is better be served by a set of Stratum 1
+replica servers. Multiple Stratum 1 servers improve the reliability, reduce
+the load, and protect the Stratum 0 master copy of the repository from direct
+accesses. Stratum 0 server, Stratum 1 servers and the site-local proxy servers
+can be seen as content distribution network. The :ref:`figure below
+<fig_stratum1>` shows the situation for the repositories hosted in the
+cern.ch domain.
+
+.. _fig_stratum1:
 
 .. figure:: _static/stratum1.png
    :alt: Concept overview of the CernVM-FS Content Delivery Network

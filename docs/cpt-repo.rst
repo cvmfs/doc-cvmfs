@@ -18,9 +18,9 @@ content-addressable format results in automatic file de-duplication. It
 furthermore simplifies data verification and it allows for file system
 snapshots.
 
-In order to provide a writable CernVM-FS repository, CernVM-FS uses a
-union file system that combines a read-only CernVM-FS mount point with a
-writable scratch area [1, 2]. Figure [fig:installwebserver] outlines the
+In order to provide a writable CernVM-FS repository, CernVM-FS uses a union
+file system that combines a read-only CernVM-FS mount point with a writable
+scratch area [1, 2]. :ref:`This figure below <fig_updateprocess>` outlines the
 process of publishing a repository.
 
 CernVM-FS Server Quick-Start Guide
@@ -31,8 +31,7 @@ System Requirements
 
 -  Apache HTTP server *OR* S3 compatible storage service
 
--  aufs union file system in the kernel (see
-   Section [sct:customkernelinstall])
+-  aufs union file system in the kernel (see :ref:`sct_customkernelinstall`)
 
 -  Officially supported platforms
 
@@ -53,8 +52,7 @@ Installation
 
 #. For local storage: Ensure enough disk space in ``/srv/cvmfs``
 
-#. Create a repository with ``cvmfs_server mkfs`` (See
-   Section [sct:repocreation])
+#. Create a repository with ``cvmfs_server mkfs`` (See :ref:`sct_repocreation`)
 
 Content Publishing
 ~~~~~~~~~~~~~~~~~~
@@ -65,10 +63,10 @@ Content Publishing
 
 #. Create nested catalogs at proper locations
 
-   -  Create ``.cvmfscatalog`` files (See Section [sct:nestedcatalogs])
+   -  Create ``.cvmfscatalog`` files (See :ref:`sct_nestedcatalogs`)
       or
 
-   -  Consider using a ``.cvmfsdirtab`` file (See Section [sct:dirtab])
+   -  Consider using a ``.cvmfsdirtab`` file (See :ref:`sct_dirtab`)
 
 #. ``cvmfs_server publish <repository name>``
 
@@ -83,12 +81,14 @@ Backup Policy
 
    -  Stratum 1s can serve as last-ressort backup of repository content
 
+.. _sct_customkernelinstall:
+
 Installing the AUFS-enabled Kernel on Scientific Linux 6
 --------------------------------------------------------
 
 CernVM-FS uses the union file-system aufs [1] to efficiently determine
 file-system tree updates while publishing repository transactions on the
-server (see Figure [fig:installwebserver]). Note that this is *only*
+server (see Figure :ref:`below <fig_updateprocess>`). Note that this is *only*
 required on a CernVM-FS server and *not* on the client machines.
 
 | We provide customised kernel packages for Scientific Linux 6 (see
@@ -120,6 +120,8 @@ the kernel updates as quickly as possible.
 
 Publishing a new Repository Revision
 ------------------------------------
+
+.. _fig_updateprocess:
 
 .. figure:: _static/update_process.png
    :alt: CernVM-FS server schematic update overview
@@ -166,8 +168,10 @@ your machine should provide an aufs enabled kernel as well as a running
 ``Apache2`` web server. Currently we support Scientific Linux 6 and
 Ubuntu 12.04 distributions. Please note, that Scientific Linux 6 *does
 not* ship with an aufs enabled kernel, therefore we provide a compatible
-patched kernel as RPMs (see Section [sct:customkernelinstall] for
+patched kernel as RPMs (see :ref:`sct_customkernelinstall` for
 details).
+
+.. _sct_serveranatomy:
 
 Notable CernVM-FS Server Locations and Files
 --------------------------------------------
@@ -202,18 +206,18 @@ Appendix [apx:serverinfrastructure].
                                          Can be mounted or symlinked to another
                                          location *before* creating the first
                                          repository. 
-                                         Hosts the scratch area described in
-                                         Section [sct:repoupdate] thus might
-                                         consume notable disk space during
-                                         repository updates.
+                                         Hosts the scratch area described
+                                         :ref:`here <sct_repocreation_update>`,
+                                         thus might consume notable disk space
+                                         during repository updates.
 
   ``/etc/cvmfs``                         **Configuration files and keychains**
                                          Similar to the structure described in
-                                         Table [tbl:configfiles]. Do not
-                                         symlink this directory.
+                                         :ref:`this table <tab_configfiles>`. Do
+                                         not symlink this directory.
 
   ``/etc/cvmfs/cvmfs\_server\_hooks.sh`` **Customisable server behaviour**
-                                         See Section [sct:serverhooks] for
+                                         See ":ref:`sct_serverhooks`" for
                                          further details
 
   ``/etc/cvmfs/repositories.d``          **Repository configuration location**
@@ -222,6 +226,8 @@ Appendix [apx:serverinfrastructure].
 ======================================== =======================================                                         
 
 
+.. _sct_repocreation_update:
+
 CernVM-FS Repository Creation and Updating
 ------------------------------------------
 
@@ -229,6 +235,8 @@ The CernVM-FS server tool kit provides the ``cvmfs_server`` utility in
 order to perform all operations related to repository creation,
 updating, deletion, replication and inspection. Without any parameters
 it prints a short documentation of its commands.
+
+.. _sct_repocreation:
 
 Repository Creation
 ~~~~~~~~~~~~~~~~~~~
@@ -250,9 +258,9 @@ client machines.
 The ``cvmfs_server`` utility will use ``/srv/cvmfs`` as storage location
 by default. In case a separate hard disk should be used, a partition can
 be mounted on /src/cvmfs or /srv/cvmfs can be symlinked to another
-location (see Section [sct:repoanatomy]). Besides local storage it is
-possible to use an S3 compatible storage service as data backend (see
-Section [sct:s3storagesetup]).
+location (see :ref:`sct_serveranatomy`). Besides local storage it is
+possible to use an :ref:`S3 compatible storage service <sct_s3storagesetup>`
+as data backend.
 
 Once created, the repository is mounted under ``/cvmfs/my.repo.name``
 containing only a single file called ``new_repository``. The next steps
@@ -272,6 +280,8 @@ When CernVM-FS clients perform a cache cleanup, they treat files from
 volatile repositories with priority. Such volatile repositories can be
 useful, for instance, for experiment conditions data.
 
+.. _sct_s3storagesetup:
+
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -284,14 +294,16 @@ settings are given as parameters to ``cvmfs_server mkfs``:
       cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
         -w http://s3.amazonaws.com/mybucket-1-1 my.repo.name
 
-The file “mys3.conf” contains the S3 settings (see
-Table [tbl:s3confparameters]). The “-w” option is used define the S3
-server URL, e.g. http://localhost:3128, which is used for accessing the
-repository’s backend storage on S3. Note that this URL can be different
-than the S3 server address that is used for uploads, e.g. if a proxy
-server is deployed in front of the server. Note that the buckets need to
-exist before the repository is created. In the example above, a single
-bucket ``mybucket-1-1`` needs to be created beforehand.
+The file “mys3.conf” contains the S3 settings (see :ref: `table below
+<tab_s3confparameters>`). The “-w” option is used define the S3 server URL,
+e.g. http://localhost:3128, which is used for accessing the repository’s
+backend storage on S3. Note that this URL can be different than the S3 server
+address that is used for uploads, e.g. if a proxy server is deployed in front
+of the server. Note that the buckets need to exist before the repository is
+created. In the example above, a single bucket ``mybucket-1-1`` needs to be
+created beforehand.
+
+.. _tab_s3confparameters:
 
 =============================================== ===========================================
 **Parameter**                                   **Meaning**
@@ -343,6 +355,8 @@ mapped URLs to stdout, for instance:
     in: http://localhost:3128/data/.cvmfswhitelist
     out: http://swift.cern.ch/cernbucket-9-91/data/.cvmfswhitelist
 
+.. _sct_repoupdate:
+
 Repository Update
 ~~~~~~~~~~~~~~~~~
 
@@ -382,11 +396,11 @@ storage together with its corresponding signing keychain. With
 ``cvmfs_server import`` both CernVM-FS 2.0 and 2.1 compliant repository
 file storages can be imported.
 
-``cvmfs_server import`` works similar to ``cvmfs_server mkfs`` (see
-[sct:repocreation]) except it uses the provided data storage instead of
-creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file
-storage ``cvmfs_server import`` also takes care of the file catalog
-migration into the CernVM-FS 2.1 schema.
+``cvmfs_server import`` works similar to ``cvmfs_server mkfs`` (described in
+:ref:`sct_repocreation`) except it uses the provided data storage instead of
+creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file storage
+``cvmfs_server import`` also takes care of the file catalog migration into the
+CernVM-FS 2.1 schema.
 
 Legacy Repository Import
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -431,8 +445,10 @@ CernVM-FS 2.0 into 2.1. As an example we are using a repository called
              legacy.cern.ch
 
 #. Check the imported repository with
-   ``cvmfs_server check legacy.cern.ch`` for integrity (see
-   [sct:checkintegrity])
+   ``cvmfs_server check legacy.cern.ch`` for integrity
+   (see :ref:`sct_checkintegrity`)
+
+.. _sct_serverhooks:
 
 Customizable Actions Using Server Hooks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -444,8 +460,7 @@ connections automatically or other workflow triggers, depending on the
 application.
 
 There are six designated server hooks that are potentially invoked
-during the repository update procedure described in Section
-[sct:repoupdateprocedure]:
+during the :ref:`repository update procedure <sct_repoupdate>`:
 
 -  When running ``cvmfs_server transaction``:
 
@@ -515,6 +530,8 @@ Two named snapshots are managed automatically by CernVM-FS, ``trunk``
 and ``trunk-previous``. This allows for easy unpublishing of a mistake,
 by rolling back to the ``trunk-previous`` tag.
 
+.. _sct_checkintegrity:
+
 Integrity Check
 ~~~~~~~~~~~~~~~
 
@@ -535,6 +552,8 @@ Optionally ``cvmfs_server check`` can also verify the data integrity
 (command line flag ``-i``) of each data object in the repository. This
 is a time consuming process and we recommend it only for diagnostic
 purposes.
+
+.. _sct_namedsnapshots:
 
 Named Snapshots
 ~~~~~~~~~~~~~~~
@@ -595,6 +614,8 @@ back is achieved through the command
 from backups, not something one would do often. Use caution, a rollback
 is irreversible.
 
+.. _sct_nestedcatalogs:
+
 Managing Nested Catalogs
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -624,6 +645,8 @@ For example, in order to create a nested catalog for software release
 In order to merge a nested catalog with its parent catalog, the
 corresponding ``.cvmfscatalog`` file needs to be removed. Nested
 catalogs can be nested on arbitrary many levels.
+
+.. _sct_nestedrecommendations:
 
 Recommendations for Nested Catalogs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -674,14 +697,16 @@ catalog under /cvmfs/experiment.cern.ch/software/i686/common, because
 this directory needs to be accessed anyway whenever its parent directory
 is needed. As a rule of thumb, a single file catalog should contain more
 than 1000 files and directories but not contain more than
-:math:`\approx`\ 200000 files. Section [sct:inspectnestedcatalogs]
-describes how to find catalogs that do not satisfy this recommendation.
+:math:`\approx`\ 200000 files. See :ref:`sct_inspectnested` how to find
+catalogs that do not satisfy this recommendation.
 
 Restructuring the repository’s directory tree is an expensive operation
 in CernVM-FS. Moreover, it can easily break client applications when
 they switch to a restructured file system snapshot. Therefore, the
 software directory tree layout should be relatively stable before
 filling the CernVM-FS repository.
+
+.. _sct_dirtab:
 
 Managing Nested Catalogs with ``.cvmfsdirtab``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -753,6 +778,8 @@ Both ``CVMFS_AUTOCATALOGS_MAX_WEIGHT`` and
 ``CVMFS_AUTOCATALOGS_MIN_WEIGHT`` have reasonable defaults and usually
 do not need to be defined by the user.
 
+.. _sct_inspectnested:
+
 Inspecting Nested Catalog Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -764,7 +791,7 @@ of a repository.
     cvmfs_server list-catalogs
 
 Additionally this command allows to spot degenerated nested catalogs. As
-stated in Section [sct:nestedcatalogrecommendations] the recommended
+stated :ref:`here <sct_nestedrecommendations>` the recommended
 maximal file entry count of a single catalog should not exceed
 :math:`\approx`\ 200000. One can use the switch ``list-catalogs -e`` to
 inspect the current nested catalog entry counts in the repository.
@@ -833,7 +860,7 @@ Since CernVM-FS is a versioning file system it is following an
 insert-only policy regarding its backend storage. When files are deleted
 from a CernVM-FS repository, they are not automatically deleted from the
 underlying storage. Therefore legacy revisions stay intact and usable
-forever (cf. Section [sct:namedsnapshots]) at the expense of an
+forever (cf. :ref:`sct_namedsnapshots`) at the expense of an
 ever-growing storage volume both on the Stratum 0 and the Stratum 1s.
 
 For this reason, applications that frequently install files into a
@@ -855,7 +882,7 @@ Garbage Sweeping Policy
 
 The garbage collector of CernVM-FS is using a mark-and-sweep algorithm
 to detect unused files in the internal catalog graph. Revisions that are
-referenced by named snapshots (cf. Section [sct:namedsnapshots]) or that
+referenced by named snapshots (cf. :ref:`sct_namedsnapshots`) or that
 are recent enough are preserved while all other revisions are condemned
 to be removed. By default this time-based threshold is *three days* but
 can be changed using the configuration variable
@@ -869,11 +896,10 @@ Enabling Garbage Collection
 Creating a Garbage Collectable Repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Repositories can be created as *garbage-collectable* from the start by
-adding ``-z`` to the ``cvmfs_server mkfs`` command (cf.
-Section [sct:repocreation]). It is generally recommended to also add
-``-g`` to switch off automatic tagging in a garbage collectable
-repository.
+Repositories can be created as *garbage-collectable* from the start by adding
+``-z`` to the ``cvmfs_server mkfs`` command (cf. :ref:`sct_repocreation`). It
+is generally recommended to also add ``-g`` to switch off automatic tagging in
+a garbage collectable repository.
 
 Enabling Garbage Collection on an Existing Repository (Stratum 0)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
