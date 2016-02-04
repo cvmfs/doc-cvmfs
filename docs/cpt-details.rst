@@ -1,11 +1,13 @@
 Implementation Notes
 ====================
 
-CernVM-FS has a modular structure and relies on several open source
-libraries. Figure [fig:cvmfsblocks] shows the internal building blocks
-of CernVM-FS. Most of these libraries are shipped with the
-CernVM-FS sources and are linked statically in order to facilitate
-debugging and to keep the system dependencies minimal.
+CernVM-FS has a modular structure and relies on several open source libraries.
+Figure :ref:`below <fig_cvmfsblocks>` shows the internal building blocks of
+CernVM-FS. Most of these libraries are shipped with the CernVM-FS sources and
+are linked statically in order to facilitate debugging and to keep the system
+dependencies minimal.
+
+.. _fig_cvmfsblocks:
 
 .. figure:: _static/cvmfs-blocks.png
    :alt: CernVM-FS building blocks
@@ -18,6 +20,8 @@ A CernVM-FS repository is defined by its *file catalog*. The file
 catalog is an SQLite\  [1]_ database [2] having a single table that
 lists files and directories together with its metadata. The table layout
 is shown in the table below:
+
+.. _tab_catalog:
 
 ====================== ================
 **Field**               **Type**       
@@ -48,7 +52,9 @@ hardlink group will get the same inode issued by the CernVM-FS Fuse
 client. The emulated hardlinks work within the same directory, only. The
 cryptographic content hash refers to the zlib-compressed [5] version of
 the file. Flags indicate the type of an directory entry (see
-table below).
+table :ref:`below <tab_dirent_flags>`).
+
+.. _tab_dirent_flags:
 
 ============ ====================================
 **Flags**    **Meaning**
@@ -85,12 +91,13 @@ further cryptographic hash functions.
 Nested Catalogs
 ~~~~~~~~~~~~~~~
 
-In order to keep catalog sizes reasonable [2]_, repository subtrees may
-be cut and stored as separate *nested catalogs*. There is no limit on
-the level of nesting. A reasonable approach is to store separate
-software versions as separate nested catalogs. Figure [fig:nested] shows
-the simplified directory structure which we use for the ATLAS
-repository.
+In order to keep catalog sizes reasonable [2]_, repository subtrees may be cut
+and stored as separate *nested catalogs*. There is no limit on the level of
+nesting. A reasonable approach is to store separate software versions as
+separate nested catalogs. The figure :ref:`below <fig_nested>` shows the
+simplified directory structure which we use for the ATLAS repository.
+
+.. _fig_nested:
 
 .. figure:: _static/nestedcatalogs.png
    :alt: CernVM-FS nested catalogs schema
@@ -162,10 +169,10 @@ Internal Manifest Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Below is an example of a typical manifest file. Each line starts with a
-capital letter specifying the meta data field, followed by the actual
-data string. The list of meta information is ended by a separator line
-(``--``) followed by signature information further described in
-Section [sct:cvmfspublished:signature].
+capital letter specifying the meta data field, followed by the actual data
+string. The list of meta information is ended by a separator line (``--``)
+followed by signature information further described :ref:`here
+<sct_cvmfspublished_signature>`.
 
 ::
 
@@ -214,6 +221,8 @@ meta data fields.
 +-----------+-------------------------------------------------------------+
 | ``L``     | currently unused (reserved for micro catalogs)              |
 +-----------+-------------------------------------------------------------+
+
+.. _sct_cvmfspublished_signature:
 
 Repository Signature
 ~~~~~~~~~~~~~~~~~~~~
@@ -424,20 +433,21 @@ Re-constructing the cache catalog is necessary when the managed cache is
 used for the first time and every time when “unmanaged” changes occurred
 to the cache directory, when CernVM-FS was terminated unexpectedly.
 
-In case of an exclusive cache, the cache manager runs as a separate
-thread of the ``cvmfs2`` process. This thread gets notified by the Fuse
-module whenever a file is opened or inserted. Notification is done
-through a pipe. The shared cache uses the very same code, except that
-the thread becomes a separate process (see Figure [fig:sharedcache]).
-This cache manager process is not another binary but ``cvmfs2`` forks to
-itself with special arguments, indicating that it is supposed to run as
-a cache manager. The cache manager does not need to be started as a
-service. The first CernVM-FS instance that uses a shared cache will
-automatically spawn the cache manager process. Subsequent
-CernVM-FS instances will connect to the pipe of this cache manager. Once
-the last CernVM-FS instance that uses the shared cache is unmounted, the
+In case of an exclusive cache, the cache manager runs as a separate thread of
+the ``cvmfs2`` process. This thread gets notified by the Fuse module whenever
+a file is opened or inserted. Notification is done through a pipe. The shared
+cache uses the very same code, except that the thread becomes a separate
+process (see Figure :ref:`below <fig_sharedcache>`). This cache manager
+process is not another binary but ``cvmfs2`` forks to itself with special
+arguments, indicating that it is supposed to run as a cache manager. The cache
+manager does not need to be started as a service. The first CernVM-FS instance
+that uses a shared cache will automatically spawn the cache manager process.
+Subsequent CernVM-FS instances will connect to the pipe of this cache manager.
+Once the last CernVM-FS instance that uses the shared cache is unmounted, the
 communication pipe is left without any writers and the cache manager
 automatically quits.
+
+.. _fig_sharedcache:
 
 .. figure:: _static/sharedcache.png
    :alt: CernVM-FS shared local hard disk cache
@@ -550,10 +560,10 @@ directories.
 readdir
 ~~~~~~~
 
-A directory listing is served by a query on the file catalog. Although
-the “parent”-column is indexed (Table [tab:catalog]), this is a
-relatively slow function. We expect directory listing to happen rather
-seldom.
+A directory listing is served by a query on the file catalog. Although the
+“parent”-column is indexed (see :ref:`Catalog table schema <tab_catalog>`),
+this is a relatively slow function. We expect directory listing to happen
+rather seldom.
 
 open / read
 ~~~~~~~~~~~
@@ -693,10 +703,12 @@ system. CernVM-FS uses the AUFS union file system. Another union file
 system with similar semantics can be plugged in if necessary. OverlayFS
 is supported as an experimental alternative.
 
-Union file systems can be used to track changes on CernVM-FS
-repositories (Figure [fig:overlay]). In this case, the read-only file
-system interface of CernVM-FS is used in conjunction with a writable
-scratch area for changes.
+Union file systems can be used to track changes on CernVM-FS repositories
+(Figure :ref:`below <fig_overlay>`). In this case, the read-only file system
+interface of CernVM-FS is used in conjunction with a writable scratch area for
+changes.
+
+.. _fig_overlay:
 
 .. figure:: _static/overlay.png
    :alt: CernVM-FS Server update workflow
