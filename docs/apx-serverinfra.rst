@@ -150,7 +150,36 @@ the certificate, ``<fqrn>.key`` for the repository’s private key and
 ``<fqrn>.pub`` for the public key. All of those files can be symlinked
 somewhere else if necessary.
 
-TODO: figures/tabrepoconfiganatomy.tex
+==================================== ==================================================
+**File Path**                        **Description**
+==================================== ==================================================
+``/etc/cvmfs/repositories.d``        **CernVM-FS server config directory** |br|
+                                     This contains the configuration directories for
+                                     individual CernVM-FS repositories. Note that this
+                                     path is shortened using ``/.../repos.d/`` in the
+                                     rest of this table.
+``/.../repos.d/<fqrn>``              **Config directory for specific repo** |br|
+                                     This contains the configuration files for one
+                                     specific CernVM-FS repository server.
+``/.../repos.d/<fqrn>/server.conf``  **Server configuration file** |br|
+                                     Authoriative configuration file for the CernVM-FS
+                                     server tools. This file should only contain
+                                     :ref:`valid server configuration variables
+                                     <apxsct_serverparameters>` as it controls the
+                                     behaviour of the CernVM-FS server operations like
+                                     publishing, pulling and so forth.
+``/.../repos.d/<fqrn>/client.conf``  **Client configuration file** |br|
+                                     Authoriative configuration file for the CernVM-FS
+                                     client used to mount the latest revision of a
+                                     Stratum 0 release manager machine. This file should
+                                     only contain :ref:`valid client configuration
+                                     variables <apxsct_clientparameters>`. This file
+                                     must not exist for Stratum 1 repositories.
+``/.../repos.d/<fqrn>/replica.conf`` **Replication configuration file** |br|
+                                     Contains configuration variables for Stratum 1
+                                     specific repositories. This file must not exist
+                                     for Stratum 0 repositories.
+==================================== ==================================================
 
 Environment Setup
 -----------------
