@@ -471,7 +471,7 @@ client. To be able to reply to such client queries even after reloading
 catalogs or remounts of CernVM-FS, the CernVM-FS *NFS maps* implement a
 persistent store of the path names :math:`\mapsto` inode mappings.
 Storing them on hard disk allows for control of the CernVM-FS memory
-consumption (currently :math:`\approx\SI{45}{\mega\byte}` extra) and
+consumption (currently :math:`\approx` 45 MB extra) and
 ensures consistency between remounts of CernVM-FS. The performance
 penalty for doing so is small. CernVM-FS uses Google’s leveldb\ [4], a
 fast, local key value store. Reads and writes are only performed when
