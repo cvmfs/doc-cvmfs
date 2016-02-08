@@ -85,7 +85,59 @@ the spool area can grow very large for massive repository updates since
 it contains the writable AUFS branch and a CernVM-FS client cache
 directory.
 
-TODO: figures/tabrepospoolanatomy.tex
+========================================= =================================================
+**File Path**                             **Description**
+========================================= =================================================
+``/var/spool/cvmfs``                      **CernVM-FS server spool area** |br|
+                                          Contains administrative and scratch space for
+                                          CernVM-FS repositories. This directory should
+                                          only contain directories corresponding to
+                                          individual CernVM-FS repositories.
+``/var/spool/cvmfs/<fqrn>``               **Individual repository spool area** |br|
+                                          Contains the spool area of an individual
+                                          repository and might temporarily contain large
+                                          data volumes during massive repository updates.
+                                          This location can be mounted or symlinked to
+                                          other locations. Furthermore it must be
+                                          writable by the repository owner.
+``/var/spool/cvmfs/<fqrn>/cache``         **CernVM-FS client cache directory** |br|
+                                          Contains the cache of the CernVM-FS client
+                                          mounting the r/o branch
+                                          (i.e. ``/var/spool/cvmfs/<fqrn>/rdonly``) of the
+                                          AUFS mount point located at ``/cvmfs/<fqrn>``.
+                                          The content of this directory is fully managed
+                                          by the CernVM-FS client and hence must be
+                                          configured as a CernVM-FS cache and writable for
+                                          the repository owner.
+``/var/spool/cvmfs/<fqrn>/rdonly``        **CernVM-FS client mount point** |br|
+                                          Serves as the mount point of the CernVM-FS
+                                          client exposing the latest published state of
+                                          the CernVM-FS repository. It needs to be owned
+                                          by the repository owner and should be empty if
+                                          CernVM-FS is not mounted to it.
+``/var/spool/cvmfs/<fqrn>/scratch``       **Writable \aufs\ scratch area** |br|
+                                          All file system changes applied to
+                                          ``/cvmfs/<fqrn>`` during a transaction will be
+                                          stored in this directory. Hence, it potentially
+                                          needs to accommodate a large data volume
+                                          during massive repository updates. Furthermore
+                                          it needs to be writable by the repository
+                                          owner.
+``/var/spool/cvmfs/<fqrn>/tmp``           **Temporary scratch location** |br|
+                                          Some CernVM-FS server operations like
+                                          publishing store temporary data files here,
+                                          hence it needs to be writable by the repository
+                                          owner. If the repository is idle this directory
+                                          should be empty.
+``/var/spool/cvmfs/<fqrn>/client.config`` **CernVM-FS client configuration** |br|
+                                          This contains client configuration variables for
+                                          the CernVM-FS client mounted to
+                                          ``/var/spool/cvmfs/<fqrn>/rdonly``. Most notibly
+                                          it needs to contain ``CVMFS_ROOT_HASH``
+                                          configured to the latest revision published in
+                                          the corresponding repository. This file needs to
+                                          be writable by the repository owner.
+========================================= =================================================
 
 Repository Configuration Directory
 ----------------------------------
