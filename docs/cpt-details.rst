@@ -11,6 +11,8 @@ dependencies minimal.
 
 .. figure:: _static/cvmfs-blocks.png
    :alt: CernVM-FS building blocks
+   :figwidth: 400
+   :align: center
 
 
 File Catalog
@@ -101,6 +103,7 @@ simplified directory structure which we use for the ATLAS repository.
 
 .. figure:: _static/nestedcatalogs.png
    :alt: CernVM-FS nested catalogs schema
+   :align: center
 
    Directory structure useds for the ATLAS repository (simplified).
 
@@ -310,6 +313,7 @@ here.
 
 .. figure:: _static/cvmfs-keepalive.png
    :alt: Keep-Alive impact illustration
+   :align: center
 
 
 This feature, of course, somewhat sabotages a server-side
@@ -451,6 +455,7 @@ automatically quits.
 
 .. figure:: _static/sharedcache.png
    :alt: CernVM-FS shared local hard disk cache
+   :align: center
 
 
 The CernVM-FS cache supports two classes of files with respect to the
@@ -712,6 +717,8 @@ changes.
 
 .. figure:: _static/overlay.png
    :alt: CernVM-FS Server update workflow
+   :figwidth: 450
+   :align: center
 
    A union file system combines a CernVM-FS read-only mount point and
    a writable scratch area. It provides the illusion of a writable
