@@ -90,6 +90,8 @@ actually used are downloaded and cached.
 
 .. figure:: _static/fuse.svg
    :alt: CernVM-FS client architectural overview
+   :figwidth: 550
+   :align: center
 
    Opening a file on CernVM-FS. CernVM-FS resolves the name by means of
    an SQLite catalog. Downloaded files are verified against the
