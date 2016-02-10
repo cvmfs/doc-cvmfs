@@ -9,7 +9,7 @@ dependencies minimal.
 
 .. _fig_cvmfsblocks:
 
-.. figure:: _static/cvmfs-blocks.png
+.. figure:: _static/cvmfs-blocks.svg
    :alt: CernVM-FS building blocks
    :figwidth: 400
    :align: center
@@ -715,7 +715,7 @@ changes.
 
 .. _fig_overlay:
 
-.. figure:: _static/overlay.png
+.. figure:: _static/overlay.svg
    :alt: CernVM-FS Server update workflow
    :figwidth: 450
    :align: center

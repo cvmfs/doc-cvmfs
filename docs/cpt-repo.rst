@@ -123,7 +123,7 @@ Publishing a new Repository Revision
 
 .. _fig_updateprocess:
 
-.. figure:: _static/update_process.png
+.. figure:: _static/update_process.svg
    :alt: CernVM-FS server schematic update overview
 
    Updating a mounted CernVM-FS repository by overlaying it with a
