@@ -16,6 +16,7 @@ cern.ch domain.
 
 .. figure:: _static/stratum1.png
    :alt: Concept overview of the CernVM-FS Content Delivery Network
+   :align: center
 
    CernVM-FS content distribution network for the cern.ch domain: Stratum1
    replica servers are located in Europe, the U.S. and Asia. One protected

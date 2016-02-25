@@ -101,9 +101,10 @@ simplified directory structure which we use for the ATLAS repository.
 
 .. _fig_nested:
 
-.. figure:: _static/nestedcatalogs.png
+.. figure:: _static/nestedcatalogs.svg
    :alt: CernVM-FS nested catalogs schema
    :align: center
+   :width: 60%
 
    Directory structure useds for the ATLAS repository (simplified).
 
@@ -311,8 +312,9 @@ opened. This way, overhead ideally drops to just round trip time for a
 single HTTP GET. The impact of the keep-alive feature is shown in
 here.
 
-.. figure:: _static/cvmfs-keepalive.png
+.. figure:: _static/keepalive.svg
    :alt: Keep-Alive impact illustration
+   :figwidth: 65%
    :align: center
 
 
@@ -453,9 +455,10 @@ automatically quits.
 
 .. _fig_sharedcache:
 
-.. figure:: _static/sharedcache.png
+.. figure:: _static/sharedcache.svg
    :alt: CernVM-FS shared local hard disk cache
    :align: center
+   :width: 70%
 
 
 The CernVM-FS cache supports two classes of files with respect to the
