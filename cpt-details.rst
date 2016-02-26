@@ -171,6 +171,8 @@ contains fundamental repository meta data like the root catalog’s
 cryptographic hash and the repository revision number as a key-value
 list.
 
+.. _sct_manifeststructure:
+
 Internal Manifest Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -249,8 +251,13 @@ cryptographic content hashes. This concept is called a merkle tree and
 eventually provides a single hash that depends on the *complete* content
 of the repository.
 
+.. figure:: _static/reposignature.svg
+   :alt: Keep-Alive impact illustration
+   :align: center
+
 The top level hash used for the repository signature can be found in the
-repository manifest right below the separator line (``--`` / see above).
+repository manifest right below the separator line (``--`` /
+:ref:`see above <sct_manifeststructure>`).
 It is the cryptographic hash of the manifest’s meta data lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
