@@ -903,6 +903,8 @@ Repositories can be created as *garbage-collectable* from the start by adding
 ``-z`` to the ``cvmfs_server mkfs`` command (cf. :ref:`sct_repocreation`). It
 is generally recommended to also add ``-g`` to switch off automatic tagging in
 a garbage collectable repository.
+For debugging or bookkeeping it is possible to log deleted objects into a file
+by setting ``CVMFS_GC_DELETION_LOG`` to a writable file path.
 
 Enabling Garbage Collection on an Existing Repository (Stratum 0)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
