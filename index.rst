@@ -44,6 +44,7 @@ Contents
    cpt-squid
    cpt-repo
    cpt-replica
+   cpt-servermeta
    cpt-details
 
 
