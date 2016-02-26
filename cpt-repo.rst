@@ -551,6 +551,12 @@ is used after every publish operation. Where this is not affordable due
 to the size of the repositories, the integrity checker should run
 regularly.
 
+The checker can also run on a nested catalog subtree. This is useful to
+follow up a specific issue where a check on the full tree would take a
+lot of time::
+
+    cvmfs_server check -s <path to nested catalog mountpoint>
+
 Optionally ``cvmfs_server check`` can also verify the data integrity
 (command line flag ``-i``) of each data object in the repository. This
 is a time consuming process and we recommend it only for diagnostic
