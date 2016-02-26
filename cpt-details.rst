@@ -252,7 +252,7 @@ eventually provides a single hash that depends on the *complete* content
 of the repository.
 
 .. figure:: _static/reposignature.svg
-   :alt: Keep-Alive impact illustration
+   :alt: Repository signature overview
    :align: center
 
 The top level hash used for the repository signature can be found in the
@@ -271,7 +271,7 @@ cryptographic fingerprints of known publisher certificates and a
 timestamp. A white-list is valid for 30 days. It is signed by a private
 RSA key, which we refer to as *master key*. The public RSA key that
 corresponds to the master key is distributed with the
-``cvmfs-config-\cdots`` RPMs as well as with every instance of CernVM.
+``cvmfs-config-...`` RPMs as well as with every instance of CernVM.
 
 In addition, CernVM-FS checks certificate fingerprints against the local
 blacklist /etc/cvmfs/blacklist. The blacklisted fingerprints have to be
