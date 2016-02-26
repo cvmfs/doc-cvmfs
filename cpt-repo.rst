@@ -391,16 +391,31 @@ would migrate all present repositories ending with ``.cern.ch``.
 Repository Import
 ~~~~~~~~~~~~~~~~~
 
-The CernVM-FS 2.1 server tools support the import of a CernVM-FS file
-storage together with its corresponding signing keychain. With
-``cvmfs_server import`` both CernVM-FS 2.0 and 2.1 compliant repository
-file storages can be imported.
+The CernVM-FS server tools support the import of a CernVM-FS file storage
+together with its corresponding signing keychain. The import functionality is
+useful to bootstrap a release manager machine for a given file storage.
 
 ``cvmfs_server import`` works similar to ``cvmfs_server mkfs`` (described in
 :ref:`sct_repocreation`) except it uses the provided data storage instead of
 creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file storage
 ``cvmfs_server import`` also takes care of the file catalog migration into the
-CernVM-FS 2.1 schema.
+latest catalog schema (see :ref:`sct_legacyrepoimport` for details).
+
+During the import it might be necessary to resign the repository's whitelist.
+Usually because the whitelist's expiry date has exceeded. This operations
+requires the corresponding masterkey to be available in `/etc/cvmfs/keys`.
+Resigning is enabled by adding ``-r`` to ``cvmfs_server import``.
+
+An import can either use a provided repository keychain placed into
+`/etc/cvmfs/keys` or generate a fresh repository key and certificate for the
+imported repository. The latter case requires an update of the repository's
+whitelist to incorporate the newly generated repository key. To generate a fresh
+repository key add ``-t -r`` to ``cvmfs_server import``.
+
+Refer to Section :ref:`sct_cvmfspublished_signature` for a comprehensive
+description of the repository signature mechanics.
+
+.. _sct_legacyrepoimport:
 
 Legacy Repository Import
 ^^^^^^^^^^^^^^^^^^^^^^^^
