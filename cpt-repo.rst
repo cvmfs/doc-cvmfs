@@ -216,7 +216,7 @@ Appendix ":ref:`apx_serverinfra`".
                                          :ref:`this table <tab_configfiles>`. Do
                                          not symlink this directory.
 
-  ``/etc/cvmfs/cvmfs\_server\_hooks.sh`` **Customisable server behaviour**
+  ``/etc/cvmfs/cvmfs_server_hooks.sh``   **Customisable server behaviour**
                                          See ":ref:`sct_serverhooks`" for
                                          further details
 
