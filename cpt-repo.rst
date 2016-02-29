@@ -170,6 +170,8 @@ step takes place, no changes are applied to the CernVM-FS repository.
 Therefore, any unsuccessful updates to a repository can be rolled back
 by simply clearing the writable file system layer of the union file system.
 
+.. _sct_reporequirements:
+
 Requirements for a new Repository
 ---------------------------------
 
