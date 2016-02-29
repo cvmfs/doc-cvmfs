@@ -57,10 +57,16 @@ Additional Information
    apx-serverinfra
    apx-rpms
 
-Indices and tables
-==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+Contact and Authors
+^^^^^^^^^^^^^^^^^^^
+
+Visit our website on `cernvm.cern.ch <http://cernvm.cern.ch/>`_.
+
+Authors of this documentation:
+
+   * Jakob Blomer
+   * Predrag Buncic
+   * Dave Dykstra
+   * René Meusel
 
