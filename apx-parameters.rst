@@ -20,7 +20,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
 =============================== ====================================================================================================================================================================================
 CVMFS_ALIEN_CACHE               If set, use an alien cache at the given location
 CVMFS_AUTO_UPDATE               If set to *no*, disables the automatic update of file catalogs.
-CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data. 
+CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data.
 CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to download data.
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
