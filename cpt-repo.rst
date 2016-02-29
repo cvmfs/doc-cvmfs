@@ -769,36 +769,6 @@ inspect the current nested catalog entry counts in the repository.
 Furthermore ``list-catalgos -s`` will print the file sizes of the
 catalogs in bytes.
 
-Syncing files into a repository with cvmfs\_rsync
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A common method of publishing into CernVM-FS is to first install all the
-files into a convenient shared filesystem, mount the shared filesystem
-on the publishing machine, and then sync the files into the repository
-during a transaction. The most common tool to do the syncing is
-``rsync``, but ``rsync`` by itself doesn’t have a convenient mechanism
-for avoiding generated ``.cvmfscatalog`` and ``.cvmfsautocatalog`` files
-in the CernVM-FS repository. Actually the ``--exclude`` option is good
-for avoiding the extra files, but the problem is that if a source
-directory tree is removed, then ``rsync`` will not remove the
-corresponding copy of the directory tree in the repository if it
-contains a catalog, because the extra file remains in the repository.
-For this reason, a tool called ``cvmfs_rsync`` is included in the
-``cvmfs-server`` package. This is a small wrapper around ``rsync`` that
-adds the ``--exclude`` options and removes ``.cvmfscatalog`` and
-``.cvmfsautocatalog`` files from a repository when the corresponding
-source directory is removed. This is the usage:
-
-::
-
-      cvmfs_rsync [rsync_options] srcdir /cvmfs/reponame[/destsubdir]
-
-This is an example use case:
-
-::
-
-      $ cvmfs_rsync -av --delete /data/lhapdf /cvmfs/cms.cern.ch
-
 Migrate File Catalogs
 ~~~~~~~~~~~~~~~~~~~~~
 
