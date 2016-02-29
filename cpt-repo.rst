@@ -260,7 +260,7 @@ client machines.
 
 The ``cvmfs_server`` utility will use ``/srv/cvmfs`` as storage location
 by default. In case a separate hard disk should be used, a partition can
-be mounted on /src/cvmfs or /srv/cvmfs can be symlinked to another
+be mounted on /srv/cvmfs or /srv/cvmfs can be symlinked to another
 location (see :ref:`sct_serveranatomy`). Besides local storage it is
 possible to use an :ref:`S3 compatible storage service <sct_s3storagesetup>`
 as data backend.
