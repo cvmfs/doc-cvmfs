@@ -69,4 +69,5 @@ Authors of this documentation:
    * Predrag Buncic
    * Dave Dykstra
    * René Meusel
+   * Jose Molina Colmenero
 
