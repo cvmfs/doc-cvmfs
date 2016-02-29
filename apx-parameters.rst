@@ -100,9 +100,6 @@ CVMFS_AUTO_TAG                      Creates a generic revision tag for each publ
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_AUTO_GC                       Enables the automatic garbage collection on *publish* and *snapshot*
 CVMFS_AUTO_GC_TIMESPAN              Date-threshold for automatic garbage collection |br| (For example: `3 days ago`, `1 week ago`, ...)
-CVMFS_AUTOCATALOGS                  Enable/disable automatic catalog management using autocatalogs.
-CVMFS_AUTOCATALOGS_MAX_WEIGHT       Maximum number of entries in an autocatalog to be considered overflowed. Default value: 100000 |br| (see also *CVMFS_AUTOCATALOGS*)
-CVMFS_AUTOCATALOGS_MIN_WEIGHT       Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 |br| (see also *CVMFS_AUTOCATALOGS*)
 =================================== ============================================================================================================================================================
 
 
