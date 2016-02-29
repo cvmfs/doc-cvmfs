@@ -879,6 +879,40 @@ migrated.
 After ``cvmfs_server migrate`` has successfully updated all file
 catalogs repository maintenance can continue as usual.
 
+Change File Ownership on File Catalog Level
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CernVM-FS tracks the UID and GID of all contained files and exposes them
+through the client to all using machines. Repository maintainers should
+keep this in mind and plan their UID and GID assignments accordingly.
+
+Repository operation might occasionally require to bulk-change many or all
+UIDs/GIDs. While this is of course possible via ``chmod -R`` in a normal
+repository transaction, it is cumbersome for large repositories. We provide
+a tool to quickly do such adaption on :ref:`CernVM-FS catalog level
+<sct_filecatalog>` using UID and GID mapping files::
+
+  cvmfs_server catalog-chown -u <uid map> -g <gid map> <repo name>
+
+Both the UID and GID map contain a list of rules to apply to each file
+meta data record in the CernVM-FS catalogs. This is an example of such
+a rules list::
+
+  # map root UID/GID to 1001
+  0 1001
+
+  # swap UID/GID 1002 and 1003
+  1002 1003
+  1003 1002
+
+  # map everything else to 1004
+  * 1004
+
+Note that running ``cvmfs_server catalog-chown`` produces a new repository
+revision containing :ref:`CernVM-FS catalogs <sct_filecatalog>` with updated
+UIDs and GIDs according to the provided rules. Thus, previous revisions of
+the CernVM-FS repository will *not* be affected by this update.
+
 Repository Garbage Collection
 -----------------------------
 

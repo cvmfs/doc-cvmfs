@@ -15,6 +15,8 @@ dependencies minimal.
    :align: center
 
 
+.. _sct_filecatalog:
+
 File Catalog
 ------------
 
