@@ -184,58 +184,6 @@ started in privileged mode, like
 In such a container, CernVM-FS can be installed and used the usual way
 provided that autofs is turned off.
 
-Parrot Connector to CernVM-FS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In case Fuse cannot be be installed, the parrot\  [1]_ toolkit provides
-a means to “mount” CernVM-FS on Linux in pure user space.
-parrot sandboxes an application in a similar way gdb sandboxes an
-application. But instead of debugging the application,
-parrot transparently rewrites file system calls and can effectively
-provide /cvmfs to an application. We recommend to use the latest
-precompiled parrot from
-http://ccl.cse.nd.edu/software/downloadfiles.php, which has
-CernVM-FS support built-in.
-
-In order to sandbox a command ``<CMD>`` with options ``<OPTIONS>`` in
-parrot, use
-
-::
-
-    export PARROT_ALLOW_SWITCHING_CVMFS_REPOSITORIES=yes
-    export PARROT_CVMFS_REPO="<default-repositories>"
-    export HTTP_PROXY='<SITE HTTP PROXY>'  # or 'DIRECT;' if not on a cluster or grid site
-    parrot_run <PARROT_OPTIONS> <CMD> <OPTIONS>
-
-Repositories that are not available by default from the builtin
-``<default-repositories>`` list can be explicitly added to
-``PARROT_CVMFS_REPO``. The repository name, a stratum 1 URL, and the
-public key of the repository need to be provided. For instance, in order
-to add alice-ocdb.cern.ch and ilc.desy.de to the list of repositories,
-one can write
-
-::
-
-    export CERN_S1="http://cvmfs-stratum-one.cern.ch/cvmfs"
-    export DESY_S1="http://grid-cvmfs-one.desy.de:8000/cvmfs"
-    export PARROT_CVMFS_REPO="<default-repositories> \
-      alice-ocdb.cern.ch:url=${CERN_S1}/alice-ocdb.cern.ch,pubkey=<PATH/key.pub> \
-      ilc.desy.de:url=${DESY_S1}/ilc.desy.de,pubkey=<PATH/key.pub>"
-
-given that the repository public keys are in the provided paths.
-
-By default, parrot uses a shared CernVM-FS cache for all parrot
-instances of the same user stored under a temporary directory that is
-derived from the user id. In order to place the CernVM-FS cache into a
-different directory, use
-
-::
-
-    export PARROT_CVMFS_ALIEN_CACHE=</path/to/cache>
-
-In order to share this directory among multiple users, the users have to
-belong to the same UNIX group.
-
 .. _sct_network:
 
 Network Settings
