@@ -290,7 +290,8 @@ S3 Compatible Storage Systems
 
 CernVM-FS can store files directly to S3 compatible storage systems,
 such as Amazon S3, Huawei UDS and OpenStack SWIFT. The S3 storage
-settings are given as parameters to ``cvmfs_server mkfs``:
+settings are given as parameters to ``cvmfs_server mkfs`` or
+``cvmfs_server add-replica``:
 
 ::
 
@@ -348,10 +349,11 @@ recommendation is to use a Squid proxy server (version
     url_rewrite_program /usr/bin/s3_squid_rewrite.py
     cache deny all
 
-The bucket mapping logic is implemented in s3\_squid\_rewrite.py file.
+The bucket mapping logic is implemented in ``s3_squid_rewrite.py`` file.
 This script is not provided by CernVM-FS but needs to be written by the
-repository owner. The script needs to read requests from stdin and write
-mapped URLs to stdout, for instance:
+repository owner (the CernVM-FS Git repository `contains an example
+<https://github.com/cvmfs/cvmfs/blob/devel/add-ons/s3rewrite.py>`_). The script
+needs to read requests from stdin and write mapped URLs to stdout, for instance:
 
 ::
 
