@@ -199,13 +199,13 @@ Appendix ":ref:`apx_serverinfra`".
 
   ``/srv/cvmfs/<fqrn>``                  **Storage location of a repository**
                                          Can be symlinked to another location
-                                         *before* creating the repository 
+                                         *before* creating the repository
                                          ``<fqrn>``.
 
   ``/var/spool/cvmfs``                   **Internal states of repositories**
                                          Can be mounted or symlinked to another
                                          location *before* creating the first
-                                         repository. 
+                                         repository.
                                          Hosts the scratch area described
                                          :ref:`here <sct_repocreation_update>`,
                                          thus might consume notable disk space
@@ -223,7 +223,7 @@ Appendix ":ref:`apx_serverinfra`".
   ``/etc/cvmfs/repositories.d``          **Repository configuration location**
                                          Contains repository server specific
                                          configuration files.
-======================================== =======================================                                         
+======================================== =======================================
 
 
 .. _sct_repocreation_update:
@@ -327,7 +327,7 @@ created beforehand.
                                                 create only one bucket called
                                                 ``mybucket-1-1``
 ``CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`` Number of parallel uploads to the S3
-                                                server, e.g. 400 
+                                                server, e.g. 400
 =============================================== ===========================================
 
 In addition, if the S3 backend is configured to use multiple accounts or
