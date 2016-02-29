@@ -83,7 +83,7 @@ CVMFS_UPSTREAM_STORAGE              Upstream spooler description defining the ba
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
 CVMFS_AUTO_REPAIR_MOUNTPOINT        Set to *true* to enable automatic recovery from bogus server mount states.
-CVMFS_UNION_DIR                     Mount point of the union file system between CernVM-FS and AUFS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
+CVMFS_UNION_DIR                     Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently AUFS is fully supported)
 CVMFS_AUFS_WARNING                  Set to *false* to silence AUFS kernel deadlock warning.
 CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1* and *rmd160*)

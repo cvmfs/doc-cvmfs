@@ -29,9 +29,13 @@ CernVM-FS Server Quick-Start Guide
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
--  Apache HTTP server *OR* S3 compatible storage service
+-  Apache HTTP server *or* S3 compatible storage service
 
--  aufs union file system in the kernel (see :ref:`sct_customkernelinstall`)
+-  union file system in the kernel
+
+   - AUFS (see :ref:`sct_customkernelinstall`)
+
+   - OverlayFS (as of kernel version 4.2.x)
 
 -  Officially supported platforms
 
@@ -40,8 +44,14 @@ System Requirements
    -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
       Appendix ":ref:`apx_rpms`")
 
-   -  Ubuntu 13.10 and above (64 bit - with installed AUFS kernel
-      module)
+   -  Fedora 22 and above (with kernel :math:`\ge` 4.2.x)
+
+   -  Ubuntu 12.04 64 bit and above
+
+       - Ubuntu < 15.10: with installed AUFS kernel module
+         (cf. `linux-image-extra` package)
+
+       - Ubuntu 15.10 and later (using upstream OverlayFS)
 
 Installation
 ~~~~~~~~~~~~
@@ -127,10 +137,10 @@ Publishing a new Repository Revision
    :alt: CernVM-FS server schematic update overview
 
    Updating a mounted CernVM-FS repository by overlaying it with a
-   copy-on-write aufs volume. Any changes will be accumulated in a
-   writable volume (yellow) and can be synchronized into the
-   CernVM-FS repository afterwards. The file catalog contains the
-   directory structure as well as file metadata, symbolic links, and
+   copy-on-write union file system volume. Any changes will be
+   accumulated in a writable volume (yellow) and can be synchronized
+   into the CernVM-FS repository afterwards. The file catalog contains
+   the directory structure as well as file metadata, symbolic links, and
    secure hash keys of regular files. Regular files are compressed and
    renamed to their cryptographic content hash before copied into the
    data store.
@@ -139,38 +149,47 @@ Since the repositories may contain many file system objects (i.e. ATLAS
 contains :math:`70 * 10^6` file system objects -- February 2016), we
 cannot afford to generate an entire repository from scratch for every
 update. Instead, we add a writable file system layer on top of a mounted
-read-only CernVM-FS repository using the union file system aufs [1].
+read-only CernVM-FS repository using a union file system.
 This renders a read-only CernVM-FS mount point writable to the user,
 while all performed changes are stored in a special writable scratch
-area managed by aufs. A similar approach is used by Linux Live
-Distributions that are shipped on read-only media, but allow *virtual*
+area managed by the union file system. A similar approach is used by Linux
+Live Distributions that are shipped on read-only media, but allow *virtual*
 editing of files where changes are stored on a RAM disk.
 
-If a file in the CernVM-FS repository gets changed, aufs first copies it
-to the writable volume and applies any changes to this copy
-(copy-on-write semantics). aufs will put newly created files or
-directories in the writable volume as well. Additionally it creates
+If a file in the CernVM-FS repository gets changed, the union file system
+first copies it to the writable volume and applies any changes to this copy
+(copy-on-write semantics). Also newly created files or directories will be
+stored in the writable volume. Additionally the union file system creates
 special hidden files (called *white-outs*) to keep track of file
 deletions in the CernVM-FS repository.
 
-Eventually, all changes applied to the repository are stored in aufs\ ’s
+Eventually, all changes applied to the repository are stored in this
 scratch area and can be merged into the actual CernVM-FS repository by a
 subsequent synchronization step. Up until the actual synchronization
 step takes place, no changes are applied to the CernVM-FS repository.
 Therefore, any unsuccessful updates to a repository can be rolled back
-by simply clearing the writable file system layer of aufs.
+by simply clearing the writable file system layer of the union file system.
 
 Requirements for a new Repository
 ---------------------------------
 
 In order to create a repository, the server and client part of
 CernVM-FS must be installed on the release manager machine. Furthermore
-your machine should provide an aufs enabled kernel as well as a running
-``Apache2`` web server. Currently we support Scientific Linux 6 and
-Ubuntu 12.04 distributions. Please note, that Scientific Linux 6 *does
-not* ship with an aufs enabled kernel, therefore we provide a compatible
-patched kernel as RPMs (see :ref:`sct_customkernelinstall` for
-details).
+you will need a kernel containing a union file system implementation as
+well as a running ``Apache2`` web server. Currently we support Scientific
+Linux 6, Ubuntu 12.04+ and Fedora 22+ distributions. Please note, that
+Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
+we provide a compatible patched kernel as RPMs (see
+:ref:`sct_customkernelinstall` for details).
+
+Historically CernVM-FS solely used `aufs <http://aufs.sourceforge.net/>`_
+as a union file system. However, the Linux kernel community favoured `OverlayFS
+<https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt>`_, a
+competing union file system implementation that was merged upstream. Hence,
+since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
+Note however, that the first versions of OverlayFS were broken and will not
+work properly with CernVM-FS. At least a 4.2.x kernel is needed to use
+CernVM-FS with OverlayFS.
 
 .. _sct_serveranatomy:
 
@@ -188,10 +207,10 @@ Appendix ":ref:`apx_serverinfra`".
 **File Path**                            **Description**
 ======================================== =======================================
   ``/cvmfs``                             **Repository mount points**
-                                         Contains read-only AUFS mountpoints
-                                         that become writable during repository
-                                         updates. Do not symlink or manually
-                                         mount anything here.
+                                         Contains read-only union file system
+                                         mountpoints that become writable during
+                                         repository updates. Do not symlink or
+                                         manually mount anything here.
 
   ``/srv/cvmfs``                         **Central repository storage location**
                                          Can be mounted or symlinked to another

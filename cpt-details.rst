@@ -716,9 +716,7 @@ first fully functional implementation has been presented by Wright et
 al. [11]. By now, union file systems are well established for “Live CD”
 builders, which use a RAM disk overlay on top of the read-only system
 partition in order to provide the illusion of a fully read-writable
-system. CernVM-FS uses the AUFS union file system. Another union file
-system with similar semantics can be plugged in if necessary. OverlayFS
-is supported as an experimental alternative.
+system. CernVM-FS supports both aufs and OverlayFS union file systems.
 
 Union file systems can be used to track changes on CernVM-FS repositories
 (Figure :ref:`below <fig_overlay>`). In this case, the read-only file system
