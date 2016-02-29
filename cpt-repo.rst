@@ -135,7 +135,8 @@ Publishing a new Repository Revision
    renamed to their cryptographic content hash before copied into the
    data store.
 
-Since the repositories may contain many file system objects [2]_, we
+Since the repositories may contain many file system objects (i.e. ATLAS
+contains :math:`70 * 10^6` file system objects -- February 2016), we
 cannot afford to generate an entire repository from scratch for every
 update. Instead, we add a writable file system layer on top of a mounted
 read-only CernVM-FS repository using the union file system aufs [1].
@@ -1117,7 +1118,3 @@ Brook University.
    CernVM-FS download page:
    http://cernvm.cern.ch/portal/filesystem/downloads
 
-.. [2]
-   For ATLAS, for example, “many” means order of :math:`10^7` file
-   system objects (number of regular files, symbolic links, and
-   directories).
