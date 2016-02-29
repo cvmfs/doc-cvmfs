@@ -185,11 +185,15 @@ we provide a compatible patched kernel as RPMs (see
 Historically CernVM-FS solely used `aufs <http://aufs.sourceforge.net/>`_
 as a union file system. However, the Linux kernel community favoured `OverlayFS
 <https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt>`_, a
-competing union file system implementation that was merged upstream. Hence,
-since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
+competing union file system implementation that was merged upstream.
+
+Since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
 Note however, that the first versions of OverlayFS were broken and will not
 work properly with CernVM-FS. At least a 4.2.x kernel is needed to use
-CernVM-FS with OverlayFS.
+CernVM-FS with OverlayFS. Furthermore note that OverlayFS cannot fully comply
+with POSIX semantics, in particular hard links must be broken into individual
+files. That is usually not a problem but should be kept in mind when installing
+certain software distributions into a CernVM-FS repository.
 
 .. _sct_serveranatomy:
 
