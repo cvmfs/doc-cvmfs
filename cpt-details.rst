@@ -15,6 +15,8 @@ dependencies minimal.
    :align: center
 
 
+.. _sct_filecatalog:
+
 File Catalog
 ------------
 
@@ -26,20 +28,20 @@ is shown in the table below:
 .. _tab_catalog:
 
 ====================== ================
-**Field**               **Type**       
+**Field**               **Type**
 ====================== ================
-Path MD5                128Bit Integer 
-Parent Path MD5         128Bit Integer 
-Hardlinks               Integer        
-SHA1 Content Hash       160Bit Integer 
-Size                    Integer        
-Mode                    Integer        
-Last Modified           Timestamp      
-Flags                   Integer        
-Name                    String         
-Symlink                 String         
-uid                     Integer        
-gid                     Integer        
+Path MD5                128Bit Integer
+Parent Path MD5         128Bit Integer
+Hardlinks               Integer
+SHA1 Content Hash       160Bit Integer
+Size                    Integer
+Mode                    Integer
+Last Modified           Timestamp
+Flags                   Integer
+Name                    String
+Symlink                 String
+uid                     Integer
+gid                     Integer
 ====================== ================
 
 In order to save space we do not store absolute paths. Instead we store
@@ -169,6 +171,8 @@ contains fundamental repository meta data like the root catalog’s
 cryptographic hash and the repository revision number as a key-value
 list.
 
+.. _sct_manifeststructure:
+
 Internal Manifest Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -247,8 +251,13 @@ cryptographic content hashes. This concept is called a merkle tree and
 eventually provides a single hash that depends on the *complete* content
 of the repository.
 
+.. figure:: _static/reposignature.svg
+   :alt: Repository signature overview
+   :align: center
+
 The top level hash used for the repository signature can be found in the
-repository manifest right below the separator line (``--`` / see above).
+repository manifest right below the separator line (``--`` /
+:ref:`see above <sct_manifeststructure>`).
 It is the cryptographic hash of the manifest’s meta data lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
@@ -262,7 +271,7 @@ cryptographic fingerprints of known publisher certificates and a
 timestamp. A white-list is valid for 30 days. It is signed by a private
 RSA key, which we refer to as *master key*. The public RSA key that
 corresponds to the master key is distributed with the
-``cvmfs-config-\cdots`` RPMs as well as with every instance of CernVM.
+``cvmfs-config-...`` RPMs as well as with every instance of CernVM.
 
 In addition, CernVM-FS checks certificate fingerprints against the local
 blacklist /etc/cvmfs/blacklist. The blacklisted fingerprints have to be
@@ -707,9 +716,7 @@ first fully functional implementation has been presented by Wright et
 al. [11]. By now, union file systems are well established for “Live CD”
 builders, which use a RAM disk overlay on top of the read-only system
 partition in order to provide the illusion of a fully read-writable
-system. CernVM-FS uses the AUFS union file system. Another union file
-system with similar semantics can be plugged in if necessary. OverlayFS
-is supported as an experimental alternative.
+system. CernVM-FS supports both aufs and OverlayFS union file systems.
 
 Union file systems can be used to track changes on CernVM-FS repositories
 (Figure :ref:`below <fig_overlay>`). In this case, the read-only file system

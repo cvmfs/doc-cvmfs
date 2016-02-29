@@ -29,9 +29,13 @@ CernVM-FS Server Quick-Start Guide
 System Requirements
 ~~~~~~~~~~~~~~~~~~~
 
--  Apache HTTP server *OR* S3 compatible storage service
+-  Apache HTTP server *or* S3 compatible storage service
 
--  aufs union file system in the kernel (see :ref:`sct_customkernelinstall`)
+-  union file system in the kernel
+
+   - AUFS (see :ref:`sct_customkernelinstall`)
+
+   - OverlayFS (as of kernel version 4.2.x)
 
 -  Officially supported platforms
 
@@ -40,8 +44,14 @@ System Requirements
    -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
       Appendix ":ref:`apx_rpms`")
 
-   -  Ubuntu 13.10 and above (64 bit - with installed AUFS kernel
-      module)
+   -  Fedora 22 and above (with kernel :math:`\ge` 4.2.x)
+
+   -  Ubuntu 12.04 64 bit and above
+
+       - Ubuntu < 15.10: with installed AUFS kernel module
+         (cf. `linux-image-extra` package)
+
+       - Ubuntu 15.10 and later (using upstream OverlayFS)
 
 Installation
 ~~~~~~~~~~~~
@@ -127,49 +137,65 @@ Publishing a new Repository Revision
    :alt: CernVM-FS server schematic update overview
 
    Updating a mounted CernVM-FS repository by overlaying it with a
-   copy-on-write aufs volume. Any changes will be accumulated in a
-   writable volume (yellow) and can be synchronized into the
-   CernVM-FS repository afterwards. The file catalog contains the
-   directory structure as well as file metadata, symbolic links, and
+   copy-on-write union file system volume. Any changes will be
+   accumulated in a writable volume (yellow) and can be synchronized
+   into the CernVM-FS repository afterwards. The file catalog contains
+   the directory structure as well as file metadata, symbolic links, and
    secure hash keys of regular files. Regular files are compressed and
    renamed to their cryptographic content hash before copied into the
    data store.
 
-Since the repositories may contain many file system objects [2]_, we
+Since the repositories may contain many file system objects (i.e. ATLAS
+contains :math:`70 * 10^6` file system objects -- February 2016), we
 cannot afford to generate an entire repository from scratch for every
 update. Instead, we add a writable file system layer on top of a mounted
-read-only CernVM-FS repository using the union file system aufs [1].
+read-only CernVM-FS repository using a union file system.
 This renders a read-only CernVM-FS mount point writable to the user,
 while all performed changes are stored in a special writable scratch
-area managed by aufs. A similar approach is used by Linux Live
-Distributions that are shipped on read-only media, but allow *virtual*
+area managed by the union file system. A similar approach is used by Linux
+Live Distributions that are shipped on read-only media, but allow *virtual*
 editing of files where changes are stored on a RAM disk.
 
-If a file in the CernVM-FS repository gets changed, aufs first copies it
-to the writable volume and applies any changes to this copy
-(copy-on-write semantics). aufs will put newly created files or
-directories in the writable volume as well. Additionally it creates
+If a file in the CernVM-FS repository gets changed, the union file system
+first copies it to the writable volume and applies any changes to this copy
+(copy-on-write semantics). Also newly created files or directories will be
+stored in the writable volume. Additionally the union file system creates
 special hidden files (called *white-outs*) to keep track of file
 deletions in the CernVM-FS repository.
 
-Eventually, all changes applied to the repository are stored in aufs\ ’s
+Eventually, all changes applied to the repository are stored in this
 scratch area and can be merged into the actual CernVM-FS repository by a
 subsequent synchronization step. Up until the actual synchronization
 step takes place, no changes are applied to the CernVM-FS repository.
 Therefore, any unsuccessful updates to a repository can be rolled back
-by simply clearing the writable file system layer of aufs.
+by simply clearing the writable file system layer of the union file system.
+
+.. _sct_reporequirements:
 
 Requirements for a new Repository
 ---------------------------------
 
 In order to create a repository, the server and client part of
 CernVM-FS must be installed on the release manager machine. Furthermore
-your machine should provide an aufs enabled kernel as well as a running
-``Apache2`` web server. Currently we support Scientific Linux 6 and
-Ubuntu 12.04 distributions. Please note, that Scientific Linux 6 *does
-not* ship with an aufs enabled kernel, therefore we provide a compatible
-patched kernel as RPMs (see :ref:`sct_customkernelinstall` for
-details).
+you will need a kernel containing a union file system implementation as
+well as a running ``Apache2`` web server. Currently we support Scientific
+Linux 6, Ubuntu 12.04+ and Fedora 22+ distributions. Please note, that
+Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
+we provide a compatible patched kernel as RPMs (see
+:ref:`sct_customkernelinstall` for details).
+
+Historically CernVM-FS solely used `aufs <http://aufs.sourceforge.net/>`_
+as a union file system. However, the Linux kernel community favoured `OverlayFS
+<https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt>`_, a
+competing union file system implementation that was merged upstream.
+
+Since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
+Note however, that the first versions of OverlayFS were broken and will not
+work properly with CernVM-FS. At least a 4.2.x kernel is needed to use
+CernVM-FS with OverlayFS. Furthermore note that OverlayFS cannot fully comply
+with POSIX semantics, in particular hard links must be broken into individual
+files. That is usually not a problem but should be kept in mind when installing
+certain software distributions into a CernVM-FS repository.
 
 .. _sct_serveranatomy:
 
@@ -187,10 +213,10 @@ Appendix ":ref:`apx_serverinfra`".
 **File Path**                            **Description**
 ======================================== =======================================
   ``/cvmfs``                             **Repository mount points**
-                                         Contains read-only AUFS mountpoints
-                                         that become writable during repository
-                                         updates. Do not symlink or manually
-                                         mount anything here.
+                                         Contains read-only union file system
+                                         mountpoints that become writable during
+                                         repository updates. Do not symlink or
+                                         manually mount anything here.
 
   ``/srv/cvmfs``                         **Central repository storage location**
                                          Can be mounted or symlinked to another
@@ -199,13 +225,13 @@ Appendix ":ref:`apx_serverinfra`".
 
   ``/srv/cvmfs/<fqrn>``                  **Storage location of a repository**
                                          Can be symlinked to another location
-                                         *before* creating the repository 
+                                         *before* creating the repository
                                          ``<fqrn>``.
 
   ``/var/spool/cvmfs``                   **Internal states of repositories**
                                          Can be mounted or symlinked to another
                                          location *before* creating the first
-                                         repository. 
+                                         repository.
                                          Hosts the scratch area described
                                          :ref:`here <sct_repocreation_update>`,
                                          thus might consume notable disk space
@@ -216,14 +242,14 @@ Appendix ":ref:`apx_serverinfra`".
                                          :ref:`this table <tab_configfiles>`. Do
                                          not symlink this directory.
 
-  ``/etc/cvmfs/cvmfs\_server\_hooks.sh`` **Customisable server behaviour**
+  ``/etc/cvmfs/cvmfs_server_hooks.sh``   **Customisable server behaviour**
                                          See ":ref:`sct_serverhooks`" for
                                          further details
 
   ``/etc/cvmfs/repositories.d``          **Repository configuration location**
                                          Contains repository server specific
                                          configuration files.
-======================================== =======================================                                         
+======================================== =======================================
 
 
 .. _sct_repocreation_update:
@@ -257,7 +283,7 @@ client machines.
 
 The ``cvmfs_server`` utility will use ``/srv/cvmfs`` as storage location
 by default. In case a separate hard disk should be used, a partition can
-be mounted on /src/cvmfs or /srv/cvmfs can be symlinked to another
+be mounted on /srv/cvmfs or /srv/cvmfs can be symlinked to another
 location (see :ref:`sct_serveranatomy`). Besides local storage it is
 possible to use an :ref:`S3 compatible storage service <sct_s3storagesetup>`
 as data backend.
@@ -287,7 +313,8 @@ S3 Compatible Storage Systems
 
 CernVM-FS can store files directly to S3 compatible storage systems,
 such as Amazon S3, Huawei UDS and OpenStack SWIFT. The S3 storage
-settings are given as parameters to ``cvmfs_server mkfs``:
+settings are given as parameters to ``cvmfs_server mkfs`` or
+``cvmfs_server add-replica``:
 
 ::
 
@@ -327,7 +354,7 @@ created beforehand.
                                                 create only one bucket called
                                                 ``mybucket-1-1``
 ``CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`` Number of parallel uploads to the S3
-                                                server, e.g. 400 
+                                                server, e.g. 400
 =============================================== ===========================================
 
 In addition, if the S3 backend is configured to use multiple accounts or
@@ -345,10 +372,11 @@ recommendation is to use a Squid proxy server (version
     url_rewrite_program /usr/bin/s3_squid_rewrite.py
     cache deny all
 
-The bucket mapping logic is implemented in s3\_squid\_rewrite.py file.
+The bucket mapping logic is implemented in ``s3_squid_rewrite.py`` file.
 This script is not provided by CernVM-FS but needs to be written by the
-repository owner. The script needs to read requests from stdin and write
-mapped URLs to stdout, for instance:
+repository owner (the CernVM-FS Git repository `contains an example
+<https://github.com/cvmfs/cvmfs/blob/devel/add-ons/s3rewrite.py>`_). The script
+needs to read requests from stdin and write mapped URLs to stdout, for instance:
 
 ::
 
@@ -391,16 +419,31 @@ would migrate all present repositories ending with ``.cern.ch``.
 Repository Import
 ~~~~~~~~~~~~~~~~~
 
-The CernVM-FS 2.1 server tools support the import of a CernVM-FS file
-storage together with its corresponding signing keychain. With
-``cvmfs_server import`` both CernVM-FS 2.0 and 2.1 compliant repository
-file storages can be imported.
+The CernVM-FS server tools support the import of a CernVM-FS file storage
+together with its corresponding signing keychain. The import functionality is
+useful to bootstrap a release manager machine for a given file storage.
 
 ``cvmfs_server import`` works similar to ``cvmfs_server mkfs`` (described in
 :ref:`sct_repocreation`) except it uses the provided data storage instead of
 creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file storage
 ``cvmfs_server import`` also takes care of the file catalog migration into the
-CernVM-FS 2.1 schema.
+latest catalog schema (see :ref:`sct_legacyrepoimport` for details).
+
+During the import it might be necessary to resign the repository's whitelist.
+Usually because the whitelist's expiry date has exceeded. This operations
+requires the corresponding masterkey to be available in `/etc/cvmfs/keys`.
+Resigning is enabled by adding ``-r`` to ``cvmfs_server import``.
+
+An import can either use a provided repository keychain placed into
+`/etc/cvmfs/keys` or generate a fresh repository key and certificate for the
+imported repository. The latter case requires an update of the repository's
+whitelist to incorporate the newly generated repository key. To generate a fresh
+repository key add ``-t -r`` to ``cvmfs_server import``.
+
+Refer to Section :ref:`sct_cvmfspublished_signature` for a comprehensive
+description of the repository signature mechanics.
+
+.. _sct_legacyrepoimport:
 
 Legacy Repository Import
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -547,6 +590,12 @@ that referenced data chunks are present. Ideally, the integrity checker
 is used after every publish operation. Where this is not affordable due
 to the size of the repositories, the integrity checker should run
 regularly.
+
+The checker can also run on a nested catalog subtree. This is useful to
+follow up a specific issue where a check on the full tree would take a
+lot of time::
+
+    cvmfs_server check -s <path to nested catalog mountpoint>
 
 Optionally ``cvmfs_server check`` can also verify the data integrity
 (command line flag ``-i``) of each data object in the repository. This
@@ -853,6 +902,40 @@ migrated.
 After ``cvmfs_server migrate`` has successfully updated all file
 catalogs repository maintenance can continue as usual.
 
+Change File Ownership on File Catalog Level
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CernVM-FS tracks the UID and GID of all contained files and exposes them
+through the client to all using machines. Repository maintainers should
+keep this in mind and plan their UID and GID assignments accordingly.
+
+Repository operation might occasionally require to bulk-change many or all
+UIDs/GIDs. While this is of course possible via ``chmod -R`` in a normal
+repository transaction, it is cumbersome for large repositories. We provide
+a tool to quickly do such adaption on :ref:`CernVM-FS catalog level
+<sct_filecatalog>` using UID and GID mapping files::
+
+  cvmfs_server catalog-chown -u <uid map> -g <gid map> <repo name>
+
+Both the UID and GID map contain a list of rules to apply to each file
+meta data record in the CernVM-FS catalogs. This is an example of such
+a rules list::
+
+  # map root UID/GID to 1001
+  0 1001
+
+  # swap UID/GID 1002 and 1003
+  1002 1003
+  1003 1002
+
+  # map everything else to 1004
+  * 1004
+
+Note that running ``cvmfs_server catalog-chown`` produces a new repository
+revision containing :ref:`CernVM-FS catalogs <sct_filecatalog>` with updated
+UIDs and GIDs according to the provided rules. Thus, previous revisions of
+the CernVM-FS repository will *not* be affected by this update.
+
 Repository Garbage Collection
 -----------------------------
 
@@ -900,6 +983,8 @@ Repositories can be created as *garbage-collectable* from the start by adding
 ``-z`` to the ``cvmfs_server mkfs`` command (cf. :ref:`sct_repocreation`). It
 is generally recommended to also add ``-g`` to switch off automatic tagging in
 a garbage collectable repository.
+For debugging or bookkeeping it is possible to log deleted objects into a file
+by setting ``CVMFS_GC_DELETION_LOG`` to a writable file path.
 
 Enabling Garbage Collection on an Existing Repository (Stratum 0)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1058,7 +1143,3 @@ Brook University.
    CernVM-FS download page:
    http://cernvm.cern.ch/portal/filesystem/downloads
 
-.. [2]
-   For ATLAS, for example, “many” means order of :math:`10^7` file
-   system objects (number of regular files, symbolic links, and
-   directories).
