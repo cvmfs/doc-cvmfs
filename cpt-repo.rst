@@ -749,35 +749,6 @@ Note that unlike the regular lines that add catalogs, asterisks in the
 exclamation point exclusion lines can span the slashes separating
 directory levels.
 
-Automatic Management of Nested Catalogs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-An alternative to ``.cvmfsdirtab`` is the automatic catalog generation.
-This feature automatically generates nested catalogs based on their
-weight (number of entries). It can be enabled by setting
-``CVMFS_AUTOCATALOGS=true`` in the server configuration file.
-
-Catalogs are split when their weight is greater than a specified maximum
-threshold, or removed if their weight is less than a minimum threshold.
-Automatically generated catalogs contain a ``.cvmfsautocatalog`` file
-(along with the ``.cvmfscatalog`` file) in its root directory.
-User-defined catalogs (containing only a ``.cvmfscatalog`` file) always
-remain untouched. Hence one can mix both manual and automatically
-managed directory sub-trees.
-
-The following conditions are applied when processing a nested catalog:
-
--  If the weight is greater than ``CVMFS_AUTOCATALOGS_MAX_WEIGHT``, this
-   catalog will be split in smaller catalogs that meet the maximum and
-   minimum thresholds.
-
--  If the weight is less than ``CVMFS_AUTOCATALOGS_MIN_WEIGHT``, this
-   catalog will be merged into its parent.
-
-Both ``CVMFS_AUTOCATALOGS_MAX_WEIGHT`` and
-``CVMFS_AUTOCATALOGS_MIN_WEIGHT`` have reasonable defaults and usually
-do not need to be defined by the user.
-
 .. _sct_inspectnested:
 
 Inspecting Nested Catalog Structure
