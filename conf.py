@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CernVM-FS'
-copyright = u'2016, CernVM Team'
+copyright = u'2015, CernVM Team'
 author = u'CernVM Team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -57,7 +57,7 @@ author = u'CernVM Team'
 # built documents.
 #
 # The short X.Y version.
-version = u'2.1'
+version = u'2.1.20'
 # The full version, including alpha/beta/rc tags.
 release = u'2.1.20'
 
