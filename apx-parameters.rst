@@ -104,12 +104,3 @@ CVMFS_AUTOCATALOGS                  Enable/disable automatic catalog management 
 CVMFS_AUTOCATALOGS_MAX_WEIGHT       Maximum number of entries in an autocatalog to be considered overflowed. Default value: 100000 |br| (see also *CVMFS_AUTOCATALOGS*)
 CVMFS_AUTOCATALOGS_MIN_WEIGHT       Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 |br| (see also *CVMFS_AUTOCATALOGS*)
 =================================== ============================================================================================================================================================
-
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   </div>
