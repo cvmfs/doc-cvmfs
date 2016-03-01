@@ -18,7 +18,7 @@ Prerequisites
 A CernVM-FS server installation depends on the following environment
 setup and tools to be in place:
 
--  aufs support in the kernel (see Section [sct:customkernelinstall])
+-  aufs support in the kernel (see Section :ref:`sct_customkernelinstall`)
 
 -  Backend storage location available through HTTP
 
@@ -213,11 +213,3 @@ CernVM-FS uses the following entries for these mount points:
 
     aufs_<fqrn> /cvmfs/<fqrn> aufs br=/var/spool/cvmfs/<fqrn>/scratch=rw: \
     /var/spool/cvmfs/<fqrn>/rdonly=rr,udba=none,ro 0 0
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   </div>

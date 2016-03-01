@@ -56,6 +56,7 @@ Additional Information
    apx-parameters
    apx-serverinfra
    apx-rpms
+   apx-references
 
 
 Contact and Authors

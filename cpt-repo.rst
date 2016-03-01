@@ -20,8 +20,8 @@ snapshots.
 
 In order to provide a writable CernVM-FS repository, CernVM-FS uses a union
 file system that combines a read-only CernVM-FS mount point with a writable
-scratch area [1, 2]. :ref:`This figure below <fig_updateprocess>` outlines the
-process of publishing a repository.
+scratch area [Wright04]_. :ref:`This figure below <fig_updateprocess>` outlines
+the process of publishing a repository.
 
 CernVM-FS Server Quick-Start Guide
 ----------------------------------
@@ -86,10 +86,12 @@ Backup Policy
 Installing the AUFS-enabled Kernel on Scientific Linux 6
 --------------------------------------------------------
 
-CernVM-FS uses the union file-system aufs [1] to efficiently determine
-file-system tree updates while publishing repository transactions on the
-server (see Figure :ref:`below <fig_updateprocess>`). Note that this is *only*
-required on a CernVM-FS server and *not* on the client machines.
+CernVM-FS uses the union file-system `aufs
+<http://aufs.sourceforge.net>`_ to efficiently determine file-system
+tree updates while publishing repository transactions on the server
+(see Figure :ref:`below <fig_updateprocess>`). Note that this is
+*only* required on a CernVM-FS server and *not* on the client
+machines.
 
 | We provide customised kernel packages for Scientific Linux 6 (see
   Appendix ":ref:`apx_rpms`") and keep them up-to-date with upstream kernel
@@ -97,8 +99,8 @@ required on a CernVM-FS server and *not* on the client machines.
   repository.
 | Please follow these steps to install the provided customised kernel:
 
-#. Download the latest cvmfs-release package from the CernVM
-   website [1]_
+#. Download the latest cvmfs-release package from `the CernVM website
+   <https://cernvm.cern.ch/portal/filesystem/downloads>`_
 
 #. | Install the cvmfs-release package:
      ``yum install cvmfs-release*.rpm``
@@ -135,10 +137,11 @@ Publishing a new Repository Revision
    renamed to their cryptographic content hash before copied into the
    data store.
 
-Since the repositories may contain many file system objects [2]_, we
+Since the repositories may contain many file system objects, we
 cannot afford to generate an entire repository from scratch for every
 update. Instead, we add a writable file system layer on top of a mounted
-read-only CernVM-FS repository using the union file system aufs [1].
+read-only CernVM-FS repository using the union file system `aufs
+<http://aufs.sourceforge.net>`_.
 This renders a read-only CernVM-FS mount point writable to the user,
 while all performed changes are stored in a special writable scratch
 area managed by aufs. A similar approach is used by Linux Live
@@ -152,7 +155,7 @@ directories in the writable volume as well. Additionally it creates
 special hidden files (called *white-outs*) to keep track of file
 deletions in the CernVM-FS repository.
 
-Eventually, all changes applied to the repository are stored in aufs\ ’s
+Eventually, all changes applied to the repository are stored in aufs’s
 scratch area and can be merged into the actual CernVM-FS repository by a
 subsequent synchronization step. Up until the actual synchronization
 step takes place, no changes are applied to the CernVM-FS repository.
@@ -199,13 +202,13 @@ Appendix ":ref:`apx_serverinfra`".
 
   ``/srv/cvmfs/<fqrn>``                  **Storage location of a repository**
                                          Can be symlinked to another location
-                                         *before* creating the repository 
+                                         *before* creating the repository
                                          ``<fqrn>``.
 
   ``/var/spool/cvmfs``                   **Internal states of repositories**
                                          Can be mounted or symlinked to another
                                          location *before* creating the first
-                                         repository. 
+                                         repository.
                                          Hosts the scratch area described
                                          :ref:`here <sct_repocreation_update>`,
                                          thus might consume notable disk space
@@ -223,7 +226,7 @@ Appendix ":ref:`apx_serverinfra`".
   ``/etc/cvmfs/repositories.d``          **Repository configuration location**
                                          Contains repository server specific
                                          configuration files.
-======================================== =======================================                                         
+======================================== =======================================
 
 
 .. _sct_repocreation_update:
@@ -327,7 +330,7 @@ created beforehand.
                                                 create only one bucket called
                                                 ``mybucket-1-1``
 ``CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`` Number of parallel uploads to the S3
-                                                server, e.g. 400 
+                                                server, e.g. 400
 =============================================== ===========================================
 
 In addition, if the S3 backend is configured to use multiple accounts or
@@ -1022,43 +1025,3 @@ in the repository just like any other files that have identical content.
 Note that if, in a subsequent publish operation, only one of these
 cross-directory hardlinks gets changed, the other hardlinks remain
 unchanged (the hardlink got “broken”).
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   <div id="ref-aufs">
-
-[1] Okajima, J.R. Aufs - Advanced multi layered Unification FileSystem.
-http://aufs.sourceforge.net/.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-unionfs04">
-
-[2] Wright, C.P. et al. 2004. *Versatility and unix semantics in a
-fan-out unification file system*. Technical Report #FSL-04-01b. Stony
-Brook University.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. [1]
-   CernVM-FS download page:
-   http://cernvm.cern.ch/portal/filesystem/downloads
-
-.. [2]
-   For ATLAS, for example, “many” means order of :math:`10^7` file
-   system objects (number of regular files, symbolic links, and
-   directories).

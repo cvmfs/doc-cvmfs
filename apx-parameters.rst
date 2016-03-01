@@ -20,7 +20,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
 =============================== ====================================================================================================================================================================================
 CVMFS_ALIEN_CACHE               If set, use an alien cache at the given location
 CVMFS_AUTO_UPDATE               If set to *no*, disables the automatic update of file catalogs.
-CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data. 
+CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data.
 CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to download data.
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
@@ -104,12 +104,3 @@ CVMFS_AUTOCATALOGS                  Enable/disable automatic catalog management 
 CVMFS_AUTOCATALOGS_MAX_WEIGHT       Maximum number of entries in an autocatalog to be considered overflowed. Default value: 100000 |br| (see also *CVMFS_AUTOCATALOGS*)
 CVMFS_AUTOCATALOGS_MIN_WEIGHT       Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 |br| (see also *CVMFS_AUTOCATALOGS*)
 =================================== ============================================================================================================================================================
-
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   </div>

@@ -104,7 +104,7 @@ The following lines should appear accordingly in /etc/squid/squid.conf:
       maximum_object_size 1024 MB
       maximum_object_size_in_memory 128 KB
 
-| 
+|
 | Note that ``http_access allow all`` has to be inserted before (or
   instead of) the line ``http_access deny all``. If Apache is running on
   the same host, the ``APACHE_HOSTNAME`` will be ``localhost``. Also, in
@@ -142,11 +142,3 @@ load.
 Keep an eye on HTTP 404 errors. For normal CernVM-FS traffic, such
 failures should not occur. Traffic from CernVM-FS clients is marked by
 an ``X-CVMFS2`` header.
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   </div>
