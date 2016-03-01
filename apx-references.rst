@@ -49,3 +49,30 @@ References
 .. [Wright04] Wright, C.P. et al. 2004. *Versatility and unix semantics in a
    fan-out unification file system*. Technical Report #FSL-04-01b.
    Stony Brook University.
+
+.. [BernersLee96] Berners-Lee, T. et al. 1996. *Hypertext Transfer Protocol – HTTP/1.0*.
+   Technical Report #1945. Internet Engineering Task Force.
+
+.. [Fielding99] Fielding, R. et al. 1999. *Hypertext Transfer Protocol – HTTP/1.1*.
+   Technical Report #2616. Internet Engineering Task Force.
+
+.. [Compostella10] Compostella, G. et al. 2010. CDF software distribution on the Grid
+   using Parrot. *Journal of Physics: Conference Series*. 219, (2010).
+
+.. [Thain05] Thain, D. and Livny, M. 2005. Parrot: an application environment for
+   data-intensive computing. *Scalable Computing: Practice and Experience*.
+   6, 3 (18 2005), 9.
+
+.. [Suzaki06] Suzaki, K. et al. 2006. HTTP-FUSE Xenoppix. *Proc. of the 2006 linux
+   symposium* (2006), 379–392.
+
+.. [Freedman03] Freedman, M.J. and Mazières, D. 2003. Sloppy hashing and
+   self-organizing clusters. M.F. Kaashoek and I. Stoica, eds. Springer. 45–55.
+
+.. [Nygren10] Nygren, E. et al. 2010. The Akamai network: A platform for
+   high-performance internet applications. *ACM SIGOPS Operating Systems
+   Review*. 44, 3 (2010), 2–19.
+
+.. [Tolia03] Tolia, N. et al. 2003. Opportunistic use of content addressable
+   storage for distributed file systems. *Proc. of the uSENIX annual
+   technical conference* (2003).
