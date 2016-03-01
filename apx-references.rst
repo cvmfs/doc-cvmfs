@@ -76,3 +76,6 @@ References
 .. [Tolia03] Tolia, N. et al. 2003. Opportunistic use of content addressable
    storage for distributed file systems. *Proc. of the uSENIX annual
    technical conference* (2003).
+
+.. [Mockapetris87] Mockapetris, P. 1987. *Domain names - implementation and
+   specification*. Technical Report #1035. Internet Engineering Task Force.
