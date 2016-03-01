@@ -48,7 +48,7 @@ set to the parent directory of the configuration file at hand.
 ``keys/``                      Contains domain-specific sub directories with
                                public keys used to verify the digital signature
                                of file catalogs
-============================== =================================================   
+============================== =================================================
 
 The “Config Repository”
 ~~~~~~~~~~~~~~~~~~~~~~~

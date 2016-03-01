@@ -26,20 +26,20 @@ its metadata. The table layout is shown in the table below:
 .. _tab_catalog:
 
 ====================== ================
-**Field**               **Type**       
+**Field**               **Type**
 ====================== ================
-Path MD5                128Bit Integer 
-Parent Path MD5         128Bit Integer 
-Hardlinks               Integer        
-SHA1 Content Hash       160Bit Integer 
-Size                    Integer        
-Mode                    Integer        
-Last Modified           Timestamp      
-Flags                   Integer        
-Name                    String         
-Symlink                 String         
-uid                     Integer        
-gid                     Integer        
+Path MD5                128Bit Integer
+Parent Path MD5         128Bit Integer
+Hardlinks               Integer
+SHA1 Content Hash       160Bit Integer
+Size                    Integer
+Mode                    Integer
+Last Modified           Timestamp
+Flags                   Integer
+Name                    String
+Symlink                 String
+uid                     Integer
+gid                     Integer
 ====================== ================
 
 In order to save space we do not store absolute paths. Instead we
