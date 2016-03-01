@@ -104,7 +104,7 @@ The following lines should appear accordingly in /etc/squid/squid.conf:
       maximum_object_size 1024 MB
       maximum_object_size_in_memory 128 KB
 
-| 
+|
 | Note that ``http_access allow all`` has to be inserted before (or
   instead of) the line ``http_access deny all``. If Apache is running on
   the same host, the ``APACHE_HOSTNAME`` will be ``localhost``. Also, in
