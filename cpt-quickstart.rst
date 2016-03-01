@@ -9,14 +9,15 @@ openSuSE 13.1, Fedora 19–21, or Mac OS X \ :math:`\geq 10.8`.
 Getting the Software
 --------------------
 
-The CernVM-FS source code and binary packages are available under
-https://cernvm.cern.ch/portal/downloads. Binary packages are produced
-for rpm, dpkg, and Mac OS X (.pkg). yum repositories for 64 bit and 32
-bit Scientific Linux 5 and 6 and 64 bit Scientific Linux 7 are available
-under http://cvmrepo.web.cern.ch/cvmrepo/yum. The ``cvmfs-release``
-packages can be used to add a these yum repositories to the local
-yum installation. The ``cvmfs-release`` packages are available under
-https://cernvm.cern.ch/portal/downloads.
+The CernVM-FS source code and binary packages are available `on our
+website <https://cernvm.cern.ch/portal/filesystem/downloads>`_. Binary
+packages are produced for rpm, dpkg, and Mac OS X (.pkg). yum
+repositories for 64 bit and 32 bit Scientific Linux 5 and 6 and 64 bit
+Scientific Linux 7 are available as a `yum repository
+<http://cvmrepo.web.cern.ch/cvmrepo/yum>`_. The ``cvmfs-release``
+packages can be used to add a these yum repositories to the local yum
+installation. The ``cvmfs-release`` packages are available on `our
+download page <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
 
 The CernVM-FS client is not relocatable and needs to be installed under
 /usr. On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler,
@@ -87,9 +88,9 @@ To install, proceed according to the following steps:
 Mac OS X
 ~~~~~~~~
 
-On Mac OS X, CernVM-FS is based on OSXFuse\  [1]_. It is not integrated
-with autofs. In order to install, proceed according to the following
-steps:
+On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
+It is not integrated with autofs. In order to install, proceed according
+to the following steps:
 
 **Step 1**
     Install the CernVM-FS package by opening the .pkg file.
@@ -128,7 +129,7 @@ Usage
 The CernVM-FS repositories are located under /cvmfs. Each repository is
 identified by a *fully qualified repository name*. The fully qualified
 repository name consists of a repository identifier and a domain name,
-similar to DNS records [1]. The domain part of the fully qualified
+similar to DNS records [Mockapetris87]_. The domain part of the fully qualified
 repository name indicates the location of repository creation and
 maintenance. For the ATLAS experiment software, for instance, the fully
 qualified repository name is atlas.cern.ch although the hosting web
@@ -187,25 +188,3 @@ In case you need additional assistance, please don’t hesitate to contact
 us at `cernvm.support@cern.ch <cernvm.support@cern.ch>`__. Together with
 the problem description, please send the system information tarball
 created by ``cvmfs_config bugreport``.
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   <div id="ref-rfc1035">
-
-[1] Mockapetris, P. 1987. *Domain names - implementation and
-specification*. Technical Report #1035. Internet Engineering Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. [1]
-   http://osxfuse.github.io
