@@ -79,3 +79,7 @@ References
 
 .. [Mockapetris87] Mockapetris, P. 1987. *Domain names - implementation and
    specification*. Technical Report #1035. Internet Engineering Task Force.
+
+.. [Dykstra10] Dykstra, D. and Lueking, L. 2010. Greatly improved cache update
+   times for conditions data with frontier/Squid. *Journal of Physics:
+   Conference Series*. 219, (2010).
