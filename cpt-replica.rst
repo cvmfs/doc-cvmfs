@@ -142,11 +142,3 @@ load.
 Keep an eye on HTTP 404 errors. For normal CernVM-FS traffic, such
 failures should not occur. Traffic from CernVM-FS clients is marked by
 an ``X-CVMFS2`` header.
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   </div>
