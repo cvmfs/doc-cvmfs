@@ -19,42 +19,43 @@ File Catalog
 ------------
 
 A CernVM-FS repository is defined by its *file catalog*. The file
-catalog is an SQLite\  [1]_ database [2] having a single table that
-lists files and directories together with its metadata. The table layout
-is shown in the table below:
+catalog is an `SQLite database <https://www.sqlite.org>`_ [Allen10]_
+having a single table that lists files and directories together with
+its metadata. The table layout is shown in the table below:
 
 .. _tab_catalog:
 
 ====================== ================
-**Field**               **Type**       
+**Field**               **Type**
 ====================== ================
-Path MD5                128Bit Integer 
-Parent Path MD5         128Bit Integer 
-Hardlinks               Integer        
-SHA1 Content Hash       160Bit Integer 
-Size                    Integer        
-Mode                    Integer        
-Last Modified           Timestamp      
-Flags                   Integer        
-Name                    String         
-Symlink                 String         
-uid                     Integer        
-gid                     Integer        
+Path MD5                128Bit Integer
+Parent Path MD5         128Bit Integer
+Hardlinks               Integer
+SHA1 Content Hash       160Bit Integer
+Size                    Integer
+Mode                    Integer
+Last Modified           Timestamp
+Flags                   Integer
+Name                    String
+Symlink                 String
+uid                     Integer
+gid                     Integer
 ====================== ================
 
-In order to save space we do not store absolute paths. Instead we store
-MD5 [8, 10] hash values of the absolute path names. Symbolic links are
-kept in the catalog. Symbolic links may contain environment variables in
-the form ``$(VAR_NAME)`` or ``$(VAR_NAME:-/default/path)`` that will be
-dynamically resolved by CernVM-FS on access. Hardlinks are emulated by
-CernVM-FS. The hardlink count is stored in the lower 32bit of the
-hardlinks field, a *hardlink group* is stored in the higher 32 bit. If
-the hardlink group is greater than zero, all files with the same
-hardlink group will get the same inode issued by the CernVM-FS Fuse
-client. The emulated hardlinks work within the same directory, only. The
-cryptographic content hash refers to the zlib-compressed [5] version of
-the file. Flags indicate the type of an directory entry (see
-table :ref:`below <tab_dirent_flags>`).
+In order to save space we do not store absolute paths. Instead we
+store MD5 [Rivest92]_, [Turner11]_ hash values of the absolute path
+names. Symbolic links are kept in the catalog. Symbolic links may
+contain environment variables in the form ``$(VAR_NAME)`` or
+``$(VAR_NAME:-/default/path)`` that will be dynamically resolved by
+CernVM-FS on access. Hardlinks are emulated by CernVM-FS. The hardlink
+count is stored in the lower 32bit of the hardlinks field, a *hardlink
+group* is stored in the higher 32 bit. If the hardlink group is
+greater than zero, all files with the same hardlink group will get the
+same inode issued by the CernVM-FS Fuse client. The emulated hardlinks
+work within the same directory, only. The cryptographic content hash
+refers to the zlib-compressed [Deutsch96]_ version of the file. Flags
+indicate the type of an directory entry (see table :ref:`below
+<tab_dirent_flags>`).
 
 .. _tab_dirent_flags:
 
@@ -81,19 +82,20 @@ catalog and kernel caching is turned back on.
 Content Hashes
 ~~~~~~~~~~~~~~
 
-CernVM-FS can use SHA-1 [1] or RIPEMD-160 [6] as cryptographic hash
-function. The hash function can be changed on the Stratum 0 during the
-lifetime of repositories. On a change, new and updated files will use
-the new cryptographic hash while existing files remain unchanged. This
-is transparent to the clients since the hash function is stored in the
-flags field of file catalogs for each and every file. The default hash
-function is SHA-1. New software versions might introduce support for
-further cryptographic hash functions.
+CernVM-FS can use SHA-1 [Jones01]_, RIPEMD-160 [Dobbertin96]_ and
+SHAKE-128 [Bertoni09]_ as cryptographic hash function. The hash function
+can be changed on the Stratum 0 during the lifetime of repositories.
+On a change, new and updated files will use the new cryptographic hash
+while existing files remain unchanged. This is transparent to the clients
+since the hash function is stored in the flags field of file catalogs for
+each and every file. The default hash function is SHA-1.
+New software versions might introduce support for further cryptographic
+hash functions.
 
 Nested Catalogs
 ~~~~~~~~~~~~~~~
 
-In order to keep catalog sizes reasonable [2]_, repository subtrees may be cut
+In order to keep catalog sizes reasonable [#]_, repository subtrees may be cut
 and stored as separate *nested catalogs*. There is no limit on the level of
 nesting. A reasonable approach is to store separate software versions as
 separate nested catalogs. The figure :ref:`below <fig_nested>` shows the
@@ -269,7 +271,8 @@ blacklist /etc/cvmfs/blacklist. The blacklisted fingerprints have to be
 in the same format than the fingerprints on the white-list. The
 blacklist has precedence over the white-list.
 
-As crypto engine, CernVM-FS uses libcrypto from the OpenSSL project [9].
+As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
+<http://www.openssl.org/docs/crypto/crypto.html>`_.
 
 Use of HTTP
 -----------
@@ -277,7 +280,7 @@ Use of HTTP
 The particular way of using the HTTP protocol has significant impact on
 the performance and usability of CernVM-FS. If possible, CernVM-FS tries
 to benefit from the HTTP/1.1 features keep-alive and cache-control.
-Internally, CernVM-FS uses the libcurl library [3].
+Internally, CernVM-FS uses the `libcurl library <http://curl.haxx.se/libcurl>`_.
 
 The HTTP behaviour affects a system with cold caches only. As soon as
 all necessary files are cached, there is only network traffic when a
@@ -407,10 +410,10 @@ they are renamed into their content-addressable names atomically by
 
 The hard disk cache is managed, CernVM-FS maintains cache size
 restrictions and replaces files according to the least recently used
-(LRU) strategy [7]. In order to keep track of files sizes and relative
-file access times, CernVM-FS sets up another SQLite database in the
-cache directory, the *cache catalog*. The cache catalog contains a
-single table; its structure is shown here:
+(LRU) strategy [Panagiotou06]_. In order to keep track of files sizes
+and relative file access times, CernVM-FS sets up another SQLite
+database in the cache directory, the *cache catalog*. The cache
+catalog contains a single table; its structure is shown here:
 
 ================================= =========================
 **Field**                         **Type**
@@ -472,19 +475,20 @@ NFS Maps
 --------
 
 In normal mode, CernVM-FS issues inodes based on the row number of an
-entry in the file catalog. When exported via NFS, this scheme can result
-in inconsistencies because CernVM-FS does not control the cache lifetime
-of NFS clients. A once issued inode can be asked for anytime later by a
-client. To be able to reply to such client queries even after reloading
-catalogs or remounts of CernVM-FS, the CernVM-FS *NFS maps* implement a
-persistent store of the path names :math:`\mapsto` inode mappings.
-Storing them on hard disk allows for control of the CernVM-FS memory
-consumption (currently :math:`\approx` 45 MB extra) and
-ensures consistency between remounts of CernVM-FS. The performance
-penalty for doing so is small. CernVM-FS uses Google’s leveldb\ [4], a
-fast, local key value store. Reads and writes are only performed when
-meta-data are looked up in SQLite, in which case the SQLite query
-supposedly dominates the running time.
+entry in the file catalog. When exported via NFS, this scheme can
+result in inconsistencies because CernVM-FS does not control the cache
+lifetime of NFS clients. A once issued inode can be asked for anytime
+later by a client. To be able to reply to such client queries even
+after reloading catalogs or remounts of CernVM-FS, the CernVM-FS *NFS
+maps* implement a persistent store of the path names :math:`\mapsto`
+inode mappings. Storing them on hard disk allows for control of the
+CernVM-FS memory consumption (currently :math:`\approx` 45 MB extra)
+and ensures consistency between remounts of CernVM-FS. The performance
+penalty for doing so is small. CernVM-FS uses `Google’s leveldb
+<https://github.com/google/leveldb>`, a fast, local key value store.
+Reads and writes are only performed when meta-data are looked up in
+SQLite, in which case the SQLite query supposedly dominates the
+running time.
 
 A drawback of the NFS maps is that there is no easy way to account for
 them by the cache quota. They sum up to some 150-200 Bytes per path name
@@ -704,12 +708,12 @@ changes are in fact written to the read-write branch.
 
 Preserving POSIX semantics in union file systems is non-trivial; the
 first fully functional implementation has been presented by Wright et
-al. [11]. By now, union file systems are well established for “Live CD”
-builders, which use a RAM disk overlay on top of the read-only system
-partition in order to provide the illusion of a fully read-writable
-system. CernVM-FS uses the AUFS union file system. Another union file
-system with similar semantics can be plugged in if necessary. OverlayFS
-is supported as an experimental alternative.
+al. [Wright04]_. By now, union file systems are well established for
+“Live CD” builders, which use a RAM disk overlay on top of the read-
+only system partition in order to provide the illusion of a fully
+read-writable system. CernVM-FS uses the AUFS union file system.
+Another union file system with similar semantics can be plugged in if
+necessary. OverlayFS is supported as an experimental alternative.
 
 Union file systems can be used to track changes on CernVM-FS repositories
 (Figure :ref:`below <fig_overlay>`). In this case, the read-only file system
@@ -735,141 +739,8 @@ scratch area and, once published, are re-mounted as repository revision
 :math:`r+1`. In this way, CernVM-FS provides snapshots. In case of
 errors, one can safely resume from a previously committed revision.
 
-.. raw:: html
+.. rubric:: Footnotes
 
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   <div id="ref-rfc3174">
-
-[1] 3rd, D.E. and Jones, P. 2001. *US Secure Hash Algorithm 1 (SHA1)*.
-Technical Report #3174. Internet Engineering Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-sqlite10">
-
-[2] Allen, G. and Owens, M. 2010. *The definitive guide to SQLite*.
-Apress.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-libcurl">
-
-[3] Daniel Stenberg et al. libcurl. http://curl.haxx.se/libcurl.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-leveldb">
-
-[4] Dean, J. and Ghemawat, S. Leveldb.
-http://code.google.com/p/leveldb/.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-rfc1950">
-
-[5] Deutsch, P. and Gailly, J.-L. 1996. *ZLIB Compressed Data Format
-Specification version 3.3*. Technical Report #1950. Internet Engineering
-Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-ripemd160">
-
-[6] Dobbertin, H. et al. 1996. RIPEMD-160: A strengthened version of
-RIPEMD. Springer. 71–82.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-lru06">
-
-[7] Panagiotou, K. and Souza, A. 2006. On adequate performance measures
-for paging. *Annual ACM Symposium on Theory Of Computing*. 38, (2006),
-487–496.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-rfc1321">
-
-[8] Rivest, R. 1992. *The MD5 Message-Digest Algorithm*. Technical
-Report #1321. Internet Engineering Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-openssl">
-
-[9] The OpenSSL Software Foundation OpenSSL.
-http://www.openssl.org/docs/crypto/crypto.html.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-rfc6151">
-
-[10] Turner, S. and Chen, L. 2011. *Updated Security Considerations for
-the MD5 Message-Digest and the HMAC-MD5 Algorithms*. Technical Report
-#6151. Internet Engineering Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-unionfs04">
-
-[11] Wright, C.P. et al. 2004. *Versatility and unix semantics in a
-fan-out unification file system*. Technical Report #FSL-04-01b. Stony
-Brook University.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. [1]
-   https://www.sqlite.org
-
-.. [2]
+.. [#]
    As a rule of thumb, file catalogs up to (compressed) are reasonably
    small.

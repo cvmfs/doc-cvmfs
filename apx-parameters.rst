@@ -101,12 +101,3 @@ CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (
 CVMFS_AUTO_GC                       Enables the automatic garbage collection on *publish* and *snapshot*
 CVMFS_AUTO_GC_TIMESPAN              Date-threshold for automatic garbage collection |br| (For example: `3 days ago`, `1 week ago`, ...)
 =================================== ============================================================================================================================================================
-
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   </div>
