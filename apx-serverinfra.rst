@@ -18,7 +18,8 @@ Prerequisites
 A CernVM-FS server installation depends on the following environment
 setup and tools to be in place:
 
--  aufs support in the kernel (see Section :ref:`sct_customkernelinstall`)
+-  kernel 4.2.x or later (for OverlayFS) *or* aufs support built into
+   the kernel (see Section :ref:`sct_customkernelinstall`)
 
 -  Backend storage location available through HTTP
 
@@ -82,8 +83,8 @@ scratch area of a Stratum0 or specifically a release manager machine
 installation. It is always located inside ``/var/spool/cvmfs`` with
 directories for individual repositories. Note that the data volume of
 the spool area can grow very large for massive repository updates since
-it contains the writable AUFS branch and a CernVM-FS client cache
-directory.
+it contains the writable union file system branch and a CernVM-FS client
+cache directory.
 
 ========================================= =================================================
 **File Path**                             **Description**
@@ -104,7 +105,8 @@ directory.
                                           Contains the cache of the CernVM-FS client
                                           mounting the r/o branch
                                           (i.e. ``/var/spool/cvmfs/<fqrn>/rdonly``) of the
-                                          AUFS mount point located at ``/cvmfs/<fqrn>``.
+                                          union file system mount point located at
+                                          ``/cvmfs/<fqrn>``.
                                           The content of this directory is fully managed
                                           by the CernVM-FS client and hence must be
                                           configured as a CernVM-FS cache and writable for
@@ -115,7 +117,7 @@ directory.
                                           the CernVM-FS repository. It needs to be owned
                                           by the repository owner and should be empty if
                                           CernVM-FS is not mounted to it.
-``/var/spool/cvmfs/<fqrn>/scratch``       **Writable \aufs\ scratch area** |br|
+``/var/spool/cvmfs/<fqrn>/scratch``       **Writable union file system scratch area** |br|
                                           All file system changes applied to
                                           ``/cvmfs/<fqrn>`` during a transaction will be
                                           stored in this directory. Hence, it potentially
@@ -188,7 +190,7 @@ Apart from file and directory locations a CernVM-FS server installation
 depends on a few environment configurations. Most notably the
 possibility to access the backend storage through HTTP and to allow for
 mounting of both the CernVM-FS client at
-``/var/spool/cvmfs/<fqrn>/rdonly`` and aufs on ``/cvmfs/<fqrn>``.
+``/var/spool/cvmfs/<fqrn>/rdonly`` and a union file system on ``/cvmfs/<fqrn>``.
 
 Granting HTTP access can happen in various ways and depends on the
 chosen backend storage type. For an S3 hosted backend storage, the

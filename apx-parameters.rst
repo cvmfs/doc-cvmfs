@@ -31,6 +31,8 @@ CVMFS_FALLBACK_PROXY            List of HTTP proxies similar to ``CVMFS_HTTP_PRO
 CVMFS_FOLLOW_REDIRECTS          When set to *yes*, follow up to 4 HTTP redirects in requests.
 CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``.
 CVMFS_HTTP_PROXY                Chain of HTTP proxy groups used by CernVM-FS. Necessary. Set to ``DIRECT`` if you don't use proxies.
+CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
+CVMFS_EXTERNAL_FALLBACK_PROXY   List of HTTP proxies similar to ``CVMFS_EXTERNAL_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
 CVMFS_KCACHE_TIMEOUT            Timeout for path names and file attributes in the kernel file system buffers.
@@ -53,16 +55,21 @@ CVMFS_REPOSITORIES              Comma-separated list of fully qualified reposito
 CVMFS_REPOSITORY_TAG            Select a named repository snapshot that should be mounted instead of ``trunk``.
 CVMFS_ROOT_HASH                 Hash of the root file catalog, implies ``CVMFS_AUTO_UPDATE=no``.
 CVMFS_SERVER_URL                Semicolon-separated chain of Stratum~1 servers.
+CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks
 CVMFS_SHARED_CACHE              If set to *no*, makes a repository use an exclusive cache.
 CVMFS_STRICT_MOUNT              If set to *yes*, mount only repositories that are listed in ``CVMFS_REPOSITORIES``.
 CVMFS_SYSLOG_FACILITY           If set to a number between 0 and 7, uses the corresponding LOCAL$n$ facility for syslog messages.
 CVMFS_SYSLOG_LEVEL              If set to 1 or 2, sets the syslog level for CernVM-FS messages to LOG_DEBUG or LOG_INFO respectively.
 CVMFS_TIMEOUT                   Timeout in seconds for HTTP requests with a proxy server.
 CVMFS_TIMEOUT_DIRECT            Timeout in seconds for HTTP requests without a proxy server.
+CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
+CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
 CVMFS_TRACEFILE                 If set, enables the tracer and trace file system calls to the given file.
 CVMFS_USE_GEOAPI                Request order of Stratum 1 servers and fallback proxies via Geo-API.
 CVMFS_USER                      Sets the ``gid`` and ``uid`` mount options. Don't touch or overwrite.
 CVMFS_USYSLOG                   All messages that normally are logged to syslog are re-directed to the given file.  This file can grow up to 500kB and there is one step of log rotation.  Required for $\mu$CernVM.
+CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used as a release manager repository base line.
+CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernVM-FS specific extended attributes
 =============================== ====================================================================================================================================================================================
 
 
@@ -83,10 +90,10 @@ CVMFS_UPSTREAM_STORAGE              Upstream spooler description defining the ba
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
 CVMFS_AUTO_REPAIR_MOUNTPOINT        Set to *true* to enable automatic recovery from bogus server mount states.
-CVMFS_UNION_DIR                     Mount point of the union file system between CernVM-FS and AUFS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
-CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently AUFS is fully supported)
+CVMFS_UNION_DIR                     Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
+CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently `aufs` and `overlayfs` are fully supported)
 CVMFS_AUFS_WARNING                  Set to *false* to silence AUFS kernel deadlock warning.
-CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1* and *rmd160*)
+CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1*, *rmd160* and *shake128*)
 CVMFS_CATALOG_ENTRY_WARN_THRESHOLD  Threshold of catalog entry count before triggering a warning message.
 CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
 CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
@@ -95,12 +102,20 @@ CVMFS_AVG_CHUNK_SIZE                Desired Average size of a file chunk in byte
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
 CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
-CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum~1 only).
+CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
 CVMFS_AUTO_TAG                      Creates a generic revision tag for each published revision (if set to *true*).
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_AUTO_GC                       Enables the automatic garbage collection on *publish* and *snapshot*
 CVMFS_AUTO_GC_TIMESPAN              Date-threshold for automatic garbage collection |br| (For example: `3 days ago`, `1 week ago`, ...)
+CVMFS_GC_DELETION_LOG               Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
 CVMFS_AUTOCATALOGS                  Enable/disable automatic catalog management using autocatalogs.
 CVMFS_AUTOCATALOGS_MAX_WEIGHT       Maximum number of entries in an autocatalog to be considered overflowed. Default value: 100000 |br| (see also *CVMFS_AUTOCATALOGS*)
 CVMFS_AUTOCATALOGS_MIN_WEIGHT       Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 |br| (see also *CVMFS_AUTOCATALOGS*)
+CVMFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage. Using OverlayFS in kernel older than 4.2.x is not supported! (see :ref:`sct_reporequirements`)
+CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
+CVMFS_CATALOG_ALT_PATHS             Enable/disable generation of catalog bootstrapping shortcuts during publishing. (Useful when backend directory `/data` is not publicly accessible)
+CVMFS_VOMS_AUTHZ                    VOMS authentication string to be added into the file catalogs
+CVMFS_COMPRESSION_ALGORITHM         Compression algorithm to be used during publishing |br| (currently either 'default' or 'none')
+CVMFS_EXTERNAL_DATA                 Set to *true* to mark repository to contain external data that is served from an external HTTP server
+CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
 =================================== ============================================================================================================================================================
