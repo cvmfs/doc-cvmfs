@@ -24,7 +24,7 @@ The CernVM-FS software is available in form of several RPM packages:
 
 **cvmfs-devel**
     Contains the ``libcvmfs.a`` static library and the ``libcvmfs.h``
-    header file for use of CernVM-FS with Parrot[1].
+    header file for use of CernVM-FS with Parrot [Thain05]_.
 
 **cvmfs-auto-setup**
     Only available through yum. This is a wrapper for
@@ -45,23 +45,3 @@ The CernVM-FS software is available in form of several RPM packages:
 
 **cvmfs-unittests**
     Contains the ``cvmfs_unittests`` binary. Only required for testing.
-
-.. raw:: html
-
-   <div id="refs" class="references">
-
-.. raw:: html
-
-   <div id="ref-parrot05">
-
-[1] Thain, D. and Livny, M. 2005. Parrot: an application environment for
-data-intensive computing. *Scalable Computing: Practice and Experience*.
-6, 3 (18 2005), 9.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
