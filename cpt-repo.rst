@@ -186,7 +186,7 @@ Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
 we provide a compatible patched kernel as RPMs (see
 :ref:`sct_customkernelinstall` for details).
 
-Historically CernVM-FS solely used `aufs <http://aufs.sourceforge.net/>`_
+Historically CernVM-FS solely used `aufs <http://aufs.sourceforge.net>`_
 as a union file system. However, the Linux kernel community favoured `OverlayFS
 <https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt>`_, a
 competing union file system implementation that was merged upstream.
