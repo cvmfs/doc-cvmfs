@@ -187,15 +187,15 @@ provided that autofs is turned off.
 Parrot Connector to CernVM-FS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In case Fuse cannot be be installed, the parrot\  [1]_ toolkit provides
-a means to “mount” CernVM-FS on Linux in pure user space.
-parrot sandboxes an application in a similar way gdb sandboxes an
+In case Fuse cannot be be installed, the `parrot toolkit
+<http://ccl.cse.nd.edu/software/parrot>`_ provides a means to “mount”
+CernVM-FS on Linux in pure user space.
+Parrot sandboxes an application in a similar way gdb sandboxes an
 application. But instead of debugging the application,
 parrot transparently rewrites file system calls and can effectively
-provide /cvmfs to an application. We recommend to use the latest
-precompiled parrot from
-http://ccl.cse.nd.edu/software/downloadfiles.php, which has
-CernVM-FS support built-in.
+provide /cvmfs to an application. We recommend to use the `latest
+precompiled parrot <http://ccl.cse.nd.edu/software/downloadfiles.php>`_, which
+has CernVM-FS support built-in.
 
 In order to sandbox a command ``<CMD>`` with options ``<OPTIONS>`` in
 parrot, use
@@ -243,15 +243,15 @@ Network Settings
 
 CernVM-FS uses HTTP for the data transfer. Repository data can be
 replicated to multiple web servers and cached by standard web proxies
-such as Squid [5]. In a typical setup, repositories are replicated to a
-handful of web servers in different locations. These replicas form the
+such as Squid [Guerrero99]_. In a typical setup, repositories are replicated to
+a handful of web servers in different locations. These replicas form the
 CernVM-FS Stratum 1 service, whereas the replication source server is
 the CernVM-FS Stratum 0 server. In every cluster of client machines,
 there should be two or more web proxy servers that CernVM-FS can use
 (see :ref:`cpt_squid`). These site-local web proxies reduce the
 network latency for the CernVM-FS clients and they reduce the load for
 the Stratum 1 service. CernVM-FS supports WPAD/PAC proxy auto
-configuration [4], choosing a random proxy for load-balancing, and
+configuration [Gauthier99]_, choosing a random proxy for load-balancing, and
 automatic fail-over to other hosts and proxies in case of network
 errors. Roaming clients can connect directly to the Stratum 1 service.
 
@@ -303,7 +303,7 @@ proxies.
 
 The chain of proxy groups is specified by a string of semicolon
 separated entries, each group is a list of pipe separated
-hostnames [2]_. Multiple IP addresses behind a single proxy host name
+hostnames [#]_. Multiple IP addresses behind a single proxy host name
 (DNS *round-robin* entry) are automatically transformed into a
 load-balanced group. The ``DIRECT`` keyword for a hostname avoids using
 proxies. Note that the ``CVMFS_HTTP_PROXY`` parameter is necessary in
@@ -330,7 +330,7 @@ for PAC files in the order given by the semicolon separated URLs in the
 ``CVMFS_PAC_URLS`` environment variable. This variable defaults to
 http://wpad/wpad.dat. The ``auto`` keyword used as a URL in
 ``CVMFS_PAC_URLS`` is resolved to http://wpad/wpad.dat, too, in order to
-be compatible with Frontier [1].
+be compatible with Frontier [Blumenfeld08]_.
 
 Fallback Proxy List
 ~~~~~~~~~~~~~~~~~~~
@@ -395,7 +395,8 @@ Downloaded files will be stored in a local cache directory. The
 CernVM-FS cache has a soft quota; as a safety margin, the partition
 hosting the cache should provide more space than the soft quota limit.
 Once the quota limit is reached, CernVM-FS will automatically remove
-files from the cache according to the least recently used policy [6].
+files from the cache according to the least recently used policy
+[Panagiotou06]_.
 Removal of files is performed bunch-wise until half of the maximum cache
 size has been freed. The quota limit can be set in Megabytes by
 ``CVMFS_QUOTA_LIMIT``. For typical repositories, a few Gigabytes make a
@@ -470,10 +471,10 @@ NFS Server Mode
 ---------------
 
 In case there is no local hard disk space available on a cluster of
-worker nodes, a single CernVM-FS client can be exported via nfs [2, 8]
-to these worker nodes. This mode of deployment will inevitably introduce
-a performance bottleneck and a single point of failure and should be
-only used if necessary.
+worker nodes, a single CernVM-FS client can be exported via
+nfs [Callaghan95]_ [Shepler03]_ to these worker nodes.This mode of deployment
+will inevitably introduce a performance bottleneck and a single point of
+failure and should be only used if necessary.
 
 NSF export requires Linux kernel >= 2.6.27 on the NFS server. For
 instance, exporting works for Scientific Linux 6 but not for Scientific
@@ -512,13 +513,14 @@ NFS daemons is set by the ``RPCNFSDCOUNT`` parameter in
 /etc/sysconfig/nfs.
 
 The performance will benefit from large RAM on the NFS server
-(:math:`\geq\SI{16}{\giga\byte}`) and CernVM-FS caches hosted on an SSD
+(:math:`\geq` 16GB) and CernVM-FS caches hosted on an SSD
 hard drive.
 
 Shared NFS Maps (HA-NFS)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-As an alternative to the existing, leveldb [3] managed NFS maps, the NFS
+As an alternative to the existing, `leveldb
+<https://github.com/google/leveldb>`_ managed NFS maps, the NFS
 maps can optionally be managed out of the CernVM-FS cache directory by
 SQLite. This allows the NFS maps to be placed on shared storage and
 accessed by multiple CernVM-FS NFS export nodes simultaneously for
@@ -700,8 +702,9 @@ toolchain, information about the overall number of file system entries
 in the repository as well as the number of entries covered by currently
 loaded meta-data can be gathered by ``df -i``.
 
-For the Nagios\  [3]_ [7] monitoring system, a checker plugin is
-available under http://cernvm.cern.ch/portal/filesystem/downloads.
+For the `Nagios monitoring system <http://www.nagios.org>`_ [Schubert08]_, a
+checker plugin is available `on our website
+<http://cernvm.cern.ch/portal/filesystem/downloads>`_.
 
 Debug Logs
 ----------
@@ -717,109 +720,9 @@ can be started in debug mode. In the debug mode, CernVM-FS will log with high
 verbosity which makes the debug mode unsuitable for production use. In order
 to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
 
-.. raw:: html
 
-   <div id="refs" class="references">
+.. rubric:: Footnotes
 
-.. raw:: html
-
-   <div id="ref-frontier08">
-
-[1] Blumenfeld, B. et al. 2008. CMS conditions data access using
-FroNTier. *Journal of Physics: Conference Series*. 119, (2008).
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-rfc1813">
-
-[2] Callaghan, B. et al. 1995. *NFS Version 3 Protocol Specification*.
-Technical Report #1813. Internet Engineering Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-leveldb">
-
-[3] Dean, J. and Ghemawat, S. Leveldb.
-http://code.google.com/p/leveldb/.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-wpad99">
-
-[4] Gauthier, P. et al. 1999. *Web proxy auto-discovery protocol*. IETF
-Secretariat.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-squid99">
-
-[5] Guerrero, D. 1999. Caching the web, part 2. *Linux Journal*. 58
-(Feburary 1999).
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-lru06">
-
-[6] Panagiotou, K. and Souza, A. 2006. On adequate performance measures
-for paging. *Annual ACM Symposium on Theory Of Computing*. 38, (2006),
-487–496.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-nagios08">
-
-[7] Schubert, M. et al. 2008. *Nagios 3 enterprise network monitoring*.
-Syngress.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   <div id="ref-rfc3530">
-
-[8] Shepler, S. et al. 2003. *Network File System (NFS) version 4
-Protocol*. Technical Report #3530. Internet Engineering Task Force.
-
-.. raw:: html
-
-   </div>
-
-.. raw:: html
-
-   </div>
-
-.. [1]
-   http://ccl.cse.nd.edu/software/parrot
-
-.. [2]
+.. [#]
    The usual proxy notation rules apply, like
    ``http://proxy1:8080|http://proxy2:8080;DIRECT``
-
-.. [3]
-   http://www.nagios.org
