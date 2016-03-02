@@ -3,30 +3,30 @@
 Setting up a Local Squid Proxy
 ==============================
 
-For clusters of nodes with CernVM-FS clients, we strongly recommend to
+For clusters of nodes with CernVM-FS clients, we strongly recommend to
 setup two or more `Squid forward proxy <http://www.squid-
 cache.org>`_ servers as well. The forward proxies will reduce the
 latency for the local worker nodes, which is critical for cold cache
 performance. They also reduce the load on the Stratum 1 servers.
 
-From what we have seen, a Squid server on commodity hardware scales well
+From what we have seen, a Squid server on commodity hardware scales well
 for at least a couple of hundred worker nodes. The more RAM and hard
 disk you can devote for caching the better. We have good experience with
 of memory cache and of hard disk cache. We suggest to setup two
-identical Squid servers for reliability and load-balancing. Assuming the
+identical Squid servers for reliability and load-balancing. Assuming the
 two servers are A and B, set
 
 ::
 
       CVMFS_HTTP_PROXY="http://A:3128|http://B:3128"
 
-Squid is very powerful and has lots of configuration and tuning
-options. For CernVM-FS we require only the very basic static content
-caching. If you already have a `Frontier Squid <http://frontier.cern.ch>`_ 
+Squid is very powerful and has lots of configuration and tuning
+options. For CernVM-FS we require only the very basic static content
+caching. If you already have a `Frontier Squid <http://frontier.cern.ch>`_ 
 [Blumenfeld08]_ [Dykstra10]_ installed you can use it as well for CernVM-FS.
 
 Otherwise, cache sizes and access control needs to be configured in
-order to use the Squid server with CernVM-FS. In order to do so, browse
+order to use the Squid server with CernVM-FS. In order to do so, browse
 through your /etc/squid/squid.conf and make sure the following lines
 appear accordingly:
 
@@ -40,10 +40,10 @@ appear accordingly:
       # 50 GB disk cache
       cache_dir ufs /var/spool/squid 50000 16 256
 
-Furthermore, Squid needs to allow access to all Stratum 1 servers. This
-is controlled through Squid ACLs. For the Stratum 1 servers for the
+Furthermore, Squid needs to allow access to all Stratum 1 servers. This
+is controlled through Squid ACLs. For the Stratum 1 servers for the
 cern.ch, egi.eu, and opensciencegrid.org domains, add the following
-lines to you Squid configuration:
+lines to you Squid configuration:
 
 ::
 
@@ -61,7 +61,7 @@ lines to you Squid configuration:
       acl cvmfs dst cvmfs-s1fnal.opensciencegrid.org
       http_access allow cvmfs
 
-The Squid configuration can be verified by ``squid -k parse``. Before
+The Squid configuration can be verified by ``squid -k parse``. Before
 the first service start, the cache space on the hard disk needs to be
 prepared by ``squid -z``. In order to make the increased number of file
 descriptors effective for Squid, execute ``ulimit -n 8192`` prior to

@@ -1,28 +1,28 @@
 Getting Started
 ===============
 
-This section describes how to install the CernVM-FS client. The
-CernVM-FS client is supported on x86, x86\_64, and ARMv7 architectures
-running Scientific Linux 4–7, Ubuntu \ :math:`\geq12.04`, SLES 11 and
-openSuSE 13.1, Fedora 19–21, or Mac OS X \ :math:`\geq 10.8`.
+This section describes how to install the CernVM-FS client. The
+CernVM-FS client is supported on x86, x86\_64, and ARMv7 architectures
+running Scientific Linux 4–7, Ubuntu \ :math:`\geq12.04`, SLES 11 and
+openSuSE 13.1, Fedora 19–21, or Mac OS X \ :math:`\geq 10.8`.
 
 Getting the Software
 --------------------
 
-The CernVM-FS source code and binary packages are available `on our
+The CernVM-FS source code and binary packages are available `on our
 website <https://cernvm.cern.ch/portal/filesystem/downloads>`_. Binary
 packages are produced for rpm, dpkg, and Mac OS X (.pkg). yum
 repositories for 64 bit and 32 bit Scientific Linux 5 and 6 and 64 bit
 Scientific Linux 7 are available as a `yum repository
 <http://cvmrepo.web.cern.ch/cvmrepo/yum>`_. The ``cvmfs-release``
-packages can be used to add a these yum repositories to the local yum
+packages can be used to add a these yum repositories to the local yum
 installation. The ``cvmfs-release`` packages are available on `our
 download page <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
 
-The CernVM-FS client is not relocatable and needs to be installed under
-/usr. On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler,
-on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and
-install from sources, use the following cmake command:
+The CernVM-FS client is not relocatable and needs to be installed under
+/usr. On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler,
+on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and
+install from sources, use the following cmake command:
 
 ::
 
@@ -39,14 +39,14 @@ Linux
 To install, proceed according to the following steps:
 
 **Step 1**
-    Install the CernVM-FS packages. With yum, run
+    Install the CernVM-FS packages. With yum, run
 
     ::
 
           yum install cvmfs cvmfs-config-default
 
     If yum does not show the latest packages, clean the yum cache by
-    ``yum clean all``. Packages can be also installed with rpm instead
+    ``yum clean all``. Packages can be also installed with rpm instead
     with the command ``rpm -vi``. On Ubuntu, use ``dpkg -i`` on the
     cvmfs and cvmfs-config-default .deb packages.
 
@@ -77,23 +77,23 @@ To install, proceed according to the following steps:
 
     For the syntax of more complex HTTP proxy settings, see
     :ref:`sct_network`. Make sure your local proxy servers allow access to all
-    the Stratum 1 web servers (more on :ref:`proxy configuration here <cpt_squid>`). For Cern
+    the Stratum 1 web servers (more on :ref:`proxy configuration here <cpt_squid>`). For Cern
     repositories, the Stratum 1 web servers are listed in
     /etc/cvmfs/domain.d/cern.ch.conf.
 
 **Step 5**
-    Check if CernVM-FS mounts the specified repositories by
+    Check if CernVM-FS mounts the specified repositories by
     ``cvmfs_config probe``.
 
 Mac OS X
 ~~~~~~~~
 
-On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
+On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
 It is not integrated with autofs. In order to install, proceed according
 to the following steps:
 
 **Step 1**
-    Install the CernVM-FS package by opening the .pkg file.
+    Install the CernVM-FS package by opening the .pkg file.
 
 **Step 2**
     Create /etc/cvmfs/default.local and open the file for editing.
@@ -126,16 +126,16 @@ to the following steps:
 Usage
 -----
 
-The CernVM-FS repositories are located under /cvmfs. Each repository is
+The CernVM-FS repositories are located under /cvmfs. Each repository is
 identified by a *fully qualified repository name*. The fully qualified
 repository name consists of a repository identifier and a domain name,
-similar to DNS records [Mockapetris87]_. The domain part of the fully qualified
+similar to DNS records [Mockapetris87]_. The domain part of the fully qualified
 repository name indicates the location of repository creation and
 maintenance. For the ATLAS experiment software, for instance, the fully
 qualified repository name is atlas.cern.ch although the hosting web
 servers are spread around the world.
 
-Mounting and un-mounting of the CernVM-FS is controlled by autofs and
+Mounting and un-mounting of the CernVM-FS is controlled by autofs and
 automount. That is, starting from the base directory /cvmfs different
 repositories are mounted automatically just by accessing them. For
 instance, running the command ``ls /cvmfs/atlas.cern.ch`` will mount the
@@ -153,7 +153,7 @@ In order to check for common misconfigurations in the base setup, run
 
       cvmfs_config chksetup
 
-CernVM-FS gathers its configuration parameter from various configuration
+CernVM-FS gathers its configuration parameter from various configuration
 files that can overwrite each others settings (default configuration,
 domain specific configuration, local setup, …). To show the effective
 configuration for *repository*.cern.ch, run

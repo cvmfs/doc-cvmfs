@@ -1,29 +1,29 @@
-Creating a Repository (Stratum 0)
+Creating a Repository (Stratum 0)
 =================================
 
-CernVM-FS is a file system with a single source of (new) data. This
+CernVM-FS is a file system with a single source of (new) data. This
 single source, the repository *Stratum 0*, is maintained by a dedicated
 *release manager machine* or *installation box*. A read-writable copy of
 the repository is accessible on the release manager machine. The
-CernVM-FS server tool kit is used to *publish* the current state of the
+CernVM-FS server tool kit is used to *publish* the current state of the
 repository on the release manager machine. Publishing is an atomic
 operation.
 
-All data stored in CernVM-FS have to be converted into a
-CernVM-FS *repository* during the process of publishing. The
-CernVM-FS repository is a form of content-addressable storage.
+All data stored in CernVM-FS have to be converted into a
+CernVM-FS *repository* during the process of publishing. The
+CernVM-FS repository is a form of content-addressable storage.
 Conversion includes creating the file catalog(s), compressing new and
 updated files and calculating content hashes. Storing the data in a
 content-addressable format results in automatic file de-duplication. It
 furthermore simplifies data verification and it allows for file system
 snapshots.
 
-In order to provide a writable CernVM-FS repository, CernVM-FS uses a union
-file system that combines a read-only CernVM-FS mount point with a writable
-scratch area [Wright04]_. :ref:`This figure below <fig_updateprocess>` outlines
+In order to provide a writable CernVM-FS repository, CernVM-FS uses a union
+file system that combines a read-only CernVM-FS mount point with a writable
+scratch area [Wright04]_. :ref:`This figure below <fig_updateprocess>` outlines
 the process of publishing a repository.
 
-CernVM-FS Server Quick-Start Guide
+CernVM-FS Server Quick-Start Guide
 ----------------------------------
 
 System Requirements
@@ -42,7 +42,7 @@ System Requirements
    -  Scientific Linux 5 (64 bit)
 
    -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
-      Appendix ":ref:`apx_rpms`")
+      Appendix ":ref:`apx_rpms`")
 
    -  Fedora 22 and above (with kernel :math:`\ge` 4.2.x)
 
@@ -89,22 +89,22 @@ Backup Policy
 
    -  For local storage: ``/srv/cvmfs``
 
-   -  Stratum 1s can serve as last-ressort backup of repository content
+   -  Stratum 1s can serve as last-ressort backup of repository content
 
 .. _sct_customkernelinstall:
 
 Installing the AUFS-enabled Kernel on Scientific Linux 6
 --------------------------------------------------------
 
-CernVM-FS uses the union file-system `aufs
+CernVM-FS uses the union file-system `aufs
 <http://aufs.sourceforge.net>`_ to efficiently determine file-system
 tree updates while publishing repository transactions on the server
-(see Figure :ref:`below <fig_updateprocess>`). Note that this is
-*only* required on a CernVM-FS server and *not* on the client
+(see Figure :ref:`below <fig_updateprocess>`). Note that this is
+*only* required on a CernVM-FS server and *not* on the client
 machines.
 
 | We provide customised kernel packages for Scientific Linux 6 (see
-  Appendix ":ref:`apx_rpms`") and keep them up-to-date with upstream kernel
+  Appendix ":ref:`apx_rpms`") and keep them up-to-date with upstream kernel
   updates. The kernel RPMs are published in the ``cernvm-kernel`` yum
   repository.
 | Please follow these steps to install the provided customised kernel:
@@ -117,17 +117,17 @@ machines.
    | This adds the CernVM yum repositories to your machine’s
      configuration.
 
-#. | Install the aufs enabled kernel from ``cernvm-kernel``:
+#. | Install the aufs enabled kernel from ``cernvm-kernel``:
    | ``yum --disablerepo=* --enablerepo=cernvm-kernel install kernel``
 
-#. | Install the aufs user utilities:
+#. | Install the aufs user utilities:
    | ``yum --enablerepo=cernvm-kernel install aufs2-util``
 
 #. Reboot the machine
 
 Once a new kernel version is released ``yum update`` will *not* pick the
 upstream version but it will wait until the patched kernel with
-aufs support is published by the CernVM team. We always try to follow
+aufs support is published by the CernVM team. We always try to follow
 the kernel updates as quickly as possible.
 
 Publishing a new Repository Revision
@@ -138,10 +138,10 @@ Publishing a new Repository Revision
 .. figure:: _static/update_process.svg
    :alt: CernVM-FS server schematic update overview
 
-   Updating a mounted CernVM-FS repository by overlaying it with a
-   copy-on-write union file system volume. Any changes will be
+   Updating a mounted CernVM-FS repository by overlaying it with a
+   copy-on-write union file system volume. Any changes will be
    accumulated in a writable volume (yellow) and can be synchronized
-   into the CernVM-FS repository afterwards. The file catalog contains
+   into the CernVM-FS repository afterwards. The file catalog contains
    the directory structure as well as file metadata, symbolic links, and
    secure hash keys of regular files. Regular files are compressed and
    renamed to their cryptographic content hash before copied into the
@@ -151,24 +151,24 @@ Since the repositories may contain many file system objects (i.e. ATLAS
 contains :math:`70 * 10^6` file system objects -- February 2016), we
 cannot afford to generate an entire repository from scratch for every
 update. Instead, we add a writable file system layer on top of a mounted
-read-only CernVM-FS repository using a union file system.
-This renders a read-only CernVM-FS mount point writable to the user,
+read-only CernVM-FS repository using a union file system.
+This renders a read-only CernVM-FS mount point writable to the user,
 while all performed changes are stored in a special writable scratch
 area managed by the union file system. A similar approach is used by Linux
 Live Distributions that are shipped on read-only media, but allow *virtual*
 editing of files where changes are stored on a RAM disk.
 
-If a file in the CernVM-FS repository gets changed, the union file system
+If a file in the CernVM-FS repository gets changed, the union file system
 first copies it to the writable volume and applies any changes to this copy
 (copy-on-write semantics). Also newly created files or directories will be
 stored in the writable volume. Additionally the union file system creates
 special hidden files (called *white-outs*) to keep track of file
-deletions in the CernVM-FS repository.
+deletions in the CernVM-FS repository.
 
 Eventually, all changes applied to the repository are stored in this
-scratch area and can be merged into the actual CernVM-FS repository by a
+scratch area and can be merged into the actual CernVM-FS repository by a
 subsequent synchronization step. Up until the actual synchronization
-step takes place, no changes are applied to the CernVM-FS repository.
+step takes place, no changes are applied to the CernVM-FS repository.
 Therefore, any unsuccessful updates to a repository can be rolled back
 by simply clearing the writable file system layer of the union file system.
 
@@ -178,11 +178,11 @@ Requirements for a new Repository
 ---------------------------------
 
 In order to create a repository, the server and client part of
-CernVM-FS must be installed on the release manager machine. Furthermore
+CernVM-FS must be installed on the release manager machine. Furthermore
 you will need a kernel containing a union file system implementation as
 well as a running ``Apache2`` web server. Currently we support Scientific
 Linux 6, Ubuntu 12.04+ and Fedora 22+ distributions. Please note, that
-Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
+Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
 we provide a compatible patched kernel as RPMs (see
 :ref:`sct_customkernelinstall` for details).
 
@@ -201,15 +201,15 @@ certain software distributions into a CernVM-FS repository.
 
 .. _sct_serveranatomy:
 
-Notable CernVM-FS Server Locations and Files
+Notable CernVM-FS Server Locations and Files
 --------------------------------------------
 
-There are a number of possible customisations in the CernVM-FS server
+There are a number of possible customisations in the CernVM-FS server
 installation. The following table provides an overview of important
 configuration files and intrinsical paths together with some
 customisation hints. For an exhaustive description of the
-CernVM-FS server infrastructure please consult
-Appendix ":ref:`apx_serverinfra`".
+CernVM-FS server infrastructure please consult
+Appendix ":ref:`apx_serverinfra`".
 
 ======================================== =======================================
 **File Path**                            **Description**
@@ -256,10 +256,10 @@ Appendix ":ref:`apx_serverinfra`".
 
 .. _sct_repocreation_update:
 
-CernVM-FS Repository Creation and Updating
+CernVM-FS Repository Creation and Updating
 ------------------------------------------
 
-The CernVM-FS server tool kit provides the ``cvmfs_server`` utility in
+The CernVM-FS server tool kit provides the ``cvmfs_server`` utility in
 order to perform all operations related to repository creation,
 updating, deletion, replication and inspection. Without any parameters
 it prints a short documentation of its commands.
@@ -277,7 +277,7 @@ A new repository is created by ``cvmfs_server mkfs``:
 
 The utility will ask for a user that should act as the owner of the
 repository and afterwards create all the infrastructure for the new
-CernVM-FS repository. Additionally it will create a reasonable default
+CernVM-FS repository. Additionally it will create a reasonable default
 configuration and generate a new release manager certificate and
 software signing key. The public key in
 ``/etc/cvmfs/keys/my.repo.name.pub`` needs to be distributed to all
@@ -304,7 +304,7 @@ Repositories can be flagged as containing *volatile* files using the
 
       cvmfs_server mkfs -v my.repo.name
 
-When CernVM-FS clients perform a cache cleanup, they treat files from
+When CernVM-FS clients perform a cache cleanup, they treat files from
 volatile repositories with priority. Such volatile repositories can be
 useful, for instance, for experiment conditions data.
 
@@ -313,7 +313,7 @@ useful, for instance, for experiment conditions data.
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CernVM-FS can store files directly to S3 compatible storage systems,
+CernVM-FS can store files directly to S3 compatible storage systems,
 such as Amazon S3, Huawei UDS and OpenStack SWIFT. The S3 storage
 settings are given as parameters to ``cvmfs_server mkfs`` or
 ``cvmfs_server add-replica``:
@@ -361,9 +361,9 @@ created beforehand.
 
 In addition, if the S3 backend is configured to use multiple accounts or
 buckets, a proxy server is needed to map HTTP requests to correct
-buckets. This mapping is needed because CernVM-FS does not support
+buckets. This mapping is needed because CernVM-FS does not support
 buckets but assumes that all files are stored in a flat namespace. The
-recommendation is to use a Squid proxy server (version
+recommendation is to use a Squid proxy server (version
 :math:`\geq 3.1.10`). The squid.conf can look like this:
 
 ::
@@ -375,7 +375,7 @@ recommendation is to use a Squid proxy server (version
     cache deny all
 
 The bucket mapping logic is implemented in ``s3_squid_rewrite.py`` file.
-This script is not provided by CernVM-FS but needs to be written by the
+This script is not provided by CernVM-FS but needs to be written by the
 repository owner (the CernVM-FS Git repository `contains an example
 <https://github.com/cvmfs/cvmfs/blob/devel/add-ons/s3rewrite.py>`_). The script
 needs to read requests from stdin and write mapped URLs to stdout, for instance:
@@ -394,7 +394,7 @@ Typically a repository publisher does the following steps in order to
 create a new revision of a repository:
 
 #. Run ``cvmfs_server transaction`` to switch to a copy-on-write enabled
-   CernVM-FS volume
+   CernVM-FS volume
 
 #. Make the necessary changes to the repository, add new directories,
    patch certain binaries, …
@@ -409,7 +409,7 @@ create a new revision of a repository:
    -  Run ``cvmfs_server abort`` to clear all changes and start over
       again
 
-CernVM-FS supports having more than one repository on a single server
+CernVM-FS supports having more than one repository on a single server
 machine. In case of a multi-repository host, the target repository of a
 command needs to be given as a parameter when running the
 ``cvmfs_server`` utility. The ``cvmfs_server resign`` command should run
@@ -421,13 +421,13 @@ would migrate all present repositories ending with ``.cern.ch``.
 Repository Import
 ~~~~~~~~~~~~~~~~~
 
-The CernVM-FS server tools support the import of a CernVM-FS file storage
+The CernVM-FS server tools support the import of a CernVM-FS file storage
 together with its corresponding signing keychain. The import functionality is
 useful to bootstrap a release manager machine for a given file storage.
 
 ``cvmfs_server import`` works similar to ``cvmfs_server mkfs`` (described in
 :ref:`sct_repocreation`) except it uses the provided data storage instead of
-creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file storage
+creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file storage
 ``cvmfs_server import`` also takes care of the file catalog migration into the
 latest catalog schema (see :ref:`sct_legacyrepoimport` for details).
 
@@ -450,25 +450,25 @@ description of the repository signature mechanics.
 Legacy Repository Import
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-We strongly recommend to install CernVM-FS 2.1 on a fresh or at least a
-properly cleaned machine without any traces of the CernVM-FS 2.0
-installation before installing CernVM-FS 2.1 server tools.
+We strongly recommend to install CernVM-FS 2.1 on a fresh or at least a
+properly cleaned machine without any traces of the CernVM-FS 2.0
+installation before installing CernVM-FS 2.1 server tools.
 
-The command ``cvmfs_server import`` requires the full CernVM-FS 2.0 data
+The command ``cvmfs_server import`` requires the full CernVM-FS 2.0 data
 storage which is located at /srv/cvmfs by default as well as the
-repository’s signing keys. Since the CernVM-FS 2.1 server backend
+repository’s signing keys. Since the CernVM-FS 2.1 server backend
 supports multiple repositories in contrast to its 2.0 counterpart, we
 recommend to move the repository’s data storage to /srv/cvmfs/<FQRN>
 upfront to avoid later inconsistencies.
 
 The following steps describe the transformation of a repository from
-CernVM-FS 2.0 into 2.1. As an example we are using a repository called
+CernVM-FS 2.0 into 2.1. As an example we are using a repository called
 **legacy.cern.ch**.
 
 #. Make sure that you have backups of both the repository’s backend
    storage and its signing keys
 
-#. Install and test the CernVM-FS 2.1 server tools on the machine that
+#. Install and test the CernVM-FS 2.1 server tools on the machine that
    is going to be used as new Stratum 0 maintenance machine
 
 #. | Place the repository’s backend storage data in
@@ -552,14 +552,14 @@ or more of the following shell script functions:
 
 The defined functions get called at the specified positions in the
 repository update process and are provided with the fully qualified
-repository name as their only parameter (\ ``$1``). Undefined functions
+repository name as their only parameter (\ ``$1``). Undefined functions
 automatically default to a NO-OP. An example script is located at
-``cvmfs/cvmfs_server_hooks.sh.demo`` in the CernVM-FS sources.
+``cvmfs/cvmfs_server_hooks.sh.demo`` in the CernVM-FS sources.
 
 Maintaining a CernVM-FS Repository
 ----------------------------------
 
-CernVM-FS is a versioning, snapshot-based file system. Similar to
+CernVM-FS is a versioning, snapshot-based file system. Similar to
 versioning systems, changes to /cvmfs/…are temporary until they are
 committed (``cvmfs_server publish``) or discarded
 (``cvmfs_server abort``). That allows you to test and verify changes,
@@ -580,7 +580,7 @@ by rolling back to the ``trunk-previous`` tag.
 Integrity Check
 ~~~~~~~~~~~~~~~
 
-CernVM-FS provides an integrity checker for repositories. It is invoked
+CernVM-FS provides an integrity checker for repositories. It is invoked
 by
 
 ::
@@ -610,7 +610,7 @@ Named Snapshots
 ~~~~~~~~~~~~~~~
 
 Named snapshots or *tags* are an easy way to organise checkpoints in the
-file system history. CernVM-FS clients can explicitly mount a repository
+file system history. CernVM-FS clients can explicitly mount a repository
 at a specific named snapshot to expose the file system content published
 with this tag. It also allows for rollbacks to previously created and
 tagged file system revisions. Tag names need to be unique for each
@@ -636,7 +636,7 @@ Creating a Named Snapshot
 
 Tags can be added while publishing a new file system revision. To do so,
 the -a and -m options for ``cvmfs_server publish`` are used. The
-following command publishes a CernVM-FS revision with a new revision
+following command publishes a CernVM-FS revision with a new revision
 that is tagged as “release-1.0”:
 
 ::
@@ -670,7 +670,7 @@ is irreversible.
 Managing Nested Catalogs
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-CernVM-FS stores meta-data (path names, file sizes, …) in file catalogs.
+CernVM-FS stores meta-data (path names, file sizes, …) in file catalogs.
 When a client accesses a repository, it has to download the file catalog
 first and then it downloads the files as they are opened. A single file
 catalog for an entire repository can quickly become large and
@@ -678,7 +678,7 @@ impractical. Also, clients typically do not need all of the repository’s
 meta-data at the same time. For instance, clients using software release
 1.0 do not need to know about the contents of software release 2.0.
 
-With nested catalogs, CernVM-FS has a mechanism to partition the
+With nested catalogs, CernVM-FS has a mechanism to partition the
 directory tree of a repository into many catalogs. Repository
 maintainers are responsible for sensible cutting of the directory trees
 into nested catalogs. They can do so by creating and removing magic
@@ -852,13 +852,13 @@ catalogs in bytes.
 Syncing files into a repository with cvmfs\_rsync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A common method of publishing into CernVM-FS is to first install all the
+A common method of publishing into CernVM-FS is to first install all the
 files into a convenient shared filesystem, mount the shared filesystem
 on the publishing machine, and then sync the files into the repository
 during a transaction. The most common tool to do the syncing is
 ``rsync``, but ``rsync`` by itself doesn’t have a convenient mechanism
 for avoiding generated ``.cvmfscatalog`` and ``.cvmfsautocatalog`` files
-in the CernVM-FS repository. Actually the ``--exclude`` option is good
+in the CernVM-FS repository. Actually the ``--exclude`` option is good
 for avoiding the extra files, but the problem is that if a source
 directory tree is removed, then ``rsync`` will not remove the
 corresponding copy of the directory tree in the repository if it
@@ -882,13 +882,13 @@ This is an example use case:
 Migrate File Catalogs
 ~~~~~~~~~~~~~~~~~~~~~
 
-In rare cases the further development of CernVM-FS makes it necessary to
+In rare cases the further development of CernVM-FS makes it necessary to
 change the internal structure of file catalogs. Updating the
-CernVM-FS installation on a Stratum 0 machine might require a migration
+CernVM-FS installation on a Stratum 0 machine might require a migration
 of the file catalogs.
 
 It is recommended that ``cvmfs_server list`` is issued after any
-CernVM-FS update to review if any of the maintained repositories need a
+CernVM-FS update to review if any of the maintained repositories need a
 migration. Outdated repositories will be marked as “INCOMPATIBLE” and
 ``cvmfs_server`` refuses all actions on these repositories until the
 file catalogs have been updated.
@@ -941,12 +941,12 @@ the CernVM-FS repository will *not* be affected by this update.
 Repository Garbage Collection
 -----------------------------
 
-Since CernVM-FS is a versioning file system it is following an
+Since CernVM-FS is a versioning file system it is following an
 insert-only policy regarding its backend storage. When files are deleted
-from a CernVM-FS repository, they are not automatically deleted from the
+from a CernVM-FS repository, they are not automatically deleted from the
 underlying storage. Therefore legacy revisions stay intact and usable
 forever (cf. :ref:`sct_namedsnapshots`) at the expense of an
-ever-growing storage volume both on the Stratum 0 and the Stratum 1s.
+ever-growing storage volume both on the Stratum 0 and the Stratum 1s.
 
 For this reason, applications that frequently install files into a
 repository and delete older ones – for example the output from nightly
@@ -955,23 +955,23 @@ storage. Furthermore these applications might actually never make use of
 the aforementioned long-term revision preservation rendering most of the
 stored objects “garbage”.
 
-CernVM-FS supports garbage-collected repositories that automatically
+CernVM-FS supports garbage-collected repositories that automatically
 remove unreferenced data objects and free storage space. This feature
-needs to be enabled on the Stratum 0 and automatically scans the
+needs to be enabled on the Stratum 0 and automatically scans the
 repository’s catalog structure for unreferenced objects both on the
-Stratum 0 and the Stratum 1 installations on every publish respectively
+Stratum 0 and the Stratum 1 installations on every publish respectively
 snapshot operation.
 
 Garbage Sweeping Policy
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-The garbage collector of CernVM-FS is using a mark-and-sweep algorithm
+The garbage collector of CernVM-FS is using a mark-and-sweep algorithm
 to detect unused files in the internal catalog graph. Revisions that are
 referenced by named snapshots (cf. :ref:`sct_namedsnapshots`) or that
 are recent enough are preserved while all other revisions are condemned
 to be removed. By default this time-based threshold is *three days* but
 can be changed using the configuration variable
-``CVMFS_AUTO_GC_TIMESPAN`` both on Stratum 0 and Stratum 1. The value of
+``CVMFS_AUTO_GC_TIMESPAN`` both on Stratum 0 and Stratum 1. The value of
 this variable is expected to be parseable by the ``date`` command, for
 example ``3 days ago`` or ``1 week ago``.
 
@@ -1010,17 +1010,17 @@ the stratum 1 installation. This will only work if the upstream stratum
 Limitations on Repository Content
 ---------------------------------
 
-Because CernVM-FS provides what appears to be a POSIX filesystem to
+Because CernVM-FS provides what appears to be a POSIX filesystem to
 clients, it is easy to think that it is a general purpose filesystem and
 that it will work well with all kinds of files. That is not the case,
-however, because CernVM-FS is optimized for particular types of files
+however, because CernVM-FS is optimized for particular types of files
 and usage. This section contains guidelines for limitations on the
 content of repositories for best operation.
 
 Data files
 ~~~~~~~~~~
 
-First and foremost, CernVM-FS is designed to distribute executable code
+First and foremost, CernVM-FS is designed to distribute executable code
 that is shared between a large number of jobs that run together at grid
 sites, clouds, or clusters. Worker node cache sizes and web proxy
 bandwidth are generally engineered to accommodate that application. The
@@ -1029,7 +1029,7 @@ amount of RAM per job slot. The same files are also expected to be read
 from the worker node cache multiple times for the same type of job, and
 read from a caching web proxy by multiple worker nodes.
 
-If there are data files distributed by CernVM-FS that follow similar
+If there are data files distributed by CernVM-FS that follow similar
 access patterns and size limits as executable code, it will probably
 work fine. In addition, if there are files that are larger but read
 slowly throughout long jobs, as opposed to all at once at the beginning,
@@ -1069,7 +1069,7 @@ first unpack it into its separate pieces first. This is because it
 allows better sharing of content between multiple releases of the file;
 some pieces inside the archive file might change and other pieces might
 not in the next release, and pieces that don’t change will be stored as
-the same file in the repository. CernVM-FS will compress the content of
+the same file in the repository. CernVM-FS will compress the content of
 the individual pieces, so even if there’s no sharing between releases it
 shouldn’t take much more space.
 
@@ -1090,12 +1090,12 @@ unless the client has set
 (and most do not), unprivileged users will not be able to read files
 unless they are readable by “other” and all their parent directories
 have at least “execute” permissions. It makes little sense to publish
-files in CernVM-FS if they won’t be able to be read by anyone.
+files in CernVM-FS if they won’t be able to be read by anyone.
 
 Hardlinks
 ~~~~~~~~~
 
-By default CernVM-FS does not allow hardlinks of a file to be in
+By default CernVM-FS does not allow hardlinks of a file to be in
 different directories. If there might be any such hardlinks in a
 repository, set the option
 

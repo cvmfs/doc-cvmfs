@@ -1,6 +1,6 @@
 .. _apx_paramters:
 
-CernVM-FS Parameters
+CernVM-FS Parameters
 ====================
 
 .. |br| raw:: html
