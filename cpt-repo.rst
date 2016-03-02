@@ -323,8 +323,8 @@ settings are given as parameters to ``cvmfs_server mkfs`` or
       cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
         -w http://s3.amazonaws.com/mybucket-1-1 my.repo.name
 
-The file “mys3.conf” contains the S3 settings (see :ref: `table below
-<tab_s3confparameters>`). The “-w” option is used define the S3 server URL,
+The file "mys3.conf" contains the S3 settings (see :ref: `table below
+<tab_s3confparameters>`). The "-w" option is used define the S3 server URL,
 e.g. http://localhost:3128, which is used for accessing the repository's
 backend storage on S3. Note that this URL can be different than the S3 server
 address that is used for uploads, e.g. if a proxy server is deployed in front
@@ -637,7 +637,7 @@ Creating a Named Snapshot
 Tags can be added while publishing a new file system revision. To do so,
 the -a and -m options for ``cvmfs_server publish`` are used. The
 following command publishes a CernVM-FS revision with a new revision
-that is tagged as “release-1.0”:
+that is tagged as "release-1.0":
 
 ::
 
@@ -889,7 +889,7 @@ of the file catalogs.
 
 It is recommended that ``cvmfs_server list`` is issued after any
 CernVM-FS update to review if any of the maintained repositories need a
-migration. Outdated repositories will be marked as “INCOMPATIBLE” and
+migration. Outdated repositories will be marked as "INCOMPATIBLE" and
 ``cvmfs_server`` refuses all actions on these repositories until the
 file catalogs have been updated.
 
@@ -953,7 +953,7 @@ repository and delete older ones - for example the output from nightly
 software builds - might quickly fill up the repository's backend
 storage. Furthermore these applications might actually never make use of
 the aforementioned long-term revision preservation rendering most of the
-stored objects “garbage”.
+stored objects "garbage".
 
 CernVM-FS supports garbage-collected repositories that automatically
 remove unreferenced data objects and free storage space. This feature
@@ -1077,9 +1077,9 @@ File permissions
 ~~~~~~~~~~~~~~~~
 
 Care should be taken to make all the files in a repository readable by
-“other”. This is because permissions on files in the original repository
+"other". This is because permissions on files in the original repository
 are generally the same as those seen by end clients, except the files
-are owned by the “cvmfs” user and group. The write permissions are
+are owned by the "cvmfs" user and group. The write permissions are
 ignored by the client since it is a read-only filesystem. However,
 unless the client has set
 
@@ -1088,8 +1088,8 @@ unless the client has set
       CVMFS_CHECK_PERMISSIONS=no
 
 (and most do not), unprivileged users will not be able to read files
-unless they are readable by “other” and all their parent directories
-have at least “execute” permissions. It makes little sense to publish
+unless they are readable by "other" and all their parent directories
+have at least "execute" permissions. It makes little sense to publish
 files in CernVM-FS if they won't be able to be read by anyone.
 
 Hardlinks
@@ -1108,4 +1108,4 @@ hardlinked to the client, but it will still be stored as only one file
 in the repository just like any other files that have identical content.
 Note that if, in a subsequent publish operation, only one of these
 cross-directory hardlinks gets changed, the other hardlinks remain
-unchanged (the hardlink got “broken”).
+unchanged (the hardlink got "broken").

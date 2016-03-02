@@ -10,7 +10,7 @@ distribution of files, CernVM-FS uses a standard HTTP [BernersLee96]_
 caches, including commercial content delivery networks. CernVM-FS
 ensures data authenticity and integrity over these possibly untrusted
 caches and connections. The CernVM-FS software comprises client-side
-software to mount “CernVM-FS repositories” (similar to AFS volumes) as
+software to mount "CernVM-FS repositories" (similar to AFS volumes) as
 well as a server-side toolkit to create such distributable CernVM-FS
 repositories.
 

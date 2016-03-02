@@ -448,7 +448,7 @@ volume of pinned catalogs exceeds of the overall cache volume.
 
 The cache catalog can be re-constructed from scratch on mount.
 Re-constructing the cache catalog is necessary when the managed cache is
-used for the first time and every time when “unmanaged” changes occurred
+used for the first time and every time when "unmanaged" changes occurred
 to the cache directory, when CernVM-FS was terminated unexpectedly.
 
 In case of an exclusive cache, the cache manager runs as a separate thread of
@@ -582,7 +582,7 @@ readdir
 ~~~~~~~
 
 A directory listing is served by a query on the file catalog. Although the
-“parent”-column is indexed (see :ref:`Catalog table schema <tab_catalog>`),
+"parent"-column is indexed (see :ref:`Catalog table schema <tab_catalog>`),
 this is a relatively slow function. We expect directory listing to happen
 rather seldom.
 
@@ -718,7 +718,7 @@ changes are in fact written to the read-write branch.
 Preserving POSIX semantics in union file systems is non-trivial; the
 first fully functional implementation has been presented by Wright et
 al. [Wright04]_. By now, union file systems are well established for
-“Live CD” builders, which use a RAM disk overlay on top of the read-
+"Live CD" builders, which use a RAM disk overlay on top of the read-
 only system partition in order to provide the illusion of a fully
 read-writable system. CernVM-FS supports both aufs and OverlayFS
 union file systems.

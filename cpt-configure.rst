@@ -50,11 +50,11 @@ set to the parent directory of the configuration file at hand.
                                of file catalogs
 ============================== =================================================
 
-The “Config Repository”
+The "Config Repository"
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 In addition to the local system configuration, a client can configure a
-dedicated “config repository”. A config repository is a standard
+dedicated "config repository". A config repository is a standard
 mountable CernVM-FS repository that resembles the directory structure of
 /etc/cvmfs. It can be used to centrally maintain the public keys and
 configuration of repositories that should not be distributed with rather
@@ -188,7 +188,7 @@ Parrot Connector to CernVM-FS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In case Fuse cannot be be installed, the `parrot toolkit
-<http://ccl.cse.nd.edu/software/parrot>`_ provides a means to “mount”
+<http://ccl.cse.nd.edu/software/parrot>`_ provides a means to "mount"
 CernVM-FS on Linux in pure user space.
 Parrot sandboxes an application in a similar way gdb sandboxes an
 application. But instead of debugging the application,
@@ -323,7 +323,7 @@ Automatic Proxy Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The proxy settings can be automatically gathered through WPAD. The
-special proxy server “auto” in ``CVMFS_HTTP_PROXY`` is resolved
+special proxy server "auto" in ``CVMFS_HTTP_PROXY`` is resolved
 according to the proxy server specification loaded from a PAC file. PAC
 files can be on a file system or accessible via HTTP. CernVM-FS looks
 for PAC files in the order given by the semicolon separated URLs in the
@@ -368,7 +368,7 @@ temporarily overloaded paths. The timeout for connection attempts and
 for very slow downloads can be set by ``CVMFS_TIMEOUT`` and
 ``CVMFS_TIMEOUT_DIRECT``. The two timeout parameters apply to a
 connection with a proxy server and to a direct connection to a Stratum 1
-server, respectively. A download is considered to be “very slow” if the
+server, respectively. A download is considered to be "very slow" if the
 transfer rate is below for more than the timeout interval. The threshold
 can be adjusted with the ``CVMFS_LOW_SPEED_LIMIT`` parameter. A very
 slow download is treated like a broken connection.
@@ -428,7 +428,7 @@ the shared cache but use an exclusive cache, set
 Alien Cache
 ~~~~~~~~~~~
 
-An “alien cache” provides the possibility to use a data cache outside
+An "alien cache" provides the possibility to use a data cache outside
 the control of CernVM-FS. This can be necessary, for instance, in HPC
 environments where local disk space is not available or scarce but
 powerful cluster file systems are available. The alien cache directory
@@ -559,7 +559,7 @@ reloaded without unmounting the file system. The current active code is
 unloaded and the code from the currently installed binaries is loaded.
 Hotpatching is logged to syslog. Since CernVM-FS is re-initialized
 during hotpatching and configuration parameters are re-read, hotpatching
-can be also seen as a “reload”.
+can be also seen as a "reload".
 
 Hotpatching has to be done for all repositories concurrently by
 
