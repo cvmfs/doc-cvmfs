@@ -146,9 +146,9 @@ Repository Configuration Directory
 
 The authoritative configuration of a CernVM-FS repository is located in
 ``/etc/cvmfs/repositories.d`` and should only be writable by the
-administrator. Furthermore the repository’s keychain is located in
+administrator. Furthermore the repository's keychain is located in
 ``/etc/cvmfs/keys`` and follows the naming convention ``<fqrn>.crt`` for
-the certificate, ``<fqrn>.key`` for the repository’s private key and
+the certificate, ``<fqrn>.key`` for the repository's private key and
 ``<fqrn>.pub`` for the public key. All of those files can be symlinked
 somewhere else if necessary.
 

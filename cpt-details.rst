@@ -123,7 +123,7 @@ stored in the parent catalog. Therefore, the root catalog fully defines
 an entire repository.
 
 Loading of nested catalogs happens on demand by CernVM-FS on the first
-attempt to access of anything inside, a user won’t see the difference
+attempt to access of anything inside, a user won't see the difference
 between a single large catalog and several nested catalogs. While this
 usually avoids unnecessary catalogs to be loaded, recursive operations
 like ``find`` can easily bypass this optimization.
@@ -165,11 +165,11 @@ Repository Manifest (.cvmfspublished)
 -------------------------------------
 
 Every CernVM-FS repository contains a repository manifest file that
-serves as entry point into the repository’s catalog structure. The
+serves as entry point into the repository's catalog structure. The
 repository manifest is the first file accessed by the CernVM-FS client
 at mount time and therefore must be accessible via HTTP on the
 repository root URL. It is always called **.cvmfspublished** and
-contains fundamental repository meta data like the root catalog’s
+contains fundamental repository meta data like the root catalog's
 cryptographic hash and the repository revision number as a key-value
 list.
 
@@ -209,16 +209,16 @@ meta data fields.
 +-----------+-------------------------------------------------------------+
 | **Field** | **Meta Data Description**                                   |
 +-----------+-------------------------------------------------------------+
-| ``C``     | Cryptographic hash of the repository’s current root catalog |
+| ``C``     | Cryptographic hash of the repository's current root catalog |
 +-----------+-------------------------------------------------------------+
-| ``R``     | MD5 hash of the repository’s root path         |br|         |
+| ``R``     | MD5 hash of the repository's root path         |br|         |
 |           | (usually always ``d41d8cd98f00b204e9800998ecf8427e``)       |
 +-----------+-------------------------------------------------------------+
 | ``B``     | File size of the root catalog in bytes                      |
 +-----------+-------------------------------------------------------------+
 | ``X``     | Cryptographic hash of the signing certificate               |
 +-----------+-------------------------------------------------------------+
-| ``H``     | Cryptographic hash of the repository’s named tag history    |
+| ``H``     | Cryptographic hash of the repository's named tag history    |
 |           | database                                                    |
 +-----------+-------------------------------------------------------------+
 | ``T``     | Unix timestamp of this particular revision                  |
@@ -260,7 +260,7 @@ of the repository.
 The top level hash used for the repository signature can be found in the
 repository manifest right below the separator line (``--`` /
 :ref:`see above <sct_manifeststructure>`).
-It is the cryptographic hash of the manifest’s meta data lines excluding
+It is the cryptographic hash of the manifest's meta data lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
 
@@ -493,7 +493,7 @@ maps* implement a persistent store of the path names :math:`\mapsto`
 inode mappings. Storing them on hard disk allows for control of the
 CernVM-FS memory consumption (currently :math:`\approx` 45 MB extra)
 and ensures consistency between remounts of CernVM-FS. The performance
-penalty for doing so is small. CernVM-FS uses `Google’s leveldb
+penalty for doing so is small. CernVM-FS uses `Google's leveldb
 <https://github.com/google/leveldb>`, a fast, local key value store.
 Reads and writes are only performed when meta-data are looked up in
 SQLite, in which case the SQLite query supposedly dominates the
@@ -514,7 +514,7 @@ The CernVM-FS Fuse module comprises a minimal *loader* loader process
 (the ``cvmfs2`` binary) and a shared library containing the actual
 Fuse module (``libcvmfs_fuse.so``). This structure makes it possible to
 reload CernVM-FS code and parameters without unmounting the file system.
-Loader and library don’t share any symbols except for two global structs
+Loader and library don't share any symbols except for two global structs
 ``cvmfs_exports`` and ``loader_exports`` used to call each others
 functions. The loader process opens the Fuse channel and implements stub
 Fuse callbacks that redirect all calls to the CernVM-FS shared library.
@@ -742,7 +742,7 @@ changes.
 Based on the read-write interface to CernVM-FS, we create a feed-back
 loop that represents the addition of new software releases to a
 CernVM-FS repository. A repository in base revision :math:`r` is mounted
-in read-write mode on the publisher’s end. Changes are written to the
+in read-write mode on the publisher's end. Changes are written to the
 scratch area and, once published, are re-mounted as repository revision
 :math:`r+1`. In this way, CernVM-FS provides snapshots. In case of
 errors, one can safely resume from a previously committed revision.

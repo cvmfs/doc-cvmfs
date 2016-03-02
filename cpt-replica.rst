@@ -47,7 +47,7 @@ Stratum 0. A direct connection is therefore preferable.
 Recommended Setup
 -----------------
 
-The vast majority of HTTP requests will be served by the site’s local
+The vast majority of HTTP requests will be served by the site's local
 proxy servers. Being a publicly available service, however, we recommend
 to install a Squid frontend in front of the Stratum 1 web server.
 
@@ -136,7 +136,7 @@ checks. They should be configured with the URL
 http://$replica-server/cvmfs/$repository_name/.cvmfspublished. This file
 can also be used to monitor if the same repository revision is served by
 the Stratum 0 server and all the Stratum 1 servers. In order to tune the
-hardware and cache sizes, keep an eye on the Squid server’s CPU and I/O
+hardware and cache sizes, keep an eye on the Squid server's CPU and I/O
 load.
 
 Keep an eye on HTTP 404 errors. For normal CernVM-FS traffic, such

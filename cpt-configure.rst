@@ -25,7 +25,7 @@ The .conf and .local configuration files are key-value pairs in the form
 of shell commands can be used inside these files including comments,
 ``if`` clauses, parameter evaluation, and shell math (``$((…))``).
 Special characters have to be quoted. For instance, instead of
-``CVMFS_HTTP_PROXY=p1;p2``, write ``CVMFS_HTTP_PROXY=’p1;p2’`` in order
+``CVMFS_HTTP_PROXY=p1;p2``, write ``CVMFS_HTTP_PROXY='p1;p2'`` in order
 to avoid parsing errors. The shell commands in the configuration files
 can use the ``CVMFS_FQRN`` parameter, which contains the fully qualified
 repository names that is being mounted. The current working directory is
@@ -72,7 +72,7 @@ autofs will take care of mounting. autofs will also automatically
 unmount a repository if it is not used for a while.
 
 Instead of using autofs, CernVM-FS repositories can be mounted manually
-with the system’s ``mount`` command. In order to do so, use the
+with the system's ``mount`` command. In order to do so, use the
 ``cvmfs`` file system type, like
 
 ::
@@ -87,7 +87,7 @@ Likewise, CernVM-FS repositories can be mounted through entries in
       atlas.cern.ch /mnt/test cvmfs defaults 0 0
 
 Every mount point corresponds to a CernVM-FS process. Using autofs or
-the system’s mount command, every repository can only be mounted once.
+the system's mount command, every repository can only be mounted once.
 Otherwise multiple CernVM-FS processes would collide in the same cache
 location. If a repository is needed under several paths, use a *bind
 mount* or use a :ref:`private file system mount point <sct_privatemount>`.
@@ -97,7 +97,7 @@ mount* or use a :ref:`private file system mount point <sct_privatemount>`.
 Private Mount Points
 ~~~~~~~~~~~~~~~~~~~~
 
-In contrast to the system’s ``mount`` command which requires root
+In contrast to the system's ``mount`` command which requires root
 privileges, CernVM-FS can also be mounted like other Fuse file systems
 by normal users. In this case, CernVM-FS uses parameters from one or
 several user-provided config files instead of using the files under
@@ -105,7 +105,7 @@ several user-provided config files instead of using the files under
 file systems but as ``fuse`` file systems. The ``cvmfs_config`` and
 ``cvmfs_talk`` commands ignore privately mounted CernVM-FS repositories.
 On an interactive machine, private mount points are for instance
-unaffected by an administrator unmounting all system’s CernVM-FS mount
+unaffected by an administrator unmounting all system's CernVM-FS mount
 points by ``cvmfs_config umount``.
 
 In order to mount CernVM-FS privately, use the ``cvmfs2`` command like
@@ -307,7 +307,7 @@ hostnames [#]_. Multiple IP addresses behind a single proxy host name
 (DNS *round-robin* entry) are automatically transformed into a
 load-balanced group. The ``DIRECT`` keyword for a hostname avoids using
 proxies. Note that the ``CVMFS_HTTP_PROXY`` parameter is necessary in
-order to mount. If you don’t use proxies, set the parameter to
+order to mount. If you don't use proxies, set the parameter to
 ``DIRECT``.
 
 Multiple proxy groups are often organized as a primary proxy group at
@@ -445,7 +445,7 @@ must not be touched by third-party programs.
 
 In contrast to normal cache mode where files are store in mode 0600, in
 the alien cache files are stored in mode 0660. So all users being part
-of the alien cache directory’s owner group can use it.
+of the alien cache directory's owner group can use it.
 
 The skeleton of the alien cache directory should be created upfront.
 Otherwise, the first CernVM-FS process accessing the alien cache
@@ -603,7 +603,7 @@ caused by errors outside the scope of CernVM-FS. CernVM-FS stores files
 in the local disk cache with their cryptographic content hash key as
 name, which makes it easy to verify file integrity. CernVM-FS contains
 the ``cvmfs_fsck`` utility to do so for a specific cache directory. Its
-return value is comparable to the system’s ``fsck``. For example,
+return value is comparable to the system's ``fsck``. For example,
 
 ::
 

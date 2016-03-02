@@ -112,7 +112,7 @@ to the following steps:
 
           CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
 
-    If you’re unsure about the proxy names, set
+    If you're unsure about the proxy names, set
     ``CVMFS_HTTP_PROXY=DIRECT``.
 
 **Step 4**
@@ -184,7 +184,7 @@ original error served from the file system buffers by
 
       service autofs restart
 
-In case you need additional assistance, please don’t hesitate to contact
+In case you need additional assistance, please don't hesitate to contact
 us at `cernvm.support@cern.ch <cernvm.support@cern.ch>`__. Together with
 the problem description, please send the system information tarball
 created by ``cvmfs_config bugreport``.

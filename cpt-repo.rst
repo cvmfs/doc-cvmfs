@@ -114,7 +114,7 @@ machines.
 
 #. | Install the cvmfs-release package:
      ``yum install cvmfs-release*.rpm``
-   | This adds the CernVM yum repositories to your machine’s
+   | This adds the CernVM yum repositories to your machine's
      configuration.
 
 #. | Install the aufs enabled kernel from ``cernvm-kernel``:
@@ -325,7 +325,7 @@ settings are given as parameters to ``cvmfs_server mkfs`` or
 
 The file “mys3.conf” contains the S3 settings (see :ref: `table below
 <tab_s3confparameters>`). The “-w” option is used define the S3 server URL,
-e.g. http://localhost:3128, which is used for accessing the repository’s
+e.g. http://localhost:3128, which is used for accessing the repository's
 backend storage on S3. Note that this URL can be different than the S3 server
 address that is used for uploads, e.g. if a proxy server is deployed in front
 of the server. Note that the buckets need to exist before the repository is
@@ -456,26 +456,26 @@ installation before installing CernVM-FS 2.1 server tools.
 
 The command ``cvmfs_server import`` requires the full CernVM-FS 2.0 data
 storage which is located at /srv/cvmfs by default as well as the
-repository’s signing keys. Since the CernVM-FS 2.1 server backend
+repository's signing keys. Since the CernVM-FS 2.1 server backend
 supports multiple repositories in contrast to its 2.0 counterpart, we
-recommend to move the repository’s data storage to /srv/cvmfs/<FQRN>
+recommend to move the repository's data storage to /srv/cvmfs/<FQRN>
 upfront to avoid later inconsistencies.
 
 The following steps describe the transformation of a repository from
 CernVM-FS 2.0 into 2.1. As an example we are using a repository called
 **legacy.cern.ch**.
 
-#. Make sure that you have backups of both the repository’s backend
+#. Make sure that you have backups of both the repository's backend
    storage and its signing keys
 
 #. Install and test the CernVM-FS 2.1 server tools on the machine that
    is going to be used as new Stratum 0 maintenance machine
 
-#. | Place the repository’s backend storage data in
+#. | Place the repository's backend storage data in
      /srv/cvmfs/*legacy.cern.ch*
    | (default storage location)
 
-#. Transfer the repository’s signing keychain to the machine (f.e. to
+#. Transfer the repository's signing keychain to the machine (f.e. to
    /legacy\_keys/)
 
 #. Run ``cvmfs_server import`` like this:
@@ -615,7 +615,7 @@ at a specific named snapshot to expose the file system content published
 with this tag. It also allows for rollbacks to previously created and
 tagged file system revisions. Tag names need to be unique for each
 repository and are not allowed to contain spaces or spacial characters.
-Besides the actual tag’s name they can also contain a free descriptive
+Besides the actual tag's name they can also contain a free descriptive
 text and store a creation timestamp.
 
 Named snapshots are best to use for larger modifications to the
@@ -674,7 +674,7 @@ CernVM-FS stores meta-data (path names, file sizes, …) in file catalogs.
 When a client accesses a repository, it has to download the file catalog
 first and then it downloads the files as they are opened. A single file
 catalog for an entire repository can quickly become large and
-impractical. Also, clients typically do not need all of the repository’s
+impractical. Also, clients typically do not need all of the repository's
 meta-data at the same time. For instance, clients using software release
 1.0 do not need to know about the contents of software release 2.0.
 
@@ -738,7 +738,7 @@ the repository from old catalogs that have changed. In addition, each
 run only tends to access one version of any package so having a separate
 catalog per version avoids loading catalog information that will not be
 used. A nested catalog at the top level of each platform may make sense
-if there is a significant number of platform-specific files that aren’t
+if there is a significant number of platform-specific files that aren't
 included in other catalogs.
 
 It could also make sense to have a nested catalog under
@@ -751,7 +751,7 @@ than 1000 files and directories but not contain more than
 :math:`\approx`\ 200000 files. See :ref:`sct_inspectnested` how to find
 catalogs that do not satisfy this recommendation.
 
-Restructuring the repository’s directory tree is an expensive operation
+Restructuring the repository's directory tree is an expensive operation
 in CernVM-FS. Moreover, it can easily break client applications when
 they switch to a restructured file system snapshot. Therefore, the
 software directory tree layout should be relatively stable before
@@ -856,7 +856,7 @@ A common method of publishing into CernVM-FS is to first install all the
 files into a convenient shared filesystem, mount the shared filesystem
 on the publishing machine, and then sync the files into the repository
 during a transaction. The most common tool to do the syncing is
-``rsync``, but ``rsync`` by itself doesn’t have a convenient mechanism
+``rsync``, but ``rsync`` by itself doesn't have a convenient mechanism
 for avoiding generated ``.cvmfscatalog`` and ``.cvmfsautocatalog`` files
 in the CernVM-FS repository. Actually the ``--exclude`` option is good
 for avoiding the extra files, but the problem is that if a source
@@ -950,7 +950,7 @@ ever-growing storage volume both on the Stratum 0 and the Stratum 1s.
 
 For this reason, applications that frequently install files into a
 repository and delete older ones - for example the output from nightly
-software builds - might quickly fill up the repository’s backend
+software builds - might quickly fill up the repository's backend
 storage. Furthermore these applications might actually never make use of
 the aforementioned long-term revision preservation rendering most of the
 stored objects “garbage”.
@@ -958,7 +958,7 @@ stored objects “garbage”.
 CernVM-FS supports garbage-collected repositories that automatically
 remove unreferenced data objects and free storage space. This feature
 needs to be enabled on the Stratum 0 and automatically scans the
-repository’s catalog structure for unreferenced objects both on the
+repository's catalog structure for unreferenced objects both on the
 Stratum 0 and the Stratum 1 installations on every publish respectively
 snapshot operation.
 
@@ -1068,10 +1068,10 @@ file is desired to be distributed by CernVM-FS, it is usually better to
 first unpack it into its separate pieces first. This is because it
 allows better sharing of content between multiple releases of the file;
 some pieces inside the archive file might change and other pieces might
-not in the next release, and pieces that don’t change will be stored as
+not in the next release, and pieces that don't change will be stored as
 the same file in the repository. CernVM-FS will compress the content of
-the individual pieces, so even if there’s no sharing between releases it
-shouldn’t take much more space.
+the individual pieces, so even if there's no sharing between releases it
+shouldn't take much more space.
 
 File permissions
 ~~~~~~~~~~~~~~~~
@@ -1090,7 +1090,7 @@ unless the client has set
 (and most do not), unprivileged users will not be able to read files
 unless they are readable by “other” and all their parent directories
 have at least “execute” permissions. It makes little sense to publish
-files in CernVM-FS if they won’t be able to be read by anyone.
+files in CernVM-FS if they won't be able to be read by anyone.
 
 Hardlinks
 ~~~~~~~~~
@@ -1103,7 +1103,7 @@ repository, set the option
 
         CVMFS_IGNORE_XDIR_HARDLINKS=true
 
-in the repository’s ``server.conf``. The file will not appear to be
+in the repository's ``server.conf``. The file will not appear to be
 hardlinked to the client, but it will still be stored as only one file
 in the repository just like any other files that have identical content.
 Note that if, in a subsequent publish operation, only one of these
