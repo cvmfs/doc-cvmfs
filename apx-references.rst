@@ -14,7 +14,7 @@ References
    (Feburary 1999).
 
 .. [Panagiotou06] Panagiotou, K. and Souza, A. 2006. On adequate performance measures
-   for paging. *Annual ACM Symposium on Theory Of Computing*. 38, (2006), 487–496.
+   for paging. *Annual ACM Symposium on Theory Of Computing*. 38, (2006), 487-496.
 
 .. [Schubert08] Schubert, M. et al. 2008. *Nagios 3 enterprise network monitoring*.
    Syngress.
@@ -26,7 +26,7 @@ References
    Technical Report #3174. Internet Engineering Task Force.
 
 .. [Dobbertin96] Dobbertin, H. et al. 1996. RIPEMD-160: A strengthened version of
-   RIPEMD. Springer. 71–82.
+   RIPEMD. Springer. 71-82.
 
 .. [Bertoni09] Bertoni, G., Daemen, J., Peeters, M. and Van Assche, G., 2009.
    Keccak sponge function family main document.
@@ -50,10 +50,10 @@ References
    fan-out unification file system*. Technical Report #FSL-04-01b.
    Stony Brook University.
 
-.. [BernersLee96] Berners-Lee, T. et al. 1996. *Hypertext Transfer Protocol – HTTP/1.0*.
+.. [BernersLee96] Berners-Lee, T. et al. 1996. *Hypertext Transfer Protocol - HTTP/1.0*.
    Technical Report #1945. Internet Engineering Task Force.
 
-.. [Fielding99] Fielding, R. et al. 1999. *Hypertext Transfer Protocol – HTTP/1.1*.
+.. [Fielding99] Fielding, R. et al. 1999. *Hypertext Transfer Protocol - HTTP/1.1*.
    Technical Report #2616. Internet Engineering Task Force.
 
 .. [Compostella10] Compostella, G. et al. 2010. CDF software distribution on the Grid
@@ -64,14 +64,14 @@ References
    6, 3 (18 2005), 9.
 
 .. [Suzaki06] Suzaki, K. et al. 2006. HTTP-FUSE Xenoppix. *Proc. of the 2006 linux
-   symposium* (2006), 379–392.
+   symposium* (2006), 379-392.
 
 .. [Freedman03] Freedman, M.J. and Mazières, D. 2003. Sloppy hashing and
-   self-organizing clusters. M.F. Kaashoek and I. Stoica, eds. Springer. 45–55.
+   self-organizing clusters. M.F. Kaashoek and I. Stoica, eds. Springer. 45-55.
 
 .. [Nygren10] Nygren, E. et al. 2010. The Akamai network: A platform for
    high-performance internet applications. *ACM SIGOPS Operating Systems
-   Review*. 44, 3 (2010), 2–19.
+   Review*. 44, 3 (2010), 2-19.
 
 .. [Tolia03] Tolia, N. et al. 2003. Opportunistic use of content addressable
    storage for distributed file systems. *Proc. of the uSENIX annual
