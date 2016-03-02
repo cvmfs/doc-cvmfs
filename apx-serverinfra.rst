@@ -4,10 +4,10 @@
 
 .. _apx_serverinfra:
 
-CernVM-FS Server Infrastructure
+CernVM-FS Server Infrastructure
 ===============================
 
-This section provides technical details on the CernVM-FS server setup
+This section provides technical details on the CernVM-FS server setup
 including the infrastructure necessary for an individual repository. It
 is highly recommended to first consult ":ref:`sct_serveranatomy`" for a
 more general overview of the involved directory structure.
@@ -15,11 +15,11 @@ more general overview of the involved directory structure.
 Prerequisites
 -------------
 
-A CernVM-FS server installation depends on the following environment
+A CernVM-FS server installation depends on the following environment
 setup and tools to be in place:
 
--  kernel 4.2.x or later (for OverlayFS) *or* aufs support built into
-   the kernel (see Section :ref:`sct_customkernelinstall`)
+-  kernel 4.2.x or later (for OverlayFS) *or* aufs support built into
+   the kernel (see Section :ref:`sct_customkernelinstall`)
 
 -  Backend storage location available through HTTP
 
@@ -31,7 +31,7 @@ setup and tools to be in place:
 Local Backend Storage Infrastructure
 ------------------------------------
 
-CernVM-FS stores the entire repository content (file content and
+CernVM-FS stores the entire repository content (file content and
 meta-data catalogs) into a content addressable storage (CAS). This
 storage can either be a file system at ``/srv/cvmfs`` or an S3
 compatible object storage system (see ":ref:`sct_s3storagesetup`" for
@@ -83,7 +83,7 @@ scratch area of a Stratum0 or specifically a release manager machine
 installation. It is always located inside ``/var/spool/cvmfs`` with
 directories for individual repositories. Note that the data volume of
 the spool area can grow very large for massive repository updates since
-it contains the writable union file system branch and a CernVM-FS client
+it contains the writable union file system branch and a CernVM-FS client
 cache directory.
 
 ========================================= =================================================
@@ -144,11 +144,11 @@ cache directory.
 Repository Configuration Directory
 ----------------------------------
 
-The authoritative configuration of a CernVM-FS repository is located in
+The authoritative configuration of a CernVM-FS repository is located in
 ``/etc/cvmfs/repositories.d`` and should only be writable by the
-administrator. Furthermore the repository’s keychain is located in
+administrator. Furthermore the repository's keychain is located in
 ``/etc/cvmfs/keys`` and follows the naming convention ``<fqrn>.crt`` for
-the certificate, ``<fqrn>.key`` for the repository’s private key and
+the certificate, ``<fqrn>.key`` for the repository's private key and
 ``<fqrn>.pub`` for the public key. All of those files can be symlinked
 somewhere else if necessary.
 
@@ -186,26 +186,26 @@ somewhere else if necessary.
 Environment Setup
 -----------------
 
-Apart from file and directory locations a CernVM-FS server installation
+Apart from file and directory locations a CernVM-FS server installation
 depends on a few environment configurations. Most notably the
 possibility to access the backend storage through HTTP and to allow for
-mounting of both the CernVM-FS client at
-``/var/spool/cvmfs/<fqrn>/rdonly`` and a union file system on ``/cvmfs/<fqrn>``.
+mounting of both the CernVM-FS client at
+``/var/spool/cvmfs/<fqrn>/rdonly`` and a union file system on ``/cvmfs/<fqrn>``.
 
 Granting HTTP access can happen in various ways and depends on the
 chosen backend storage type. For an S3 hosted backend storage, the
-CernVM-FS client can usually be directly pointed to the S3 bucket used
+CernVM-FS client can usually be directly pointed to the S3 bucket used
 for storage (see ":ref:`sct_s3storagesetup`" for details). In case of a
 local file system backend any web server can be used for this purpose.
-By default CernVM-FS assumes Apache and uses that automatically.
+By default CernVM-FS assumes Apache and uses that automatically.
 
-Internally the CernVM-FS server uses a SUID binary (i.e.
+Internally the CernVM-FS server uses a SUID binary (i.e.
 ``cvmfs_suid_helper``) to manipulate its mount points. This is necessary
-since transactional CernVM-FS commands must be accessible to the
+since transactional CernVM-FS commands must be accessible to the
 repository owner that is usually different from root. Both the mount
 directives for ``/var/spool/cvmfs/<fqrn>/rdonly`` and ``/cvmfs/<fqrn>``
 must be placed into ``/etc/fstab`` for this reason. By default
-CernVM-FS uses the following entries for these mount points:
+CernVM-FS uses the following entries for these mount points:
 
 ::
 

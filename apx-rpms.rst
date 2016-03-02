@@ -3,10 +3,10 @@
 Available RPMs
 ==============
 
-The CernVM-FS software is available in form of several RPM packages:
+The CernVM-FS software is available in form of several RPM packages:
 
 **cvmfs-release**
-    Adds the CernVM-FS yum repository.
+    Adds the CernVM-FS yum repository.
 
 **cvmfs-config-default**
     Contains a configuration and public keys suitable for nodes in the
@@ -24,7 +24,7 @@ The CernVM-FS software is available in form of several RPM packages:
 
 **cvmfs-devel**
     Contains the ``libcvmfs.a`` static library and the ``libcvmfs.h``
-    header file for use of CernVM-FS with Parrot [Thain05]_.
+    header file for use of CernVM-FS with Parrot [Thain05]_.
 
 **cvmfs-auto-setup**
     Only available through yum. This is a wrapper for
@@ -32,16 +32,16 @@ The CernVM-FS software is available in form of several RPM packages:
     configuration for the ATLAS Tier3s. Depends on cvmfs.
 
 **cvmfs-server**
-    Contains the CernVM-FS server tool kit for maintaining Stratum 0 and
-    Stratum 1 servers.
+    Contains the CernVM-FS server tool kit for maintaining Stratum 0 and
+    Stratum 1 servers.
 
 **kernel-\ :math:`\cdots`-.aufs21**
     Scientific Linux 6 kernel with aufs. Required for SL6 based
-    Stratum 0 servers.
+    Stratum 0 servers.
 
 **kernel-\ :math:`\cdots`-.aufs3**
     Scientific Linux 7 kernel with aufs. Required for SL7/CC7 based
-    Stratum 0 servers.
+    Stratum 0 servers.
 
 **cvmfs-unittests**
     Contains the ``cvmfs_unittests`` binary. Only required for testing.
