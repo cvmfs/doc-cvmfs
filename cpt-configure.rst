@@ -23,7 +23,7 @@ parameters, see Appendix ":ref:`apxsct_clientparameters`".
 The .conf and .local configuration files are key-value pairs in the form
 ``PARAMETER=value``. They are sourced by /bin/sh. Hence, a limited set
 of shell commands can be used inside these files including comments,
-``if`` clauses, parameter evaluation, and shell math (``$((…))``).
+``if`` clauses, parameter evaluation, and shell math (``$((...))``).
 Special characters have to be quoted. For instance, instead of
 ``CVMFS_HTTP_PROXY=p1;p2``, write ``CVMFS_HTTP_PROXY='p1;p2'`` in order
 to avoid parsing errors. The shell commands in the configuration files
@@ -275,14 +275,14 @@ trip time measurement.
 
 The special sequence ``@fqrn@`` in the ``CVMFS_SERVER_URL`` string is
 replaced by fully qualified repository name (atlas.cern.cn, cms.cern.ch,
-…). That allows to use the same parameter for many repositories hosted
+...). That allows to use the same parameter for many repositories hosted
 under the same domain. For instance,
 http://cvmfs-stratum-one.cern.ch/cvmfs/@fqrn@ can resolve to
 http://cvmfs-stratum-one.cern.ch/cvmfs/atlas.cern.ch,
 http://cvmfs-stratum-one.cern.ch/cvmfs/cms.cern.ch, and so on depending
 on the repository that is being mounted. The same works for the sequence
 ``@org@`` which is replaced by the unqualified repository name (atlas,
-cms, …).
+cms, ...).
 
 Proxy Lists
 ~~~~~~~~~~~

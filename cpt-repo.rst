@@ -397,7 +397,7 @@ create a new revision of a repository:
    CernVM-FS volume
 
 #. Make the necessary changes to the repository, add new directories,
-   patch certain binaries, …
+   patch certain binaries, ...
 
 #. Test the software installation
 
@@ -560,7 +560,7 @@ Maintaining a CernVM-FS Repository
 ----------------------------------
 
 CernVM-FS is a versioning, snapshot-based file system. Similar to
-versioning systems, changes to /cvmfs/…are temporary until they are
+versioning systems, changes to /cvmfs/...are temporary until they are
 committed (``cvmfs_server publish``) or discarded
 (``cvmfs_server abort``). That allows you to test and verify changes,
 for instance to test a newly installed release before publishing it to
@@ -670,7 +670,7 @@ is irreversible.
 Managing Nested Catalogs
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-CernVM-FS stores meta-data (path names, file sizes, …) in file catalogs.
+CernVM-FS stores meta-data (path names, file sizes, ...) in file catalogs.
 When a client accesses a repository, it has to download the file catalog
 first and then it downloads the files as they are opened. A single file
 catalog for an entire repository can quickly become large and
