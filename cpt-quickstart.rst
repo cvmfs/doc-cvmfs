@@ -3,8 +3,8 @@ Getting Started
 
 This section describes how to install the CernVM-FS client. The
 CernVM-FS client is supported on x86, x86\_64, and ARMv7 architectures
-running Scientific Linux 4–7, Ubuntu \ :math:`\geq12.04`, SLES 11 and
-openSuSE 13.1, Fedora 19–21, or Mac OS X \ :math:`\geq 10.8`.
+running Scientific Linux 4-7, Ubuntu \ :math:`\geq12.04`, SLES 11 and
+openSuSE 13.1, Fedora 19-21, or Mac OS X \ :math:`\geq 10.8`.
 
 Getting the Software
 --------------------

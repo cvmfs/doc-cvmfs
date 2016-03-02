@@ -949,8 +949,8 @@ forever (cf. :ref:`sct_namedsnapshots`) at the expense of an
 ever-growing storage volume both on the Stratum 0 and the Stratum 1s.
 
 For this reason, applications that frequently install files into a
-repository and delete older ones – for example the output from nightly
-software builds – might quickly fill up the repository’s backend
+repository and delete older ones - for example the output from nightly
+software builds - might quickly fill up the repository’s backend
 storage. Furthermore these applications might actually never make use of
 the aforementioned long-term revision preservation rendering most of the
 stored objects “garbage”.
