@@ -851,6 +851,34 @@ inspect the current nested catalog entry counts in the repository.
 Furthermore ``list-catalgos -s`` will print the file sizes of the
 catalogs in bytes.
 
+Repository Mount Point Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CernVM-FS server maintains two mount points for each repository (see
+:ref:`apx_serverinfra` for details) and needs to keep them in sync with
+:ref:`transactional operations <sct_publish_revision>` on the repository.
+
+In rare occasions (for example at reboot of a release manager machine)
+CernVM-FS might need to perform repair operations on those mount points.
+`As of CernVM-FS 2.2.0 <https://sft.its.cern.ch/jira/browse/CVM-872>`_
+those mount points are not automatically mounted on reboot of the release
+manager machine anymore. Usually the mount point handling happens
+automatically and transparently to the user when invoking arbitrary
+``cvmfs_server`` commands.
+
+Nevertheless ``cvmfs_server mount <repo name>`` allows users to explicitly
+trigger this repair operation anytime for individual repositories. Mounting
+all hosted repositories is possible with the ``-a`` parameter but requires
+root privileges.
+
+.. code-block:: bash
+
+      # properly mount a specific repository
+      cvmfs_server mount test.cern.ch
+
+      # properly mount all hosted repositories (as root)
+      sudo cvmfs_server mount -a
+
 Syncing files into a repository with cvmfs_rsync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
