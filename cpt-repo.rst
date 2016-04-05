@@ -130,6 +130,8 @@ upstream version but it will wait until the patched kernel with
 aufs support is published by the CernVM team. We always try to follow
 the kernel updates as quickly as possible.
 
+.. _sct_publish_revision:
+
 Publishing a new Repository Revision
 ------------------------------------
 
