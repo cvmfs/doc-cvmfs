@@ -38,6 +38,7 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   cpt-releasenotes
    cpt-overview
    cpt-quickstart
    cpt-configure
