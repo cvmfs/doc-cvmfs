@@ -2,13 +2,8 @@ Release Notes for CernVM-FS 2.2
 ===============================
 
 Version 2.2 comes with a number of new features and bugfixes.  We would like to
-especially thank
-
-  * Brian Bockelman (U. Nebraska)
-  * Dave Dykstra (FNAL)
-  * Derek Weitzel (U. Nebraska)
-
-for their contributions to this release!
+especially thank Brian Bockelman (U. Nebraska), Dave Dykstra (FNAL), and Derek
+Weitzel (U. Nebraska) for their contributions to this release!
 
 Substential improvements in this release are:
 
@@ -40,7 +35,7 @@ new package from the repository.  Please take special care when upgrading a
 cvmfs client in NFS mode.  As of this release, we also provide an
 apt repository.
 
-This release has been tested at the CERN Tier 1 for the last couple of weeks.
+This release has been tested at the CERN Tier 1 for the last two weeks.
 
 Please find below details on the larger new features and changes, followed by
 the usual list of bugfixes and smaller improvements.

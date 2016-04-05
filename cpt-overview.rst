@@ -58,6 +58,9 @@ following key features:
 
 -  Dynamic expansion of environment variables embedded in symbolic links
 
+-  Support for extended attributes, such as file capabilities and SElinux 
+   attributes
+
 -  Automatic mirror server selection based on geographic proximity
 
 -  Automatic load-balancing of proxy servers

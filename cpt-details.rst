@@ -33,7 +33,7 @@ its metadata. The table layout is shown in the table below:
 Path MD5                128Bit Integer
 Parent Path MD5         128Bit Integer
 Hardlinks               Integer
-SHA1 Content Hash       160Bit Integer
+Content Hash            BLOB
 Size                    Integer
 Mode                    Integer
 Last Modified           Timestamp
@@ -42,6 +42,7 @@ Name                    String
 Symlink                 String
 uid                     Integer
 gid                     Integer
+xattr                   BLOB
 ====================== ================
 
 In order to save space we do not store absolute paths. Instead we
@@ -59,6 +60,12 @@ refers to the zlib-compressed [Deutsch96]_ version of the file. Flags
 indicate the type of an directory entry (see table :ref:`below
 <tab_dirent_flags>`).
 
+Extended attributes are either NULL or stored as a BLOB of key-value pairs.  It
+starts with 8 bytes for the data structure's version (currently 1) followed by
+8 bytes for the number of extended attributes.  This is followed by the list of
+pairs, which start with two 8 byte values for the length of the key/value
+followed by the concatenated strings of the key and the value.
+
 .. _tab_dirent_flags:
 
 ============ ====================================
@@ -66,9 +73,15 @@ indicate the type of an directory entry (see table :ref:`below
 1            Directory
 2            Transition point to a nested catalog
 33           Root directory of a nested catalog
-3            Regular file
-4            Symbolic link
+4            Regular file
+8            Symbolic link
+68           Chunked file
+132          External file (stored under path name)
 ============ ====================================
+
+As of bit 8, the flags the flags store the cryptographic content hash
+algorithm used to process the given file.  Bit eleven is 1 if the file is
+stored uncompressed.
 
 A file catalog contains a *time to live* (TTL), stored in seconds. The
 catalog TTL advises clients to check for a new version of the catalog,
@@ -153,6 +166,8 @@ the subtree this catalog is root of:
 
 -  Number of nested catalogs
 
+-  Number of external files
+
 -  Number of chunked files
 
 -  Number of individual file chunks
@@ -211,12 +226,19 @@ meta data fields.
 +-----------+-------------------------------------------------------------+
 | ``C``     | Cryptographic hash of the repository's current root catalog |
 +-----------+-------------------------------------------------------------+
+| ``B``     | Size of the root file catalog in bytes                      |
++-----------+-------------------------------------------------------------+
+| ``A``     | "yes" if the catalog should be fetched under its    |br|    |
+|           | alternative name (outside servers /data directory)          |
++-----------+-------------------------------------------------------------+
 | ``R``     | MD5 hash of the repository's root path         |br|         |
 |           | (usually always ``d41d8cd98f00b204e9800998ecf8427e``)       |
 +-----------+-------------------------------------------------------------+
 | ``B``     | File size of the root catalog in bytes                      |
 +-----------+-------------------------------------------------------------+
 | ``X``     | Cryptographic hash of the signing certificate               |
++-----------+-------------------------------------------------------------+
+| ``G``     | "yes" if the repository is garbage-collectable              |
 +-----------+-------------------------------------------------------------+
 | ``H``     | Cryptographic hash of the repository's named tag history    |
 |           | database                                                    |
@@ -228,6 +250,8 @@ meta data fields.
 | ``S``     | Revision number of this published revision                  |
 +-----------+-------------------------------------------------------------+
 | ``N``     | The full name of the manifested repository                  |
++-----------+-------------------------------------------------------------+
+| ``M``     | Cryptographic hash of the repository JSON metadata          |
 +-----------+-------------------------------------------------------------+
 | ``L``     | currently unused (reserved for micro catalogs)              |
 +-----------+-------------------------------------------------------------+
@@ -426,7 +450,7 @@ catalog contains a single table; its structure is shown here:
 
 ================================= =========================
 **Field**                         **Type**
-SHA-1                             String (hex notation)
+Hash                              String (hex notation)
 Size                              Integer
 Access Sequence                   Integer
 Pinned                            Integer
@@ -502,7 +526,7 @@ running time.
 A drawback of the NFS maps is that there is no easy way to account for
 them by the cache quota. They sum up to some 150-200 Bytes per path name
 that has been accessed. A recursive ``find`` on /cvmfs/atlas.cern.ch
-with 25 million entries, for instance, would add up in the cache
+with 50 million entries, for instance, would add up 8GB in the cache
 directory. This is mitigated by the fact that the NFS mode will be only
 used on few servers that can be given large enough spare space on hard
 disk.
@@ -601,16 +625,27 @@ getxattr
 CernVM-FS uses extended attributes to display additional repository
 information. There are two supported attributes:
 
+**chunks**
+    Number of chunks of a regular file.
+
+**compression**
+    Compression algorithm, for regular files only.  Either "zlib" or "none".
+
 **expires**
     Shows the remaining life time of the mounted root file catalog in
     minutes.
 
+**external\_file**
+    Indicates if a regular file is an external file or not.  Either 0 or 1.
+
+**external\_host**
+    Like ``host`` but for the host settings to fetch external files.
+
+**external\_timeout**
+    Like ``timeout`` but for the host settings to fetch external files.
+
 **fqrn**
     Shows the fully qualified repository name of the mounted repository.
-
-**inode\_max**
-    Shows the highest possible inode with the current set of loaded
-    catalogs.
 
 **hash**
     Shows the cryptographic hash of a regular file as listed in the file
@@ -621,6 +656,10 @@ information. There are two supported attributes:
 
 **host\_list**
     Shows the ordered list of HTTP servers.
+
+**inode\_max**
+    Shows the highest possible inode with the current set of loaded
+    catalogs.
 
 **lhash**
     Shows the cryptographic hash of a regular file as stored in the
@@ -651,6 +690,9 @@ information. There are two supported attributes:
 **proxy**
     Shows the currently active HTTP proxy.
 
+**pubkeys**
+    The loaded public RSA keys used for repository whitelist verification.
+
 **rawlink**
     Shows unresolved variant symbolic links; only accessible as root.
 
@@ -667,14 +709,14 @@ information. There are two supported attributes:
 **speed**
     Shows the average download speed.
 
+**tag**
+    The configured repository tag.
+
 **timeout**
     Shows the timeout for proxied connections in seconds.
 
 **timeout\_direct**
     Shows the timeout for direct connections in seconds.
-
-**rawlink**
-    Shows the unresolved variant symlink.
 
 **uptime**
     Shows the time passed since mounting in minutes.

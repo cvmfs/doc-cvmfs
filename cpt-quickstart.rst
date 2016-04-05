@@ -4,20 +4,20 @@ Getting Started
 This section describes how to install the CernVM-FS client. The
 CernVM-FS client is supported on x86, x86\_64, and ARMv7 architectures
 running Scientific Linux 4-7, Ubuntu \ :math:`\geq12.04`, SLES 11 and
-openSuSE 13.1, Fedora 19-21, or Mac OS X \ :math:`\geq 10.8`.
+openSuSE 13.1, Fedora 22 and 23, or Mac OS X \ :math:`\geq 10.10`.  There is
+experimental support for AArch64 and Power 8.
 
 Getting the Software
 --------------------
 
 The CernVM-FS source code and binary packages are available `on our
 website <https://cernvm.cern.ch/portal/filesystem/downloads>`_. Binary
-packages are produced for rpm, dpkg, and Mac OS X (.pkg). yum
-repositories for 64 bit and 32 bit Scientific Linux 5 and 6 and 64 bit
-Scientific Linux 7 are available as a `yum repository
-<http://cvmrepo.web.cern.ch/cvmrepo/yum>`_. The ``cvmfs-release``
-packages can be used to add a these yum repositories to the local yum
-installation. The ``cvmfs-release`` packages are available on `our
-download page <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
+packages are produced for rpm, dpkg, and Mac OS X (.pkg). Packages for 64 bit and
+32 bit Scientific Linux 5 and 6 and 64 bit Scientific Linux 7 are available as a
+`yum repository <http://cvmrepo.web.cern.ch/cvmrepo/yum>`_.
+The ``cvmfs-release`` packages can be used to add a these yum/apt repositories
+to the local yum installation. The ``cvmfs-release`` packages are available on
+`our download page <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
 
 The CernVM-FS client is not relocatable and needs to be installed under
 /usr. On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler,
@@ -43,12 +43,18 @@ To install, proceed according to the following steps:
 
     ::
 
-          yum install cvmfs cvmfs-config-default
+          sudo yum install cvmfs cvmfs-config-default
 
     If yum does not show the latest packages, clean the yum cache by
-    ``yum clean all``. Packages can be also installed with rpm instead
-    with the command ``rpm -vi``. On Ubuntu, use ``dpkg -i`` on the
-    cvmfs and cvmfs-config-default .deb packages.
+    ``sudo yum clean all``. Packages can be also installed with rpm instead
+    with the command ``rpm -vi``. On Ubuntu, use
+    ::
+
+        sudo apt-get install cvmfs cvmfs-config-default
+
+    If apt does not show the latest packages, run ``sudo apt-get update``
+    before. Packages can be also installed with dpkg instead with the command
+    ``dpkg -i``.
 
 **Step 2**
     For the base setup, run ``cvmfs_config setup``. Alternatively, you
@@ -83,7 +89,8 @@ To install, proceed according to the following steps:
 
 **Step 5**
     Check if CernVM-FS mounts the specified repositories by
-    ``cvmfs_config probe``.
+    ``cvmfs_config probe``.  If the probe fails, try to restart autofs with
+    ``sudo service autofs restart``.
 
 Mac OS X
 ~~~~~~~~

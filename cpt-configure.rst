@@ -166,7 +166,7 @@ CernVM-FS repository inside, like
 
 ::
 
-    docker run -i -t -v /cvmfs/sft.cern.ch:/cvmfs/sft.cern.ch centos /bin/bash
+    docker run -it -v /cvmfs/sft.cern.ch:/cvmfs/sft.cern.ch centos /bin/bash
 
 The ``-v`` option can be used multiple times with different
 repositories.
@@ -255,6 +255,16 @@ configuration [Gauthier99]_, choosing a random proxy for load-balancing, and
 automatic fail-over to other hosts and proxies in case of network
 errors. Roaming clients can connect directly to the Stratum 1 service.
 
+IP Protocol Version
+~~~~~~~~~~~~~~~~~~~
+
+CernVM-FS can use both IPv4 and IPv6. For dual-stack stratum 1 hosts it will use
+the system default settings when connecting directly to the host. When
+connecting to a proxy, by default it will try on the IPv4 address unless the
+proxy only has IPv6 addresses configured. The ``CVMFS_IPFAMILY_PREFER=[4|6]``
+parameter can be used to select the preferred IP protocol for dual-stack
+proxies.
+
 Stratum 1 List
 ~~~~~~~~~~~~~~
 
@@ -305,10 +315,13 @@ The chain of proxy groups is specified by a string of semicolon
 separated entries, each group is a list of pipe separated
 hostnames [#]_. Multiple IP addresses behind a single proxy host name
 (DNS *round-robin* entry) are automatically transformed into a
-load-balanced group. The ``DIRECT`` keyword for a hostname avoids using
-proxies. Note that the ``CVMFS_HTTP_PROXY`` parameter is necessary in
-order to mount. If you don't use proxies, set the parameter to
-``DIRECT``.
+load-balanced group.  In order to limit the number of proxy servers used from
+a round-robin DNS entry, set ``CVMFS_MAX_IPADDR_PER_PROXY``.  This also limits
+the perceived "hang duration" while CernVM-FS performs fail-overs.
+
+The ``DIRECT`` keyword for a hostname avoids using proxies. Note that the
+``CVMFS_HTTP_PROXY`` parameter is necessary in order to mount. If you don't use
+proxies, set the parameter to ``DIRECT``.
 
 Multiple proxy groups are often organized as a primary proxy group at
 the local site and backup proxy groups at remote sites. In order to
@@ -318,6 +331,7 @@ primary group after some time. The delay for re-trying a proxies from
 the primary group is set in seconds by ``CVMFS_PROXY_RESET_AFTER``. The
 distinction of primary and backup proxy groups can be turned off by
 setting this parameter to 0.
+
 
 Automatic Proxy Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -491,8 +505,8 @@ anytime later. As the NFS server has no control over the lifetime of
 client caches, entries in the NFS maps cannot be removed.
 
 Typically, every entry in the NFS maps requires some 150-200 Bytes. A
-recursive ``find`` on /cvmfs/atlas.cern.ch with 25 million entries, for
-instance, would add up in the cache directory. For a CernVM-FS instance
+recursive ``find`` on /cvmfs/atlas.cern.ch with 50 million entries, for
+instance, would add up 8GB in the cache directory. For a CernVM-FS instance
 that is exported via NFS, the safety margin for the NFS maps needs be
 taken into account. It also might be necessary to monitor the actual
 space consumption.
@@ -621,6 +635,9 @@ using 8 concurrent threads. Supported options are:
                  rebuilt by CernVM-FS on next mount.
 ================ ===============================================================
 
+The ``cvmfs_config fsck`` command can be used to verify all configured
+repositories.
+
 cvmfs\_config
 ~~~~~~~~~~~~~
 
@@ -651,7 +668,11 @@ system for use with CernVM-FS.
 
 **probe**
     The ``probe`` command tries to access /cvmfs/$repository for all
-    repositories specified in ``CVMFS_REPOSITORIES``.
+    repositories specified in ``CVMFS_REPOSITORIES`` or the ones specified as
+    a space separated list on the command line, respectively.
+
+**fsck**
+    Run ``cvmfs_fsck`` on all repositories specified in ``CVMFS_REPOSITORIES``.
 
 **reload**
     The ``reload`` command is used to :ref:`reload or hotpatch
@@ -665,6 +686,13 @@ system for use with CernVM-FS.
 **wipecache**
     The ``wipecache`` command is an alias for ``reload -c``.
 
+**killall**
+    The ``killall`` command immediately unmounts all repositories under
+    /cvmfs and terminates the associated processes.  It is meant to escape from
+    a hung state without the need to reboot a machine.  However, all processes
+    that use CernVM-FS at the time will be terminated, too.  The need to use
+    this command very likely points to a network problem or a bug in cvmfs.
+
 **bugreport**
     The ``bugreport`` command creates a tarball with collected system
     information which helps to :ref:`debug a problem <sct_debugginghints>`.
@@ -676,7 +704,7 @@ The ``cvmfs_talk`` command provides a way to control a currently running
 CernVM-FS process and to extract information about the status of the
 corresponding mount point. Most of the commands are for special purposes
 only or covered by more convenient commands, such as
-``cvmfs_config showconfig`` or ``cvmfs_config stat``. Two commands might
+``cvmfs_config showconfig`` or ``cvmfs_config stat``. Three commands might
 be of particular interest though.
 
 ::
@@ -685,6 +713,14 @@ be of particular interest though.
 
 will, without interruption of service, immediately cleanup the cache
 from all files that are not currently pinned in the cache.
+
+::
+
+      cvmfs_talk cleanup rate 120
+
+shows the number of cache cleanups in the last two hours (120 minutes).  If
+this value is larger than one or two, the cache size is probably two small and
+the client experiences cache thrashing.
 
 ::
 

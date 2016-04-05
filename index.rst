@@ -43,6 +43,7 @@ Contents
    cpt-quickstart
    cpt-configure
    cpt-squid
+   cpt-hpc
    cpt-repo
    cpt-replica
    cpt-servermeta

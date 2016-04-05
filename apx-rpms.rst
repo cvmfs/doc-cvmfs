@@ -6,7 +6,7 @@ Available RPMs
 The CernVM-FS software is available in form of several RPM packages:
 
 **cvmfs-release**
-    Adds the CernVM-FS yum repository.
+    Adds the CernVM-FS yum/apt repository.
 
 **cvmfs-config-default**
     Contains a configuration and public keys suitable for nodes in the
@@ -35,12 +35,8 @@ The CernVM-FS software is available in form of several RPM packages:
     Contains the CernVM-FS server tool kit for maintaining Stratum 0 and
     Stratum 1 servers.
 
-**kernel-\ :math:`\cdots`-.aufs21**
+**kernel-...-.aufs21**
     Scientific Linux 6 kernel with aufs. Required for SL6 based
-    Stratum 0 servers.
-
-**kernel-\ :math:`\cdots`-.aufs3**
-    Scientific Linux 7 kernel with aufs. Required for SL7/CC7 based
     Stratum 0 servers.
 
 **cvmfs-unittests**

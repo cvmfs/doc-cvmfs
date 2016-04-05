@@ -19,6 +19,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
 **Parameter**                   **Meaning**
 =============================== ====================================================================================================================================================================================
 CVMFS_ALIEN_CACHE               If set, use an alien cache at the given location
+CVMFS_ALT_ROOT_PATH             If set to *yes*, use alternative root catalog path.  Only required for fixed catalogs (tag / hash) under the alternative path.
 CVMFS_AUTO_UPDATE               If set to *no*, disables the automatic update of file catalogs.
 CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data.
 CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to download data.
@@ -29,12 +30,17 @@ CVMFS_DEBUGLOG                  If set, run CernVM-FS in debug mode and write a 
 CVMFS_DEFAULT_DOMAIN            The default domain will be automatically appended to repository names when given without a domain.
 CVMFS_FALLBACK_PROXY            List of HTTP proxies similar to ``CVMFS_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 CVMFS_FOLLOW_REDIRECTS          When set to *yes*, follow up to 4 HTTP redirects in requests.
+CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernVM-FS specific extended attributes
 CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``.
 CVMFS_HTTP_PROXY                Chain of HTTP proxy groups used by CernVM-FS. Necessary. Set to ``DIRECT`` if you don't use proxies.
+CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
+CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
 CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
 CVMFS_EXTERNAL_FALLBACK_PROXY   List of HTTP proxies similar to ``CVMFS_EXTERNAL_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
+CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks.
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
+CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to proxies.  Can be either 4 or 6.
 CVMFS_KCACHE_TIMEOUT            Timeout for path names and file attributes in the kernel file system buffers.
 CVMFS_KEYS_DIR                  Directory containing \*.pub files used as repository signing keys.  If set, this parameter has precedence over ``CVMFS_PUBLIC_KEY``.
 CVMFS_LOW_SPEED_LIMIT           Minimum transfer rate a server or proxy must provide.
@@ -48,28 +54,28 @@ CVMFS_NFS_SOURCE                If set to *yes*, act as a source for the NFS dae
 CVMFS_NFS_SHARED                If set a path, used to store the NFS maps in an SQlite database, instead of the usual LevelDB storage in the cache directory.
 CVMFS_PAC_URLS                  Chain of URLs pointing to PAC files with HTTP proxy configuration information.
 CVMFS_PROXY_RESET_AFTER         Delay in seconds after which CernVM-FS will retry the primary proxy group in case of a fail-over to another group.
+CVMFS_PROXY_TEMPLATE            Overwrite the default proxy template in Geo-API calls.  Only needed for debugging.
 CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
 CVMFS_QUOTA_LIMIT               Soft-limit of the cache in Megabyte.
 CVMFS_RELOAD_SOCKETS            Directory of the sockets used by the CernVM-FS loader to trigger hotpatching/reloading.
 CVMFS_REPOSITORIES              Comma-separated list of fully qualified repository names that shall be mountable under /cvmfs.
+CVMFS_REPOSITORY_DATE           A timestamp in ISO format (e.g. ``2007-03-01T13:00:00Z``).  Selects the repository state as of the given date.
 CVMFS_REPOSITORY_TAG            Select a named repository snapshot that should be mounted instead of ``trunk``.
 CVMFS_ROOT_HASH                 Hash of the root file catalog, implies ``CVMFS_AUTO_UPDATE=no``.
+CVMFS_SEND_INFO_HEADER          If set to *yes*, include the cvmfs path of downloaded data in HTTP headers.
+CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used as a release manager repository base line.
 CVMFS_SERVER_URL                Semicolon-separated chain of Stratum~1 servers.
-CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks
 CVMFS_SHARED_CACHE              If set to *no*, makes a repository use an exclusive cache.
 CVMFS_STRICT_MOUNT              If set to *yes*, mount only repositories that are listed in ``CVMFS_REPOSITORIES``.
 CVMFS_SYSLOG_FACILITY           If set to a number between 0 and 7, uses the corresponding LOCAL$n$ facility for syslog messages.
 CVMFS_SYSLOG_LEVEL              If set to 1 or 2, sets the syslog level for CernVM-FS messages to LOG_DEBUG or LOG_INFO respectively.
+CVMFS_SYSTEMD_NOKILL            If set to *yes*, modify the command line to ``@vmfs2 ...`` in order to act as a systemd lowlevel storage manager.
 CVMFS_TIMEOUT                   Timeout in seconds for HTTP requests with a proxy server.
 CVMFS_TIMEOUT_DIRECT            Timeout in seconds for HTTP requests without a proxy server.
-CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
-CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
 CVMFS_TRACEFILE                 If set, enables the tracer and trace file system calls to the given file.
 CVMFS_USE_GEOAPI                Request order of Stratum 1 servers and fallback proxies via Geo-API.
 CVMFS_USER                      Sets the ``gid`` and ``uid`` mount options. Don't touch or overwrite.
 CVMFS_USYSLOG                   All messages that normally are logged to syslog are re-directed to the given file.  This file can grow up to 500kB and there is one step of log rotation.  Required for $\mu$CernVM.
-CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used as a release manager repository base line.
-CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernVM-FS specific extended attributes
 =============================== ====================================================================================================================================================================================
 
 
