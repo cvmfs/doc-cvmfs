@@ -849,8 +849,8 @@ inspect the current nested catalog entry counts in the repository.
 Furthermore ``list-catalgos -s`` will print the file sizes of the
 catalogs in bytes.
 
-Syncing files into a repository with cvmfs\_rsync
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Syncing files into a repository with cvmfs_rsync
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A common method of publishing into CernVM-FS is to first install all the
 files into a convenient shared filesystem, mount the shared filesystem
