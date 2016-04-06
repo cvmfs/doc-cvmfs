@@ -31,9 +31,11 @@ Substential improvements in this release are:
     scenarios (see below).
 
 As with previous releases, upgrading should be seamless just by installing the
-new package from the repository.  Please take special care when upgrading a
-cvmfs client in NFS mode.  As of this release, we also provide an
-apt repository.
+new package from the repository.  As of this release, we also provide an
+apt repository.  As usual, we recommend to update only a few worker nodes first
+and gradually ramp up once the new version proves to work all right. Please take
+special care when upgrading a cvmfs client in NFS mode.  For Stratum 0 servers,
+all transactions must be closed before upgrading.
 
 This release has been tested at the CERN Tier 1 for the last two weeks.
 
