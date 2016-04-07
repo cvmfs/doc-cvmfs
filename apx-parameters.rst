@@ -124,4 +124,5 @@ CVMFS_VOMS_AUTHZ                    VOMS authentication string to be added into 
 CVMFS_COMPRESSION_ALGORITHM         Compression algorithm to be used during publishing |br| (currently either 'default' or 'none')
 CVMFS_EXTERNAL_DATA                 Set to *true* to mark repository to contain external data that is served from an external HTTP server
 CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
+CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 =================================== ============================================================================================================================================================
