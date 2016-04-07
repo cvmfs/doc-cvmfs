@@ -28,6 +28,8 @@ CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownersh
 CVMFS_CLAIM_OWNERSHIP           If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
 CVMFS_DEBUGLOG                  If set, run CernVM-FS in debug mode and write a verbose log the the specified file.
 CVMFS_DEFAULT_DOMAIN            The default domain will be automatically appended to repository names when given without a domain.
+CVMFS_DNS_RETRIES               Number of retries when resolving proxy names
+CVMFS_DNS_TIMEOUT               Timeout in seconds when resolving proxy names
 CVMFS_FALLBACK_PROXY            List of HTTP proxies similar to ``CVMFS_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 CVMFS_FOLLOW_REDIRECTS          When set to *yes*, follow up to 4 HTTP redirects in requests.
 CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernVM-FS specific extended attributes
