@@ -7,9 +7,7 @@ Stratum0 and Stratum1 repositories and user-defined administrative meta
 information.
 
 Furthermore each repository contains user-maintained and signed meta information
-gets replicated to Stratum1 servers automatically. Since this JSON data is part
-of CernVM-FS's internal data format it is easiest accessible `through our
-python library <https://github.com/cvmfs/python-cvmfsutils>`_.
+gets replicated to Stratum1 servers automatically.
 
 .. _sct_globalmetainfo:
 
