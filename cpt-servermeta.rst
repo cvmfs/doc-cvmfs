@@ -48,9 +48,7 @@ of the repository's content and a list of recommended Stratum1 replica URLs.
 Furthermore it provides a custom JSON region for arbitrary information.
 
 Note that this JSON file is stored inside CernVM-FS's backend data structure and
-gets replicated to Stratum1 servers automatically. To date there is no specific
-URL to access it but we recommend to use `our
-python library <https://github.com/cvmfs/python-cvmfsutils>`_ for read access.
+gets replicated to Stratum1 servers automatically.
 
 Editing is done per repository using the ``cvmfs_server`` utilitiy. As with the
 :ref:`global meta information <sct_globalmetainfo>` ``cvmfs_server`` uses ``jq``
