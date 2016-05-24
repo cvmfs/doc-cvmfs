@@ -25,13 +25,13 @@ name, contact information and an arbitrary user-defined JSON portion here::
 
   http://<server base URL>/cvmfs/info/meta.json
 
-Using the  ``cvmfs_server`` utilitiy an administrator can edit the user-defined
-portion of the data with a text editor (cf. ``$EDITOR``). Note that
-``cvmfs_server`` validates the edited JSON data when the ``jq`` utility is
-installed on the system, otherwise the administrator is reponsible to produce a
-valid JSON file::
+Using the  ``cvmfs_server`` utility, an administrator can edit the user-defined
+portion of the data with a text editor (cf. ``$EDITOR``)s::
 
   cvmfs_server update-info
+
+Note that the ``cvmfs_server`` package requires the ``jq`` utility, which validates 
+CVMFS JSON data.
 
 Below are :ref:`examples <sct_jsonexamples>` of both the repository list and
 user-defined JSON files.
