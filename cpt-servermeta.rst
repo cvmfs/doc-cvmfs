@@ -18,12 +18,12 @@ This JSON data provides information about the CernVM-FS server itself. A list of
 all repositories (both Stratum0 and Stratum1) hosted at this specific server is
 automatically generated and can be accessed here::
 
-  http://<server base URL>/cvmfs/info/repositories.json
+  http://<server base URL>/cvmfs/info/v1/repositories.json
 
 Furthermore there might be user-defined information like the administrator's
 name, contact information and an arbitrary user-defined JSON portion here::
 
-  http://<server base URL>/cvmfs/info/meta.json
+  http://<server base URL>/cvmfs/info/v1/meta.json
 
 Using the  ``cvmfs_server`` utility, an administrator can edit the user-defined
 portion of the data with a text editor (cf. ``$EDITOR``)s::
@@ -67,8 +67,8 @@ An example of a repository specific meta information file can be found in
 Examples
 --------
 
-/cvmfs/info/meta.json
-^^^^^^^^^^^^^^^^^^^^^
+/cvmfs/info/v1/meta.json
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: json
 
@@ -83,8 +83,8 @@ Examples
   }
 
 
-/cvmfs/info/repositories.json
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/cvmfs/info/v1/repositories.json
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: json
 
