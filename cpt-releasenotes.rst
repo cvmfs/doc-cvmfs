@@ -383,3 +383,28 @@ Improvements
 
   * Library: add support for chunked files in libcvmfs
     (`CVM-687 <https://sft.its.cern.ch/jira/browse/CVM-687>`_)
+
+
+Bug Fixes in CernVM-FS 2.2.2
+----------------------------
+
+  * Remove use of ``SSLv3_client_method()`` in libcurl
+
+  * Server: fix ``cvmfs_server snapshot -a`` not noticing failed snapshots
+    (`CVM-997 <https://sft.its.cern.ch/jira/browse/CVM-997>`_)
+
+  * Server: backport ``cvmfs_server mount -a``
+    (`CVM-996 <https://sft.its.cern.ch/jira/browse/CVM-996>`_)
+
+  * Server: update ``cvmfs_rsync`` to handle source dirs changed into symlinks
+    (`CVM-1004 <https://sft.its.cern.ch/jira/browse/CVM-1004>`_)
+
+  * Library: fix compilation on Fedora 23 i686
+
+
+Bug Fixes in CernVM-FS 2.2.3
+----------------------------
+
+  * Client: fix stale data in opened, chunked files that are updated in the
+    repository
+    (`CVM-1017 <https://sft.its.cern.ch/jira/browse/CVM-1017>`_)
