@@ -47,6 +47,7 @@ Contents
    cpt-repo
    cpt-replica
    cpt-servermeta
+   cpt-plugins
    cpt-details
 
 
@@ -56,6 +57,7 @@ Additional Information
 .. toctree::
    :maxdepth: 1
 
+   apx-security
    apx-parameters
    apx-serverinfra
    apx-rpms
