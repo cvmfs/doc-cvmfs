@@ -312,6 +312,30 @@ useful, for instance, for experiment conditions data.
 
 .. _sct_s3storagesetup:
 
+
+Confidential Repositories
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Repositories can be created with the ``-V`` options or republished with the
+``-F`` option with a ``membership requirement``.  Clients that mount
+repositories with a membership requirement will grant or deny access to the
+repository based on the decision made by an authzoriation helper.  See
+Section :ref:`sct_authz` for details on authorization helpers.
+
+For instance, a repository can be configured to grant access to a repository
+only to those users that have a X.509 certificate with a certain DN.  Note that
+the corresponding client-side X.509 authentication helper is not part of
+CernVM-FS but is provided as a third-party plugin by the Open Science Grid.
+
+A membership requirement makes most sense if the repository is served by an
+HTTPS server that requires client-side authentication.  Note that such
+repositories cannot be replicated to Stratum 1 servers.  Such repositories also
+cannot benefit from site proxies.  Instead, such repositories are either part
+of a (non CernVM-FS) HTTPS content distribution network or they might be
+installed for a small number of users that, for example, require access to
+licensed software.
+
+
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
