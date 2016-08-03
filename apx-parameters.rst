@@ -21,6 +21,8 @@ Parameters recognized in configuration files under /etc/cvmfs:
 CVMFS_ALIEN_CACHE               If set, use an alien cache at the given location
 CVMFS_ALT_ROOT_PATH             If set to *yes*, use alternative root catalog path.  Only required for fixed catalogs (tag / hash) under the alternative path.
 CVMFS_AUTO_UPDATE               If set to *no*, disables the automatic update of file catalogs.
+CVMFS_AUTHZ_HELPER              Full path to an authz helper, overwrites the helper hint in the catalog.
+CVMFS_AUTHZ_SEARCH_PATH         Full path to the directory that contains the authz helpers.
 CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data.
 CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to download data.
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.

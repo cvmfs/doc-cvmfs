@@ -25,7 +25,7 @@ CernVM-FS does **not** provide data confidentiality out of the box.  By default
 data is transferred through HTTP and thus only public data should be stored on
 CernVM-FS.  However, CernVM-FS can be operated with HTTPS data transport.  In
 combination with client-authentication using an authz helper (see Section
-:ref:`cpt_plugins`), CernVM-FS can be configured for end-to-end data
+:ref:`sct_authz`), CernVM-FS can be configured for end-to-end data
 confidentiality.
 
 Once downloaded and stored in a cache, the CernVM-FS client fully trusts the
@@ -33,7 +33,7 @@ cache.  Data in the cache can be checked for silent corruption but no integrity
 re-check takes place.
 
 Signature Details
-^^^^^^^^^^^^^^^^^
+-----------------
 
 Creating and validating a repository signature is a two-step process.  The
 *repository manifest* (the file ``.cvmfspublished``) is signed by a private RSA
@@ -65,7 +65,7 @@ whitelist on a dedicated key-signing machine.
 
 
 Content Hashes
-^^^^^^^^^^^^^^
+--------------
 
 CernVM-FS supports multiple content hash algorithms: SHA-1 (default),
 RIPEMD-160, and SHAKE-128 with 160 output bits.  The content hash algorithm
@@ -77,7 +77,7 @@ another.
 
 
 Local UNIX Permissions
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 Most parts of CernVM-FS do not require root privileges.  On the server side,
 only creating and deleting a repository (or replica) requires root privileges.
@@ -92,7 +92,7 @@ and RHEL7.  The cache directory should be labeled as ``cvmfs_cache_t``.
 
 
 CernVM-FS Software Distribution
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------
 
 CernVM-FS software is distributed through HTTPS in packages.  There are yum and
 apt repositories for Linux and ``pkg`` packages for OS X.  Sofware is available
