@@ -58,7 +58,7 @@ following key features:
 
 -  Dynamic expansion of environment variables embedded in symbolic links
 
--  Support for extended attributes, such as file capabilities and SElinux 
+-  Support for extended attributes, such as file capabilities and SElinux
    attributes
 
 -  Automatic mirror server selection based on geographic proximity
@@ -100,6 +100,5 @@ actually used are downloaded and cached.
 
    Opening a file on CernVM-FS. CernVM-FS resolves the name by means of
    an SQLite catalog. Downloaded files are verified against the
-   cryptographic hash of the corresponding catalog entry. The ``read()``
-   and the ``stat()`` system call can be entirely served from the
-   in-kernel file system buffers.
+   cryptographic hash of the corresponding catalog entry. The ``stat()`` system 
+   call can be entirely served from the in-kernel file system buffers.
