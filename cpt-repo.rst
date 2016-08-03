@@ -319,7 +319,7 @@ Confidential Repositories
 Repositories can be created with the ``-V`` options or republished with the
 ``-F`` option with a ``membership requirement``.  Clients that mount
 repositories with a membership requirement will grant or deny access to the
-repository based on the decision made by an authzoriation helper.  See
+repository based on the decision made by an authorization helper.  See
 Section :ref:`sct_authz` for details on authorization helpers.
 
 For instance, a repository can be configured to grant access to a repository
