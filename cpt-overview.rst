@@ -31,7 +31,7 @@ Fuse [Suzaki06]_ and content-delivery networks [Freedman03]_
 following key features:
 
 -  Use of the the `Fuse kernel module <http://fuse.sourceforge.net>`_
-   that comes with in-kernel caching of file data and file attributes
+   that comes with in-kernel caching of file attributes
 
 -  Cache quota management
 
