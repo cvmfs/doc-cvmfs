@@ -19,9 +19,9 @@ local UNIX user (uid/gid) and the process id (pid) that is issuing a file system
 request.
 
 An authz helper is spawned by CernVM-FS if the root file catalog contains
-*membership requirement* (see below).  The binary to spawned is derived from
+*membership requirement* (see below).  The binary to be spawned is derived from
 the membership requirement but it can be overwritten with the
-``CVMFS_AUTHZ_HELPER`` parameter.  The authz helper listens on commands on
+``CVMFS_AUTHZ_HELPER`` parameter.  The authz helper listens for commands on
 ``stdin`` and it replies on ``stdout``.
 
 Grant/deny decisions are typically cached for a while by the client.  Note that
@@ -58,12 +58,13 @@ The authz helper gets spawned by the CernVM-FS client with ``stdin`` and
 a 4 byte version (=1), a 4 byte length, and then a JSON text that needs to
 contain the top-level struct ``cvmfs_authz_v1 { ... }``. Communication starts
 with a handshake where the client passes logging parameters to the authz helper.
-The client then sends zero or more authorization requests that are answered by a
-positive or negative permit each that can include the access token for positive
-permits. The permits are cached by the client with a TTL that the helper can
-chose. On unmount, the client sends a quit command to the helper.
+The client then sends zero or more authorization requests, each of which is
+answered by a positive or negative permit.  A positive permit can include an 
+access token that should be used to download data. The permits are cached by the
+client with a TTL that the helper can chose. On unmount, the client sends a quit 
+command to the helper.
 
-When spawned, the authz helper's environment is prepoulated with all
+When spawned, the authz helper's environment is prepopulated with all
 ``CVMFS_AUTHZ_...`` environment variables that are in the CernVM-FS client's
 environment.  Furthermore the parameter ``CVMFS_AUTHZ_HELPER=yes`` is set.
 
