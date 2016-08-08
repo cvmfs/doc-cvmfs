@@ -6,15 +6,15 @@ Client Plug-Ins
 The CernVM-FS client's functionality can be extended through plug-ins.
 CernVM-FS plug-ins are binaries (processes) that communicate with the main
 client process through IPC.  Currently the only plug-in interface is for
-authentication helpers.
+authorization helpers.
 
 .. _sct_authz:
 
-Authentication Helpers
-----------------------
+Authorization Helpers
+---------------------
 
-Client authentication helpers (*authz helper*) can be used to grant or deny read
-access to a mounted repository.  To do so, authentication helpers can verify the
+Client authorization helpers (*authz helper*) can be used to grant or deny read
+access to a mounted repository.  To do so, authorization helpers can verify the
 local UNIX user (uid/gid) and the process id (pid) that is issuing a file system
 request.
 

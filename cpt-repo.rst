@@ -324,7 +324,7 @@ Section :ref:`sct_authz` for details on authorization helpers.
 
 For instance, a repository can be configured to grant access to a repository
 only to those users that have a X.509 certificate with a certain DN.  Note that
-the corresponding client-side X.509 authentication helper is not part of
+the corresponding client-side X.509 authorization helper is not part of
 CernVM-FS but is provided as a third-party plugin by the Open Science Grid.
 
 A membership requirement makes most sense if the repository is served by an
