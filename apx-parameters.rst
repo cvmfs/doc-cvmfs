@@ -32,16 +32,16 @@ CVMFS_DEBUGLOG                  If set, run CernVM-FS in debug mode and write a 
 CVMFS_DEFAULT_DOMAIN            The default domain will be automatically appended to repository names when given without a domain.
 CVMFS_DNS_RETRIES               Number of retries when resolving proxy names
 CVMFS_DNS_TIMEOUT               Timeout in seconds when resolving proxy names
+CVMFS_EXTERNAL_FALLBACK_PROXY   List of HTTP proxies similar to ``CVMFS_EXTERNAL_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
+CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
+CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
+CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
+CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks.
 CVMFS_FALLBACK_PROXY            List of HTTP proxies similar to ``CVMFS_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 CVMFS_FOLLOW_REDIRECTS          When set to *yes*, follow up to 4 HTTP redirects in requests.
 CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernVM-FS specific extended attributes
 CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``.
 CVMFS_HTTP_PROXY                Chain of HTTP proxy groups used by CernVM-FS. Necessary. Set to ``DIRECT`` if you don't use proxies.
-CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
-CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
-CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
-CVMFS_EXTERNAL_FALLBACK_PROXY   List of HTTP proxies similar to ``CVMFS_EXTERNAL_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
-CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks.
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
 CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to proxies.  Can be either 4 or 6.
@@ -91,43 +91,43 @@ Server parameters
 =================================== ============================================================================================================================================================
 **Parameter**                       **Meaning**
 =================================== ============================================================================================================================================================
-CVMFS_CREATOR_VERSION               The CernVM-FS version that was used to create this repository (do not change manually).
-CVMFS_IGNORE_XDIR_HARDLINKS         If set to *yes*, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.
-CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
-CVMFS_REPOSITORY_TYPE               Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
-CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
-CVMFS_UPSTREAM_STORAGE              Upstream spooler description defining the basic upstream storage type and configuration.
-CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
-CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
-CVMFS_AUTO_REPAIR_MOUNTPOINT        Set to *true* to enable automatic recovery from bogus server mount states.
-CVMFS_UNION_DIR                     Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
-CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently `aufs` and `overlayfs` are fully supported)
 CVMFS_AUFS_WARNING                  Set to *false* to silence AUFS kernel deadlock warning.
-CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1*, *rmd160* and *shake128*)
-CVMFS_CATALOG_ENTRY_WARN_THRESHOLD  Threshold of catalog entry count before triggering a warning message.
-CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
-CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
-CVMFS_MIN_CHUNK_SIZE                Minimal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
-CVMFS_AVG_CHUNK_SIZE                Desired Average size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
-CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
-CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
-CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
-CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
-CVMFS_AUTO_TAG                      Creates a generic revision tag for each published revision (if set to *true*).
-CVMFS_AUTO_TAG_TIMESPAN             Date-threshold for automatic tags, after which auto tags get removed (For example: `4 days ago`)
-CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_AUTO_GC                       Enables the automatic garbage collection on *publish* and *snapshot*
 CVMFS_AUTO_GC_TIMESPAN              Date-threshold for automatic garbage collection |br| (For example: `3 days ago`, `1 week ago`, ...)
-CVMFS_GC_DELETION_LOG               Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
+CVMFS_AUTO_REPAIR_MOUNTPOINT        Set to *true* to enable automatic recovery from bogus server mount states.
+CVMFS_AUTO_TAG                      Creates a generic revision tag for each published revision (if set to *true*).
+CVMFS_AUTO_TAG_TIMESPAN             Date-threshold for automatic tags, after which auto tags get removed (For example: `4 days ago`)
 CVMFS_AUTOCATALOGS                  Enable/disable automatic catalog management using autocatalogs.
 CVMFS_AUTOCATALOGS_MAX_WEIGHT       Maximum number of entries in an autocatalog to be considered overflowed. Default value: 100000 |br| (see also *CVMFS_AUTOCATALOGS*)
 CVMFS_AUTOCATALOGS_MIN_WEIGHT       Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 |br| (see also *CVMFS_AUTOCATALOGS*)
-CVMFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage. Using OverlayFS in kernel older than 4.2.x is not supported! (see :ref:`sct_reporequirements`)
-CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
+CVMFS_AVG_CHUNK_SIZE                Desired Average size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_CATALOG_ALT_PATHS             Enable/disable generation of catalog bootstrapping shortcuts during publishing. (Useful when backend directory `/data` is not publicly accessible)
-CVMFS_VOMS_AUTHZ                    VOMS authentication string to be added into the file catalogs
+CVMFS_CATALOG_ENTRY_WARN_THRESHOLD  Threshold of catalog entry count before triggering a warning message.
 CVMFS_COMPRESSION_ALGORITHM         Compression algorithm to be used during publishing |br| (currently either 'default' or 'none')
+CVMFS_CREATOR_VERSION               The CernVM-FS version that was used to create this repository (do not change manually).
+CVMFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage. Using OverlayFS in kernel older than 4.2.x is not supported! (see :ref:`sct_reporequirements`)
 CVMFS_EXTERNAL_DATA                 Set to *true* to mark repository to contain external data that is served from an external HTTP server
-CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
+CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
+CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
+CVMFS_GC_DELETION_LOG               Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
+CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1*, *rmd160* and *shake128*)
+CVMFS_IGNORE_XDIR_HARDLINKS         If set to *yes*, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
+CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
+CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
+CVMFS_MIN_CHUNK_SIZE                Minimal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
+CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
+CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
+CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
+CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
+CVMFS_REPOSITORY_TYPE               Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
+CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
+CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
+CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
+CVMFS_UNION_DIR                     Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
+CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently `aufs` and `overlayfs` are fully supported)
+CVMFS_UPSTREAM_STORAGE              Upstream spooler description defining the basic upstream storage type and configuration.
+CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
+CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
+CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
 =================================== ============================================================================================================================================================
