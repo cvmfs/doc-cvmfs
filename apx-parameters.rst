@@ -114,6 +114,7 @@ CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed fil
 CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
 CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
 CVMFS_AUTO_TAG                      Creates a generic revision tag for each published revision (if set to *true*).
+CVMFS_AUTO_TAG_TIMESPAN             Date-threshold for automatic tags, after which auto tags get removed (For example: `4 days ago`)
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_AUTO_GC                       Enables the automatic garbage collection on *publish* and *snapshot*
 CVMFS_AUTO_GC_TIMESPAN              Date-threshold for automatic garbage collection |br| (For example: `3 days ago`, `1 week ago`, ...)

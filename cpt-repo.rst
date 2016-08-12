@@ -651,11 +651,20 @@ preserve the state of the file system for the future. Nevertheless,
 named snapshots should not be used excessively. Less than 50 named
 snapshots are a good number of named snapshots in many cases.
 
+Automatically Generated Tags
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 By default, new repositories will automatically create a generic tag if
 no explicit tag is given during publish. The automatic tagging can be
-turned off using the -g option during repository creation or by setting
+turned off using the ``-g`` option during repository creation or by setting
 ``CVMFS_AUTO_TAG=false`` in the
 /etc/cvmfs/repositories.d/$repository/server.conf file.
+
+The life time of automatic tags can be restriced by the
+``CVMFS_AUTO_TAG_TIMESPAN`` parameter or by the ``-G`` option to
+``cvmfs_server mkfs``.  The parameter takes a string that the ``date`` utility
+can parse, for instance ``"4 weeks ago"``.  On every publish, automatically
+generated tags older than the defined threshold are removed.
 
 Creating a Named Snapshot
 ^^^^^^^^^^^^^^^^^^^^^^^^^
