@@ -902,7 +902,9 @@ automatically and transparently to the user when invoking arbitrary
 Nevertheless ``cvmfs_server mount <repo name>`` allows users to explicitly
 trigger this repair operation anytime for individual repositories. Mounting
 all hosted repositories is possible with the ``-a`` parameter but requires
-root privileges.
+root privileges.  If you want to have all hosted repositories mounted after
+reboot then put ``cvmfs_server mount -a`` in a boot script, for example in
+``/etc/rc.local``.
 
 .. code-block:: bash
 
