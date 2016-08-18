@@ -84,7 +84,7 @@ Likewise, CernVM-FS repositories can be mounted through entries in
 
 ::
 
-      atlas.cern.ch /mnt/test cvmfs defaults 0 0
+      atlas.cern.ch /mnt/test cvmfs defaults,_netdev,nodev 0 0
 
 Every mount point corresponds to a CernVM-FS process. Using autofs or
 the system's mount command, every repository can only be mounted once.
