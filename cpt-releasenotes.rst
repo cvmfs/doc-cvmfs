@@ -95,7 +95,7 @@ Improvements
 
   * Client: improve debuggability with Valgrind
 
-  * Server: add `cvmfs_server mount` command
+  * Server: add ``cvmfs_server mount`` command
     (`CVM-996 <https://sft.its.cern.ch/jira/browse/CVM-996>`_)
 
   * Server: Warn before forcfully remounting the file system stack, new
