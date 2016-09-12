@@ -1,5 +1,5 @@
-Release Notes for CernVM-FS 2.3
-===============================
+Release Notes for CernVM-FS 2.3.1
+=================================
 
 CernVM-FS 2.3 comes with performance improvements and several new features and
 bugfixes. We would like to thank Dave Dykstra (FNAL), Brian Bockelman
