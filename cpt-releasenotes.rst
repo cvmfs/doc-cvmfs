@@ -1,4 +1,4 @@
-Release Notes for CernVM-FS 2.3.1
+Release Notes for CernVM-FS 2.3.2
 =================================
 
 CernVM-FS 2.3 comes with performance improvements and several new features and
@@ -59,6 +59,9 @@ Bug Fixes
 
   * Client: fix potential null pointer dereference for authz extended attribute
 
+  * Client: fix segfault in debug logging of certain download failures
+    (`CVM-1076 <https://sft.its.cern.ch/jira/browse/CVM-1076>`_)
+
   * Client: fix a few small memory leaks during ``cvmfs_config reload``
 
   * Client: gracefully deal with proxies without http:// prefix
@@ -76,10 +79,16 @@ Bug Fixes
 
   * Server: fix lookup of sbin binaries in the ``cvmfs_server`` script
 
+  * Server: fix publishing of auto catalog markers
+    (`CVM-1079 <https://sft.its.cern.ch/jira/browse/CVM-1079>`_)
+
   * Server: fix false warning on graft files when removing trees on overlayfs
     (`CVM-932 <https://sft.its.cern.ch/jira/browse/CVM-932>`_)
 
   * Server: fix ``lsof`` report in ``cvmfs_server`` on newer Linux distributions
+
+  * Server: fix error reporting when downloading replication sentinal file
+    (`CVM-1078 <https://sft.its.cern.ch/jira/browse/CVM-1078>`_)
 
   * Server: prevent ``cvmfs_server migrate`` on a repository that is in a
     transaction
