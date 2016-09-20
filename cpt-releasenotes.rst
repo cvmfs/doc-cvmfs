@@ -77,6 +77,8 @@ Bug Fixes
 
   * Server: fix a rare crash when parsing the whitelist
 
+  * Server: fix crash when publishing a symlink to a recreated directory
+
   * Server: fix lookup of sbin binaries in the ``cvmfs_server`` script
 
   * Server: fix publishing of auto catalog markers
