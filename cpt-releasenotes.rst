@@ -44,9 +44,6 @@ adjusted by a call to ``cvmfs_server migrate`` for each repository.
 
 For Stratum 1 server, there should be no running snapshots during the upgrade.
 
-As discussed in the Grid Deployment Board, this release will stay in testing for
-two weeks before being moved to the production repositories.
-
 Please find below the list of bugfixes and smaller improvements.
 
 Bug Fixes
