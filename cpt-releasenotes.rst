@@ -40,7 +40,7 @@ correctly. Please take special care when upgrading a cvmfs client in NFS mode.
 
 For Stratum 0 servers, all transactions must be closed before upgrading.  After
 the software upgrade, the directory layout on the release manager needs to be
-adjusted by a call to ``cvmfs_server migrate`` for each repository.
+adjusted by a call to ``cvmfs_server migrate`` for each repository.  **Note**: if the configuration of the Stratum 0 server is handled by a configuration management system (Puppet, Chef, ...), please see below for manual migration instructions.
 
 For Stratum 1 server, there should be no running snapshots during the upgrade.
 
@@ -111,3 +111,37 @@ Improvements
 
   * Server: add support for ``cvmfs_server publish -f`` to force publishing in
     the presence of open file descriptors
+
+Manual Migration of Release Manager Machines
+--------------------------------------------
+
+Release manager machines that maintain Stratum 0 repositories can be migrated from version 2.2 with the following steps:
+
+  1. Ensure that there are no open transactions before updating the server software and during the repository layout migration.
+
+  2. Install the ``cvmfs-server`` 2.3 package.
+
+The following steps have to be performed for all repositories on the release manager machine:
+
+  3. Unmount /cvmfs/<REPOSITORY>
+
+  4. In /var/spool/cvmfs/<REPOSITORY>/scratch, create the subdirectories ``current`` and ``wastebin`` and make sure that they are owned by the user who owns the repository
+
+  5. In /etc/fstab, update the aufs entry for /cvmfs/<REPOSITORY> such that the writable branch points to the new ``current`` subdirectory.  A new, valid fstab entry could look like this one
+
+  ::
+
+    aufs_cernvm-prod.cern.ch /cvmfs/cernvm-prod.cern.ch aufs br=/var/spool/cvmfs/cernvm-prod.cern.ch/scratch/current=rw:/var/spool/cvmfs/cernvm-prod.cern.ch/rdonly=rr,udba=none,ro,noauto 0 0
+
+  6. Mount /cvmfs/<REPOSITORY>
+
+  7. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set ``CVMFS_CREATOR_VERSION=2.3.0-1``
+
+In agreement with the repository owner, it's recommended to make a test publish
+
+::
+
+    cvmfs_server transaction <REPOSITORY>
+    cvmfs_server publish <REPOSITORY>
+
+before resuming normal operation.
