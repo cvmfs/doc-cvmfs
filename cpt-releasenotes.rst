@@ -40,7 +40,9 @@ correctly. Please take special care when upgrading a cvmfs client in NFS mode.
 
 For Stratum 0 servers, all transactions must be closed before upgrading.  After
 the software upgrade, the directory layout on the release manager needs to be
-adjusted by a call to ``cvmfs_server migrate`` for each repository.  **Note**: if the configuration of the Stratum 0 server is handled by a configuration management system (Puppet, Chef, ...), please see below for manual migration instructions.
+adjusted by a call to ``cvmfs_server migrate`` for each repository.
+
+**Note**: if the configuration of the Stratum 0 server is handled by a configuration management system (Puppet, Chef, ...), please see Section :ref:`sct_manual_stratum0_migration`.
 
 For Stratum 1 server, there should be no running snapshots during the upgrade.
 
@@ -112,8 +114,10 @@ Improvements
   * Server: add support for ``cvmfs_server publish -f`` to force publishing in
     the presence of open file descriptors
 
-Manual Migration of Release Manager Machines
---------------------------------------------
+
+.. _sct_manual_stratum0_migration:
+Manual Migration from 2.2 Release Manager Machines
+--------------------------------------------------
 
 Release manager machines that maintain Stratum 0 repositories can be migrated from version 2.2 with the following steps:
 
