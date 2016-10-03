@@ -144,7 +144,7 @@ The following steps have to be performed for all repositories on the release man
 
   7. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set ``CVMFS_CREATOR_VERSION=2.3.0-1``
 
-  8. _Only_ garbage collectable repositories: run ``cvmfs_server gc <REPOSITORY>`` in order to migrate internal data structures
+  8. *Only* garbage collectable repositories: run ``cvmfs_server gc <REPOSITORY>`` in order to migrate internal data structures
 
 In agreement with the repository owner, it's recommended to make a test publish
 
