@@ -44,6 +44,8 @@ adjusted by a call to ``cvmfs_server migrate`` for each repository.
 
 **Note**: if the configuration of the Stratum 0 server is handled by a configuration management system (Puppet, Chef, ...), please see Section :ref:`sct_manual_migration`.
 
+**Note for garbage collectable repositories**: For garbage collected repositories on Stratum 0 and Stratum 1 servers, please run ``cvmfs_server gc`` manually once after the software update.  The automatic garbage collection will not work until the manual garbage collection run.
+
 For Stratum 1 server, there should be no running snapshots during the upgrade.
 
 Please find below the list of bugfixes and smaller improvements.
@@ -105,7 +107,7 @@ Improvements
 
   * Client: improve debuggability with Valgrind
 
-  * Server: add ``cvmfs_server mount`` command
+  * Server: add help text for ``cvmfs_server mount`` command
     (`CVM-996 <https://sft.its.cern.ch/jira/browse/CVM-996>`_)
 
   * Server: Warn before forcfully remounting the file system stack, new
@@ -141,6 +143,8 @@ The following steps have to be performed for all repositories on the release man
   6. Mount /cvmfs/<REPOSITORY>
 
   7. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set ``CVMFS_CREATOR_VERSION=2.3.0-1``
+
+  8. _Only_ garbage collectable repositories: run ``cvmfs_server gc <REPOSITORY>`` in order to migrate internal data structures
 
 In agreement with the repository owner, it's recommended to make a test publish
 
