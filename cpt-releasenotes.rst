@@ -33,6 +33,8 @@ Substantial improvements in this release are:
 
   * New platforms: Fedora 24 on x86_64, SLES 12 on x86_64, CentOS 7 on AArch64
 
+**Note for mac OS 10.12 Sierra**: please `use a pre-release <http://ecsft.cern.ch/dist/cvmfs/nightlies/cvmfs-git-309/cvmfs-2.3.3-0.309-git-fb1e5b279e7383ec.pkg>`_ until patch release 2.3.3 is published.  Please also make sure to use `FUSE for macOS 3.5.2 or newer <https://github.com/osxfuse/osxfuse/releases>`_, which fixes stuck Fuse mountpoints on Sierra.
+
 As with previous releases, upgrading should be seamless just by installing the
 new package from the repository. As usual, we recommend to update only a few
 worker nodes first and gradually ramp up once the new version proves to work
