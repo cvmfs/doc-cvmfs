@@ -444,6 +444,36 @@ every 30 days to update the signatures of the repository. Most
 more than one repository at once, ``cvmfs_server migrate *.cern.ch``
 would migrate all present repositories ending with ``.cern.ch``.
 
+Variant Symlinks
+~~~~~~~~~~~~~~~~
+
+It may be convenient to have a symlink in the repository resolve
+based on the CVMFS client configuration; this is called a *variant symlink*.
+For example, in the ``oasis.opensciencegrid.org`` repository, the OSG provides a
+default set of CAs at ``/cvmfs/oasis.opensciencegrid.org/mis/certificates``
+but would like to give the sysadmin the ability to override this with their
+own set of CA certificates.
+
+To setup a variant symlink in your repository, create a symlink as follows
+inside a repository transaction:
+
+::
+
+      ln -s '$(OSG_CERTIFICATES)' /cvmfs/oasis.opensciencegrid.org/mis/certificates
+      
+Here, the ``certificates`` symlink will evaluate to the value of the ``OSG_CERTIFICATES``
+configuration variable in the client.  If ``OSG_CERTIFICATES`` is not provided, the
+symlink resolution will be an empty string.  To provide a server-side default value,
+you can instead do:
+
+::
+
+      ln -s '$(OSG_CERTIFICATES:-/cvmfs/oasis.opensciencegrid.org/mis/certificates-real)' /cvmfs/oasis.opensciencegrid.org/mis/certificates
+
+Here, the symlink will evaluate to ``/cvmfs/oasis.opensciencegrid.org/mis/certificates-real``
+by default unless the sysadmin sets ``OSG_CERTIFICATES`` in a configuration file (such as
+``/etc/cvmfs/config.d/oasis.opensciencegrid.org.local``.
+
 Repository Import
 ~~~~~~~~~~~~~~~~~
 
