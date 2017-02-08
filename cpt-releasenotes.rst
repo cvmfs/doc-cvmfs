@@ -1,3 +1,87 @@
+Release Notes for CernVM-FS 2.3.3
+=================================
+
+CernVMV-FS 2.3.3 is a hotpatch release containing bugfixes and adjustments
+necessary for smooth operation.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+**Note for mac OS 10.12 Sierra**: Please use `FUSE for macOS 3.5.2 or newer
+<https://github.com/osxfuse/osxfuse/releases>`_, which fixes stuck Fuse
+mountpoints on Sierra.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+
+For Release Manager Machines, all transactions must be closed before upgrading.
+
+For both Release Manager Machines and Stratum 1 servers, after the software
+upgrade, the directory layout on the release manager needs to be adjusted by a
+call to ``cvmfs_server migrate`` for each repository.  If the configuration of
+the Stratum 0 server is handled by a configuration management system (Puppet,
+Chef, ...), please see Section :ref:`sct_manual_migration_2.3.2`.
+
+**Note for upgrades from versions prior to 2.3.2**: please also see the
+specific instructions in the release notes for version 2.3.2.
+
+Bug Fixes
+---------
+
+  * Client: perform host failover when receiving corrupted data from stratum 1 (`CVM-478 <https://sft.its.cern.ch/jira/browse/CVM-478>`_)
+  * Client: add support for ``CVMFS_CONFIG_REPO_REQUIRED`` option (`CVM-1111 <https://sft.its.cern.ch/jira/browse/CVM-1111>`_)
+  * Client: add support for ``cvmfs_talk external host switch`` (`CVM-1126 <https://sft.its.cern.ch/jira/browse/CVM-1126>`_)
+  * Client: fix ``cvmfs_config`` on EL7 if working directory is /usr/bin (`CVM-1118 <https://sft.its.cern.ch/jira/browse/CVM-1118>`_)
+  * Client: fix crash when ``cvmfs_talk cleanup rate`` is called without an argument
+  * Client: fix misleading cache cleanup log message (`CVM-1128 <https://sft.its.cern.ch/jira/browse/CVM-1128>`_)
+  * Client: fix output of ``cvmfs_config umount`` on failures
+  * Server: accept OverlayFS / ext4 on RHEL >= 7.3 (`CVM-835 <https://sft.its.cern.ch/jira/browse/CVM-835>`_)
+  * Server: fix potential deadlock when uploading catalogs (`CVM-1165 <https://sft.its.cern.ch/jira/browse/CVM-1165>`_)
+  * Server: fix asynchronous cleanup with open file descriptors on some aufs versions
+  * Server: prevent garbage collection from running at the same time as snapshot (`CVM-1108 <https://sft.its.cern.ch/jira/browse/CVM-1108>`_)
+  * Server: don't ignore stale locks when publishing (`CVM-1146 <https://sft.its.cern.ch/jira/browse/CVM-1146>`_)
+  * Server: increase robustness when fetching reflog and checksum (`CVM-1114 <https://sft.its.cern.ch/jira/browse/CVM-1114>`_, `CVM-1124 <https://sft.its.cern.ch/jira/browse/CVM-1124>`_)
+  * Server: fix history file leak on automatic removal of generic tags
+  * Server: fix migration of server info JSON files (`CVM-1159 <https://sft.its.cern.ch/jira/browse/CVM-1159>`_)
+  * Server: fix ``cvmfs_server resign`` if ``CVMFS_HASH_ALGORITHM`` is unset (`CVM-1013 <https://sft.its.cern.ch/jira/browse/CVM-1013>`_)
+  * Server: fix selecting repositories by wildcard (`CVM-1151 <https://sft.its.cern.ch/jira/browse/CVM-1151>`_)
+  * Server: compact reflog after garbage collection (`CVM-1162 <https://sft.its.cern.ch/jira/browse/CVM-1162>`_)
+  * Server: add .cvmfs_status file for stratum 1 monitoring (`CVM-1107 <https://sft.its.cern.ch/jira/browse/CVM-1107>`_)
+  * Preloader: fix application of dirtab for nested catalogs
+  * Fixes for macOS 10.12 Sierra (`CVM-1084 <https://sft.its.cern.ch/jira/browse/CVM-1084>`_)
+  * Fix building on EL 7.3 (`CVM-1153 <https://sft.its.cern.ch/jira/browse/CVM-1153>`_)
+
+.. _sct_manual_migration_2.3.2:
+
+Manual Migration from 2.3.2 Release Manager Machines and Stratum 1s
+-------------------------------------------------------------------
+
+Repositories on release manager machines and Stratum 1 servers can be migrated from version 2.3.2 with the following steps.  Earlier version require additional migration to 2.3.2 first.
+
+  1. Ensure that there are no open transactions and no running snapshots before updating the server software.
+
+  2. Install the ``cvmfs-server`` 2.3.3 package.
+
+  3. Ensure that the ``/srv/cvmfs/info/v1/meta.json`` and ``/srv/cvmfs/info/v1/repositories.json`` files exist and are being served by the Stratum 0/1 (see Section :ref:`sct_metainfo`).
+
+The following step has to be done for all repositories on the server:
+
+  3. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set ``CVMFS_CREATOR_VERSION=2.3.3-1``
+
+
+In agreement with the repository owner, it's recommended for stratum 0 servers to make a test publish
+
+::
+
+    cvmfs_server transaction <REPOSITORY>
+    cvmfs_server publish <REPOSITORY>
+
+before resuming normal operation.
+
+
+
 Release Notes for CernVM-FS 2.3.2
 =================================
 
@@ -32,8 +116,6 @@ Substantial improvements in this release are:
   * Performance improvements and reduced memory footprint for client and server.
 
   * New platforms: Fedora 24 on x86_64, SLES 12 on x86_64, CentOS 7 on AArch64
-
-**Note for mac OS 10.12 Sierra**: please `use a pre-release <http://ecsft.cern.ch/dist/cvmfs/nightlies/cvmfs-git-309/cvmfs-2.3.3-0.309-git-fb1e5b279e7383ec.pkg>`_ until patch release 2.3.3 is published.  Please also make sure to use `FUSE for macOS 3.5.2 or newer <https://github.com/osxfuse/osxfuse/releases>`_, which fixes stuck Fuse mountpoints on Sierra.
 
 As with previous releases, upgrading should be seamless just by installing the
 new package from the repository. As usual, we recommend to update only a few

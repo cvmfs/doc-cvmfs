@@ -30,7 +30,7 @@ portion of the data with a text editor (cf. ``$EDITOR``)s::
 
   cvmfs_server update-info
 
-Note that the ``cvmfs_server`` package requires the ``jq`` utility, which validates 
+Note that the ``cvmfs_server`` package requires the ``jq`` utility, which validates
 CVMFS JSON data.
 
 Below are :ref:`examples <sct_jsonexamples>` of both the repository list and
