@@ -1,3 +1,5 @@
+.. _sct_metainfo:
+
 CernVM-FS Server Meta Information
 =================================
 

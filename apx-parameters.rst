@@ -65,6 +65,7 @@ CVMFS_RELOAD_SOCKETS            Directory of the sockets used by the CernVM-FS l
 CVMFS_REPOSITORIES              Comma-separated list of fully qualified repository names that shall be mountable under /cvmfs.
 CVMFS_REPOSITORY_DATE           A timestamp in ISO format (e.g. ``2007-03-01T13:00:00Z``).  Selects the repository state as of the given date.
 CVMFS_REPOSITORY_TAG            Select a named repository snapshot that should be mounted instead of ``trunk``.
+CVMFS_CONFIG_REPO_REQUIRED      If set to *yes*, no repository can be mounted unless the config repository is available.
 CVMFS_ROOT_HASH                 Hash of the root file catalog, implies ``CVMFS_AUTO_UPDATE=no``.
 CVMFS_SEND_INFO_HEADER          If set to *yes*, include the cvmfs path of downloaded data in HTTP headers.
 CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used as a release manager repository base line.

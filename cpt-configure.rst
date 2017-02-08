@@ -63,6 +63,9 @@ by the local configuration in case of conflicts. The config repository
 is set by the ``CVMFS_CONFIG_REPOSITORY`` parameter. The default
 configuration sets this parameter to cvmfs-config.cern.ch.
 
+The ``CVMFS_CONFIG_REPO_REQUIRED`` parameter can be used to force availability
+of the config repository in order for other repositories to get mounted.
+
 Mounting
 --------
 
