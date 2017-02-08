@@ -19,10 +19,10 @@ For Stratum 1 servers, there should be no running snapshots during the upgrade.
 For Release Manager Machines, all transactions must be closed before upgrading.
 
 For both Release Manager Machines and Stratum 1 servers, after the software
-upgrade, the directory layout on the release manager needs to be adjusted by a
-call to ``cvmfs_server migrate`` for each repository.  If the configuration of
-the Stratum 0 server is handled by a configuration management system (Puppet,
-Chef, ...), please see Section :ref:`sct_manual_migration_2.3.2`.
+upgrade, the directory layout on the release manager needs to be slightly
+adjusted by a call to ``cvmfs_server migrate`` for each repository.  If the
+configuration of the server is handled by a configuration management system
+(Puppet, Chef, ...), please see Section :ref:`sct_manual_migration_2.3.2`.
 
 **Note for upgrades from versions prior to 2.3.2**: please also see the
 specific instructions in the release notes for version 2.3.2.
