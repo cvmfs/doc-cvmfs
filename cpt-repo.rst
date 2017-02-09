@@ -44,6 +44,9 @@ System Requirements
    -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
       Appendix ":ref:`apx_rpms`")
 
+   -  CentOS/SL >= 7.3, provided that /var/spool/cvmfs is served by an ext4
+      file system.
+
    -  Fedora 22 and above (with kernel :math:`\ge` 4.2.x)
 
    -  Ubuntu 12.04 64 bit and above
@@ -196,10 +199,12 @@ competing union file system implementation that was merged upstream.
 Since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
 Note however, that the first versions of OverlayFS were broken and will not
 work properly with CernVM-FS. At least a 4.2.x kernel is needed to use
-CernVM-FS with OverlayFS. Furthermore note that OverlayFS cannot fully comply
-with POSIX semantics, in particular hard links must be broken into individual
-files. That is usually not a problem but should be kept in mind when installing
-certain software distributions into a CernVM-FS repository.
+CernVM-FS with OverlayFS. (Red Hat) Enterprise Linux >= 7.3 works, too,
+provided that /var/spool/cvmfs is served by an ext4 file system. Furthermore
+note that OverlayFS cannot fully comply with POSIX semantics, in particular
+hard links must be broken into individual files. That is usually not a problem
+but should be kept in mind when installing certain software distributions into
+a CernVM-FS repository.
 
 .. _sct_serveranatomy:
 
@@ -460,7 +465,7 @@ inside a repository transaction:
 ::
 
       ln -s '$(OSG_CERTIFICATES)' /cvmfs/oasis.opensciencegrid.org/mis/certificates
-      
+
 Here, the ``certificates`` symlink will evaluate to the value of the ``OSG_CERTIFICATES``
 configuration variable in the client.  If ``OSG_CERTIFICATES`` is not provided, the
 symlink resolution will be an empty string.  To provide a server-side default value,
