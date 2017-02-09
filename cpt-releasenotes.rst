@@ -53,6 +53,21 @@ Bug Fixes
   * Fixes for macOS 10.12 Sierra (`CVM-1084 <https://sft.its.cern.ch/jira/browse/CVM-1084>`_)
   * Fix building on EL 7.3 (`CVM-1153 <https://sft.its.cern.ch/jira/browse/CVM-1153>`_)
 
+
+Release Manager Machines on EL 7
+--------------------------------
+
+As of RHEL 7.3, the overlayfs implementation shipped with the Red Hat kernel
+passes the CernVM-FS integration tests provided that /var/spool/cvmfs is served
+by an ext4 file system. In this case, the ``cvmfs_server mkfs`` command does
+not prevent anymore creation of new repositories. Reportedly, the overlayfs
+implementation also works if /var/spool/cvmfs is on an xfs partition that was
+created with the ``ftype=1`` option. This has not yet been verified by
+integration tests. Users can export ``CVMFS_DONT_CHECK_OVERLAYFS_VERSION=yes``
+in order to force the creation of a repository.
+
+
+
 .. _sct_manual_migration_2.3.2:
 
 Manual Migration from 2.3.2 Release Manager Machines and Stratum 1s
