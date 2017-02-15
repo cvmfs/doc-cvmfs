@@ -44,8 +44,9 @@ Repository Specific Meta Information
 Each repository contains a JSON object with repository specific meta data. The
 information is maintained by the repository's owner on the Stratum0 release
 manager machine. It contains the maintainer's contact information, a description
-of the repository's content and a list of recommended Stratum1 replica URLs.
-Furthermore it provides a custom JSON region for arbitrary information.
+of the repository's content, the recommended Stratum 0 URL and a list of
+recommended Stratum 1 replica URLs. Furthermore it provides a custom JSON region
+for arbitrary information.
 
 Note that this JSON file is stored inside CernVM-FS's backend data structure and
 gets replicated to Stratum1 servers automatically.
@@ -122,6 +123,7 @@ Repository Specific Meta Information
     "email"         : "you@organisation.org",
     "organisation"  : "Your Organisation",
     "description"   : "Repository content",
+    "recommended-stratum0"  : "stratum 0 url",
     "recommended-stratum1s" : [ "stratum1 url", "stratum1 url" ],
 
     "custom" : {
