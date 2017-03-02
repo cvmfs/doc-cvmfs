@@ -3,16 +3,23 @@
 CernVM-FS on Supercomputers
 ===========================
 
-Typically there are two problems in using CernVM-FS on supercomputers.
+There are several characteristics in which supercomputers can differ from
+other nodes with respect to CernVM-FS
 
-  1. Individual nodes do not have Internet connectivity
-  2. Fuse is not allowed on the individual nodes
+  1. Fuse is not allowed on the individual nodes
+  2. Individual nodes do not have Internet connectivity
+  3. Nodes have no local hard disk to store the CernVM-FS cache
 
-These problems can be overcome by preloading a CernVM-FS cache on the shared
-cluster file system and, subsequently, using the
-`Parrot connector <http://cernvm.cern.ch/portal/filesystem/parrot>`_ instead of
-the Fuse module.  In contrast to a plain copy of a CernVM-FS repository to a
-shared file system, this approach has the following advantages:
+These problems can be overcome as described in the following sections.
+
+
+Parrot-Mounted CernVM-FS in lieu of Fuse Module
+-----------------------------------------------
+Instead of accessing /cvmfs through a Fuse module, processes can use the
+`Parrot connector <http://cernvm.cern.ch/portal/filesystem/parrot>`_. The parrot
+connector works on x86_64 Linux if the ``ptrace`` system call is not disabled.
+In contrast to a plain copy of a CernVM-FS repository to a shared file system,
+this approach has the following advantages:
 
   * Millions of synchronized meta-data operations per node (path lookups, in
     particular) will not drown the shared cluster file system but resolve
@@ -29,21 +36,17 @@ shared file system, this approach has the following advantages:
   * Support for extra functionality implemented by CernVM-FS such as versioning
     and variant symlinks (symlinks resolved according to environment variables).
 
-In the following, we assume a Supercomputer with a shared file system (e.g.
-Lustre or GPFS) that is accessible from all the normal nodes as well as from one
-or multiple *login nodes*. Only the login nodes need to have access to the
-Internet. They will be used to preload the CernVM-FS cache on the shared cluster
-file system.
 
 Preloading the CernVM-FS Cache
 ------------------------------
 
 The
 `cvmfs_preload utility <http://cernvm.cern.ch/portal/filesystem/downloads>`_
-is used to preload a CernVM-FS cache.  Internally it uses the same code that
-used to replicate between CernVM-FS stratum 0 and stratum 1.  The
-``cvmfs_preload`` command is a self-extracting binary with no further
-dependencies and should work on a majority of x86_64 Linux hosts.
+can be used to preload a CernVM-FS cache onto the shared cluster file system.
+Internally it uses the same code that is used to replicate between CernVM-FS
+stratum 0 and stratum 1.  The ``cvmfs_preload`` command is a self-extracting
+binary with no further dependencies and should work on a majority of x86_64
+Linux hosts.
 
 The ``cvmfs_preload`` command replicates from a stratum 0 (not from a
 stratum 1). Because this induces significant load on the source server,
@@ -84,12 +87,13 @@ manually when necessary or scheduled for instance with a cron job.
 The ``cvmfs_preload`` command can preload files from multiple repositories
 into the same cache directory.
 
-Access From the Nodes
----------------------
+
+Access from the Nodes
+~~~~~~~~~~~~~~~~~~~~~
 
 In order to access a preloaded cache from the nodes,
 `set the path to the directory <http://cernvm.cern.ch/portal/filesystem/parrot>`_
-as an *Alien Cache*. Since there won't be cache misses, parrot or fuse clients 
+as an *Alien Cache*. Since there won't be cache misses, parrot or fuse clients
 do not need to download additional files from the network.
 
 If clients do have network access, they might find a repository version online
@@ -105,7 +109,28 @@ parrot process on the nodes, for instance by setting
 before the invocation of ``parrot_run``.
 
 Compiling ``cvmfs_preload`` from Sources
-----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to compile ``cvmfs_preload`` from sources, use the
 ``-DCVMFS_PRELOADER=on`` cmake option.
+
+
+Loopback File Systems for Nodes' Caches
+---------------------------------------
+
+If nodes have Internet access but no local hard disk, it is preferable to
+provide the CernVM-FS caches as loopback file systems on the cluster file
+system. This way, CernVM-FS automatically populates the cache with the latest
+upstream content. A Fuse mounted CernVM-FS will also automatically manage the
+cache quota.
+
+This approach requires a separate file for every node (not every mountpoint) on
+the cluster file system. The file should be 15% larger than the configured
+CernVM-FS cache size on the nodes, and it should be formatted with an ext3/4 or
+an xfs file system. These files can be created with the ``dd`` and ``mkfs``
+utilities. Nodes can mount these files as loopback file systems from the
+shared file system.
+
+Because there is only a single file for every node, the parallelism of the
+cluster file system can be exploited and all the requests from CernVM-FS
+circumvent the cluster file system's meta-data server(s).
