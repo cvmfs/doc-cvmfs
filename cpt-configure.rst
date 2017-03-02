@@ -148,14 +148,25 @@ container. This has the advantage that the CernVM-FS cache is shared
 among multiple containers. The second option is to mount a repository
 inside a container, which requires a *privileged* container.
 
-In both cases, autofs should not be used. Docker has often issues with
-autofs.
+Volume Driver
+^^^^^^^^^^^^^
+There is an `external package <https://gitlab.cern.ch/cloud-infrastructure/docker-volume-cvmfs/>`_
+that provides a Docker Volume Driver for CernVM-FS.
+This package provides management of repositories in Docker and Kubernetes.
+It provides a convenient interface to handle CernVM-FS volume definitions.
 
 Bind mount from the host
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to bind mount a repository from the host, turn off autofs on
-the host and mount the repository manually, like:
+On Docker >= 1.10, the autofs managed area /cvmfs can be directly mounted into
+the container as a shared mount point like
+
+::
+
+    docker run -it -v /cvmfs:/cvmfs:shared centos /bin/bash
+
+In order to bind mount an individual repository from the host, turn off autofs
+on the host and mount the repository manually, like:
 
 ::
 
