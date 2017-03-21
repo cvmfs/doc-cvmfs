@@ -1,3 +1,34 @@
+Release Notes for CernVM-FS 2.3.4
+=================================
+
+CernVMV-FS 2.3.4 is a patch release containing bugfixes and adjustments
+necessary for smooth operation.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+
+For Release Manager Machines, all transactions must be closed before upgrading.
+
+**Note for upgrades from versions prior to 2.3.3**: please also see the
+specific instructions in the release notes for version 2.3.3 and earlier.
+
+Bug Fixes
+---------
+
+  * Client: work around CentOS 7 bug that can kill cvmfs fuse mount points on ``systemctl restart autofs`` (`CVM-1200 <https://sft.its.cern.ch/jira/browse/CVM-1200>`_)
+  * Client: fix getting the ``rawlink`` extended attribute
+  * Client: remove corrupted empty files from cache during recovery of the cache database after worker node crash (`CVM-1113 <https://sft.its.cern.ch/jira/browse/CVM-1113>`_)
+  * Server: fix automatic tag cleanup for repositories with large tag lists (`CVM-1198 <https://sft.its.cern.ch/jira/browse/CVM-1198>`_)
+  * Server: fix stratum 0 /etc/fstab migration from versions < 2.1.20 (`CVM-1182 <https://sft.its.cern.ch/jira/browse/CVM-1182>`_)
+  * Server: allow for keys directory in addition to specific public key list for stratum 1 repositories (`CVM-985 <https://sft.its.cern.ch/jira/browse/CVM-985>`_)
+  * Server: improve snapshot logging for repositories with large tag lists (`CVM-1021 <https://sft.its.cern.ch/jira/browse/CVM-1021>`_)
+
+
 Release Notes for CernVM-FS 2.3.3
 =================================
 
