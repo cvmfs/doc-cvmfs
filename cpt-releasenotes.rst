@@ -1,8 +1,9 @@
-Release Notes for CernVM-FS 2.3.4
+Release Notes for CernVM-FS 2.3.5
 =================================
 
-CernVMV-FS 2.3.4 is a patch release containing bugfixes and adjustments
-necessary for smooth operation.
+CernVMV-FS 2.3.5 is a patch release containing bugfixes and adjustments
+necessary for smooth operation.  Please note that version 2.3.4 was tagged but
+unreleased.
 
 As with previous releases, upgrading clients should be seamless just by
 installing the new package from the repository. As usual, we recommend to
@@ -14,13 +15,19 @@ For Stratum 1 servers, there should be no running snapshots during the upgrade.
 
 For Release Manager Machines, all transactions must be closed before upgrading.
 
+**Note**: On EL 7, Fedora, and SLES12, the cvmfs package installs a systemd
+patch configuration under
+``/usr/lib/systemd/system/autofs.service.d/50-cvmfs.conf`` in order to work
+around an upstream bug
+(`CVM-1200 <https://sft.its.cern.ch/jira/browse/CVM-1200>`_).
+
 **Note for upgrades from versions prior to 2.3.3**: please also see the
 specific instructions in the release notes for version 2.3.3 and earlier.
 
 Bug Fixes
 ---------
 
-  * Client: work around CentOS 7 bug that can kill cvmfs fuse mount points on ``systemctl restart autofs`` (`CVM-1200 <https://sft.its.cern.ch/jira/browse/CVM-1200>`_)
+  * Client: work around EL 7 bug that can kill cvmfs fuse mount points on ``systemctl restart autofs`` (`CVM-1200 <https://sft.its.cern.ch/jira/browse/CVM-1200>`_)
   * Client: fix getting the ``rawlink`` extended attribute
   * Client: remove corrupted empty files from cache during recovery of the cache database after worker node crash (`CVM-1113 <https://sft.its.cern.ch/jira/browse/CVM-1113>`_)
   * Server: fix automatic tag cleanup for repositories with large tag lists (`CVM-1198 <https://sft.its.cern.ch/jira/browse/CVM-1198>`_)
