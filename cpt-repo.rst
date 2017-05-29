@@ -301,6 +301,12 @@ Once created, the repository is mounted under ``/cvmfs/my.repo.name``
 containing only a single file called ``new_repository``. The next steps
 describe how to change the repository content.
 
+The repository name resembles a DNS scheme but it does not need to
+reflect any real server name. It is supposed to be a globally unique name that
+indicates where/who the publishing of content takes place. A repository name
+must only contain alphanumeric characters plus ``-``, ``_``, and ``.`` and it
+is limited to a length of 60 characters.
+
 Repositories for Volatile Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
