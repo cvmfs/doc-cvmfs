@@ -46,6 +46,7 @@ Contents
    cpt-hpc
    cpt-repo
    cpt-replica
+   cpt-gateway-services
    cpt-servermeta
    cpt-plugins
    cpt-details
@@ -76,4 +77,5 @@ Authors of this documentation:
    * Dave Dykstra
    * René Meusel
    * José Molina Colmenero
+   * Radu Popescu
 
