@@ -22,7 +22,7 @@ two servers are A and B, set
 
 Squid is very powerful and has lots of configuration and tuning
 options. For CernVM-FS we require only the very basic static content
-caching. If you already have a `Frontier Squid <http://frontier.cern.ch>`_ 
+caching. If you already have a `Frontier Squid <http://frontier.cern.ch>`_
 [Blumenfeld08]_ [Dykstra10]_ installed you can use it as well for CernVM-FS.
 
 Otherwise, cache sizes and access control needs to be configured in
@@ -31,6 +31,8 @@ through your /etc/squid/squid.conf and make sure the following lines
 appear accordingly:
 
 ::
+
+      minimum_expiry_time 0
 
       max_filedesc 8192
       maximum_object_size 1024 MB
