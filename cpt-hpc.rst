@@ -56,7 +56,7 @@ source.  As an example, in order to preload the ALICE repository into
 
 ::
 
-    cvmfs_preload -u http://hcc-cvmfs-example.unl.edu:8000/cvmfs/alice.cern.ch -r /shared/cache
+    cvmfs_preload -u http://cvmfs-stratum-zero-hpc.cern.ch:8000/cvmfs/alice.cern.ch -r /shared/cache
 
 This will preload the entire repository.  In order to preload only specific
 parts of the namespace, you can create a _dirtab_ file with path prefixes.  The
@@ -76,7 +76,7 @@ The corresponding invokation of ``cvmfs_preload`` is
 
 ::
 
-    cvmfs_preload -u http://hcc-cvmfs.unl.edu:8000/cvmfs/alice.cern.ch -r /shared/cache \
+    cvmfs_preload -u http://cvmfs-stratum-zero-hpc.cern.ch:8000/cvmfs/alice.cern.ch -r /shared/cache \
       -d </path/to/dirtab>
 
 The initial preloading can take several hours to a few days.  Subsequent
