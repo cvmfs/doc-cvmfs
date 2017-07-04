@@ -507,9 +507,8 @@ failure and should be only used if necessary.
 NSF export requires Linux kernel >= 2.6.27 on the NFS server. For
 instance, exporting works for Scientific Linux 6 but not for Scientific
 Linux 5. The NFS server should run a lock server as well. For proper NFS
-support, set ``CVMFS_NFS_SOURCE=yes``. Also, autofs for CernVM-FS needs
-to be turned off and repositories need to be mounted manually. On the
-client side, all available nfs implementations should work.
+support, set ``CVMFS_NFS_SOURCE=yes``. On the client side, all available nfs
+implementations should work.
 
 In the NFS mode, upon mount an additionally directory
 nfs\_maps.$repository\_name appears in the CernVM-FS cache directory.
