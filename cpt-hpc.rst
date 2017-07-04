@@ -112,7 +112,7 @@ Compiling ``cvmfs_preload`` from Sources
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to compile ``cvmfs_preload`` from sources, use the
-``-DCVMFS_PRELOADER=on`` cmake option.
+``-DBUILD_PRELOADER=yes`` cmake option.
 
 
 Loopback File Systems for Nodes' Caches
