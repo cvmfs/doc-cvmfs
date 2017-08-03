@@ -303,7 +303,7 @@ corresponds to the master key is distributed with the
 
 In addition, CernVM-FS checks certificate fingerprints against the local
 blacklist /etc/cvmfs/blacklist and the blacklist in an optional
-:ref:`"Config Repository" <_sct_config_repository>`.
+:ref:`"Config Repository" <sct_config_repository>`.
 The blacklisted fingerprints have to be
 in the same format as the fingerprints on the white-list. The
 blacklist has precedence over the white-list.
@@ -319,6 +319,7 @@ mounted.  The format for that is a less-than sign followed by the
 repository name followed by a blank and a repository number: 
 
 ::
+
         <repository.name NNN
 
 This will prevent all revisions of repository.name less than NNN from
