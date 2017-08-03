@@ -87,7 +87,7 @@ A file catalog contains a *time to live* (TTL), stored in seconds. The
 catalog TTL advises clients to check for a new version of the catalog,
 when expired. Checking for a new catalog version takes place with the
 first file system operation on a CernVM-FS volume after the TTL has
-expired. The default TTL is 15 minutes. If a new catalog is available,
+expired. The default TTL is 4 minutes. If a new catalog is available,
 CernVM-FS delays the loading for the period of the CernVM-FS kernel
 cache life time (default: 1 minute). During this drain-out period, the
 kernel caching is turned off. The first file system operation on a
