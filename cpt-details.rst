@@ -288,6 +288,8 @@ It is the cryptographic hash of the manifest's meta data lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
 
+.. _sct_signature_validation:
+
 Signature Validation
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -301,7 +303,7 @@ corresponds to the master key is distributed with the
 
 In addition, CernVM-FS checks certificate fingerprints against the local
 blacklist /etc/cvmfs/blacklist and the blacklist in an optional
-:ref:`"Config Repository" <the_config_repository>`.
+:ref:`"Config Repository" <_sct_config_repository>`.
 The blacklisted fingerprints have to be
 in the same format as the fingerprints on the white-list. The
 blacklist has precedence over the white-list.
