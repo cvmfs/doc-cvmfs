@@ -308,25 +308,26 @@ The blacklisted fingerprints have to be
 in the same format as the fingerprints on the white-list. The
 blacklist has precedence over the white-list.
 
-Blacklisted fingerprints prevent future repository publications by a
-corresponding compromised repository key, but they do not prevent
-mounting repository revisions that had previously been mounted on a
-client because the catalog for that revision is already in the cache.
-However, the same blacklist files also support another format that
-actively blocks revisions associated with a compromised repository key
-from being mounted and even forces them to be unmounted if they are
-mounted.  The format for that is a less-than sign followed by the
-repository name followed by a blank and a repository number: 
+Blacklisted fingerprints prevent clients from loading future
+repository publications by a corresponding compromised repository key,
+but they do not prevent mounting a repository revision that had
+previously been mounted on a client because the catalog for that
+revision is already in the cache.  However, the same blacklist files
+also support another format that actively blocks revisions associated
+with a compromised repository key from being mounted and even forces
+them to be unmounted if they are mounted.  The format for that is a
+less-than sign followed by the repository name followed by a blank and
+a repository revision number: 
 
 ::
 
         <repository.name NNN
 
-This will prevent all revisions of repository.name less than NNN from
-being mounted or staying mounted.  An effective protection against a
-compromised repository key will use both this format to prevent mounts
-and the fingerprint format to prevent future false publications by the
-compromised key.
+This will prevent all revisions of a repository called repository.name
+less than NNN from being mounted or staying mounted.  An effective
+protection against a compromised repository key will use both this
+format to prevent mounts and the fingerprint format to prevent using
+future untrustworthy publications signed by the compromised key.
 
 As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
 <http://www.openssl.org/docs/crypto/crypto.html>`_.
