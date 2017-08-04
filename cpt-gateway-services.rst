@@ -47,7 +47,7 @@ The gateway services application is packaged as a tarball, currently available f
 
 Then, run the set up script: ::
 
-  $ ./scripts/setup.sh
+  $ /opt/cvmfs_services/scripts/setup.sh
 
 Create the repository for the following section of this guide: ::
 
@@ -68,20 +68,12 @@ Add the API key file to the repository configuration in the gateway application:
 
 Start the gateway services application: ::
 
-  $ RUNNER_LOG_DIR=/tmp /opt/cvmfs_services/bin/cvmfs_services start
+  $ /opt/cvmfs_services/scripts/run_cvmfs_services.sh start
 
 Release Manager Configuration
 =============================
 
 This section describes the steps needed to set up a release manager for a specific CVMFS repository. The precondition is a working gateway machine where the repository has been created as a Stratum 0.
-
-1. Create another instance of the repository on the release manager using ``cvmfs_server mkfs``.
-
-2. Retrieve the public key of the repository and the GW API key from the GW and place them into ``/etc/cvmfs/keys``.
-
-3. In the ``client.conf`` file for the repository, modify the ``CVMFS_SERVER_URL`` variable to point to the GW URL.
-
-4. In the ``server.conf`` file for the repository, modify the ``CVMFS_STRATUM0`` variable to point to the GW URL. Set ``CVMFS_UPSTREAM_STORAGE`` to ``gw,<UNUSED_PATH>, <GW_API_URL>``. Set ``CVMFS_GATEWAY_KEYS`` to point to the gateway key file.
 
 Example:
 --------
