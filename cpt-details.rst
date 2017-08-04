@@ -324,10 +324,11 @@ a repository revision number:
         <repository.name NNN
 
 This will prevent all revisions of a repository called repository.name
-less than NNN from being mounted or staying mounted.  An effective
-protection against a compromised repository key will use both this
-format to prevent mounts and the fingerprint format to prevent using
-future untrustworthy publications signed by the compromised key.
+less than the number NNN from being mounted or staying mounted.  An
+effective protection against a compromised repository key will use
+both this format to prevent mounts and the fingerprint format to
+prevent using future untrustworthy publications signed by the
+compromised key.
 
 As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
 <http://www.openssl.org/docs/crypto/crypto.html>`_.
