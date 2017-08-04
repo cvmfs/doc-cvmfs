@@ -60,9 +60,8 @@ dedicated "config repository". A config repository is a standard
 mountable CernVM-FS repository that resembles the directory structure of
 /etc/cvmfs. It can be used to centrally maintain the public keys and
 configuration of repositories that should not be distributed with rather
-static packages, and also to :ref:`blacklist <sct_signature_validation>`
-compromised keys and repositories
-on a large number of clients at the same time.
+static packages, and also to centrally
+:ref:`blacklist <sct_signature_validation>` compromised repository keys.
 Configuration from the config repository is overwritten
 by the local configuration in case of conflicts; see the comments in
 /etc/cvmfs/default.conf for the precise ordering of processing
