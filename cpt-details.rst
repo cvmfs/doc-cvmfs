@@ -317,7 +317,7 @@ white-list.
 Blacklisted fingerprints prevent clients from loading future
 repository publications by a corresponding compromised repository key,
 but they do not prevent mounting a repository revision that had
-previously been mounted on a client because the catalog for that
+previously been mounted on a client, because the catalog for that
 revision is already in the cache.  However, the same blacklist files
 also support another format that actively blocks revisions associated
 with a compromised repository key from being mounted and even forces
@@ -333,7 +333,7 @@ This will prevent all revisions of a repository called repository.name
 less than the number NNN from being mounted or staying mounted.  An
 effective protection against a compromised repository key will use
 both this format to prevent mounts and the fingerprint format to
-prevent using future untrustworthy publications signed by the
+prevent accepting future untrustworthy publications signed by the
 compromised key.
 
 Use of HTTP
