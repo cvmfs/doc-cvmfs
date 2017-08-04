@@ -118,13 +118,13 @@ CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
 CVMFS_MIN_CHUNK_SIZE                Minimal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
-CVMFS_NESTED_KCATALOG_LIMIT         Maximum thousands of files allowed in nested catalogs, default 200 |br| (see also *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
+CVMFS_NESTED_KCATALOG_LIMIT         Maximum thousands of files allowed in nested catalogs, default 500 |br| (see also *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
 CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
 CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
 CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
 CVMFS_REPOSITORY_TYPE               Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
-CVMFS_ROOT_KCATALOG_LIMIT           Maximum thousands of files allowed in root catalogs, default 500 |br| (see also *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
+CVMFS_ROOT_KCATALOG_LIMIT           Maximum thousands of files allowed in root catalogs, default 200 |br| (see also *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
 CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
