@@ -349,6 +349,11 @@ this is how to use it:
 #. Store its masterkey and pub into the smartcard with 
    ``cvmfs_server masterkeycard -s my.repo.name``
 
+#. Make a backup copy of ``/etc/cvmfs/keys/my.repo.name.masterkey`` on
+    at least one USB flash drive because the next step will
+    irretrievably delete the file.  Keep the flash drive offline in
+    a safe place in case something happens to the smartcard.
+
 #. Convert the repository to use the smartcard with
    ``cvmfs_server masterkeycard -c my.repo.name``.  This will delete
    the masterkey file.  This command can also be applied to other
