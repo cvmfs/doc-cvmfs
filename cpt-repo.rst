@@ -313,10 +313,10 @@ Master keys
 
 Each cvmfs repository uses two sets of keys, one for the individual
 repository and another called the "masterkey" which signs the
-repository key.  The pub key that corresponds to the master key is
+repository key.  The pub key that corresponds to the masterkey is
 what needs to be distributed to clients to verify the authenticity of
 the repository.  It is usually most convenient to share the masterkey
-by all repositories in a domain so new repositories can be added
+between all repositories in a domain so new repositories can be added
 without updating the client configurations.  If the clients are
 maintained by multiple organizations it can be very difficult to
 quickly update the distributed pub key, so in that case it is
@@ -328,11 +328,11 @@ By default, ``cvmfs_server mkfs my.repo.name`` creates a new
 ``/etc/cvmfs/keys/my.repo.name.masterkey`` and corresponding
 ``/etc/cvmfs/keys/my.repo.name.pub`` for every new repository.
 Additional user-written procedures can then be applied to replace
-those files with a common masterkey/pub pair, and then the
+those files with a common masterkey/pub pair, and then
 ``cvmfs_server resign`` must be run to update the corresponding
 signature (in ``/srv/cvmfs/my.repo.name/.cvmfswhitelist``).
 Signatures are only good for 30 days by default, so
-``cvmfs_server resign`` command must be run before the they expire.
+``cvmfs_server resign`` must be run again before they expire.
 
 ``cvmfs_server`` also supports the ability to store the masterkey in a
 separate inexpensive smartcard, so that even if the computer hosting
