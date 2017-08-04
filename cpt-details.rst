@@ -288,8 +288,6 @@ It is the cryptographic hash of the manifest's meta data lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
 
-.. _sct_signature_validation:
-
 Signature Validation
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -301,12 +299,20 @@ RSA key, which we refer to as *master key*. The public RSA key that
 corresponds to the master key is distributed with the
 ``cvmfs-config-...`` RPMs as well as with every instance of CernVM.
 
-In addition, CernVM-FS checks certificate fingerprints against the local
-blacklist /etc/cvmfs/blacklist and the blacklist in an optional
-:ref:`"Config Repository" <sct_config_repository>`.
-The blacklisted fingerprints have to be
-in the same format as the fingerprints on the white-list. The
-blacklist has precedence over the white-list.
+As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
+<http://www.openssl.org/docs/crypto/crypto.html>`_.
+
+.. _sct_blacklisting:
+
+Blacklisting
+^^^^^^^^^^^^
+
+In addition to validating the white-list, CernVM-FS checks certificate
+fingerprints against the local black-list /etc/cvmfs/blacklist and the
+blacklist in an optional :ref:`"Config Repository" <sct_config_repository>`.
+The blacklisted fingerprints have to be in the same format as the
+fingerprints on the white-list. The black-list has precedence over the
+white-list.
 
 Blacklisted fingerprints prevent clients from loading future
 repository publications by a corresponding compromised repository key,
@@ -329,9 +335,6 @@ effective protection against a compromised repository key will use
 both this format to prevent mounts and the fingerprint format to
 prevent using future untrustworthy publications signed by the
 compromised key.
-
-As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
-<http://www.openssl.org/docs/crypto/crypto.html>`_.
 
 Use of HTTP
 -----------
