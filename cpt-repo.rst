@@ -35,7 +35,7 @@ System Requirements
 
    - AUFS (see :ref:`sct_customkernelinstall`)
 
-   - OverlayFS (as of kernel version 4.2.x)
+   - OverlayFS (as of kernel version 4.2.x or RHEL7.3)
 
 -  Officially supported platforms
 
@@ -200,7 +200,7 @@ Since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
 Note however, that the first versions of OverlayFS were broken and will not
 work properly with CernVM-FS. At least a 4.2.x kernel is needed to use
 CernVM-FS with OverlayFS. (Red Hat) Enterprise Linux >= 7.3 works, too,
-provided that /var/spool/cvmfs is served by an ext4 file system. Furthermore
+provided that /var/spool/cvmfs is served by an ext3 or ext4 file system. Furthermore
 note that OverlayFS cannot fully comply with POSIX semantics, in particular
 hard links must be broken into individual files. That is usually not a problem
 but should be kept in mind when installing certain software distributions into
