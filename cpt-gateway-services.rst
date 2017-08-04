@@ -1,13 +1,14 @@
 .. _cpt_gateway_services:
 
-CernVM-FS Gateway Services and Release Managers
-===============================================
+=================================================
+ CernVM-FS Gateway Services and Release Managers
+=================================================
 
 This page details the installation and configuration of a repository setup
 involving a gateway machine and separate release manager machines.
 
 Glossary
-^^^^^^^^
+========
 
 Gateway (GW)
   The machine running an instance of the `CVMFS gateway
@@ -37,13 +38,40 @@ Release manager (RM)
   available to clients.
 
 Gateway Services Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==============================
 
-Gateway services installation instructions will be added after the
-deployment strategy for the gateway services application is clarified.
+The gateway services application is packaged as a tarball, currently available for Ubuntu 16.04, SLC 6 and Cern CentOS 7. The tarball should be unpacked into ``/opt/cvmfs_services``: ::
+
+  $ cd /opt/cvmfs_services
+  $ tar xzf cvmfs_services-0.1.10-cc7-x86_64.tar.gz
+
+Then, run the set up script: ::
+
+  $ ./scripts/setup.sh
+
+Create the repository for the following section of this guide: ::
+
+  $ cvmfs_server mkfs test.cern.ch
+
+Create an API key file for the new repo (replace ``<KEY_ID>`` and ``<SECRET>`` with actual values): ::
+
+  $ cat <<EOF > /etc/cvmfs/keys/test.cern.ch.gw
+  test <KEY_ID> <SECRET>
+  EOF
+
+Add the API key file to the repository configuration in the gateway application: ::
+
+  $ cat <<EOF > /opt/cvmfs_services/etc/repo.config
+  {repos, [{<<"test.cern.ch">>, [<<"<KEY_ID>">>]}]}.
+  {keys, [{file, "/etc/cvmfs/keys/test.cern.ch.gw"}]}.
+  EOF
+
+Start the gateway services application: ::
+
+  $ RUNNER_LOG_DIR=/tmp /opt/cvmfs_services/bin/cvmfs_services start
 
 Release Manager Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+=============================
 
 This section describes the steps needed to set up a release manager for a specific CVMFS repository. The precondition is a working gateway machine where the repository has been created as a Stratum 0.
 
@@ -56,26 +84,26 @@ This section describes the steps needed to set up a release manager for a specif
 4. In the ``server.conf`` file for the repository, modify the ``CVMFS_STRATUM0`` variable to point to the GW URL. Set ``CVMFS_UPSTREAM_STORAGE`` to ``gw,<UNUSED_PATH>, <GW_API_URL>``. Set ``CVMFS_GATEWAY_KEYS`` to point to the gateway key file.
 
 Example:
-""""""""
+--------
 
 * The gateway machine is ``gateway.cern.ch``.
 * The release manager is ``rm.cern.ch``.
 * The new repository's fully qualified name is ``test.cern.ch``.
 * The repository's public key is ``test.cern.ch.pub``.
-* The GW API key is ``gateway_key``.
+* The GW API key is ``test.cern.ch.gw``.
 * The GW services application is running on port 8080 at the URL ``http:://gateway.cern.ch:8080/api/v1``.
+* The repository keys have been copied from the gateway machine onto the release manager machine, in ``/tmp/test.cern.ch_keys``.
 
-Steps:
+To create the repository in the release manager configuration, run the following command on ``rm.cern.ch``: ::
 
-1. ``cvmfs_server mkfs test.cern.ch``
-2. Copy ``test.cern.ch.pub`` and ``gateway_key`` to ``/etc/cvmfs/keys/``.
-3. In ``client.conf``, set ``CVMFS_SERVER_URL`` to ``http://gateway.cern.ch/cvmfs/test.cern.ch``.
-4. In ``server.conf``, set ``CVMFS_STRATUM0`` to ``http://gateway.cern.ch/cvmfs/test.cern.ch``, ``CVMFS_UPSTREAM_STORAGE`` to ``gw,/srv/cvmfs/test.cern.ch/data/txt,http:://gateway.cern.ch:8080/api/v1`` and ``CVMFS_GATEWAY_KEYS`` to ``/etc/cvmfs/keys/gateway_key``
+  $ cvmfs_server mkfs -w http://gateway.cern.ch/cvmfs/test.cern.ch \
+                      -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:8080/api/v1 \
+                      -k /tmp/test.cern.ch_keys -o `whoami` test.cern.ch
 
 At this point, from the RM we can publish to the repository: ::
 
   $ cvmfs_server transaction -e test.cern.ch
 
-  ... make changes to the repository ...
+... make changes to the repository ... ::
 
   $ cvmfs_server publish -e test.cern.ch
