@@ -286,9 +286,8 @@ The utility will ask for a user that should act as the owner of the
 repository and afterwards create all the infrastructure for the new
 CernVM-FS repository. Additionally it will create a reasonable default
 configuration and generate a new release manager certificate and
-software signing key. The public key in
-``/etc/cvmfs/keys/my.repo.name.pub`` needs to be distributed to all
-client machines.
+by default a new master key and corresponding public key (see more
+about that in the next section).
 
 The ``cvmfs_server`` utility will use ``/srv/cvmfs`` as storage location
 by default. In case a separate hard disk should be used, a partition can
@@ -306,6 +305,62 @@ reflect any real server name. It is supposed to be a globally unique name that
 indicates where/who the publishing of content takes place. A repository name
 must only contain alphanumeric characters plus ``-``, ``_``, and ``.`` and it
 is limited to a length of 60 characters.
+
+.. _sct_master_keys:
+
+Master keys
+~~~~~~~~~~~
+
+Each cvmfs repository uses two sets of keys, one for the individual
+repository and another called the "masterkey" which signs the
+repository key.  The pub key that corresponds to the master key is
+what needs to be distributed to clients to verify the authenticity of
+the repository.  It is usually most convenient to share the masterkey
+by all repositories in a domain so new repositories can be added
+without updating the client configurations.  If the clients are
+maintained by multiple organizations it can be very difficult to
+quickly update the distributed pub key, so in that case it is
+important to keep the masterkey especially safe from being stolen.
+If only repository keys are stolen, they can be replaced without
+having to update client configurations.
+
+By default, ``cvmfs_server mkfs my.repo.name`` creates a new
+``/etc/cvmfs/keys/my.repo.name.masterkey`` and corresponding
+``/etc/cvmfs/keys/my.repo.name.pub`` for every new repository.
+Additional user-written procedures can then be applied to replace
+those files with a common masterkey/pub pair, and then the
+``cvmfs_server resign`` must be run to update the corresponding
+signature (in ``/srv/cvmfs/my.repo.name/.cvmfswhitelist``).
+Signatures are only good for 30 days by default, so
+``cvmfs_server resign`` command must be run before the they expire.
+
+``cvmfs_server`` also supports the ability to store the masterkey in a
+separate inexpensive smartcard, so that even if the computer hosting
+the repositories is compromised, the masterkey cannot be stolen.
+Smartcards allow writing keys into them and signing files but they
+never allow reading the keys back.  Currently the supported hardware
+are the Yubikey 4 or Nano USB devices.
+
+If one of those devices is plugged in to a release manager machine,
+this is how to use it:
+
+#. Create a repository with ``cvmfs_server mkfs my.repo.name``
+
+#. Store its masterkey and pub into the smartcard with 
+   ``cvmfs_server masterkeycard -s my.repo.name``
+
+#. Convert the repository to use the smartcard with
+   ``cvmfs_server masterkeycard -c my.repo.name``.  This will delete
+   the masterkey file.  This command can also be applied to other
+   repositories on the same machine; their pub file will be updated
+   with what is stored in the card and they will be resigned.
+
+From then on, every newly created repository on the same machine
+will automatically use the shared masterkey stored on the smartcard.
+
+When using a masterkeycard, the default signature expiration reduces
+from 30 days to 7 days.  ``cvmfs_server resign`` needs to be run to
+renew the signature.  It is recommended to run that daily from cron.
 
 Repositories for Volatile Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -449,8 +504,7 @@ create a new revision of a repository:
 CernVM-FS supports having more than one repository on a single server
 machine. In case of a multi-repository host, the target repository of a
 command needs to be given as a parameter when running the
-``cvmfs_server`` utility. The ``cvmfs_server resign`` command should run
-every 30 days to update the signatures of the repository. Most
+``cvmfs_server`` utility.  Most
 ``cvmfs_server`` commands allow for wildcards to do manipulations on
 more than one repository at once, ``cvmfs_server migrate *.cern.ch``
 would migrate all present repositories ending with ``.cern.ch``.
@@ -500,7 +554,8 @@ latest catalog schema (see :ref:`sct_legacyrepoimport` for details).
 
 During the import it might be necessary to resign the repository's whitelist.
 Usually because the whitelist's expiry date has exceeded. This operations
-requires the corresponding masterkey to be available in `/etc/cvmfs/keys`.
+requires the corresponding masterkey to be available in `/etc/cvmfs/keys`
+or in a masterkeycard.
 Resigning is enabled by adding ``-r`` to ``cvmfs_server import``.
 
 An import can either use a provided repository keychain placed into
