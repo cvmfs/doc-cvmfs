@@ -41,11 +41,40 @@ For Stratum 1 server, there should be no running snapshots during the upgrade.
 configuration management system (Puppet, Chef, ...), please see Section
 :ref:`sct_manual_migration`.
 
+
 Cache Plugins
 -------------
 
+Every CernVM-FS client is configured to use a directory as local cache
+of data and meta-data.  Instead of this directory, the task of maintaining a
+local cache can optionally be performed by an external process, a "CernVM-FS
+Cache Plugin" (`CVM-1054 <https://sft.its.cern.ch/jira/browse/CVM-1054>`_).
+This allows for special-purpose cache managers in non-standard deployments, for
+instance on supercomputers. Cache plugins can be developed and deployed
+independently from the CernVM-FS client itself. CernVM-FS 2.4 provides one such
+plugin, an in-memory cache that uses a fixed amount of RAM as a cache
+(`CVM-1044 <https://sft.its.cern.ch/jira/browse/CVM-1044>`_).
+
+See Section :ref:`sct_cache_advanced` for configuration and use of cache plugins
+and Section :ref:`sct_plugin_cache` for an introduction on how to write cache
+plugins.
+
+
 Tiered Cache
 ------------
+
+Together with support for cache plugins, there is now support for a multi-tier
+client cache (`CVM-1050 <https://sft.its.cern.ch/jira/browse/CVM-1050>`_,
+`CVM-1183 <https://sft.its.cern.ch/jira/browse/CVM-1183>`_). A tiered cache can
+combine two other caches and organize them as an upper cache layer and a lower
+cache layer. Data is first searched for in the upper layer. Upon an upper layer
+cache miss, data is copied from the lower layer into the upper layer. Tiered
+caches can be used to combine a small cache on fast storage (e.g. SSD, memory)
+with a large cache on slower storage (e.g. HDD, network drive).
+
+See Section :ref:`sct_cache_advanced` for configuration and use of a tiered
+cache.
+
 
 Instant Access to Named Snapshots
 ---------------------------------
@@ -209,6 +238,7 @@ under ``/cvmfs/info``, should be adjusted as follows:
       <FilesMatch "^[^.]*$">
         ForceType application/octet-stream
       </FilesMatch>
+
 
   4. Change ``AllowOverride Limit`` to ``AllowOverride Limit AuthConfig``
 

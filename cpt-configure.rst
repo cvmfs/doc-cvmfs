@@ -502,6 +502,11 @@ replication mode that preloads a cache directory
 into the cache of a cluster file system for HPC setups that do not allow
 outgoing connectivity.
 
+.. _sct_cache_advanced:
+
+Advanced Cache Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 NFS Server Mode
 ---------------
 

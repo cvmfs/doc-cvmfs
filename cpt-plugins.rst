@@ -59,9 +59,9 @@ a 4 byte version (=1), a 4 byte length, and then a JSON text that needs to
 contain the top-level struct ``cvmfs_authz_v1 { ... }``. Communication starts
 with a handshake where the client passes logging parameters to the authz helper.
 The client then sends zero or more authorization requests, each of which is
-answered by a positive or negative permit.  A positive permit can include an 
+answered by a positive or negative permit.  A positive permit can include an
 access token that should be used to download data. The permits are cached by the
-client with a TTL that the helper can chose. On unmount, the client sends a quit 
+client with a TTL that the helper can chose. On unmount, the client sends a quit
 command to the helper.
 
 When spawned, the authz helper's environment is prepopulated with all
@@ -117,3 +117,8 @@ On success, the permit can optionally conatain a Base64 encoded version of an
 X.509 proxy certificate (``x509_proxy`` string field).  This certificate is used
 by the CernVM-FS client when downloading nested catalogs files as client-side
 HTTPS authentication certificate.
+
+.. _sct_plugin_cache:
+
+Cache Plugins
+-------------
