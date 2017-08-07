@@ -103,11 +103,12 @@ CVMFS_AUTOCATALOGS_MAX_WEIGHT       Maximum number of entries in an autocatalog 
 CVMFS_AUTOCATALOGS_MIN_WEIGHT       Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 |br| (see also *CVMFS_AUTOCATALOGS*)
 CVMFS_AVG_CHUNK_SIZE                Desired Average size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_CATALOG_ALT_PATHS             Enable/disable generation of catalog bootstrapping shortcuts during publishing. (Useful when backend directory `/data` is not publicly accessible)
-CVMFS_CATALOG_ENTRY_WARN_THRESHOLD  Threshold of catalog entry count before triggering a warning message.
 CVMFS_COMPRESSION_ALGORITHM         Compression algorithm to be used during publishing |br| (currently either 'default' or 'none')
 CVMFS_CREATOR_VERSION               The CernVM-FS version that was used to create this repository (do not change manually).
 CVMFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage. (see :ref:`sct_reporequirements`)
+CVMFS_ENFORCE_LIMITS                Set to *true* to cause exceeding \*LIMIT variables to be fatal to a publish instead of a warning
 CVMFS_EXTERNAL_DATA                 Set to *true* to mark repository to contain external data that is served from an external HTTP server
+CVMFS_FILE_MBYTE_LIMIT              Maximum number of megabytes for a published file, default value: 1024 |br| (see also *CVMFS_ENFORCE_LIMITS*)
 CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_GC_DELETION_LOG               Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
@@ -117,11 +118,13 @@ CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
 CVMFS_MIN_CHUNK_SIZE                Minimal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
+CVMFS_NESTED_KCATALOG_LIMIT         Maximum thousands of files allowed in nested catalogs, default 500 |br| (see also *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
 CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
 CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
 CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
 CVMFS_REPOSITORY_TYPE               Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
+CVMFS_ROOT_KCATALOG_LIMIT           Maximum thousands of files allowed in root catalogs, default 200 |br| (see also *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*
 CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
