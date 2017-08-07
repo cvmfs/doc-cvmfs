@@ -24,7 +24,7 @@ described below.
 
   * Improved apt repository structure for Debian/Ubuntu packages
 
-  * New platforms: Fedora 25 and 26 on x86_64, Debian 8,
+  * New platforms: Fedora 25 and 26 on x86_64, Debian 8 and 9,
     gcc >= 6, OpenSSL >= 1.1
 
 As with previous releases, upgrading should be seamless just by installing the
@@ -125,7 +125,7 @@ the release manager machine to clients.
   * The new server parameter ``CVMFS_GENERATE_LEGACY_BULK_CHUNKS=no`` can be
     used to omit creation of unchunked objects for large files
     (`CVM-640 <https://sft.its.cern.ch/jira/browse/CVM-640>`_).  This is most
-    interesting for repositories hosting many files that a larger than 4MB.
+    interesting for repositories hosting many files that are larger than 4MB.
     For those repository, the speed of the publication process is improved by
     more than a factor of two.  This setting requires clients newer than version
     2.1.7.
