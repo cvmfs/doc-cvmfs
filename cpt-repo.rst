@@ -1188,9 +1188,10 @@ set ``CVMFS_AUTO_GC=true`` in the ``server.conf`` file of the stratum
 snapshot, and will only work if the upstream stratum 0 repository has
 garbage collection enabled.
 
-Alternatively, ``cvmfs_server gc -a`` can be run from cron
+Alternatively, ``cvmfs_server gc -af`` can be run from cron
 periodically (e.g. daily) to run garbage collection on all
 repositories that have garbage collection enabled on the stratum 0.
+Logs will go into /var/log/cvmfs/gc.log.
 
 
 Limitations on Repository Content
