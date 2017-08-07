@@ -2,8 +2,9 @@ Release Notes for CernVM-FS 2.4
 ===============================
 
 CernVM-FS 2.4 is a feature release that comes with performance improvements,
-new functionality, and bugfixes. We would like to thank Dave Dykstra (FNAL) and
-Brian Bockelman (U. Nebraska) for their contributions to this release!
+new functionality, and bugfixes. We would like to thank Brian Bockelman
+(U. Nebraska), Dave Dykstra (FNAL), and Tom Downes (U. Wisconsin) for their
+contributions to this release!
 
 There are several substantial improvements in this release, which are further
 described below.
