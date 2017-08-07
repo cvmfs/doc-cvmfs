@@ -1097,21 +1097,31 @@ by setting ``CVMFS_GC_DELETION_LOG`` to a writable file path.
 Enabling Garbage Collection on an Existing Repository (Stratum 0)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| Existing repositories can be reconfigured to be garbage collectable by
-  adding
-| ``CVMFS_GARBAGE_COLLECTION=true`` and ``CVMFS_AUTO_GC=true`` to the
-  ``server.conf`` of the repository. Furthermore it is recommended to
-  switch off automatic tagging by setting ``CVMFS_AUTO_TAG=false`` for a
-  garbage collectable repository. The garbage collection will be enabled
-  with the next published transaction.
+Existing repositories can be reconfigured to be garbage collectable by
+adding
+``CVMFS_GARBAGE_COLLECTION=true`` and ``CVMFS_AUTO_GC=true`` to the
+``server.conf`` of the repository. Furthermore it is recommended to
+switch off automatic tagging by setting ``CVMFS_AUTO_TAG=false`` for a
+garbage collectable repository. The garbage collection will be enabled
+with the next published transaction and will run after every publish
+operation.  Alternatively, ``CVMFS_AUTO_GC=false`` may be set and
+``cvmfs_server gc`` run from cron at a time when no publish
+operations will be happening; garbage collection and publish
+operations cannot happen at the same time.
 
 Enabling Garbage Collection on an Existing Replication (Stratum 1)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to use automatic garbage collection on a stratum 1 replica
-``CVMFS_AUTO_GC=true`` needs to be added in the ``server.conf`` file of
-the stratum 1 installation. This will only work if the upstream stratum
-0 repository has garbage collection enabled.
+In order to use automatic garbage collection on a stratum 1 replica,
+set ``CVMFS_AUTO_GC=true`` in the ``server.conf`` file of the stratum
+1 installation.  This will run the garbage collection after every
+snapshot, and will only work if the upstream stratum 0 repository has
+garbage collection enabled.
+
+Alternatively, ``cvmfs_server gc -a`` can be run from cron
+periodically (e.g. daily) to run garbage collection on all
+repositories that have garbage collection enabled on the stratum 0.
+
 
 Limitations on Repository Content
 ---------------------------------
