@@ -106,7 +106,7 @@ CVMFS_CATALOG_ALT_PATHS             Enable/disable generation of catalog bootstr
 CVMFS_CATALOG_ENTRY_WARN_THRESHOLD  Threshold of catalog entry count before triggering a warning message.
 CVMFS_COMPRESSION_ALGORITHM         Compression algorithm to be used during publishing |br| (currently either 'default' or 'none')
 CVMFS_CREATOR_VERSION               The CernVM-FS version that was used to create this repository (do not change manually).
-CVMFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage. Using OverlayFS in kernel older than 4.2.x is not supported! (see :ref:`sct_reporequirements`)
+CVMFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage. (see :ref:`sct_reporequirements`)
 CVMFS_EXTERNAL_DATA                 Set to *true* to mark repository to contain external data that is served from an external HTTP server
 CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)

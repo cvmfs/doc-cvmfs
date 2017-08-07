@@ -18,7 +18,7 @@ Prerequisites
 A CernVM-FS server installation depends on the following environment
 setup and tools to be in place:
 
--  kernel 4.2.x or later (for OverlayFS) *or* aufs support built into
+-  kernel 4.2.x or RHEL7.3 or later (for OverlayFS) *or* aufs support built into
    the kernel (see Section :ref:`sct_customkernelinstall`)
 
 -  Backend storage location available through HTTP
