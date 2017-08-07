@@ -313,7 +313,12 @@ The Apache configuration on the release manager machine (resp. stratum 0) and
 on stratum 1 repositories, as well as the configuration for the meta-data area
 under ``/cvmfs/info``, should be adjusted as follows:
 
-  3. Add to the ``<Directoy>`` directive for the repository
+  3. Change ``AllowOverride Limit`` to ``AllowOverride Limit AuthConfig``
+
+  4. Reduce the cache expiry for files of type ``application/x-cvmfs`` and
+     ``application/json`` from 2 minutes to 61 seconds
+
+  5. Add to the ``<Directoy>`` directive for the repository
 
 
 ::
@@ -323,15 +328,7 @@ under ``/cvmfs/info``, should be adjusted as follows:
       </FilesMatch>
 
 
-  4. Change ``AllowOverride Limit`` to ``AllowOverride Limit AuthConfig``
-
-  5. Reduce the cache expiry for files of type ``application/x-cvmfs`` and
-     ``application/json`` from 2 minutes to 61 seconds
-
-  6. Reload Apache
-
-The following steps have to be performed for all repositories on the release
-manager machine:
+Reload the Apache service and perform the following steps for all repositories:
 
   7. *Only on release manager machines*: remove the
      ``CVMFS_CATALOG_ENTRY_WARN_THRESHOLD`` parameter.  If it was set to a value
