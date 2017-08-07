@@ -109,12 +109,34 @@ Faster Propagation of Repository Updates
 Several improvements have been made to reduce the time to propagate changes from
 the release manager machine to clients.
 
+  * The default repository time-to-live is reduced from 15 minutes to 4 minutes
+    (`CVM-1336 <https://sft.its.cern.ch/jira/browse/CVM-1336>`_).
+    Unless the ``CVMFS_REPOSITORY_TTL`` parameter is explicitly set, the first
+    ``cvmfs_server publish`` command with version 2.4 reduces the time-to-live
+    value.  Thus clients are instructed to check every 4 minutes for repository
+    updates.
+
+  * On RHEL 7 and newer, clients can actively evict old entries from kernel
+    buffers (`CVM-1041 <https://sft.its.cern.ch/jira/browse/CVM-1041>`_).
+    When clients see a new repository revision, they hence get rid of
+    a 60 seconds delay to passively wait for local kernel buffers to expire.
+
+  * The new server parameter ``CVMFS_GENERATE_LEGACY_BULK_CHUNKS=no`` can be
+    used to omit creation of unchunked objects for large files
+    (`CVM-640 <https://sft.its.cern.ch/jira/browse/CVM-640>`_).  This is most
+    interesting for repositories hosting many files that a larger than 4MB.
+    For those repository, the speed of the publication process is improved by
+    more than a factor of two.  This setting requires clients newer than version
+    2.1.7.
+    **Note for garbage collected repositories**: Besides the release manager
+    machine, all stratum 1s need to run version 2.4, too. Otherwise they will
+    delete the chunks of files with no bulk hash during garbage collection.
 
 
 Yubikey Support
 ---------------
 
-This release supports maintaining the repository master key on a YubiKey smart
+This release supports maintaining the repository master key on a Yubikey smart
 card device (`CVM-1259 <https://sft.its.cern.ch/jira/browse/CVM-1259>`_). If the
 masterkey is stored on such devices, it cannot be stolen even if the computer
 hosting the repositories is compromised.

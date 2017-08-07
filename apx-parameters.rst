@@ -124,6 +124,7 @@ CVMFS_PUBLIC_KEY                    Path to the public key file of the repositor
 CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
 CVMFS_REPOSITORY_TYPE               Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
+CVMFS_REPOSITORY_TTL                The frequency in seconds of client lookups for changes in the repository.  Defaults to 4 minutes.
 CVMFS_ROOT_KCATALOG_LIMIT           Maximum thousands of files allowed in root catalogs, default 200 |br| (see also *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*
 CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
