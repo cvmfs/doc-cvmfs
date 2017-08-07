@@ -50,6 +50,8 @@ set to the parent directory of the configuration file at hand.
                                of file catalogs
 ============================== =================================================
 
+.. _sct_config_repository:
+
 The "Config Repository"
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -58,10 +60,15 @@ dedicated "config repository". A config repository is a standard
 mountable CernVM-FS repository that resembles the directory structure of
 /etc/cvmfs. It can be used to centrally maintain the public keys and
 configuration of repositories that should not be distributed with rather
-static packages. Configuration from the config repository is overwritten
-by the local configuration in case of conflicts. The config repository
+static packages, and also to centrally
+:ref:`blacklist <sct_blacklisting>` compromised repository keys.
+Configuration from the config repository is overwritten
+by the local configuration in case of conflicts; see the comments in
+/etc/cvmfs/default.conf for the precise ordering of processing
+the config files.  The config repository
 is set by the ``CVMFS_CONFIG_REPOSITORY`` parameter. The default
-configuration sets this parameter to cvmfs-config.cern.ch.
+configuration rpm cvmfs-config-default sets this parameter to
+cvmfs-config.cern.ch.
 
 The ``CVMFS_CONFIG_REPO_REQUIRED`` parameter can be used to force availability
 of the config repository in order for other repositories to get mounted.

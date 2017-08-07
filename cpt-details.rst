@@ -299,13 +299,42 @@ RSA key, which we refer to as *master key*. The public RSA key that
 corresponds to the master key is distributed with the
 ``cvmfs-config-...`` RPMs as well as with every instance of CernVM.
 
-In addition, CernVM-FS checks certificate fingerprints against the local
-blacklist /etc/cvmfs/blacklist. The blacklisted fingerprints have to be
-in the same format than the fingerprints on the white-list. The
-blacklist has precedence over the white-list.
-
 As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
 <http://www.openssl.org/docs/crypto/crypto.html>`_.
+
+.. _sct_blacklisting:
+
+Blacklisting
+^^^^^^^^^^^^
+
+In addition to validating the white-list, CernVM-FS checks certificate
+fingerprints against the local black-list /etc/cvmfs/blacklist and the
+blacklist in an optional :ref:`"Config Repository" <sct_config_repository>`.
+The blacklisted fingerprints have to be in the same format as the
+fingerprints on the white-list. The black-list has precedence over the
+white-list.
+
+Blacklisted fingerprints prevent clients from loading future
+repository publications by a corresponding compromised repository key,
+but they do not prevent mounting a repository revision that had
+previously been mounted on a client, because the catalog for that
+revision is already in the cache.  However, the same blacklist files
+also support another format that actively blocks revisions associated
+with a compromised repository key from being mounted and even forces
+them to be unmounted if they are mounted.  The format for that is a
+less-than sign followed by the repository name followed by a blank and
+a repository revision number: 
+
+::
+
+        <repository.name NNN
+
+This will prevent all revisions of a repository called repository.name
+less than the number NNN from being mounted or staying mounted.  An
+effective protection against a compromised repository key will use
+both this format to prevent mounts and the fingerprint format to
+prevent accepting future untrustworthy publications signed by the
+compromised key.
 
 Use of HTTP
 -----------
