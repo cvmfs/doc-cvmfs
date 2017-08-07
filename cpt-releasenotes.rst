@@ -126,7 +126,7 @@ the release manager machine to clients.
     used to omit creation of unchunked objects for large files
     (`CVM-640 <https://sft.its.cern.ch/jira/browse/CVM-640>`_).  This is most
     interesting for repositories hosting many files that are larger than 4MB.
-    For those repository, the speed of the publication process is improved by
+    For those repositories, the speed of the publication process is improved by
     more than a factor of two.  This setting requires clients newer than version
     2.1.7.
     **Note for garbage collected repositories**: Besides the release manager
@@ -299,7 +299,8 @@ Other Improvements
 Manual Migration from 2.3.5 Release Manager Machines and Stratum 0/1 Web Servers
 --------------------------------------------------------------------------------
 
-Release manager machines that maintain Stratum 0 repositories as well as web
+If you do not want to use ``cvmfs_server migrate`` to automatically upgrade,
+release manager machines that maintain Stratum 0 repositories as well as web
 servers serving stratum 0/1 repositories can be migrated from version 2.3.5 with
 the following steps:
 
