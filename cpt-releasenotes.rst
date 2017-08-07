@@ -42,7 +42,7 @@ configuration management system (Puppet, Chef, ...), please see Section
 :ref:`sct_manual_migration`.
 
 **Note**: on Debian/Ubuntu platforms, please read Section
-:ref:`_sct_apt_migration` regarding hotpatching the client.
+:ref:`sct_apt_migration` regarding hotpatching the client.
 
 
 Cache Plugins
@@ -313,6 +313,7 @@ on stratum 1 repositories, as well as the configuration for the meta-data area
 under ``/cvmfs/info``, should be adjusted as follows:
 
   3. Add to the ``<Directoy>`` directive for the repository
+
 
 ::
 
