@@ -54,14 +54,13 @@ The timestamp and repository name are used prevent replay attacks.
 
 The whitelist contains the fully qualified repository name, a creation
 timestamp, an expiry timestamp, and the certificate fingerprints.  Since the
-whitelist expires, it needs to be regularly resigned.  The default validity
-period of a whitelist is 30 days.
+whitelist expires, it needs to be regularly resigned.
 
 The private part of the repository key needs to be accessible on the release
-manager machine.  The private key of the repository master key used to sign the
-whitelist *can* be maintained on the release manager machine.  We recommend,
-however, to use a smart card to store this private key and to sign a repository
-whitelist on a dedicated key-signing machine.
+manager machine.  The private part of the repository master key used to sign the
+whitelist *can* be maintained on a file on the release manager machine.
+We recommend, however, to use a smart card to store this private key.
+See section :ref:`sct_master_keys` for more details.
 
 
 Content Hashes
