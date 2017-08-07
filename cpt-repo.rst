@@ -346,7 +346,7 @@ this is how to use it:
 
 #. Create a repository with ``cvmfs_server mkfs my.repo.name``
 
-#. Store its masterkey and pub into the smartcard with 
+#. Store its masterkey and pub into the smartcard with
    ``cvmfs_server masterkeycard -s my.repo.name``
 
 #. Make a backup copy of ``/etc/cvmfs/keys/my.repo.name.masterkey`` on
@@ -800,6 +800,16 @@ back is achieved through the command
 ``cvmfs_server rollback -t release-1.0`` A rollback is, like restoring
 from backups, not something one would do often. Use caution, a rollback
 is irreversible.
+
+.. _sct_instantsnapshotaccess:
+
+Instant Access to Named Snapshots
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _sct_branching:
+
+Branching
+^^^^^^^^^
 
 .. _sct_nestedcatalogs:
 

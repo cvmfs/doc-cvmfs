@@ -41,6 +41,9 @@ For Stratum 1 server, there should be no running snapshots during the upgrade.
 configuration management system (Puppet, Chef, ...), please see Section
 :ref:`sct_manual_migration`.
 
+**Note**: on Debian/Ubuntu platforms, please read Section
+:ref:`_sct_apt_migration` regarding hotpatching the client.
+
 
 Cache Plugins
 -------------
@@ -79,17 +82,73 @@ cache.
 Instant Access to Named Snapshots
 ---------------------------------
 
+A new server parameter, ``CVMFS_VIRTUAL_DIR=[true,false]``, can be used to
+control the existance of the hidden top-level directory ``.cvmfs/snapshots`` in
+a repository (`CVM-1062 <https://sft.its.cern.ch/jira/browse/CVM-1062>`_). If
+enabled, the file system state referred to by the named tags can be browsed
+through ``.cvmfs/snapshots/$tagname``. This feature requires a CernVM-FS 2.4
+client, older clients show an empty ``.cvmfs/snapshots`` directory.
+
+See Section :ref:`sct_instantsnapshotaccess` for further information.
+
+
 Branching
 ---------
+
+The new ``cvmfs_server checkout`` command can be used to branch off a certain
+named snapshot in order to publish a fix for a previous repository state
+(`CVM-1197 <https://sft.its.cern.ch/jira/browse/CVM-1197>`_). This feature makes
+most sense for repositories that use the instant snapshot access (see above).
+
+See Section :ref:`sct_branching` for further information.
+
+
+Faster Propagation of Repository Updates
+----------------------------------------
+
+Several improvements have been made to reduce the time to propagate changes from
+the release manager machine to clients.
+
+
 
 Yubikey Support
 ---------------
 
+This release supports maintaining the repository master key on a YubiKey smart
+card device (`CVM-1259 <https://sft.its.cern.ch/jira/browse/CVM-1259>`_). If the
+masterkey is stored on such devices, it cannot be stolen even if the computer
+hosting the repositories is compromised.
+
+See Section :ref:`sct_master_keys` for further information.
+
+
+.. _sct_apt_migration:
+
 New apt Repositories
 --------------------
 
+Starting with this release, the apt repositories that provide deb packages for
+Ubuntu and Debian are restructured. So far, all Debian based platforms got
+packages built for Ubuntu 12.04. These packages are still used if the platform
+is not recognized by the ``cvmfs-release`` package. For Debian stable platforms
+and Ubuntu LTS releases, packages built for the specific platform are used
+instead.
 
-Please find below the list of bugfixes and smaller improvements.
+For Ubuntu 16.04 and Debian 8, the CernVM-FS apt repositories contain a fixed
+version of the ``autofs`` package which is necessary to support the CernVM-FS
+config repository.
+
+**Note on client hotpatching**: packages from the new apt repository **cannot**
+seamlessly upgrade previous cvmfs clients.  In order to upgrade the client,
+please
+
+  1. Run ``cvmfs_config umount`` to unmount all active repositories
+  2. Upgrade to the cvmfs-release 2.X package and run ``apt-get update``
+  3. Update the cvmfs client package.
+
+This is a one-time migration. The next CernVM-FS release will again upgrade
+seamlessly.
+
 
 Bug Fixes
 ---------
@@ -124,8 +183,8 @@ Bug Fixes
   * Server / S3: fix authentication timeouts for large transactions on Ceph
     (`CVM-1339 <https://sft.its.cern.ch/jira/browse/CVM-1308>`_)
 
-Improvements
-------------
+Other Improvements
+------------------
 
   * Client: allow for config repository on Ubuntu >= 16.04, Debian >= 8
     (`CVM-771 <https://sft.its.cern.ch/jira/browse/CVM-771>`_)

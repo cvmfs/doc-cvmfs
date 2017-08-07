@@ -133,5 +133,6 @@ CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for
 CVMFS_UPSTREAM_STORAGE              Upstream spooler description defining the basic upstream storage type and configuration.
 CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
 CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
+CVMFS_VIRTUAL_DIR                   Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
 =================================== ============================================================================================================================================================
