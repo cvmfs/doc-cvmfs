@@ -134,3 +134,11 @@ shared file system.
 Because there is only a single file for every node, the parallelism of the
 cluster file system can be exploited and all the requests from CernVM-FS
 circumvent the cluster file system's meta-data server(s).
+
+
+Tiered Cache and Cache Plugins
+------------------------------
+
+Diskless compute nodes can also combine an in-memory cache with a preloaded
+directory on the shared cluster file system. An example configuration can be
+found in Section :ref:`sct_cache_advanced_example`.
