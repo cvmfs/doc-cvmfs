@@ -430,13 +430,11 @@ Downloaded files will be stored in a local cache directory. The
 CernVM-FS cache has a soft quota; as a safety margin, the partition
 hosting the cache should provide more space than the soft quota limit.
 Once the quota limit is reached, CernVM-FS will automatically remove
-files from the cache according to the least recently used policy
-[Panagiotou06]_.
+files from the cache according to the least recently used policy.
 Removal of files is performed bunch-wise until half of the maximum cache
 size has been freed. The quota limit can be set in Megabytes by
 ``CVMFS_QUOTA_LIMIT``. For typical repositories, a few Gigabytes make a
-good quota limit. For repositories hosted at cern, quota recommendations
-can be found under http://cernvm.cern.ch/portal/cvmfs/examples.
+good quota limit.
 
 The cache directory needs to be on a local file system in order to allow
 each host the accurate accounting of the cache contents; on a network
@@ -506,6 +504,125 @@ outgoing connectivity.
 
 Advanced Cache Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For exotic cache configurations, CernVM-FS supports specifying multiple,
+independent "cache manager instances" of different types. Such cache manager
+instances replace the local cache directory. Since the local cache directory is
+also used to store transient special files, ``CVMFS_WORKSPACE=$local_path``
+must be used when advanced cache configuration is used.
+
+A concrete cache manager instance has a user-defined name and it is specified
+like
+
+::
+
+    CVMFS_CACHE_PRIMARY=myInstanceName
+    CVMFS_CACHE_myInstanceName_TYPE=posix
+
+Multiple instances can thus be safely defined with different names but only one
+is selected when the client boots. The following table lists the valid cache
+manager instance types.
+
+=========== ======================================================================
+** Type**   **Behavior**
+=========== ======================================================================
+posix       Uses a cache directory with the standard cache implementation
+tiered      Uses two other cache manager instances in a layered configuration
+external    Uses an external cache plugin process (see Section :ref:`cpt_plugins`)
+=========== ======================================================================
+
+The instance name "default" is blocked because the regular cache configuration
+syntax is automatically mapped to ``CVMFS_CACHE_default_...`` parameters.  The
+command ``sudo cvmfs_talk cache instance`` can be used to show the currently
+used cache manager instance.
+
+
+Tiered Cache
+^^^^^^^^^^^^
+
+The tiered cache manager combines two other cache manager instances as an upper
+layer and a lower layer into a single functional cache manager.  Usually, a
+small and fast upper layer (SSD, memory) is combined with a larger and slower
+lower layer (HDD, network drive). The upper layer needs to be large enough to
+serve all currently open files.  On an upper layer cache miss, CernVM-FS tries
+to copy the missing object from the lower into the upper layer. On a lower layer
+cache miss, CernVM-FS download and stores objects either in both layers or in
+the upper layer only, depending on the configuration.
+
+The parameters ``CVMFS_CACHE_$tieredInstanceName_UPPER`` and
+``CVMFS_CACHE_$tieredInstanceName_LOWER`` set the names of the upper and the
+lower instances.  The parameter
+``CVMFS_CACHE_$tieredInstanceName_LOWER_READONLY=[yes|no]`` controls whether the
+lower layer can be populated by the client or not.
+
+
+
+External Cache Plugin
+^^^^^^^^^^^^^^^^^^^^^
+
+A CernVM-FS cache manager instance can be provided by an external process. The
+cache manager process and the CernVM-FS client are connected through a socket,
+whose address is called "locator". The locator can either address a UNIX domain
+socket on the local file system, or a TCP socket, as in the following examples
+
+::
+
+    CVMFS_CACHE_instanceName_LOCATOR=unix=/var/lib/cvmfs/cache.socket
+    # or
+    CVMFS_CACHE_instanceName_LOCATOR=tcp=192.168.0.24:4242
+
+If a UNIX domain socket is used, both the CernVM-FS client and the cache manager
+need to be able to access the socket file. Usually that means they have to run
+under the same user.
+
+Instead of manually starting the cache manager, the CernVM-FS client can
+optionally automatically start and stop the cache manager process. This is
+called a "supervised cache manager". The first booting CernVM-FS client starts
+the cache manager process, the last terminating client stops the cache manager
+process. In order to start the cache manager in supervised mode, use
+``CVMFS_CACHE_instanceName_CMDLINE=<executable and arguments>``, using a comma
+(``,``) instead of a space to separate the command line parameters.
+
+
+.. _sct_cache_advanced_example:
+
+Example
+^^^^^^^
+
+The following example configures a tiered cache with an external cache plugin
+as an upper layer and a read-only, network drive as a lower layer. The cache
+plugin uses memory to cache data and is part of the CernVM-FS client. This
+configuration could be used in a data center with diskless nodes and a preloaded
+cache on a network drive (see Chapter :ref:`cpt_hpc`)
+
+::
+
+    CVMFS_WORKSPACE=/var/lib/cvmfs
+    CVMFS_CACHE_PRIMARY=hpc
+
+    CVMFS_CACHE_hpc_TYPE=tiered
+    CVMFS_CACHE_hpc_UPPER=memory
+    CVMFS_CACHE_hpc_LOWER=preloaded
+    CVMFS_CACHE_hpc_LOWER_READONLY=yes
+
+    CVMFS_CACHE_memory_TYPE=external
+    CVMFS_CACHE_memory_CMDLINE=/usr/libexec/cvmfs/cache/cvmfs_cache_ram,/etc/cvmfs/cache-mem.conf
+    CVMFS_CACHE_memory_LOCATOR=unix=/var/lib/cvmfs/cvmfs-cache.socket
+
+    CVMFS_CACHE_preloaded_TYPE=posix
+    CVMFS_CACHE_preloaded_ALIEN=/gpfs/cvmfs/alien
+    CVMFS_CACHE_preloaded_SHARED=no
+    CVMFS_CACHE_preloaded_QUOTA_LIMIT=-1
+
+The example configuration for the in-memory cache plugin in
+/etc/cvmfs/cache-mem.conf is
+
+::
+
+    CVMFS_CACHE_PLUGIN_LOCATOR=unix=/var/lib/cvmfs/cvmfs-cache.socket
+    # 2G RAM
+    CVMFS_CACHE_PLUGIN_SIZE=2000
+
 
 NFS Server Mode
 ---------------
@@ -680,7 +797,8 @@ system for use with CernVM-FS.
 
 **showconfig**
     The ``showconfig`` command prints the CernVM-FS parameters for all
-    repositories or for the specific repository given as argument.
+    repositories or for the specific repository given as argument.  With the
+    `-s` option, only non-empty parameters are shown.
 
 **stat**
     The ``stat`` command prints file system and network statistics for
