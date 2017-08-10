@@ -805,18 +805,84 @@ back is achieved through the command
 from backups, not something one would do often. Use caution, a rollback
 is irreversible.
 
+.. _sct_diffs:
+
+Named Snapshot Diffs
+^^^^^^^^^^^^^^^^^^^^
+
+The command ``cvmfs_server diff`` shows the difference in terms of added,
+deleted, and modified files and directories between any two named snapshots.
+It also shows the difference in total number of files and nested catalogs.
+
+Unless named snapshots are provided by the ``-s`` and ``-d`` flags, the command
+shows the difference from the last snapshot ("trunk-previous") to the current
+one ("trunk").
+
+
 .. _sct_instantsnapshotaccess:
 
 Instant Access to Named Snapshots
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CernVM-FS can maintain a special directory through which the contents of all
-named snapshots is accessible by clients.
+CernVM-FS can maintain a special directory
+
+::
+
+    /cvmfs/${repository_name}/.cvmfs/snapshots
+
+through which the contents of all named snapshots is accessible by clients. The
+directory is enabled and disabled by setting ``CVMFS_VIRTUAL_DIR=[true,false]``.
+If enabled, for every named snapshot ``$tag_name`` a directory
+``/cvmfs/${repository_name}/.cvmfs/snapshots/${tag_name}`` is maintained, which
+contains the contents of the repository in the state referenced by the snapshot.
+
+To prevent accidental recursion, the top-level directory ``.cvmfs`` is hidden by
+CernVM-FS clients >= 2.4 even for operations that show dot-files like ``ls -a``.
+Clients before version 2.4 will show the ``.cvmfs`` directory but they cannot
+recurse into the named snapshot directories.
+
 
 .. _sct_branching:
 
 Branching
 ^^^^^^^^^
+
+In certain cases, one might need to publish a named snapshot based not on the
+latest revision but based on a previous named snapshot. This can be useful,
+for instance, if versioned data sets are stored in CernVM-FS and certain
+files in a past data set needs to be fixed.
+
+In order to publish a branch, use ``cvmfs_server checkout`` in order to switch
+to the desired parent branch before starting a transaction. The following
+example publishes based on the existing snapshot "data-v201708" the new
+named snapshot "data-v201708-fix01" in the branch "fixes_data-v201708".
+
+::
+
+    cvmfs_server checkout -b fixes_data-v201708 -t data-v201708
+    cvmfs_server transaction
+    # show that the repository is in a checked-out state
+    cvmfs_server list
+    # make changes to /cvmfs/${repository_name}
+    cvmfs_server publish -a data-v201708-fix01
+    # show all named snapshots and their branches
+    cvmfs_server tag -l
+    # verify that the repository is back on the trunk revision
+    cvmfs_server list
+
+When publishing a checked out state, it is mandatory to specify a tag name.
+Later, it might be necessary to publish another set of fixes in the same branch.
+To do so, the command ``cvmfs_server checkout -b fixes_data-v201708``
+checks out the latest named snapshot from the given branch.  The command
+``cvmfs_server checkout`` jumps back to the trunk of the repository.
+
+Branching makes most sense for repositories that use the instant snapshot
+access (see Section :ref:`sct_branching`).
+
+Please note that while CernVM-FS supports branching, it does not support
+merging of repository snapshots.
+
+
 
 .. _sct_nestedcatalogs:
 
