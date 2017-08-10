@@ -418,7 +418,7 @@ settings are given as parameters to ``cvmfs_server mkfs`` or
 ::
 
       cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
-        -w http://s3.amazonaws.com/mybucket-1-1 my.repo.name
+        -w http://s3.amazonaws.com/mybucket my.repo.name
 
 The file "mys3.conf" contains the S3 settings (see :ref: `table below
 <tab_s3confparameters>`). The "-w" option is used define the S3 server URL,
@@ -426,7 +426,7 @@ e.g. http://localhost:3128, which is used for accessing the repository's
 backend storage on S3. Note that this URL can be different than the S3 server
 address that is used for uploads, e.g. if a proxy server is deployed in front
 of the server. Note that the buckets need to exist before the repository is
-created. In the example above, a single bucket ``mybucket-1-1`` needs to be
+created. In the example above, a single bucket ``mybucket`` needs to be
 created beforehand.
 
 .. _tab_s3confparameters:
@@ -445,13 +445,17 @@ created beforehand.
 ``CVMFS_S3_BUCKETS_PER_ACCOUNT``                S3 buckets used per account, e.g. 1. With
                                                 some S3 servers use of multiple buckets can
                                                 increase the upload speed significantly
-``CVMFS_S3_HOST``                               S3 server hostname, e.g. s3.amazonaws.com
+``CVMFS_S3_HOST``                               S3 server hostname, e.g. s3.amazonaws.com.
+                                                The hostname should NOT be prefixed by
+                                                "http\:\/\/"
+``CVMFS_S3_PORT``                               The port on which the S3 instance is
+                                                running
 ``CVMFS_S3_BUCKET``                             S3 bucket base name. Account and bucket
-                                                index are appended to the bucket base name.
-                                                If you use just one account and one bucket,
-                                                e.g. named ``mybucket``, then you need to
-                                                create only one bucket called
-                                                ``mybucket-1-1``
+                                                index are appended to the bucket base name,
+                                                e.g. ``mybucket-2-3``. If you use just one
+                                                account and one bucket, e.g. named
+                                                ``mybucket``, then you need to create only
+                                                one bucket called ``mybucket``
 ``CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`` Number of parallel uploads to the S3
                                                 server, e.g. 400
 =============================================== ===========================================
