@@ -15,7 +15,7 @@ described below.
   * Instant access to named snapshots through the hidden .cvmfs/snapshots
     directory
 
-  * Support for branching in CernVM-FS' internal versioning
+  * Support for branching and diffing in CernVM-FS' internal versioning
 
   * Faster propagation of repository updates
 
@@ -101,6 +101,15 @@ named snapshot in order to publish a fix for a previous repository state
 most sense for repositories that use the instant snapshot access (see above).
 
 See Section :ref:`sct_branching` for further information.
+
+
+Snapshot Diffs
+--------------
+
+The new ``cvmfs_server diff`` command can be used to show the difference set
+between any two snapshots
+(`CVM-1170 <https://sft.its.cern.ch/jira/browse/CVM-1170>`_). See Section
+:ref:`sct_diffs` for further information.
 
 
 Faster Propagation of Repository Updates
@@ -241,9 +250,6 @@ Other Improvements
 
   * Client / macOS: use built-in LibreSSL on macOS
     (`CVM-1112 <https://sft.its.cern.ch/jira/browse/CVM-1112>`_)
-
-  * Server: add ``cvmfs_server diff`` command
-    (`CVM-1170 <https://sft.its.cern.ch/jira/browse/CVM-1170>`_)
 
   * Server: add ``cvmfs_server gc -a`` option to garbage collect all applicable
     repositories (`CVM-1095 <https://sft.its.cern.ch/jira/browse/CVM-1095>`_)
