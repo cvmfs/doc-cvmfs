@@ -810,6 +810,9 @@ is irreversible.
 Instant Access to Named Snapshots
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+CernVM-FS can maintain a special directory through which the contents of all
+named snapshots is accessible by clients.
+
 .. _sct_branching:
 
 Branching
