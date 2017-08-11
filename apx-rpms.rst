@@ -1,9 +1,9 @@
 .. _apx_rpms:
 
-Available RPMs
-==============
+Available Packages
+==================
 
-The CernVM-FS software is available in form of several RPM packages:
+The CernVM-FS software is available in form of several packages:
 
 **cvmfs-release**
     Adds the CernVM-FS yum/apt repository.
@@ -24,7 +24,9 @@ The CernVM-FS software is available in form of several RPM packages:
 
 **cvmfs-devel**
     Contains the ``libcvmfs.a`` static library and the ``libcvmfs.h``
-    header file for use of CernVM-FS with Parrot [Thain05]_.
+    header file for use of CernVM-FS with Parrot [Thain05]_ as well as the
+    ``libcvmfs_cache.a`` static library and ``libcvmfs_cache.h`` header in order
+    to develop cache plugins.
 
 **cvmfs-auto-setup**
     Only available through yum. This is a wrapper for
