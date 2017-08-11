@@ -3,8 +3,8 @@ Getting Started
 
 This section describes how to install the CernVM-FS client. The
 CernVM-FS client is supported on x86, x86\_64, and ARMv7 architectures
-running Scientific Linux 4-7, Ubuntu \ :math:`\geq12.04`, SLES 11 and
-openSuSE 13.1, Fedora 22 and 23, or Mac OS X \ :math:`\geq 10.10`.  There is
+running Scientific Linux 4-7, Ubuntu \ :math:`\geq12.04`, SLES 11, 12 and
+openSuSE 13.1, Fedora 25 and 26, or Mac OS X \ :math:`\geq 10.12`.  There is
 experimental support for AArch64 and Power 8.
 
 Getting the Software
@@ -14,10 +14,12 @@ The CernVM-FS source code and binary packages are available `on our
 website <https://cernvm.cern.ch/portal/filesystem/downloads>`_. Binary
 packages are produced for rpm, dpkg, and Mac OS X (.pkg). Packages for 64 bit and
 32 bit Scientific Linux 5 and 6 and 64 bit Scientific Linux 7 are available as a
-`yum repository <http://cvmrepo.web.cern.ch/cvmrepo/yum>`_.
-The ``cvmfs-release`` packages can be used to add a these yum/apt repositories
-to the local yum installation. The ``cvmfs-release`` packages are available on
-`our download page <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
+`yum repository <https://cvmrepo.web.cern.ch/cvmrepo/yum>`_.  Ubuntu and Debian
+packages are available through our
+`apt repository <https://cvmrepo.web.cern.ch/cvmrepo/apt>`_.
+The ``cvmfs-release`` packages can be used to add these yum/apt repositories
+to the local package sources list. The ``cvmfs-release`` packages are available
+on `our download page <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
 
 The CernVM-FS client is not relocatable and needs to be installed under
 /usr. On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler,
