@@ -57,6 +57,7 @@ CVMFS_NFILES                    Maximum number of open file descriptors that can
 CVMFS_NFS_SOURCE                If set to *yes*, act as a source for the NFS daemon (NFS export).
 CVMFS_NFS_SHARED                If set a path, used to store the NFS maps in an SQlite database, instead of the usual LevelDB storage in the cache directory.
 CVMFS_PAC_URLS                  Chain of URLs pointing to PAC files with HTTP proxy configuration information.
+CVMFS_OOM_SCORE_ADJ             Set the Linux kernel's out-of-memory killer priority for the CernVM-FS client [-1000 - 1000].
 CVMFS_PROXY_RESET_AFTER         Delay in seconds after which CernVM-FS will retry the primary proxy group in case of a fail-over to another group.
 CVMFS_PROXY_TEMPLATE            Overwrite the default proxy template in Geo-API calls.  Only needed for debugging.
 CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
@@ -81,6 +82,7 @@ CVMFS_TRACEFILE                 If set, enables the tracer and trace file system
 CVMFS_USE_GEOAPI                Request order of Stratum 1 servers and fallback proxies via Geo-API.
 CVMFS_USER                      Sets the ``gid`` and ``uid`` mount options. Don't touch or overwrite.
 CVMFS_USYSLOG                   All messages that normally are logged to syslog are re-directed to the given file.  This file can grow up to 500kB and there is one step of log rotation.  Required for $\mu$CernVM.
+CVMFS_WORKSPACE                 Set the local directory for storing special files (defaults to the cache directory).
 =============================== ====================================================================================================================================================================================
 
 
@@ -111,9 +113,11 @@ CVMFS_EXTERNAL_DATA                 Set to *true* to mark repository to contain 
 CVMFS_FILE_MBYTE_LIMIT              Maximum number of megabytes for a published file, default value: 1024 |br| (see also *CVMFS_ENFORCE_LIMITS*)
 CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
+CVMFS_GENERATE_LEGACY_BULK_CHUNKS   Set to *false* to disable generation of whole-file objects for large files.  Requires clients >= 2.1.7.
 CVMFS_GC_DELETION_LOG               Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
 CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1*, *rmd160* and *shake128*)
-CVMFS_IGNORE_XDIR_HARDLINKS         If set to *yes*, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.
+CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files during publish without aborting.
+CVMFS_IGNORE_XDIR_HARDLINKS         If set to *true*, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
@@ -137,3 +141,48 @@ CVMFS_USER                          The user name that owns and manipulates the 
 CVMFS_VIRTUAL_DIR                   Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
 =================================== ============================================================================================================================================================
+
+
+.. _apxsct_cacheparams:
+
+Tiered Cache Parameters
+-----------------------
+
+The following parameters are used to configure a tiered cache manager instance.
+
+=============================== =================================================
+**Parameter**                   **Meaning**
+=============================== =================================================
+CVMFS_CACHE_$name_UPPER         Name of the upper layer cache instance
+CVMFS_CACHE_$name_LOWER         Name of the lower layer cache instance
+CVMFS_CACHE_LOWER_READONLY      Set to *true* to avoid populating the lower layer
+=============================== =================================================
+
+
+External Cache Plugin Parameters
+--------------------------------
+
+The following parameters are used to configure an external cache plugin as a
+cache manager instance.
+
+=============================== ====================================================================================================================
+**Parameter**                   **Meaning**
+=============================== ====================================================================================================================
+CVMFS_CACHE_$name_CMDLINE       If the client should start the plugin, the executable and command line parameters of the plugin, separated by comma.
+CVMFS_CACHE_$name_LOCATOR       The address of the socket used for communication with the plugin.
+=============================== ====================================================================================================================
+
+
+In-memory Cache Plugin Parameters
+---------------------------------
+
+The following parameters are interpreted from the configuration file provided
+to the in-memory cache plugin (see Section :ref:`sct_cache_advanced_example`).
+
+=============================== ===================================================================================
+**Parameter**                   **Meaning**
+=============================== ===================================================================================
+CVMFS_CACHE_PLUGIN_DEBUGLOG     If set, run CernVM-FS in debug mode and write a verbose log the the specified file.
+CVMFS_CACHE_PLUGIN_LOCATOR      The address of the socket used for client communication
+CVMFS_CACHE_PLUGIN_SIZE         The amount of RAM in megabyte used by the plugin for caching.
+=============================== ===================================================================================

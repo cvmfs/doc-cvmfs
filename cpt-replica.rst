@@ -76,6 +76,11 @@ We suggest the following key parameters:
     8000. The more RAM that the operating system can use for file system
     caching, the better.
 
+    **Note**: Port 8000 might be assigned to ``soundd``.  On SElinux systems,
+    this assignment must be changed to the HTTP service by
+    ``semanage port -m -t http_port_t -p tcp 8000``.  The ``cvmfs-server``
+    RPM executes this command as a post-installation script.
+
 **DNS cache**
     A Stratum 1 does a lot of DNS lookups, so we recommend installing a
     DNS caching mechanism on the machine such as ``dnsmasq`` or
