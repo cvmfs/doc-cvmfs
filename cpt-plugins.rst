@@ -23,7 +23,7 @@ serialized by the Google protobuf library. A description of the wire protocol
 can be found in the ``cvmfs/cache.proto`` source file, although the cache
 plugins should not directly implement the protocol. Instead, plugins are
 supposed to use the ``libcvmfs_cache`` library (part of the CernVM-FS
-developemnt package), which takes care of the low-level protocol handling.
+development package), which takes care of the low-level protocol handling.
 
 Good entry points into the development of a cache plugin are the demo plugin
 ``cvmfs/cache_plugin/cvmfs_cache_null.cc`` and the production in-memory cache
