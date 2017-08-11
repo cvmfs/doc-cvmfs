@@ -427,7 +427,8 @@ backend storage on S3. Note that this URL can be different than the S3 server
 address that is used for uploads, e.g. if a proxy server is deployed in front
 of the server. Note that the buckets need to exist before the repository is
 created. In the example above, a single bucket ``mybucket`` needs to be
-created beforehand.
+created beforehand. Depending on the S3 implementation (e.g. `Minio <https://minio.io>`_), buckets
+may be private by default, in which case it's necessary to make them public.
 
 .. _tab_s3confparameters:
 
