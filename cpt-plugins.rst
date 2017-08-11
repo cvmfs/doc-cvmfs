@@ -34,6 +34,7 @@ helpful for the development and debugging of a cache plugin.
 Broadly speaking, a cache plugin process performs the following steps
 
 ::
+
     #include <libcvmfs_cache.h>
 
     cvmcache_init_global();
