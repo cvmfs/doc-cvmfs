@@ -1,5 +1,5 @@
-Release Notes for CernVM-FS 2.4
-===============================
+Release Notes for CernVM-FS 2.4.1
+=================================
 
 CernVM-FS 2.4 is a feature release that comes with performance improvements,
 new functionality, and bugfixes. We would like to thank Brian Bockelman
@@ -208,6 +208,12 @@ Bug Fixes
 
   * Client / X509 Auth: Use default X509_CERT_DIR also if it is empty string
     (`CVM-1083 <https://sft.its.cern.ch/jira/browse/CVM-1083>`_)
+
+  * Server: fix potential deadlock during catalog commit phase
+    (`CVM-1360 <https://sft.its.cern.ch/jira/browse/CVM-1360>`_)
+
+  * Server: do not abort resiging on negative repository health check
+    (`CVM-1358 <https://sft.its.cern.ch/jira/browse/CVM-1358>`_)
 
   * Server: resolve SElinux conflict on port 8000 with soundd on RHEL 7
     (`CVM-1308 <https://sft.its.cern.ch/jira/browse/CVM-1308>`_)
