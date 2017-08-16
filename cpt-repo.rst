@@ -20,7 +20,7 @@ snapshots.
 
 In order to provide a writable CernVM-FS repository, CernVM-FS uses a union
 file system that combines a read-only CernVM-FS mount point with a writable
-scratch area [Wright04]_. :ref:`This figure below <fig_updateprocess>` outlines
+scratch area. :ref:`This figure below <fig_updateprocess>` outlines
 the process of publishing a repository.
 
 CernVM-FS Server Quick-Start Guide
@@ -39,15 +39,13 @@ System Requirements
 
 -  Officially supported platforms
 
-   -  Scientific Linux 5 (64 bit)
-
    -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
       Appendix ":ref:`apx_rpms`")
 
    -  CentOS/SL >= 7.3, provided that /var/spool/cvmfs is served by an ext4
       file system.
 
-   -  Fedora 22 and above (with kernel :math:`\ge` 4.2.x)
+   -  Fedora 25 and above (with kernel :math:`\ge` 4.2.x)
 
    -  Ubuntu 12.04 64 bit and above
 
@@ -186,25 +184,18 @@ In order to create a repository, the server and client part of
 CernVM-FS must be installed on the release manager machine. Furthermore
 you will need a kernel containing a union file system implementation as
 well as a running ``Apache2`` web server. Currently we support Scientific
-Linux 6, Ubuntu 12.04+ and Fedora 22+ distributions. Please note, that
+Linux 6, Ubuntu 12.04+ and Fedora 25+ distributions. Please note, that
 Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
 we provide a compatible patched kernel as RPMs (see
 :ref:`sct_customkernelinstall` for details).
 
-Historically CernVM-FS solely used `aufs <http://aufs.sourceforge.net>`_
-as a union file system. However, the Linux kernel community favoured `OverlayFS
-<https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt>`_, a
-competing union file system implementation that was merged upstream.
-
-Since CernVM-FS 2.2.0 we support the usage of both OverlayFS and aufs.
-Note however, that the first versions of OverlayFS were broken and will not
-work properly with CernVM-FS. At least a 4.2.x kernel is needed to use
-CernVM-FS with OverlayFS. (Red Hat) Enterprise Linux >= 7.3 works, too,
-provided that /var/spool/cvmfs is served by an ext3 or ext4 file system. Furthermore
-note that OverlayFS cannot fully comply with POSIX semantics, in particular
-hard links must be broken into individual files. That is usually not a problem
-but should be kept in mind when installing certain software distributions into
-a CernVM-FS repository.
+CernVM-FS 2.2.0 supports both OverlayFS and aufs as a union file system.
+At least a 4.2.x kernel is needed to use CernVM-FS with OverlayFS. (Red Hat)
+Enterprise Linux >= 7.3 works, too, provided that /var/spool/cvmfs is served by
+an ext3 or ext4 file system. Furthermore note that OverlayFS cannot fully comply
+with POSIX semantics, in particular hard links must be broken into individual
+files. That is usually not a problem but should be kept in mind when installing
+certain software distributions into a CernVM-FS repository.
 
 .. _sct_serveranatomy:
 
@@ -309,7 +300,7 @@ is limited to a length of 60 characters.
 .. _sct_master_keys:
 
 Master keys
-~~~~~~~~~~~
+^^^^^^^^^^^
 
 Each cvmfs repository uses two sets of keys, one for the individual
 repository and another called the "masterkey" which signs the
@@ -367,6 +358,7 @@ When using a masterkeycard, the default signature expiration reduces
 from 30 days to 7 days.  ``cvmfs_server resign`` needs to be run to
 renew the signature.  It is recommended to run that daily from cron.
 
+
 Repositories for Volatile Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -381,7 +373,33 @@ When CernVM-FS clients perform a cache cleanup, they treat files from
 volatile repositories with priority. Such volatile repositories can be
 useful, for instance, for experiment conditions data.
 
-.. _sct_s3storagesetup:
+
+Compression and Hash Algorithms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Files in the CernVM-FS repository data store are compressed and named
+according to their compressed content hash. The default settings use DEFLATE
+(zlib) for compression and SHA-1 for hashing.
+
+CernVM-FS can optionally skip compression of files.  This can be beneficial,
+for instance, if the repository is known to contain already compressed content,
+such as JPG images or compressed ROOT files. In order to disable compression,
+set ``CVMFS_COMPRESSION_ALGORITHM=none`` in the
+``/etc/cvmfs/repositories.d/$repository/server.conf`` file. Client version >=
+2.2 is required in order to read uncompressed files.
+
+Instead of SHA-1, CernVM-FS can use RIPEMD-160 or SHAKE-128 (a variant of SHA-3
+with 160 output bits) as hash algorithm. In general, we advise not to change the
+default.  In future versions, the default might change from SHA-1 to SHAKE-128.
+In order to enforce the use of a specific hash algorithm, set
+``CVMFS_HASH_ALGORITHM=sha1``, ``CVMFS_HASH_ALGORITHM=rmd160``, or
+``CVMFS_HASH_ALGORITHM=shake128`` in the ``server.conf`` file. Client version
+>= 2.1.18 is required for accessing repositories that use RIPEMD-160.  Client
+version >= 2.2 is required for accessing repositories that use SHAKE-128.
+
+Both compression and hash algorithm can be changed at any point during the
+repository life time.  Existing content will remain untouched, new content will
+be processed with the new settings.
 
 
 Confidential Repositories
@@ -406,6 +424,7 @@ of a (non CernVM-FS) HTTPS content distribution network or they might be
 installed for a small number of users that, for example, require access to
 licensed software.
 
+.. _sct_s3storagesetup:
 
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
