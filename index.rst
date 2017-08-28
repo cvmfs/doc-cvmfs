@@ -50,6 +50,7 @@ Contents
    cpt-servermeta
    cpt-plugins
    cpt-details
+   cpt-large-scale
 
 
 Additional Information
