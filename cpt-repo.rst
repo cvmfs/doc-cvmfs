@@ -538,6 +538,58 @@ command needs to be given as a parameter when running the
 more than one repository at once, ``cvmfs_server migrate *.cern.ch``
 would migrate all present repositories ending with ``.cern.ch``.
 
+.. _sct_grafting:
+
+Grafting Files
+~~~~~~~~~~~~~~
+
+When a repository is updated, new files are checksummed and copied / uploaded
+to a directory exported to the web.  There are situations where this is not
+optimal - particularly, when :doc:`"large-scale" repositories <cpt-large-scale>`
+are used, it may not be pragmatic to copy every file to a single host.  In these
+cases, it is possible to "graft" files by creating a special file containing the
+necessary publication data.  When a graft is encountered, the file is published
+as if it was present on the repository machine: the repository admin is responsible
+for making sure the file's data is distributed accordingly.
+
+To graft a file, ``foo`` to a directory, one must:
+-  Create an empty, zero-length file named ``foo`` in the directory.
+-  Create a separate graft-file named ``.cvmfsgraft-foo`` in the same directory.
+
+The ``.cvmfsgraft`` file must have the following format::
+
+   size=$SIZE
+   checksum=$CHECKSUM
+   chunk_offsets=$OFFSET_1,$OFFSET_2,$OFFSET_3,...
+   chunk_checksums=$CHECKSUM_1,$CHECKSUM_2,$CHECKSUM_3,...
+
+Here, ``$SIZE`` is the entire file size and ``$CHECKSUM`` is the file's
+checksum; the checksums used by this file are assumed to correspond to the
+algorithm selected at publication time.  The offsets ``$OFFSET_X`` and checksums
+``$CHECKSUM_X`` correspond to the checksum and beginning offset of each chunk in the
+file.  ``$OFFSET_1`` is always at ``0``.  Implicitly, the last chunk ends at the end
+of the file.
+
+To help generate checksum files, the ``cvmfs_swissknife graft`` command is provided.
+The ``graft`` command takes the following options:
+
+============= ==================================================
+**Option**    **Description**
+============= ==================================================
+  ``-i``      Input file to process (``-`` for reading from stdin)
+  ``-o``      Output location for graft file (optional)
+  ``-v``      Verbose output (optional)
+  ``-Z``      Compression algorithm (default: none) (optional)
+  ``-c``      Chunk size (in MB; default: 32) (optional)
+  ``-a``      hash algorithm (default: ``SHA-1``) (optional)
+============= ==================================================
+
+This command outputs both the ``.cvmfsgraft`` file and and zero-length "real" file if
+``-o`` is used; otherwise, it prints the contents of the ``.cvmfsgraft`` file to ``stdout``.
+A typical invocation would look like this::
+
+   cat /path/to/some/file | cvmfs_swissknife graft -i - -o /cvmfs/repo.example.com/my_file
+
 Variant Symlinks
 ~~~~~~~~~~~~~~~~
 
@@ -1327,6 +1379,10 @@ you have a special arrangement with particular sites to have large
 caches and bandwidths available, these limits can be made higher at
 those sites. Web proxies may also need to be engineered with faster
 disks if the data causes their cache hit ratios to be reduced.
+
+If you need to publish files with much larger working set sizes than
+a typical software environment, refer to :doc:`"large-scale" repositories <cpt-large-scale>`
+document.
 
 Also, keep in mind that the total amount of data distributed is not
 unlimited. The files are stored and distributed compressed, and files
