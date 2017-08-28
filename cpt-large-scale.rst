@@ -29,7 +29,7 @@ To deploy large-scale CVMFS, a few design decisions are needed:
    on its contents, compresses the data, and serves it from the Apache web server.  Implicitly,
    this means all data must be _copied_ to and _stored_ on the repository host; at larger scales,
    this is prohibitively expensive.  The ``cvmfs_swissknife graft`` tool provides a mechanism
-   to publish files directly if the checksum is known ahead of time.
+   to publish files directly if the checksum is known ahead of time; see :ref:`sct_grafting`.
     -  For ``ligo.osgstorage.org``, a cronjob *copies* all new data to the repository from a cache,
        creates the checksum file, and immediately deletes the downloaded file.  Hence, the LIGO
        data is copied but not stored.
@@ -59,11 +59,9 @@ Creating Large, Secure Repositories
 -----------------------------------
 
 For large-scale repositories, a few tweaks are useful at creation time.  Here is the command used to
-create the ``cms.osgstorage.org``:
+create the ``cms.osgstorage.org``::
 
-```
-cvmfs_server mkfs -V cms:/cms -X -Z none -o cmsuser cms.osgstorage.org
-```
+   cvmfs_server mkfs -V cms:/cms -X -Z none -o cmsuser cms.osgstorage.org
 
 -  The ``-V cms:/cms`` option indicates that only clients with an X509 proxy with a VOMS extension
    from CMS are allowed to access the mounted proxy.  If multiple VOMS extensions are needed, it's
@@ -74,6 +72,6 @@ cvmfs_server mkfs -V cms:/cms -X -Z none -o cmsuser cms.osgstorage.org
 -  ``-Z none`` indicates that, by default, files published to this repository will not be marked as
    compressed.
 
-By combining the``-X`` and ``-Z`` options, files at an HTTP endpoint can be published in-place: no compression
+By combining the ``-X`` and ``-Z`` options, files at an HTTP endpoint can be published in-place: no compression
 or copying into a different endpoint is necessary to publish.
 
