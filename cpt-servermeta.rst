@@ -32,7 +32,7 @@ portion of the data with a text editor (cf. ``$EDITOR``)s::
 
   cvmfs_server update-info
 
-Note that the ``cvmfs_server`` package requires the ``jq`` utility, which validates 
+Note that the ``cvmfs_server`` package requires the ``jq`` utility, which validates
 CVMFS JSON data.
 
 Below are :ref:`examples <sct_jsonexamples>` of both the repository list and
@@ -123,6 +123,7 @@ Repository Specific Meta Information
     "email"         : "you@organisation.org",
     "organisation"  : "Your Organisation",
     "description"   : "Repository content",
+    "url"           : "https://www.example.com/"
     "recommended-stratum0"  : "stratum 0 url",
     "recommended-stratum1s" : [ "stratum1 url", "stratum1 url" ],
 
