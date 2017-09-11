@@ -123,7 +123,7 @@ Repository Specific Meta Information
     "email"         : "you@organisation.org",
     "organisation"  : "Your Organisation",
     "description"   : "Repository content",
-    "url"           : "https://www.example.com/"
+    "url"           : "https://www.example.com/",
     "recommended-stratum0"  : "stratum 0 url",
     "recommended-stratum1s" : [ "stratum1 url", "stratum1 url" ],
 
