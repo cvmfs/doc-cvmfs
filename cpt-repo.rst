@@ -559,6 +559,9 @@ like
 
     cvmfs_info http://cvmfs-stratum-zero.cern.ch/cvmfs/cernvm-prod.cern.ch
 
+The ``cvmfs_info`` utility can be downloaded as a stand-alone Perl script
+from the linked github repository.
+
 The ``cvmfs_info`` utility relies on the repository meta-data as described in
 Chapter :ref:`sct_metainfo`.  It shows timestamp and revision number of the
 repository on the stratum 0 master server and all replicas, as well as the
