@@ -538,6 +538,39 @@ command needs to be given as a parameter when running the
 more than one repository at once, ``cvmfs_server migrate *.cern.ch``
 would migrate all present repositories ending with ``.cern.ch``.
 
+
+Repository Update Propagation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Updates to repositories won't immediately appear on the clients. For
+scalability reasons, clients will only regularly check for updates. The
+frequency of update checks is stored in the repository itself and defaults to
+4 minutes. The default can be changed by setting ``CVMFS_REPOSITORY_TTL`` to a
+new value in seconds in the
+``/etc/cvmfs/repositories.d/$repository/server.conf`` file. The value should
+not fall below 1 minute.
+
+If the repository is replicated to a stratum 1 server (see Chapter
+:ref:` cpt_replica`), replication of the changes needs to finish before the
+repository time-to-live applies. The status of the replication can be checked
+by the `cvmfs_info <https://github.com/cvmfs/cvmfs_info utility>`_ utility,
+like
+
+    cvmfs_info http://cvmfs-stratum-zero.cern.ch/cvmfs/cernvm-prod.cern.ch
+
+The ``cvmfs_info`` relies on the repository meta-data as described in Chapter
+:ref:` sct_metainfo`.  It shows timestamp and revision number of the repository
+on the stratum 0 master server and all replicas, as well as the remaining life
+time of the repository whitelist and the catalog time-to-live.
+
+**Note:** The ``cvmfs_info`` utility queries stratum servers without passing
+through web proxies.  It is not meant to be used on a large-scale by all
+clients.  On clients, the extended attribute ``revision`` can be used to check
+for the currently active repository state, like
+
+    attr -g revision /cvmfs/cernvm-prod.cern.ch
+
+
 .. _sct_grafting:
 
 Grafting Files
