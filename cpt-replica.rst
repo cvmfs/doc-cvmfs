@@ -68,13 +68,15 @@ We suggest the following key parameters:
 **Squid frontend**
     Squid should be used as a frontend to Apache, configured as a
     reverse proxy. It is recommended to run it on the same machine as
-    Apache to reduce the number of points of failure. Alternatively,
-    separate Squid server machines may be configured in load-balance
-    mode forwarding to the Apache server, but note that if any of them
-    are down the entire service will be considered down by
-    CernVM-FS clients. The Squid frontend should listen on ports 80 and
-    8000. The more RAM that the operating system can use for file system
-    caching, the better.
+    Apache to reduce the number of points of failure. In that case
+    caching can be disabled for the data (since there's no need to
+    store it again on the same disk), but caching is helpful for the
+    geo api calls.  Alternatively, separate Squid server machines may
+    be configured in a round-robin DNS and each forward to the Apache
+    server, but note that if any of them are down the entire service
+    will be considered down by CernVM-FS clients. The Squid frontend
+    should listen on ports 80 and 8000. The more RAM that the
+    operating system can use for file system caching, the better.
 
     **Note**: Port 8000 might be assigned to ``soundd``.  On SElinux systems,
     this assignment must be changed to the HTTP service by
