@@ -1,3 +1,106 @@
+Release Notes for CernVM-FS 2.4.2
+=================================
+
+CernVM-FS 2.4.2 is a patch release.  It contains bugfixes and adjustments for
+stratum 0 and stratum 1 operations as well as for client-side cache plugins.
+Clients not using the new cache plugins do not necessarily need to upgrade.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+**Note**: if the configuration of the Stratum 1 server is handled by a
+configuration management system (Puppet, Chef, ...), please see Section
+:ref:`sct_manual_migration_242`.
+
+For Release Manager Machines, all transactions must be closed before upgrading.
+
+Note for upgrades from versions prior to 2.4.1: please also see the specific
+instructions in the release notes for version 2.4.1 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client: fix use of cached file catalog in cache plugins
+
+  * Client: add cvmcache_get_session() to cache plugin API
+    (`CVM-1368 <https://sft.its.cern.ch/jira/browse/CVM-1368>`_)
+
+  * Client: improve logging for cache plugins
+
+  * Server: skip external files during garbage collection
+    (`CVM-1396 <https://sft.its.cern.ch/jira/browse/CVM-1396>`_)
+
+  * Server: prevent diff viewer from recursing into hidden directories
+    (`CVM-1384 <https://sft.its.cern.ch/jira/browse/CVM-1384>`_)
+
+  * Server: fix variant symlink display on release manager machine
+    (`CVM-1383 <https://sft.its.cern.ch/jira/browse/CVM-1383>`_)
+
+  * Server: fix off-by-one error for chunk size when grafting files
+
+  * Server: cache GeoAPI replies for 5 minutes, improve WSGI config
+    (`CVM-1349 <https://sft.its.cern.ch/jira/browse/CVM-1349>`_)
+
+  * Server: enforce explicit catalog TTL setting on publish
+    (`CVM-1388 <https://sft.its.cern.ch/jira/browse/CVM-1388>`_)
+
+  * Server: prevent overlayfs repositories on XFS ftype=0 spool directories
+    (`CVM-1385 <https://sft.its.cern.ch/jira/browse/CVM-1385>`_)
+
+  * Server: enforce numeric value when manually setting revision number
+    (`CVM-1372 <https://sft.its.cern.ch/jira/browse/CVM-1372>`_)
+
+.. _sct_manual_migration_242:
+
+Manual Migration from 2.4.1 Stratum 1 Web Servers
+-------------------------------------------------
+
+If you do not want to use ``cvmfs_server migrate`` to automatically upgrade,
+web servers serving Stratum 1 repositories can be migrated from version 2.4.1
+with the following steps:
+
+  1. Ensure that there are is no active replication or garbage collection
+     process before updating the server software and during the repository
+     layout migration.
+
+  2. Install the ``cvmfs-server`` 2.4.2 package.
+
+The Apache configuration for stratum 1 repositories should be adjusted as
+follows:
+
+  3. Remove the WSGI configuration, the ``Alias /cvmfs/$name/api``, and the
+     ``<Directory /var/www/wsgi-scripts>`` directives from the
+     repository-specific configuration
+
+  4. Add a new Apache configuration file named ``cvmfs.+webapi.conf`` (sic,
+     to make sure this file is alphabetically before the other configuration
+     files) with the following content
+
+::
+
+      AliasMatch ^/cvmfs/([^/]+)/api/(.*)\$ /var/www/wsgi-scripts/cvmfs-server/cvmfs-api.wsgi/\$1/\$2
+      WSGIDaemonProcess cvmfsapi threads=64 display-name=%{GROUP} \
+        python-path=/usr/share/cvmfs-server/webapi
+      <Directory /var/www/wsgi-scripts/cvmfs-server>
+        WSGIProcessGroup cvmfsapi
+        WSGIApplicationGroup cvmfsapi
+        Options ExecCGI
+        SetHandler wsgi-script
+        # On Apache 2.4: replace the next two lines by
+        # Require all granted
+        Order allow,deny
+        Allow from all
+      </Directory>
+      WSGISocketPrefix /var/run/wsgi
+
+  5. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
+     ``CVMFS_CREATOR_VERSION=138``
+
+
 Release Notes for CernVM-FS 2.4.1
 =================================
 
