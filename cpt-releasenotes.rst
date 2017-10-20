@@ -26,7 +26,7 @@ Bug Fixes and Improvements
 
   * Client: fix use of cached file catalog in cache plugins
 
-  * Client: add cvmcache_get_session() to cache plugin API
+  * Client: add ``cvmcache_get_session()`` to cache plugin API
     (`CVM-1368 <https://sft.its.cern.ch/jira/browse/CVM-1368>`_)
 
   * Client: improve logging for cache plugins
@@ -59,8 +59,8 @@ Bug Fixes and Improvements
 Manual Migration from 2.4.1 Stratum 1 Web Servers
 -------------------------------------------------
 
-If you do not want to use ``cvmfs_server migrate`` to automatically upgrade,
-web servers serving Stratum 1 repositories can be migrated from version 2.4.1
+If you are not using ``cvmfs_server migrate`` to automatically upgrade, web
+servers serving Stratum 1 repositories can be migrated from version 2.4.1
 with the following steps:
 
   1. Ensure that there are is no active replication or garbage collection
@@ -96,6 +96,7 @@ follows:
         Allow from all
       </Directory>
       WSGISocketPrefix /var/run/wsgi
+
 
   5. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
      ``CVMFS_CREATOR_VERSION=138``
