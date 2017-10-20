@@ -98,8 +98,8 @@ follows:
       WSGISocketPrefix /var/run/wsgi
 
 
-  5. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
-     ``CVMFS_CREATOR_VERSION=138``
+As a last step, update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and
+set ``CVMFS_CREATOR_VERSION=138``
 
 
 Release Notes for CernVM-FS 2.4.1
