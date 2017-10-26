@@ -435,7 +435,7 @@ under ``/cvmfs/info``, should be adjusted as follows:
   4. Reduce the cache expiry for files of type ``application/x-cvmfs`` and
      ``application/json`` from 2 minutes to 61 seconds
 
-  5. Add to the ``<Directoy>`` directive for the repository
+  5. Add to the ``<Directory>`` directive for the repository
 
 
 ::
