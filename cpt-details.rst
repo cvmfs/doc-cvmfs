@@ -323,7 +323,7 @@ also support another format that actively blocks revisions associated
 with a compromised repository key from being mounted and even forces
 them to be unmounted if they are mounted.  The format for that is a
 less-than sign followed by the repository name followed by a blank and
-a repository revision number: 
+a repository revision number:
 
 ::
 
@@ -697,6 +697,9 @@ information. There are two supported attributes:
 **maxfd**
     Shows the maximum number of file descriptors available to file
     system clients.
+
+**ncleanup24**
+    Shows the number of cache cleanups in the last 24 hours.
 
 **nclg**
     Shows the number of currently loaded nested catalogs.
