@@ -63,7 +63,7 @@ CVMFS_PROXY_TEMPLATE            Overwrite the default proxy template in Geo-API 
 CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
 CVMFS_QUOTA_LIMIT               Soft-limit of the cache in Megabyte.
 CVMFS_RELOAD_SOCKETS            Directory of the sockets used by the CernVM-FS loader to trigger hotpatching/reloading.
-CVMFS_REPOSITORIES              Comma-separated list of fully qualified repository names that shall be mountable under /cvmfs.
+CVMFS_REPOSITORIES              Comma-separated list of fully qualified repository names, used for default list by support tools such as cvmfs-talk.
 CVMFS_REPOSITORY_DATE           A timestamp in ISO format (e.g. ``2007-03-01T13:00:00Z``).  Selects the repository state as of the given date.
 CVMFS_REPOSITORY_TAG            Select a named repository snapshot that should be mounted instead of ``trunk``.
 CVMFS_CONFIG_REPO_REQUIRED      If set to *yes*, no repository can be mounted unless the config repository is available.
