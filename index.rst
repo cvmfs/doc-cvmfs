@@ -43,28 +43,12 @@ Contents
    cpt-quickstart
    cpt-configure
    cpt-squid
-   cpt-hpc
    cpt-repo
+   cpt-servermeta
    cpt-replica
    cpt-gateway-services
-   cpt-servermeta
-   cpt-plugins
-   cpt-details
-   cpt-large-scale
-   cpt-graphdriver
-
-
-Additional Information
-^^^^^^^^^^^^^^^^^^^^^^
-
-.. toctree::
-   :maxdepth: 1
-
-   apx-security
-   apx-parameters
-   apx-serverinfra
-   apx-rpms
-   apx-references
+   part-advanced
+   part-appendix
 
 
 Contact and Authors
