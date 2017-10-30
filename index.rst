@@ -51,6 +51,7 @@ Contents
    cpt-plugins
    cpt-details
    cpt-large-scale
+   cpt-graphdriver
 
 
 Additional Information
@@ -76,6 +77,7 @@ Authors of this documentation:
    * Jakob Blomer
    * Predrag Buncic
    * Dave Dykstra
+   * Nikola Hardi
    * René Meusel
    * José Molina Colmenero
    * Radu Popescu
