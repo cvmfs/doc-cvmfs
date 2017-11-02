@@ -103,3 +103,46 @@ and untar a graph driver plugin tarball.  Run ::
 **Note**: currently, the graph driver name (``my-graphdriver``) must not contain
 a colon (``:``) nor a comma (``,``).  This issue will be fixed in a lalter
 version.
+
+
+Conversion of Images
+--------------------
+
+**Note:** The usage of the ``cvmfs2docker`` utility is preliminary. A more
+convenient transformation process is under development.
+
+Download the latest version of the docker2cvmfs utility from
+`https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/ <https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/>`_
+and make it executable with ``chmod +x docker2cvmfs``.
+
+On a cvmfs release manager machines, download the original images layers as
+tarballs using ``docker2``, like ::
+
+    ./docker2cvmfs --registry https://gitlab-registry.cern.ch/v2 pull cloud/image-name:latest /home/user/layers/
+
+If you download from DockerHub, you can omit the ``--registry`` flag.
+
+To extract the image layer tarballs into a CernVM-FS repository, run a bash
+script like the following one ::
+
+    DESTINATION=/cvmfs/images.cern.ch/layers
+    for l in /home/user/layers/*; do
+      hash=$(basename $l .tar.gz)
+      dst_layer=/cvmfs/test.cern.ch/layers/$hash
+      mkdir -p $dst_layer
+      touch $dst_layer/.cvmfscatalog
+      tar xf $l -C $dst_layer --owner=$(id -u) --group=$(id -u) --no-xattrs --exclude="*dev/*";
+    done
+
+Note that the CernVM-FS repository should have the settings
+``CVMFS_IGNORE_SPECIAL_FILES=true``, ``CVMFS_INCLUDE_XATTRS=true``, and
+``CVMFS_IGNORE_XDIR_HARDLINKS=true``.  If the repository is owned by the root
+user on the release manager machine, the extra options to the tar command can
+be omitted.
+
+As a last step, the thin image needs to be pushed to a docker registry.  To
+do so, run the following commands ::
+
+    ./docker2cvmfs --registry https://gitlab-registry.cern.ch/v2 thin cloud/image-name:latest images.cern.ch/layers > thin.json
+    tar cf - thin.json | docker import - cvmfs/thin_image-name
+    docker push cvmfs/thin_image-name
