@@ -115,6 +115,7 @@ CVMFS_FORCE_REMOUNT_WARNING         Enable/disable warning through ``wall`` and 
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_GENERATE_LEGACY_BULK_CHUNKS   Set to *false* to disable generation of whole-file objects for large files.  Requires clients >= 2.1.7.
 CVMFS_GC_DELETION_LOG               Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
+CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.
 CVMFS_HASH_ALGORITHM                Define which secure hash algorithm should be used by CernVM-FS for CAS objects |br| (supported are: *sha1*, *rmd160* and *shake128*)
 CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files during publish without aborting.
 CVMFS_IGNORE_XDIR_HARDLINKS         If set to *true*, do not abort the publish operation when cross-directory hardlinks are found.  Instead automatically break the hardlinks across directories.
@@ -133,6 +134,7 @@ CVMFS_ROOT_KCATALOG_LIMIT           Maximum thousands of files allowed in root c
 CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
+CVMFS_UID_MAP                       Path of a file for the mapping of file owner user ids.
 CVMFS_UNION_DIR                     Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently `aufs` and `overlayfs` are fully supported)
 CVMFS_UPSTREAM_STORAGE              Upstream spooler description defining the basic upstream storage type and configuration.

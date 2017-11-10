@@ -707,6 +707,22 @@ A sample entry /etc/fstab entry on a client:
 
 .. _sct_hotpatch:
 
+File Ownership
+--------------
+
+By default, cvmfs presents all files and directories as belonging to the
+mounting user, which for system mounts under /cvmfs is the user ``cvmfs``.
+Alternatively, CernVM-FS can present the uid and gid of file owners as they
+have been at the time of publication by setting ``CVMFS_CLAIM_OWNERSHIP=no``.
+
+If the real uid and gid values are shown, stable uid and gid values across nodes
+are recommended; otherwise the owners shown on clients can be confusing.  The
+client can also dynamically remap uid and gid values.  To do so, the parameters
+``CVMFS_UID_MAP`` and ``CVMFS_GID_MAP`` should provide the path to text files
+that specify the mapping.  The format of the map files is identical to the map
+files used for :ref:`bulk changes of ownership on release manager machines <sct_repo_ownership>`.
+
+
 Hotpatching and Reloading
 -------------------------
 

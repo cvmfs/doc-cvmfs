@@ -1214,6 +1214,8 @@ migrated.
 After ``cvmfs_server migrate`` has successfully updated all file
 catalogs repository maintenance can continue as usual.
 
+.. _sct_repo_ownership:
+
 Change File Ownership on File Catalog Level
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
