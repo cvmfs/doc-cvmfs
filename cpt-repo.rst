@@ -668,9 +668,7 @@ useful to bootstrap a release manager machine for a given file storage.
 
 ``cvmfs_server import`` works similar to ``cvmfs_server mkfs`` (described in
 :ref:`sct_repocreation`) except it uses the provided data storage instead of
-creating a fresh (and empty) storage. In case of a CernVM-FS 2.0 file storage
-``cvmfs_server import`` also takes care of the file catalog migration into the
-latest catalog schema (see :ref:`sct_legacyrepoimport` for details).
+creating a fresh (and empty) storage.
 
 During the import it might be necessary to resign the repository's whitelist.
 Usually because the whitelist's expiry date has exceeded. This operations
@@ -686,54 +684,6 @@ repository key add ``-t -r`` to ``cvmfs_server import``.
 
 Refer to Section :ref:`sct_cvmfspublished_signature` for a comprehensive
 description of the repository signature mechanics.
-
-.. _sct_legacyrepoimport:
-
-Legacy Repository Import
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-We strongly recommend to install CernVM-FS 2.1 on a fresh or at least a
-properly cleaned machine without any traces of the CernVM-FS 2.0
-installation before installing CernVM-FS 2.1 server tools.
-
-The command ``cvmfs_server import`` requires the full CernVM-FS 2.0 data
-storage which is located at /srv/cvmfs by default as well as the
-repository's signing keys. Since the CernVM-FS 2.1 server backend
-supports multiple repositories in contrast to its 2.0 counterpart, we
-recommend to move the repository's data storage to /srv/cvmfs/<FQRN>
-upfront to avoid later inconsistencies.
-
-The following steps describe the transformation of a repository from
-CernVM-FS 2.0 into 2.1. As an example we are using a repository called
-**legacy.cern.ch**.
-
-#. Make sure that you have backups of both the repository's backend
-   storage and its signing keys
-
-#. Install and test the CernVM-FS 2.1 server tools on the machine that
-   is going to be used as new Stratum 0 maintenance machine
-
-#. | Place the repository's backend storage data in
-     /srv/cvmfs/*legacy.cern.ch*
-   | (default storage location)
-
-#. Transfer the repository's signing keychain to the machine (f.e. to
-   /legacy\_keys/)
-
-#. Run ``cvmfs_server import`` like this:
-
-   ::
-
-           cvmfs_server import
-             -o <username of repo maintainer> \
-             -k ~/legacy_keys \
-             -l               \ # for 2.0.x file catalog migration
-             -s               \ # for further repository statistics
-             legacy.cern.ch
-
-#. Check the imported repository with
-   ``cvmfs_server check legacy.cern.ch`` for integrity
-   (see :ref:`sct_checkintegrity`)
 
 .. _sct_serverhooks:
 
