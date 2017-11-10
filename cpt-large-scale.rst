@@ -1,4 +1,5 @@
 
+.. _sct_data:
 
 Large-Scale Data CernVM-FS
 ==========================

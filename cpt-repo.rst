@@ -1417,6 +1417,8 @@ unless they are readable by "other" and all their parent directories
 have at least "execute" permissions. It makes little sense to publish
 files in CernVM-FS if they won't be able to be read by anyone.
 
+.. _sct_limit_hardlink:
+
 Hardlinks
 ~~~~~~~~~
 
@@ -1434,3 +1436,87 @@ in the repository just like any other files that have identical content.
 Note that if, in a subsequent publish operation, only one of these
 cross-directory hardlinks gets changed, the other hardlinks remain
 unchanged (the hardlink got "broken").
+
+
+Configuration Recommendation by Use Case
+----------------------------------------
+
+The default configuration of a fresh CernVM-FS repository are tuned for
+production software repositories and maximum compatibility and safety.  For
+other typical use cases, the configuration should be adapted.
+
+General Recommendations
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Unless an older client base needs to be supported, we recommend to the following
+configuration changes::
+
+    CVMFS_AUTO_TAG_TIMESPAN="2 weeks ago"
+    CVMFS_IGNORE_XDIR_HARDLINKS=true
+    CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false
+    CVMFS_HASH_ALGORITHM=shake128
+
+These changes make unreferenced objects older than two weeks subject to garbage
+collection (without enabling garbage collection).  It tolerates that hard links
+among different directories (see :ref:`sct_limit_hardlink`), creates only
+chunked versions of large files and uses the more future-proof SHA-3 derived
+content hash algorithm.
+
+
+Multi-Tenant Repositories
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For repositories that are edited by several, possibly unexperienced users, we
+suggest the following configuration settings::
+
+    CVMFS_AUTOCATALOGS=true
+    CVMFS_ENFORCE_LIMITS=true
+    CVMFS_FORCE_REMOUNT_WARNING=true
+
+This will, in addition to manually created nested catalogs, keep the maximum
+file catalog size small and enforce the limit on maximum file sizes.
+
+
+Repositories for Software "Nightly Builds"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Repositories containing the result of "nightly builds" are usually subject to a
+lot of churn and accumulate unreferenced objects quickly.  We recommend to
+set ::
+
+    CVMFS_AUTO_TAG=false
+    CVMFS_GARBAGE_COLLECTION=true
+
+in order to activate garbage collection and to turn off CernVM-FS' versioning
+(provided that the content on such repositories is ephemeral).  Additionally,
+a regular cron job running ``cvmfs_server gc -af`` should be installed.
+
+
+Repositories for (Conditions) Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Repositories containing data sets (cf. :ref:`sct_data`) should start with the
+following base configuration ::
+
+    CVMFS_COMPRESSION_ALGORITHM=none
+    CVMFS_FILE_MBYTE_LIMIT= >> larger than expected maximum file size
+    CVMFS_VIRTUAL_DIR=true
+
+provided that data files are already compressed and that access to previous
+file system revisions on client-side is desired.
+
+
+Repositories for Container Images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Repositories containing Linux container image contents (that is: container root
+file systems) should have the following configuration::
+
+    CVMFS_IGNORE_SPECIAL_FILES=true
+    CVMFS_INCLUDE_XATTRS=true
+    CVMFS_VIRTUAL_DIR=true
+
+This ensures that left-over device files in the root file system do not break
+publication on CernVM-FS but instead they get silently dropped.  Extended
+attributes of files, such as file capabilities and SElinux attributes, are
+recorded.  And previous file system revisions can be accessed from the clients.
