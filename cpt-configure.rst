@@ -132,6 +132,7 @@ A minimal sample myparams.conf file could look like this:
       CVMFS_CLAIM_OWNERSHIP=yes
       CVMFS_RELOAD_SOCKETS=/home/user/mycache
       CVMFS_SERVER_URL=http://cvmfs-stratum-one.cern.ch/cvmfs/atlas.cern.ch
+      CVMFS_KEYS_DIR=/etc/cvmfs/keys/cern.ch
       CVMFS_HTTP_PROXY=DIRECT
 
 Make sure to use absolute path names for the mount point and for the
