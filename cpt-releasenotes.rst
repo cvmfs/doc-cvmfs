@@ -1,3 +1,48 @@
+Release Notes for CernVM-FS 2.4.3
+=================================
+
+CernVM-FS 2.4.3 is a patch release.  It contains bugfixes and adjustments for
+the client.  Release manager machines and stratum 1 servers do not necessarily
+need to upgrade.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For Release Manager Machines, all transactions must be closed before upgrading.
+
+Note for upgrades from versions prior to 2.4.2: please also see the specific
+instructions in the release notes for version 2.4.2 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client: fix potential corruption of /etc/mtab during client crash handling
+    (`CVM-1431 <https://sft.its.cern.ch/jira/browse/CVM-1431>`_)
+
+  * Client: fix silent drop of mount points on top of CernVM-FS volumes, introduced with 2.4.1
+    (`CVM-1423 <https://sft.its.cern.ch/jira/browse/CVM-1423>`_)
+
+  * Client: workaround for alien cache located on BeeGFS
+    (`CVM-1403 <https://sft.its.cern.ch/jira/browse/CVM-1403>`_)
+
+  * Client: fix throughput reporting in `cvmfs_config stat`
+    (`CVM-1432 <https://sft.its.cern.ch/jira/browse/CVM-1432>`_)
+
+  * Client: fix locating cached manifest for some tiered cache manager configurations
+    (`CVM-1436 <https://sft.its.cern.ch/jira/browse/CVM-1436>`_)
+
+  * Client: lower requirement on selinux-policy version on EL7
+    (`CVM-1422 <https://sft.its.cern.ch/jira/browse/CVM-1422>`_)
+
+  * Client: enable multiple cvmfs-config* packages to be installable on Debian
+    (`CVM-1420 <https://sft.its.cern.ch/jira/browse/CVM-1420>`_)
+
+
+
 Release Notes for CernVM-FS 2.4.2
 =================================
 
