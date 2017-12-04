@@ -1491,7 +1491,8 @@ set ::
 
 in order to activate garbage collection and to turn off CernVM-FS' versioning
 (provided that the content on such repositories is ephemeral).  Additionally,
-a regular cron job running ``cvmfs_server gc -af`` should be installed.
+a regular cron job running ``cvmfs_server gc -af`` should be installed, or the
+nightly build script should be updated to invoke ``cvmfs_server gc <repo name>``.
 
 
 Repositories for (Conditions) Data
