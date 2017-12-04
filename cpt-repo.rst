@@ -1473,10 +1473,12 @@ suggest the following configuration settings::
 
     CVMFS_AUTOCATALOGS=true
     CVMFS_ENFORCE_LIMITS=true
-    CVMFS_FORCE_REMOUNT_WARNING=true
+    CVMFS_FORCE_REMOUNT_WARNING=false
 
 This will, in addition to manually created nested catalogs, keep the maximum
 file catalog size small and enforce the limit on maximum file sizes.
+It will also prevent forced remounts from sending a broadcast message
+to all users.
 
 
 Repositories for Software "Nightly Builds"
