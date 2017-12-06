@@ -429,10 +429,9 @@ licensed software.
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CernVM-FS can store files directly to S3 compatible storage systems,
-such as Amazon S3, Huawei UDS and OpenStack SWIFT. The S3 storage
-settings are given as parameters to ``cvmfs_server mkfs`` or
-``cvmfs_server add-replica``:
+CernVM-FS can store files directly to S3 compatible storage systems, such as
+Amazon S3, or Ceph. The S3 storage settings are given as parameters to
+``cvmfs_server mkfs`` or ``cvmfs_server add-replica``:
 
 ::
 
@@ -442,69 +441,33 @@ settings are given as parameters to ``cvmfs_server mkfs`` or
 The file "mys3.conf" contains the S3 settings (see :ref: `table below
 <tab_s3confparameters>`). The "-w" option is used define the S3 server URL,
 e.g. http://localhost:3128, which is used for accessing the repository's
-backend storage on S3. Note that this URL can be different than the S3 server
-address that is used for uploads, e.g. if a proxy server is deployed in front
-of the server. Note that the buckets need to exist before the repository is
-created. In the example above, a single bucket ``mybucket`` needs to be
-created beforehand. Depending on the S3 implementation (e.g. `Minio <https://minio.io>`_), buckets
-may be private by default, in which case it's necessary to make them public.
+backend storage on S3. Note that the buckets need to exist before the repository
+is created. In the example above, a single bucket ``mybucket`` needs to be
+created beforehand. Depending on the S3 implementation
+(e.g. `Minio <https://minio.io>`_), buckets may be private by default, in which
+case it's necessary to make them public.
 
 .. _tab_s3confparameters:
 
 =============================================== ===========================================
 **Parameter**                                   **Meaning**
 =============================================== ===========================================
-``CVMFS_S3_ACCOUNTS``                           Number of S3 accounts to be used, e.g. 1.
-                                                With some S3 servers use of multiple
-                                                accounts can increase the upload speed
-                                                significantly
-``CVMFS_S3_ACCESS_KEY``                         S3 account access key(s) separated with
-                                                ``:``, e.g. KEY-A:KEY-B:...
-``CVMFS_S3_SECRET_KEY``                         S3 account secret key(s) separated with
-                                                ``:``, e.g. KEY-A:KEY-B:...
-``CVMFS_S3_BUCKETS_PER_ACCOUNT``                S3 buckets used per account, e.g. 1. With
-                                                some S3 servers use of multiple buckets can
-                                                increase the upload speed significantly
+``CVMFS_S3_ACCESS_KEY``                         S3 account access key
+``CVMFS_S3_SECRET_KEY``                         S3 account secret key
 ``CVMFS_S3_HOST``                               S3 server hostname, e.g. s3.amazonaws.com.
                                                 The hostname should NOT be prefixed by
                                                 "http\:\/\/"
+``CVMFS_S3_REGION``                             The S3 region, e.g. eu-central-1. If
+                                                specified, AWSv4 authorization protocol is
+                                                used.
 ``CVMFS_S3_PORT``                               The port on which the S3 instance is
                                                 running
-``CVMFS_S3_BUCKET``                             S3 bucket base name. Account and bucket
-                                                index are appended to the bucket base name,
-                                                e.g. ``mybucket-2-3``. If you use just one
-                                                account and one bucket, e.g. named
-                                                ``mybucket``, then you need to create only
-                                                one bucket called ``mybucket``
+``CVMFS_S3_BUCKET``                             S3 bucket name. The repository name as used
+                                                as a subdirectory inside the bucket.
 ``CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`` Number of parallel uploads to the S3
                                                 server, e.g. 400
 =============================================== ===========================================
 
-In addition, if the S3 backend is configured to use multiple accounts or
-buckets, a proxy server is needed to map HTTP requests to correct
-buckets. This mapping is needed because CernVM-FS does not support
-buckets but assumes that all files are stored in a flat namespace. The
-recommendation is to use a Squid proxy server (version
-:math:`\geq 3.1.10`). The squid.conf can look like this:
-
-::
-
-    http_access allow all
-    http_port 127.0.0.1:3128 intercept
-    cache_peer swift.cern.ch parent 80 0 no-query originserver
-    url_rewrite_program /usr/bin/s3_squid_rewrite.py
-    cache deny all
-
-The bucket mapping logic is implemented in ``s3_squid_rewrite.py`` file.
-This script is not provided by CernVM-FS but needs to be written by the
-repository owner (the CernVM-FS Git repository `contains an example
-<https://github.com/cvmfs/cvmfs/blob/devel/add-ons/s3rewrite.py>`_). The script
-needs to read requests from stdin and write mapped URLs to stdout, for instance:
-
-::
-
-    in: http://localhost:3128/data/.cvmfswhitelist
-    out: http://swift.cern.ch/cernbucket-9-91/data/.cvmfswhitelist
 
 .. _sct_repoupdate:
 
