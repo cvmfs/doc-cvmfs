@@ -103,8 +103,8 @@ To create the repository in the release manager configuration, run the following
 
 At this point, from the RM we can publish to the repository: ::
 
-  $ cvmfs_server transaction -e test.cern.ch
+  $ cvmfs_server transaction test.cern.ch
 
 ... make changes to the repository ... ::
 
-  $ cvmfs_server publish -e test.cern.ch
+  $ cvmfs_server publish test.cern.ch
