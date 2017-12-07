@@ -60,7 +60,7 @@ Create the repository for the following section of this guide: ::
 Create an API key file for the new repo (replace ``<KEY_ID>`` and ``<SECRET>`` with actual values): ::
 
   $ cat <<EOF > /etc/cvmfs/keys/test.cern.ch.gw
-  test <KEY_ID> <SECRET>
+  plain_text <KEY_ID> <SECRET>
   EOF
 
 Add the API key file to the repository configuration in the gateway application: ::
