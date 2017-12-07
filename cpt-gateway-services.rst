@@ -70,9 +70,14 @@ Add the API key file to the repository configuration in the gateway application:
   {keys, [{file, "/etc/cvmfs/keys/test.cern.ch.gw"}]}.
   EOF
 
-Start the gateway services application: ::
+Start the repository gateway application: ::
 
   $ /opt/cvmfs_services/scripts/run_cvmfs_services.sh start
+
+The ports 80/TCP and 8080/TCP need to be opened in the firewall, to
+allow access to the repository contents and to the gateway service
+API.
+
 
 Release Manager Configuration
 =============================
