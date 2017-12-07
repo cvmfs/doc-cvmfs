@@ -1,7 +1,7 @@
 .. _cpt_gateway_services:
 
 =================================================
- CernVM-FS Gateway Services and Release Managers
+ CernVM-FS Repository Gateway and Release Managers
 =================================================
 
 This page details the installation and configuration of a repository setup
@@ -11,36 +11,40 @@ Glossary
 ========
 
 Gateway (GW)
-  The machine running an instance of the `CVMFS gateway
-  services <https://github.com/cvmfs/cmvfs_services.git>`_ and which
-  has access to the authoritative storage of the managed
-  repositories. There is a current limitation in the implementation of
-  the gateway services that the authoritative storage must be a
-  locally mounted partition on GW, however S3 back-ends should be
-  supported in the future. The purpose of the GW is to manage access
-  to a set of repositories by assigning exclusive leases to specific
-  repository sub-paths to different release manager (RM) machines. The
-  RM can publish files to the sub-path for which it currently holds a
-  lease but sending object packs to the GW. Having received the
-  published payload from the RM, the final task of the GW in the
-  publication lifecycle is to rebuild the catalogs and repository
-  manifests for the modified repositories.
+  The machine running an instance of the `CVMFS repository gateway
+  <https://github.com/cvmfs/cmvfs_services.git>`_ and which
+  has access to the authoritative storage of the managed repositories.
+  This storage is made accessible either as a locally
+  mounted partition or through an S3 API. The purpose of the GW is to
+  manage access to a set of repositories by assigning exclusive leases
+  to specific repository sub-paths to different release manager (RM)
+  machines. The RM can publish files to the sub-path for which it
+  currently holds a lease but sending object packs to the GW. Having
+  received the published payload from the RM, the final task of the GW
+  in the publication lifecycle is to rebuild the catalogs and
+  repository manifests for the modified repositories.
 
 Release manager (RM)
   A machine running the CVMFS server tools which can request leases
   from a GW and publish change to different repositories where it
   currently holds a valid lease.
 
-  It is on the RM that the computationally heavy tasks of compressing
-  and hashing the files which are to be added or modified as part of a
-  publish operation. The processed files are finally packed together
-  and send to the GW to be inserted into the repository and made
-  available to clients.
+  The computationally heavy parts of the publication operation take
+  place on the RM: compressing and hashing the files which are to be
+  added or modified. The processed files are then packed together and
+  send to the GW to be inserted into the repository and made available
+  to clients.
 
-Gateway Services Configuration
+Repository Gateway Configuration
 ==============================
 
-The gateway services application is packaged as a tarball, currently available for Ubuntu 16.04, SLC 6 and Cern CentOS 7. The tarball should be unpacked into ``/opt/cvmfs_services``: ::
+As a prerequisite, we need to install the CVMFS client and server
+packages on the gateway. This means that the gateway machine can be
+used as a "master" release manager to perform some repository
+transformations before a separate dedicated release manager machine
+is set up.
+
+The repository gateway application is packaged as a tarball, currently available for Ubuntu 16.04, SLC 6 and Cern CentOS 7. The tarball should be unpacked into ``/opt/cvmfs_services``: ::
 
   $ cd /opt/cvmfs_services
   $ tar xzf cvmfs_services-0.1.10-cc7-x86_64.tar.gz
