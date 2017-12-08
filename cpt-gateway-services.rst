@@ -12,27 +12,27 @@ Glossary
 
 Gateway (GW)
   The machine running an instance of the `CVMFS repository gateway
-  <https://github.com/cvmfs/cmvfs_services.git>`_ and which
+  <https://github.com/cvmfs/cmvfs_services.git>`_ which
   has access to the authoritative storage of the managed repositories.
   This storage is made accessible either as a locally
   mounted partition or through an S3 API. The purpose of the GW is to
   manage access to a set of repositories by assigning exclusive leases
   to specific repository sub-paths to different release manager (RM)
   machines. The RM can publish files to the sub-path for which it
-  currently holds a lease but sending object packs to the GW. Having
+  currently holds a lease and send object packs to the GW. Having
   received the published payload from the RM, the final task of the GW
   in the publication lifecycle is to rebuild the catalogs and
   repository manifests for the modified repositories.
 
 Release manager (RM)
   A machine running the CVMFS server tools which can request leases
-  from a GW and publish change to different repositories where it
-  currently holds a valid lease.
+  from a GW and publish changes to different repositories where it
+  currently holds valid leases.
 
   The computationally heavy parts of the publication operation take
   place on the RM: compressing and hashing the files which are to be
   added or modified. The processed files are then packed together and
-  send to the GW to be inserted into the repository and made available
+  sent to the GW to be inserted into the repository and made available
   to clients.
 
 Repository Gateway Configuration
@@ -41,7 +41,7 @@ Repository Gateway Configuration
 As a prerequisite, we need to install the CVMFS client and server
 packages on the gateway. This means that the gateway machine can be
 used as a "master" release manager to perform some repository
-transformations before a separate dedicated release manager machine
+transformations before a separate release manager machine
 is set up.
 
 The repository gateway application is packaged as a tarball, currently available for Ubuntu 16.04, SLC 6 and Cern CentOS 7. The tarball should be unpacked into ``/opt/cvmfs_services``: ::
