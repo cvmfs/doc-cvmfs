@@ -1422,13 +1422,11 @@ configuration changes::
     CVMFS_AUTO_TAG_TIMESPAN="2 weeks ago"
     CVMFS_IGNORE_XDIR_HARDLINKS=true
     CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false
-    CVMFS_HASH_ALGORITHM=shake128
 
 These changes make unreferenced objects older than two weeks subject to garbage
 collection (without enabling garbage collection).  It tolerates that hard links
-among different directories (see :ref:`sct_limit_hardlink`), creates only
-chunked versions of large files and uses the more future-proof SHA-3 derived
-content hash algorithm.
+among different directories (see :ref:`sct_limit_hardlink`) and creates only
+chunked versions of large files.
 
 
 Multi-Tenant Repositories
