@@ -1413,6 +1413,9 @@ other typical use cases, the configuration should be adapted.
 General Recommendations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+**NOTE:** Do _not_ use ``CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false`` together
+with a hash algorithm other than SHA-1 in CernVM-FS <= 2.4.3.
+
 Unless an older client base needs to be supported, we recommend to the following
 configuration changes::
 
