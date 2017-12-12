@@ -1,3 +1,33 @@
+Release Notes for CernVM-FS 2.4.4
+=================================
+
+CernVM-FS 2.4.4 is a patch release. It contains an important fix for a bug with
+certain server configurations that was introduced with version 2.4.1. Linux
+clients do not necessarily need to upgrade.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For Release Manager Machines, all transactions must be closed before upgrading.
+
+Note for upgrades from versions prior to 2.4.3: please also see the specific
+instructions in the release notes for version 2.4.3 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Server: fix registration of chunk hashes without bulk hash and non-SHA1 hash
+    algorithm (`CVM-1446 <https://sft.its.cern.ch/jira/browse/CVM-1446>`_)
+  * Server: have geoapi try ``$REMOTE_ADDR`` if ``$HTTP_X_FORWARDED_FOR`` has no
+    geoinfo (`CVM-1442 <https://sft.its.cern.ch/jira/browse/CVM-1442>`_)
+  * Client: react to a change of DNS server on macOS
+    (`CVM-496 <https://sft.its.cern.ch/jira/browse/CVM-496>`_)
+
+
 Release Notes for CernVM-FS 2.4.3
 =================================
 
