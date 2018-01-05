@@ -81,7 +81,7 @@ We suggest the following key parameters:
     **Note**: Port 8000 might be assigned to ``soundd``.  On SElinux systems,
     this assignment must be changed to the HTTP service by
     ``semanage port -m -t http_port_t -p tcp 8000``.  The ``cvmfs-server``
-    RPM executes this command as a post-installation script.
+    RPM for EL7 executes this command as a post-installation script.
 
 **DNS cache**
     A Stratum 1 does a lot of DNS lookups, so we recommend installing a
