@@ -12,7 +12,7 @@ Glossary
 
 Gateway (GW)
   The machine running an instance of the `CVMFS repository gateway
-  <https://github.com/cvmfs/cmvfs_services.git>`_ which
+  <https://github.com/cvmfs/cvmfs_services>`_ which
   has access to the authoritative storage of the managed repositories.
   This storage is made accessible either as a locally
   mounted partition or through an S3 API. The purpose of the GW is to
