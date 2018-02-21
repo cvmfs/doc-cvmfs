@@ -1,8 +1,8 @@
 .. _cpt_gateway_services:
 
-=================================================
+==================================================
  CernVM-FS Repository Gateway and Release Managers
-=================================================
+==================================================
 
 This page details the installation and configuration of a repository setup
 involving a gateway machine and separate release manager machines.
@@ -12,7 +12,7 @@ Glossary
 
 Gateway (GW)
   The machine running an instance of the `CVMFS repository gateway
-  <https://github.com/cvmfs/cvmfs_services>`_ which
+  <https://github.com/cvmfs/cvmfs_gateway>`_ which
   has access to the authoritative storage of the managed repositories.
   This storage is made accessible either as a locally
   mounted partition or through an S3 API. The purpose of the GW is to
@@ -36,7 +36,7 @@ Release manager (RM)
   to clients.
 
 Repository Gateway Configuration
-==============================
+================================
 
 As a prerequisite, we need to install the CVMFS client and server
 packages on the gateway. This means that the gateway machine can be
@@ -44,14 +44,11 @@ used as a "master" release manager to perform some repository
 transformations before a separate release manager machine
 is set up.
 
-The repository gateway application is packaged as a tarball, currently available for Ubuntu 16.04, SLC 6 and Cern CentOS 7. The tarball should be unpacked into ``/opt/cvmfs_services``: ::
+The repository gateway application is currently packaged for Ubuntu
+16.04, SLC 6 and Cern CentOS 7. Once the package is installed, the
+setup script needs to be run: ::
 
-  $ cd /opt/cvmfs_services
-  $ tar xzf cvmfs_services-0.1.10-cc7-x86_64.tar.gz
-
-Then, run the set up script: ::
-
-  $ /opt/cvmfs_services/scripts/setup.sh
+  $ /opt/cvmfs_gateway/scripts/setup.sh
 
 Create the repository for the following section of this guide: ::
 
@@ -65,14 +62,27 @@ Create an API key file for the new repo (replace ``<KEY_ID>`` and ``<SECRET>`` w
 
 Add the API key file to the repository configuration in the gateway application: ::
 
-  $ cat <<EOF > /opt/cvmfs_services/etc/repo.config
-  {repos, [{<<"test.cern.ch">>, [<<"<KEY_ID>">>]}]}.
-  {keys, [{file, "/etc/cvmfs/keys/test.cern.ch.gw"}]}.
+  $ cat <<EOF > /etc/cvmfs/gateway/repo.json
+  {
+    "repos": [
+      {
+        "domain": "test.cern.ch",
+        "keys": ["<KEY_ID>"]
+      }
+    ],
+    "keys": [
+      {
+        "type": "file",
+        "file_name": "/etc/cvmfs/keys/test.cern.ch.gw",
+        "repo_subpath": "/"
+      }
+    ]
+  }
   EOF
 
 Start the repository gateway application: ::
 
-  $ /opt/cvmfs_services/scripts/run_cvmfs_services.sh start
+  $ /opt/cvmfs_gateway/scripts/run_cvmfs_gateway.sh start
 
 The ports 80/TCP and 8080/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
@@ -82,7 +92,9 @@ API.
 Release Manager Configuration
 =============================
 
-This section describes the steps needed to set up a release manager for a specific CVMFS repository. The precondition is a working gateway machine where the repository has been created as a Stratum 0.
+This section describes the steps needed to set up a release manager
+for a specific CVMFS repository. The precondition is a working gateway
+machine where the repository has been created as a Stratum 0.
 
 Example:
 --------
@@ -92,7 +104,7 @@ Example:
 * The new repository's fully qualified name is ``test.cern.ch``.
 * The repository's public key is ``test.cern.ch.pub``.
 * The GW API key is ``test.cern.ch.gw``.
-* The GW services application is running on port 8080 at the URL ``http:://gateway.cern.ch:8080/api/v1``.
+* The GW gateway application is running on port 8080 at the URL ``http:://gateway.cern.ch:8080/api/v1``.
 * The repository keys have been copied from the gateway machine onto the release manager machine, in ``/tmp/test.cern.ch_keys``.
 
 To create the repository in the release manager configuration, run the following command on ``rm.cern.ch``: ::
