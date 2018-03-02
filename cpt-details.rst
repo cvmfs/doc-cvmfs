@@ -51,8 +51,8 @@ names. Symbolic links are kept in the catalog. Symbolic links may
 contain environment variables in the form ``$(VAR_NAME)`` or
 ``$(VAR_NAME:-/default/path)`` that will be dynamically resolved by
 CernVM-FS on access. Hardlinks are emulated by CernVM-FS. The hardlink
-count is stored in the lower 32bit of the hardlinks field, a *hardlink
-group* is stored in the higher 32 bit. If the hardlink group is
+count is stored in the lower 32 bits of the hardlinks field, and a *hardlink
+group* is stored in the higher 32 bits. If the hardlink group is
 greater than zero, all files with the same hardlink group will get the
 same inode issued by the CernVM-FS Fuse client. The emulated hardlinks
 work within the same directory, only. The cryptographic content hash
@@ -123,7 +123,7 @@ simplified directory structure which we use for the ATLAS repository.
    :align: center
    :width: 60%
 
-   Directory structure useds for the ATLAS repository (simplified).
+   Directory structure used for the ATLAS repository (simplified).
 
 When a subtree is moved into a nested catalog, its entry directory
 serves as *transition point* for nested catalogs. This directory appears
@@ -300,7 +300,7 @@ corresponds to the master key is distributed with the
 ``cvmfs-config-...`` RPMs as well as with every instance of CernVM.
 
 As crypto engine, CernVM-FS uses libcrypto from the `OpenSSL project
-<http://www.openssl.org/docs/crypto/crypto.html>`_.
+<https://www.openssl.org/docs/manmaster/man3/>`_.
 
 .. _sct_blacklisting:
 
@@ -359,7 +359,7 @@ successfully able to download a file but fails to store it in the local
 cache. This situation escalates into a DoS when the application using
 CernVM-FS remains in an endless loop and tries to open a file over and
 over again. Such a situation is prevented by CernVM-FS by re-trying with
-an exponential backoff. The backoff is triggered by consequtive filaures
+an exponential backoff. The backoff is triggered by consecutive failures
 to cache a downloaded file within 10 seconds.
 
 Keep-Alive
@@ -392,7 +392,7 @@ Cache Control
 ~~~~~~~~~~~~~
 
 In a limited way, CernVM-FS advises intermediate web caches how to
-handle its requests. Therefor it uses the ``Pragma: no-cache`` and the
+handle its requests. Therefore it uses the ``Pragma: no-cache`` and the
 ``Cache-Control: no-cache`` headers in certain cases. These cache
 control headers apply to both, forward proxies as well as reverse
 proxies. This is not a guarantee that intermediate proxies fetch a fresh
@@ -407,9 +407,10 @@ from the backend.
 Identification Header
 ~~~~~~~~~~~~~~~~~~~~~
 
-CernVM-FS sends a custom header (``X-CVMFS2``) to be identified by the
-web server. If you have set the CernVM GUID, this GUID is also
-transmitted.
+CernVM-FS sends the ``User-Agent`` header set to either of ``libcvmfs`` or
+``Fuse`` depending on how it was compiled, plus the current ``VERSION`` value.
+If the ``CERNVM_UUID`` environment variable is set, that's also included in the
+``User-Agent`` field.
 
 Redirects
 ~~~~~~~~~
@@ -449,12 +450,12 @@ server from the group at random.
 The name resolving silently ignores errors in individual records. Only
 if no valid IP address is returned at all it counts as an error. IPv4
 addresses have precedence if available. If the ``CVMFS_IPV4_ONLY``
-environment variable is set,\ CernVM-FS does not try to resolve IPv6
+environment variable is set, CernVM-FS does not try to resolve IPv6
 records.
 
 The timeout for name resolving is hard-coded to 2 attempts with a
 timeout of 3 seconds each. This is independent from the
-``CVMFS_TIMEOUT`` and ``CVMFS_TIMEOUT(_DIRECT)`` settings. The effective
+``CVMFS_TIMEOUT`` and ``CVMFS_TIMEOUT_DIRECT`` settings. The effective
 timeout can be a bit longer than 6 seconds because of a backoff.
 
 The name server used by CernVM-FS is looked up only once on start. If
@@ -497,7 +498,7 @@ deleted until unmount or until a new repository revision is applied. On
 unmount, pinned file catalogs are updated with the highest sequence
 number. As a pre-caution against a cache that is blocked by pinned
 catalogs, all catalogs except the root catalog are unpinned when the
-volume of pinned catalogs exceeds of the overall cache volume.
+volume of pinned catalogs exceeds the overall cache volume.
 
 The cache catalog can be re-constructed from scratch on mount.
 Re-constructing the cache catalog is necessary when the managed cache is
@@ -547,7 +548,7 @@ inode mappings. Storing them on hard disk allows for control of the
 CernVM-FS memory consumption (currently :math:`\approx` 45 MB extra)
 and ensures consistency between remounts of CernVM-FS. The performance
 penalty for doing so is small. CernVM-FS uses `Google's leveldb
-<https://github.com/google/leveldb>`, a fast, local key value store.
+<https://github.com/google/leveldb>`_, a fast, local key value store.
 Reads and writes are only performed when meta-data are looked up in
 SQLite, in which case the SQLite query supposedly dominates the
 running time.
@@ -606,7 +607,7 @@ catalogs, there is no network traffic involved. This function is called
 as pre-requisite to other file system operations and therefore the most
 frequently called Fuse callback. In order to minimize relatively
 expensive SQLite queries, CernVM-FS uses a hash table to store negative
-and positive query results. The default size of for this memory cache is
+and positive query results. The default size for this memory cache is
 determined according to benchmarks with LHC experiment software.
 
 Additionally, the callback takes care of the catalog TTL. If the TTL is
@@ -652,7 +653,7 @@ getxattr
 ~~~~~~~~
 
 CernVM-FS uses extended attributes to display additional repository
-information. There are two supported attributes:
+information. There are several supported attributes:
 
 **chunks**
     Number of chunks of a regular file.
@@ -792,8 +793,8 @@ changes are in fact written to the read-write branch.
 Preserving POSIX semantics in union file systems is non-trivial; the
 first fully functional implementation has been presented by Wright et
 al. [Wright04]_. By now, union file systems are well established for
-"Live CD" builders, which use a RAM disk overlay on top of the read-
-only system partition in order to provide the illusion of a fully
+"Live CD" builders, which use a RAM disk overlay on top of the read-only
+system partition in order to provide the illusion of a fully
 read-writable system. CernVM-FS supports both aufs and OverlayFS
 union file systems.
 
@@ -824,5 +825,5 @@ errors, one can safely resume from a previously committed revision.
 .. rubric:: Footnotes
 
 .. [#]
-   As a rule of thumb, file catalogs up to (compressed) are reasonably
+   As a rule of thumb, file catalogs (when compressed) are reasonably
    small.
