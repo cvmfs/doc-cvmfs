@@ -80,9 +80,13 @@ Add the API key file to the repository configuration in the gateway application:
   }
   EOF
 
-Start the repository gateway application: ::
+If Systemd is available, the gateway application can be started with ``systemctl``: ::
 
-  $ /opt/cvmfs_gateway/scripts/run_cvmfs_gateway.sh start
+  $ sudo systemctl start cvmfs_gateway.service
+
+otherwise it can be manually started: ::
+
+  $ sudo /opt/cvmfs_gateway/scripts/run_cvmfs_gateway.sh start
 
 The ports 80/TCP and 8080/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
