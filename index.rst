@@ -46,7 +46,7 @@ Contents
    cpt-repo
    cpt-servermeta
    cpt-replica
-   cpt-gateway-services
+   cpt-repository-gateway
    part-advanced
    part-appendix
 
