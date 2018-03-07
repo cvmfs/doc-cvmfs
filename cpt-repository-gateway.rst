@@ -80,7 +80,7 @@ Add the API key file to the repository configuration in the gateway application:
   }
   EOF
 
-If SystemD is available, the gateway application can be started with ``systemctl``: ::
+If Systemd is available, the gateway application can be started with ``systemctl``: ::
 
   $ sudo systemctl start cvmfs_gateway.service
 
