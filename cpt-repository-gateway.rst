@@ -1,4 +1,4 @@
-.. _cpt_gateway_services:
+.. _cpt_repository_gateway:
 
 ==================================================
  CernVM-FS Repository Gateway and Release Managers
