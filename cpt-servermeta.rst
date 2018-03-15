@@ -8,8 +8,8 @@ meta information as JSON data. Release manager machines keep a list of hosted
 Stratum0 and Stratum1 repositories and user-defined administrative meta
 information.
 
-Furthermore each repository contains user-maintained and signed meta information
-gets replicated to Stratum1 servers automatically.
+Furthermore each repository contains user-maintained signed meta-information
+that gets replicated to Stratum1 servers automatically.
 
 .. _sct_globalmetainfo:
 
