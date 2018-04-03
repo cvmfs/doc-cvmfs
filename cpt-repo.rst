@@ -1276,8 +1276,8 @@ adding
 ``server.conf`` of the repository. Furthermore it is recommended to
 switch off automatic tagging by setting ``CVMFS_AUTO_TAG=false`` for a
 garbage collectable repository. The garbage collection will be enabled
-with the next published transaction and will run after every publish
-operation.  Alternatively, ``CVMFS_AUTO_GC=false`` may be set and
+with the next published transaction and will run every once in a while after a
+publish operation.  Alternatively, ``CVMFS_AUTO_GC=false`` may be set and
 ``cvmfs_server gc`` run from cron at a time when no publish
 operations will be happening; garbage collection and publish
 operations cannot happen at the same time.
@@ -1287,14 +1287,23 @@ Enabling Garbage Collection on an Existing Replication (Stratum 1)
 
 In order to use automatic garbage collection on a stratum 1 replica,
 set ``CVMFS_AUTO_GC=true`` in the ``server.conf`` file of the stratum
-1 installation.  This will run the garbage collection after every
-snapshot, and will only work if the upstream stratum 0 repository has
+1 installation.  This will run the garbage collection every once in a while
+after a snapshot.  It will only work if the upstream stratum 0 repository has
 garbage collection enabled.
 
 Alternatively, ``cvmfs_server gc -af`` can be run from cron
 periodically (e.g. daily) to run garbage collection on all
 repositories that have garbage collection enabled on the stratum 0.
 Logs will go into /var/log/cvmfs/gc.log.
+
+Frequency of the Automatic Garbage Collection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If ``CVMFS_AUTO_GC=true`` is set, the parameter ``CVMFS_AUTO_GC_LAPSE`` controls
+how frequently automatic garbage collection is executed.  By default,
+``CVMFS_AUTO_GC_LAPSE`` is set to ``1 day ago``.  If, on publish or snapshot,
+the last manual or automatic garbage collection is farther in the past then the
+given threshold, garbage collection will run.  Otherwise it is skipped.
 
 
 Limitations on Repository Content
@@ -1460,11 +1469,13 @@ set ::
 
     CVMFS_AUTO_TAG=false
     CVMFS_GARBAGE_COLLECTION=true
+    CVMFS_AUTO_GC=true
 
 in order to activate garbage collection and to turn off CernVM-FS' versioning
-(provided that the content on such repositories is ephemeral).  Additionally,
-a regular cron job running ``cvmfs_server gc -af`` should be installed, or the
-nightly build script should be updated to invoke ``cvmfs_server gc <repo name>``.
+(provided that the content on such repositories is ephemeral).  Instead of
+autmatic garbage collection, one can also install a regular cron job running
+``cvmfs_server gc -af``, or the nightly build script should be updated to invoke
+``cvmfs_server gc <repo name>``.
 
 
 Repositories for (Conditions) Data

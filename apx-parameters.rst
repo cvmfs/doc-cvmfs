@@ -97,6 +97,7 @@ Server parameters
 CVMFS_AUFS_WARNING                  Set to *false* to silence AUFS kernel deadlock warning.
 CVMFS_AUTO_GC                       Enables the automatic garbage collection on *publish* and *snapshot*
 CVMFS_AUTO_GC_TIMESPAN              Date-threshold for automatic garbage collection |br| (For example: `3 days ago`, `1 week ago`, ...)
+CVMFS_AUTO_GC_LAPSE                 Frequency of auto garbage collection, only garbage collect if last GC is before given threshold |br| (For example: `1 day ago`)
 CVMFS_AUTO_REPAIR_MOUNTPOINT        Set to *true* to enable automatic recovery from bogus server mount states.
 CVMFS_AUTO_TAG                      Creates a generic revision tag for each published revision (if set to *true*).
 CVMFS_AUTO_TAG_TIMESPAN             Date-threshold for automatic tags, after which auto tags get removed (For example: `4 days ago`)
