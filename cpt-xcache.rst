@@ -12,7 +12,7 @@ NOTE: This is not a replacement for a general site forward proxy.
 Forwarding needs to be defined separately in the Xcache configuration
 for each destination Stratum 1, and the client CVMFS_SERVER_URL
 configuration has to point to a separate forwarder URL for each
-server.  This document is for the convenience of people who want too
+server.  This document is for the convenience of people who want to
 experiment with this configuration.
 
 Requirements
