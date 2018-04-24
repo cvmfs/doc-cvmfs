@@ -1,12 +1,19 @@
 .. _cpt_xcache:
 
-============================
- Setting up an Xcache proxy
-============================
+===================================
+ Setting up an Xcache reverse proxy
+===================================
 
-This page describes how to set up an experimental HTTP proxy layer for
-CernVM-FS based on `Xcache
+This page describes how to set up an experimental HTTP reverse proxy
+layer for CernVM-FS based on `Xcache
 <http://xrootd.org/doc/dev47/pss_config.htm>`_.
+
+NOTE: This is not a replacement for a general site forward proxy.
+Forwarding needs to be defined separately in the Xcache configuration
+for each destination Stratum 1, and the client CVMFS_SERVER_URL
+configuration has to point to a separate forwarder URL for each
+server.  This document is for the convenience of people who want to
+experiment with this configuration.
 
 Requirements
 ============
@@ -15,7 +22,7 @@ Requirements
   CernVM-FS repository. Should have CernVM-FS server tools installed,
   as well as XRootD.
 
-* A second machine (labeled **Machine B**) to use as a proxy. Only
+* A second machine (labeled **Machine B**) to use as a reverse proxy. Only
   XRootD is needed on this machine.
 
 * A CernVM-FS client to mount the repository, for testing.
@@ -26,7 +33,7 @@ Instructions
 `XRootD <http://xrootd.org>`_ is a high-performance, scalable file
 distribution solution. It has a plugin-based architecture and can be
 configured to suit various use cases. In the Xcache configuration, an
-XRootD daemon functions as a proxy, serving the contents of a data
+XRootD daemon functions as a reverse proxy, serving the contents of a data
 repository over HTTP.
 
 The following diagram shows how Xcache can be deployed as a cache
@@ -116,5 +123,5 @@ HTTP:
 
 This set up is non-intrusive, as the machine serving the CernVM-FS
 repository no longer needs to be modified in any way. Xcache could
-thus be deployed as a proxy layer for existing CernVM-FS stratum
+thus be deployed as a reverse proxy layer for existing CernVM-FS stratum
 servers.
