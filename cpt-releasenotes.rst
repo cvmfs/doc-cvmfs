@@ -49,8 +49,8 @@ Gateway Services
 ----------------
 
 The new CernVM-FS Gateway Services allow for distributed server deployments.
-This can be used for multi-tenant repositories, where every tentant takes
-ownership of a specific repository subtree.  It can also be used to paralellize
+This can be used for multi-tenant repositories, where every tenant takes
+ownership of a specific repository subtree.  It can also be used to parallelize
 publishing of content if the different change sets are limited to a specific
 subtree.
 
@@ -62,7 +62,7 @@ on the same repository.
 Detailed documentation is available in Section :ref:`sct_manual_migration`.
 
 
-Auatomatic, Infrequent Garbage Collection
+Automatic, Infrequent Garbage Collection
 -----------------------------------------
 
 The new parameter ``CVMFS_AUTO_GC_LAPSE`` can be used on stratum 0 and stratum 1
