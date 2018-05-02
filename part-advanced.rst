@@ -8,5 +8,6 @@ Advanced Topics
    cpt-plugins
    cpt-hpc
    cpt-graphdriver
+   cpt-xcache
    cpt-large-scale
    cpt-details
