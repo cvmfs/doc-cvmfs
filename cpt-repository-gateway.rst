@@ -12,7 +12,7 @@ Glossary
 
 Gateway (GW)
   The machine running an instance of the `CVMFS repository gateway
-  <https://github.com/cvmfs/cvmfs_gateway>`_ which
+  <https://github.com/cvmfs/cvmfs-gateway>`_ which
   has access to the authoritative storage of the managed repositories.
   This storage is made accessible either as a locally
   mounted partition or through an S3 API. The purpose of the GW is to
@@ -48,7 +48,7 @@ The repository gateway application is currently packaged for Ubuntu
 16.04, SLC 6 and Cern CentOS 7. Once the package is installed, the
 setup script needs to be run: ::
 
-  $ /opt/cvmfs_gateway/scripts/setup.sh
+  $ /opt/cvmfs-gateway/scripts/setup.sh
 
 Create the repository for the following section of this guide: ::
 
@@ -82,11 +82,11 @@ Add the API key file to the repository configuration in the gateway application:
 
 If Systemd is available, the gateway application can be started with ``systemctl``: ::
 
-  $ sudo systemctl start cvmfs_gateway.service
+  $ sudo systemctl start cvmfs-gateway.service
 
 otherwise it can be manually started: ::
 
-  $ sudo /opt/cvmfs_gateway/scripts/run_cvmfs_gateway.sh start
+  $ sudo /opt/cvmfs-gateway/scripts/run_cvmfs_gateway.sh start
 
 The ports 80/TCP and 8080/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
