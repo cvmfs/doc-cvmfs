@@ -87,6 +87,9 @@ To install, proceed according to the following steps:
     the Stratum 1 web servers (more on :ref:`proxy configuration here <cpt_squid>`). For Cern
     repositories, the Stratum 1 web servers are listed in
     /etc/cvmfs/domain.d/cern.ch.conf.
+    
+    If you're unsure about the proxy names, set
+    ``CVMFS_HTTP_PROXY=DIRECT``.
 
 **Step 5**
     Check if CernVM-FS mounts the specified repositories by
