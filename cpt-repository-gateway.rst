@@ -88,10 +88,16 @@ otherwise it can be manually started: ::
 
   $ sudo /opt/cvmfs-gateway/scripts/run_cvmfs_gateway.sh start
 
-The ports 80/TCP and 8080/TCP need to be opened in the firewall, to
+The ports 80/TCP and 4929/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
 API.
 
+Alongside the ``repo.json`` file, there is another configuration file for the repository gateway - ``user.json``. The most important options in this file are:
+
+* ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
+* ``fe_tcp_port`` - the port on which the gateway application listens, 4929 by default
+
+By default, the gateway application only spawns a single ``cvmfs_receiver`` worker process. It is possible to run multiple worker processes by increasing the value of the ``size`` entry in the ``receiver_config`` map, found in ``user.json``. This value should not be increased beyond the number of available CPU cores.
 
 Release Manager Configuration
 =============================
@@ -108,13 +114,13 @@ Example:
 * The new repository's fully qualified name is ``test.cern.ch``.
 * The repository's public key is ``test.cern.ch.pub``.
 * The GW API key is ``test.cern.ch.gw``.
-* The GW gateway application is running on port 8080 at the URL ``http:://gateway.cern.ch:8080/api/v1``.
+* The GW gateway application is running on port 4929 at the URL ``http:://gateway.cern.ch:4929/api/v1``.
 * The repository keys have been copied from the gateway machine onto the release manager machine, in ``/tmp/test.cern.ch_keys``.
 
 To create the repository in the release manager configuration, run the following command on ``rm.cern.ch``: ::
 
   $ cvmfs_server mkfs -w http://gateway.cern.ch/cvmfs/test.cern.ch \
-                      -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:8080/api/v1 \
+                      -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:4929/api/v1 \
                       -k /tmp/test.cern.ch_keys -o `whoami` test.cern.ch
 
 At this point, from the RM we can publish to the repository: ::
