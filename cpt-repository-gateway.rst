@@ -92,6 +92,12 @@ The ports 80/TCP and 4929/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
 API.
 
+Alongside the ``repo.json`` file, there is another configuration file for the repository gateway - ``user.json``. The most important options in this file are:
+
+* ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
+* ``fe_tcp_port`` - the port on which the gateway application listens, 4929 by default
+
+By default, the gateway application only spawns a single ``cvmfs_receiver`` worker process. It is possible to run multiple worker processes by increasing the value of the ``size`` entry in the ``receiver_config`` map, found in ``user.json``. This value should not be increased beyond the number of available CPU cores.
 
 Release Manager Configuration
 =============================
