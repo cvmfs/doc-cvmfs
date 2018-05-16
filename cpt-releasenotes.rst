@@ -59,7 +59,7 @@ storage and they need to be installed on a central machine. Multiple release
 manager machines can then be installed that use the gateway service to operate
 on the same repository.
 
-Detailed documentation is available in Section :ref:`sct_manual_migration`.
+Detailed documentation is available in Chapter :ref:`cpt_repository_gateway`.
 
 
 Automatic, Infrequent Garbage Collection
@@ -195,7 +195,7 @@ the following steps:
 
 ::
 
-     /usr/lib/systemd/system-generators/systemd-fstab-generator \
+    /usr/lib/systemd/system-generators/systemd-fstab-generator \
       /run/systemd/generator '' '' 2>/dev/null
     systemctl daemon-reload
 
