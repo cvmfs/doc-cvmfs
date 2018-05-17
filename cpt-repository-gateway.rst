@@ -48,7 +48,7 @@ The repository gateway application is currently packaged for Ubuntu
 16.04, SLC 6 and Cern CentOS 7. Once the package is installed, the
 setup script needs to be run: ::
 
-  $ /usr/libexec/cvmfs-gateway/scripts/setup.sh
+  $ /opt/cvmfs-gateway/scripts/setup.sh
 
 Create the repository for the following section of this guide: ::
 
@@ -86,7 +86,7 @@ If Systemd is available, the gateway application can be started with ``systemctl
 
 otherwise it can be manually started: ::
 
-  $ sudo /usr/libexec/cvmfs-gateway/scripts/run_cvmfs_gateway.sh start
+  $ sudo /opt/cvmfs-gateway/scripts/run_cvmfs_gateway.sh start
 
 The ports 80/TCP and 4929/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
