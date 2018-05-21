@@ -61,9 +61,10 @@ To install, proceed according to the following steps:
 **Step 2**
     For the base setup, run ``cvmfs_config setup``. Alternatively, you
     can do the base setup by hand: ensure that ``/cvmfs /etc/auto.cvmfs`` is set
-    in /etc/auto.master and that the autofs service is running. If you
-    migrate from a previous version of CernVM-FS, check the release notes
-    if there is anything special to do for migration.
+    in /etc/auto.master and that the autofs service is running. Reload the
+    autofs service in order to apply the updated configuration. If you migrate
+    from a previous version of CernVM-FS, check the release notes if there is
+    anything special to do for migration.
 
 **Step 3**
     Create /etc/cvmfs/default.local and open the file for editing.
