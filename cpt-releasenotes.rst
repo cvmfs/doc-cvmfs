@@ -34,11 +34,10 @@ new package from the repository. As usual, we recommend to update only a few
 worker nodes first and gradually ramp up once the new version proves to work
 correctly. Please take special care when upgrading a client in NFS mode.
 
-For Stratum 0 servers, all transactions must be closed before upgrading.  After
-the software upgrade, the directory layout on the release manager needs to be
-adjusted by a call to ``cvmfs_server migrate`` for each repository.
+For Stratum 0 servers, all transactions must be closed before upgrading.
+For Stratum 1 servers, there should be no running snapshots during the upgrade. 
+After the software upgrade, both stratum 0 and 1 servers require doing ``cvmfs_server migrate`` for each repository.
 
-For Stratum 1 server, there should be no running snapshots during the upgrade.
 
 **Note**: if the configuration of the Stratum 0/1 server is handled by a
 configuration management system (Puppet, Chef, ...), please see Section
