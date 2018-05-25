@@ -146,7 +146,7 @@ Updating from cvmfs-gateway-0.2.5
 In the first published version, ``cvmfs-gateway-0.2.5``, the
 application files were installed under ``/opt/cvmfs-gateway`` and the
 database files under ``/opt/cvmfs-mnesia``. Starting with version 0.2.6,
-the application in installed under ``/usr/libexec/cvmfs-gateway``, while
+the application is installed under ``/usr/libexec/cvmfs-gateway``, while
 the database files are under ``/var/lib/cvmfs-gateway``.
 
 When updating from 0.2.5, please make sure that the application is stopped: ::
@@ -157,7 +157,7 @@ and rerun the setup script: ::
 
   $ /usr/libexec/cvmfs-gateway/scripts/setup.sh
 
-At this point, the new version of the application can started. If the
+At this point, the new version of the application can be started. If the
 old directories are still present, they can be deleted: ::
 
   $ sudo rm -r /opt/cvmfs-{gateway,mnesia}
