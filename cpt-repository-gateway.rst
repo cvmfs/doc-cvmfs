@@ -92,12 +92,19 @@ The ports 80/TCP and 4929/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
 API.
 
-Alongside the ``repo.json`` file, there is another configuration file for the repository gateway - ``user.json``. The most important options in this file are:
+Alongside the ``repo.json`` file, there is another configuration file
+for the repository gateway - ``user.json``. The most important options
+in this file are:
 
 * ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
-* ``fe_tcp_port`` - the port on which the gateway application listens, 4929 by default
+* ``fe_tcp_port`` - the port on which the gateway application listens,
+  4929 by default
 
-By default, the gateway application only spawns a single ``cvmfs_receiver`` worker process. It is possible to run multiple worker processes by increasing the value of the ``size`` entry in the ``receiver_config`` map, found in ``user.json``. This value should not be increased beyond the number of available CPU cores.
+By default, the gateway application only spawns a single
+``cvmfs_receiver`` worker process. It is possible to run multiple
+worker processes by increasing the value of the ``size`` entry in the
+``receiver_config`` map, found in ``user.json``. This value should not
+be increased beyond the number of available CPU cores.
 
 Release Manager Configuration
 =============================
@@ -115,7 +122,8 @@ Example:
 * The repository's public key is ``test.cern.ch.pub``.
 * The GW API key is ``test.cern.ch.gw``.
 * The GW gateway application is running on port 4929 at the URL ``http:://gateway.cern.ch:4929/api/v1``.
-* The repository keys have been copied from the gateway machine onto the release manager machine, in ``/tmp/test.cern.ch_keys``.
+* The repository keys have been copied from the gateway machine onto
+  the release manager machine, in ``/tmp/test.cern.ch_keys``.
 
 To create the repository in the release manager configuration, run the following command on ``rm.cern.ch``: ::
 
@@ -130,3 +138,26 @@ At this point, from the RM we can publish to the repository: ::
 ... make changes to the repository ... ::
 
   $ cvmfs_server publish test.cern.ch
+
+
+Updating from cvmfs-gateway-0.2.5
+=================================
+
+In the first published version, ``cvmfs-gateway-0.2.5``, the
+application files were installed under ``/opt/cvmfs-gateway`` and the
+database files under ``/opt/cvmfs-mnesia``. Starting with version 0.2.6,
+the application is installed under ``/usr/libexec/cvmfs-gateway``, while
+the database files are under ``/var/lib/cvmfs-gateway``.
+
+When updating from 0.2.5, please make sure that the application is stopped: ::
+
+  $ sudo systemctl stop cvmfs-gateway
+
+and rerun the setup script: ::
+
+  $ /usr/libexec/cvmfs-gateway/scripts/setup.sh
+
+At this point, the new version of the application can be started. If the
+old directories are still present, they can be deleted: ::
+
+  $ sudo rm -r /opt/cvmfs-{gateway,mnesia}
