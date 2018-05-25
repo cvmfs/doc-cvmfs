@@ -52,7 +52,7 @@ setup script needs to be run as root: ::
 
 Create the repository for the following section of this guide: ::
 
-  # cvmfs_server mkfs test.cern.ch
+  # cvmfs_server mkfs -o root test.cern.ch
 
 Create an API key file for the new repo (replace ``<KEY_ID>`` and ``<SECRET>`` with actual values): ::
 
