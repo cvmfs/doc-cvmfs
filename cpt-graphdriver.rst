@@ -117,7 +117,7 @@ releases:
 ``docker2cvmfs`` provides different commands to manipulate docker images but
 the simplest way is to use the ``make-thin`` sub-command.
 
-This subcommand expects to find on the host machine a recent version of
+This sub-command expects to find on the host machine a recent version of
 ``cvmfs`` that support the ``ingest`` commands.
 
 Invoking the help of the subcommand ``docker2cvmfs make-thin --help`` explain
@@ -132,7 +132,8 @@ Assuming a cvmfs repository called ``example.cern.ch`` is already in place::
 
 The utility takes as input the reference (``library/redis:4``) to the
 image to ingest into ``cvmfs`` along with the reference to associate to the
-new thin image and the repository where we want to store the several layers.
+new thin image (``thin/redis:4``) and the repository where we want to store
+the several layers (``example.cern.ch``).
 
 The utility download every layer that compose the image, store them into the
 repository, create then new thin image and import that into docker.
