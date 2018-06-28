@@ -108,41 +108,39 @@ version.
 Conversion of Images
 --------------------
 
-**Note:** The usage of the ``cvmfs2docker`` utility is preliminary. A more
-convenient transformation process is under development.
+A simple way to ingest docker images inside a cvmfs repository is available
+through a small utility ``docker2cvmfs``.
 
-Download the latest version of the docker2cvmfs utility from
-`https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/ <https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/>`_
-and make it executable with ``chmod +x docker2cvmfs``.
+At the moment is possible to directly download the executable:
+`docker2cvmfs v0.3 <https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/0.3/docker2cvmfs>`_
 
-On a cvmfs release manager machines, download the original images layers as
-tarballs using ``docker2``, like ::
+``docker2cvmfs`` provides different commands to manipulate docker images but
+the simplest way is to use the ``make-thin`` sub-command.
 
-    ./docker2cvmfs --registry https://gitlab-registry.cern.ch/v2 pull cloud/image-name:latest /home/user/layers/
+This sub-command expects to find on the host machine a recent version of
+``cvmfs`` that support the ``ingest`` commands.
 
-If you download from DockerHub, you can omit the ``--registry`` flag.
+Invoking the help of the subcommand ``docker2cvmfs make-thin --help`` explain
+what options are available and how to use them.
 
-To extract the image layer tarballs into a CernVM-FS repository, run a bash
-script like the following one ::
+Below we provide a complete example on how to use ``docker2cvmfs`` to convert
+the docker image of ``Redis`` into a thin image.
 
-    DESTINATION=/cvmfs/images.cern.ch/layers
-    for l in /home/user/layers/*; do
-      hash=$(basename $l .tar.gz)
-      dst_layer=/cvmfs/test.cern.ch/layers/$hash
-      mkdir -p $dst_layer
-      touch $dst_layer/.cvmfscatalog
-      tar xf $l -C $dst_layer --owner=$(id -u) --group=$(id -u) --no-xattrs --exclude="*dev/*";
-    done
+Assuming a cvmfs repository called ``example.cern.ch`` is already in place::
 
-Note that the CernVM-FS repository should have the settings
-``CVMFS_IGNORE_SPECIAL_FILES=true``, ``CVMFS_INCLUDE_XATTRS=true``, and
-``CVMFS_IGNORE_XDIR_HARDLINKS=true``.  If the repository is owned by the root
-user on the release manager machine, the extra options to the tar command can
-be omitted.
+    ./docker2cvmfs make-thin --input-reference library/redis:4 --output-reference thin/redis:4 --repository example.cern.ch
 
-As a last step, the thin image needs to be pushed to a docker registry.  To
-do so, run the following commands ::
+The utility takes as input the reference (``library/redis:4``) to the
+image to ingest into ``cvmfs`` along with the reference to associate to the
+new thin image (``thin/redis:4``) and the repository where we want to store
+the several layers (``example.cern.ch``).
 
-    ./docker2cvmfs --registry https://gitlab-registry.cern.ch/v2 thin cloud/image-name:latest images.cern.ch/layers > thin.json
-    tar cf - thin.json | docker import - cvmfs/thin_image-name
-    docker push cvmfs/thin_image-name
+The utility download every layer that compose the image, store them into the
+repository, create then new thin image and import that into docker.
+
+By default the layers are stored into the ``layers/`` subdirectory of the
+repository, this can be modified using the ``--subdirectory`` parameters.
+
+The images are downloaded, by default, from the official docker hub registry,
+this can be modified as well using the ``--registry`` parameter.
+
