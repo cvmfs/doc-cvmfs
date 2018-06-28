@@ -111,8 +111,8 @@ Conversion of Images
 A simple way to ingest docker images inside a cvmfs repository is available
 through a small utility ``docker2cvmfs``.
 
-At the moment is possible to download the executable directly from github
-releases:
+At the moment is possible to directly download the executable:
+`docker2cvmfs v0.3 <https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/0.3/docker2cvmfs>`_
 
 ``docker2cvmfs`` provides different commands to manipulate docker images but
 the simplest way is to use the ``make-thin`` sub-command.
