@@ -44,25 +44,27 @@ used as a "master" release manager to perform some repository
 transformations before a separate release manager machine
 is set up.
 
-The repository gateway application is currently packaged for Ubuntu
-16.04, SLC 6 and Cern CentOS 7. Once the package is installed, the
-setup script needs to be run: ::
+The repository gateway application is currently packaged for Ubuntu 16.04,
+Ubuntu 18.04, SLC 6 and Cern CentOS 7. On Ubuntu, an additional step is required
+after the package is installed, the setup script needs to be run as root: ::
 
-  $ /usr/libexec/cvmfs-gateway/scripts/setup.sh
+  # /usr/libexec/cvmfs-gateway/scripts/setup.sh
 
 Create the repository for the following section of this guide: ::
 
-  $ cvmfs_server mkfs test.cern.ch
+  # cvmfs_server mkfs -o root test.cern.ch
 
-Create an API key file for the new repo (replace ``<KEY_ID>`` and ``<SECRET>`` with actual values): ::
+Create an API key file for the new repo (replace ``<KEY_ID>`` and ``<SECRET>``
+with actual values): ::
 
-  $ cat <<EOF > /etc/cvmfs/keys/test.cern.ch.gw
+  # cat <<EOF > /etc/cvmfs/keys/test.cern.ch.gw
   plain_text <KEY_ID> <SECRET>
   EOF
+  # chmod 600 /etc/cvmfs/keys/test.cern.ch.gw
 
 Add the API key file to the repository configuration in the gateway application: ::
 
-  $ cat <<EOF > /etc/cvmfs/gateway/repo.json
+  # cat <<EOF > /etc/cvmfs/gateway/repo.json
   {
     "repos": [
       {
@@ -82,11 +84,11 @@ Add the API key file to the repository configuration in the gateway application:
 
 If Systemd is available, the gateway application can be started with ``systemctl``: ::
 
-  $ sudo systemctl start cvmfs-gateway.service
+  # systemctl start cvmfs-gateway.service
 
 otherwise it can be manually started: ::
 
-  $ sudo /usr/libexec/cvmfs-gateway/scripts/run_cvmfs_gateway.sh start
+  # /usr/libexec/cvmfs-gateway/scripts/run_cvmfs_gateway.sh start
 
 The ports 80/TCP and 4929/TCP need to be opened in the firewall, to
 allow access to the repository contents and to the gateway service
@@ -125,11 +127,12 @@ Example:
 * The repository keys have been copied from the gateway machine onto
   the release manager machine, in ``/tmp/test.cern.ch_keys``.
 
-To create the repository in the release manager configuration, run the following command on ``rm.cern.ch``: ::
+To create the repository in the release manager configuration, run the following
+command on ``rm.cern.ch`` as an unprivileged user with sudo access: ::
 
-  $ cvmfs_server mkfs -w http://gateway.cern.ch/cvmfs/test.cern.ch \
-                      -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:4929/api/v1 \
-                      -k /tmp/test.cern.ch_keys -o `whoami` test.cern.ch
+  $ sudo cvmfs_server mkfs -w http://gateway.cern.ch/cvmfs/test.cern.ch \
+                           -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:4929/api/v1 \
+                           -k /tmp/test.cern.ch_keys -o `whoami` test.cern.ch
 
 At this point, from the RM we can publish to the repository: ::
 
@@ -151,13 +154,13 @@ the database files are under ``/var/lib/cvmfs-gateway``.
 
 When updating from 0.2.5, please make sure that the application is stopped: ::
 
-  $ sudo systemctl stop cvmfs-gateway
+  # systemctl stop cvmfs-gateway
 
 and rerun the setup script: ::
 
-  $ /usr/libexec/cvmfs-gateway/scripts/setup.sh
+  # /usr/libexec/cvmfs-gateway/scripts/setup.sh
 
 At this point, the new version of the application can be started. If the
 old directories are still present, they can be deleted: ::
 
-  $ sudo rm -r /opt/cvmfs-{gateway,mnesia}
+  # rm -r /opt/cvmfs-{gateway,mnesia}
