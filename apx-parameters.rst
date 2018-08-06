@@ -127,7 +127,7 @@ CVMFS_MIN_CHUNK_SIZE                Minimal size of a file chunk in bytes |br| (
 CVMFS_NESTED_KCATALOG_LIMIT         Maximum thousands of files allowed in nested catalogs, default 500 |br| (see also *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
 CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
 CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
-CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this Stratum1 when executing ``cvmfs_server snapshot -a``
+CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this repository when executing ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
 CVMFS_REPOSITORY_TYPE               Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
 CVMFS_REPOSITORY_TTL                The frequency in seconds of client lookups for changes in the repository.  Defaults to 4 minutes.
