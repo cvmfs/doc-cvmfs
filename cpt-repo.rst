@@ -429,8 +429,22 @@ licensed software.
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CernVM-FS can store files directly to S3 compatible storage systems, such as
-Amazon S3, or Ceph. The S3 storage settings are given as parameters to
+CernVM-FS can store data directly to S3 compatible storage systems, such as
+Amazon S3, or Ceph. The S3 target bucket needs to be created beforehand, for example with ``s3cmd``.
+The bucket needs to be public for reading and require authorization for writing:
+
+::
+
+      # The --configure is optional. For the CERN Ceph S3 instance, for example, use host cs3.cern.ch and the cs3.cern.ch/%(bucket) URL template.
+      s3cmd --configure
+      export AWS_ACCESS_KEY_ID=<ACCESS KEY>
+      export AWS_SECRET_ACCESS_KEY=<SECRET KEY>
+      s3cmd mb s3://<BUCKET NAME>
+      s3cmd --acl-public setacl s3://<BUCKET NAME>
+
+Note: if you use the Minio client, the ``download`` bucket policy won't work as a bucket policy.
+
+Once the bucket is available, the S3 storage settings are given as parameters to
 ``cvmfs_server mkfs`` or ``cvmfs_server add-replica``:
 
 ::
@@ -441,11 +455,7 @@ Amazon S3, or Ceph. The S3 storage settings are given as parameters to
 The file "mys3.conf" contains the S3 settings (see :ref: `table below
 <tab_s3confparameters>`). The "-w" option is used define the S3 server URL,
 e.g. http://localhost:3128, which is used for accessing the repository's
-backend storage on S3. Note that the buckets need to exist before the repository
-is created. In the example above, a single bucket ``mybucket`` needs to be
-created beforehand. Depending on the S3 implementation
-(e.g. `Minio <https://minio.io>`_), buckets may be private by default, in which
-case it's necessary to make them public.
+backend storage on S3.
 
 .. _tab_s3confparameters:
 
