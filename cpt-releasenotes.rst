@@ -1,3 +1,86 @@
+Release Notes for CernVM-FS 2.5.1
+=================================
+
+CernVM-FS 2.5.1 is a patch release.  It contains bugfixes and improvements for
+clients, stratum 0 and stratum 1 servers.  This release also adds support for
+Ubuntu 18.04 ("bionic").
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For Release Manager Machines, all transactions must be closed before upgrading.
+
+Note for upgrades from versions prior to 2.5.0: please also see the specific
+instructions in the release notes for version 2.5.0 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client, macOS: Improved check for OSXFUSE in ``cvmfs_config chksetup``
+    (`CVM-1550 <https://sft.its.cern.ch/jira/browse/CVM-1550>`_)
+
+  * Client: avoid mount helper crash if required config repository is missing
+    (`CVM-1512 <https://sft.its.cern.ch/jira/browse/CVM-1512>`_)
+
+  * Client: Apply catalog updates from updated alien cache
+    (`CVM-1515 <https://sft.its.cern.ch/jira/browse/CVM-1515>`_)
+
+  * Client: Fix occasional false error of ``cvmfs_config probe`` on Fedora 28
+
+  * Client: add support for CA bundle files through new parameter ``X509_CERT_BUNDLE``
+    (`CVM-1421 <https://sft.its.cern.ch/jira/browse/CVM-1421>`_)
+
+  * Libcvmfs: fix workspace default location
+
+  * Server: fix broken repository manifest after catalog migration operations
+    (`CVM-1534 <https://sft.its.cern.ch/jira/browse/CVM-1534>`_)
+
+  * Server: fix locking bug in cvmfs_server snapshot
+    (`CVM-1598 <https://sft.its.cern.ch/jira/browse/CVM-1598>`_)
+
+  * Server: fix Yubikey signature handling (`CVM-1604 <https://sft.its.cern.ch/jira/browse/CVM-1604>`_)
+
+  * Server: flush file system buffers after snapshot, gc, resign, and publish
+    (`CVM-1552 <https://sft.its.cern.ch/jira/browse/CVM-1552>`_)
+
+  * Server: fix ``cvmfs_suid_helper`` on Ubuntu 18.04 for symlinked spool directory
+
+  * Server: replace deprecated geolite free database by geolite2
+    (`CVM-1496 <https://sft.its.cern.ch/jira/browse/CVM-1496>`_)
+
+  * Server, S3: parallelize object removal during garbage collection
+    (`CVM-1593 <https://sft.its.cern.ch/jira/browse/CVM-1593>`_)
+
+  * Server, S3: Make S3 network parameters adjustable, new parameters
+    ``CVMFS_S3_MAX_RETRIES`` and ``CVMFS_S3_TIMEOUT``
+
+  * Gateway: handle spooler failures gracefully in the gateway receiver
+    (`CVM-1545 <https://sft.its.cern.ch/jira/browse/CVM-1545>`_)
+
+  * Gateway: fix publishing with ``CVMFS_AUTO_TAGS=false``
+    (`CVM-1559 <https://sft.its.cern.ch/jira/browse/CVM-1559>`_)
+
+  * Gateway: fix potential deadlock when uploading files to the repository storage
+    (`CVM-1555 <https://sft.its.cern.ch/jira/browse/CVM-1555>`_)
+
+  * Gateway: fix hard link handling (`CVM-1542 <https://sft.its.cern.ch/jira/browse/CVM-1542>`_)
+
+  * Gateway: terminate gracefully when reflog is missing
+    (`CVM-1560 <https://sft.its.cern.ch/jira/browse/CVM-1560>`_)
+
+  * Gateway: performance improvements for publishing
+
+  * Fix potential memory corruption on gcc7+ in tiered cache manager and cvmfs_swissknife
+
+  * Fix compilation with libattr >= 2.4.48
+
+  * Fix compiler optimization flags for gcc8+ and macOS clang9+
+
+
 Release Notes for CernVM-FS 2.5.0
 =================================
 
@@ -35,7 +118,7 @@ worker nodes first and gradually ramp up once the new version proves to work
 correctly. Please take special care when upgrading a client in NFS mode.
 
 For Stratum 0 servers, all transactions must be closed before upgrading.
-For Stratum 1 servers, there should be no running snapshots during the upgrade. 
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
 After the software upgrade, both stratum 0 and 1 servers require doing ``cvmfs_server migrate`` for each repository.
 
 

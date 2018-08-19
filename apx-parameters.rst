@@ -143,6 +143,8 @@ CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small
 CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
 CVMFS_VIRTUAL_DIR                   Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
+X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS connections (see :ref:`sct_data:`)
+X509_CERT_DIR                       Directory file with CA certificates for HTTPS connections, defaults to /etc/grid-security/certificates (see :ref:`sct_data:`)
 =================================== ============================================================================================================================================================
 
 
