@@ -32,27 +32,27 @@
      inkscape:window-height="1341"
      id="namedview99"
      showgrid="false"
-     inkscape:zoom="3.84"
-     inkscape:cx="190.75891"
-     inkscape:cy="40.320448"
+     inkscape:zoom="3.8399999"
+     inkscape:cx="337.85813"
+     inkscape:cy="53.113817"
      inkscape:window-x="0"
      inkscape:window-y="28"
      inkscape:window-maximized="1"
      inkscape:current-layer="Ebene 1" /><g
      id="Ebene 1"><rect
        id="rect3178"
-       x="371.719"
-       y="174.453"
-       width="260.457"
-       height="151.65"
-       style="fill:#e6e6e6;stroke-width:0.53px;stroke:#000;" /><text
-       x="541.26px"
-       y="320.695px"
-       style="font-family:'HelveticaNeue';font-size:16px;fill:#000;"
-       id="text5">Cer<tspan
-   x="567.02px 575.916px "
-   y="320.695px 320.695px "
-   id="tspan3">nV</tspan>M-FS</text>
+       x="371.72122"
+       y="174.45525"
+       width="264.87961"
+       height="151.64552"
+       style="fill:#e6e6e6;stroke:#000000;stroke-width:0.53447288px" /><text
+       x="502.19748"
+       y="317.43982"
+       style="font-size:16px;font-family:HelveticaNeue;fill:#000000"
+       id="text5"><tspan
+   x="536.85352"
+   y="317.43982"
+   id="tspan3">CernV</tspan>M-FS</text>
 <use
        id="path3183"
        xlink:href="#_Image1"
@@ -152,8 +152,9 @@
          d="M528.689,227.385l0.037,6.729l6.936,0.022"
          style="fill:none;stroke-width:1.36px;stroke-linecap:butt;stroke:#008000;" /></g><path
        id="rect3180"
-       d="M605.849,182.725l-201.372,0c0,0 -19.122,0.468 18.879,22.976c-65.047,54.714 -80.163,78.393 -77.964,128.674l260.457,0l0,-151.65Z"
-       style="fill:#eaff00;fill-opacity:0.392157;fill-rule:nonzero;stroke-width:0.53px;stroke:#000;" /><g
+       d="m 604.80733,183.24583 h -201.372 c 0,0 -19.122,0.468 18.879,22.976 -65.047,54.714 -80.163,78.393 -77.964,128.674 h 260.457 z"
+       style="fill:#eaff00;fill-opacity:0.39215698;fill-rule:nonzero;stroke:#000000;stroke-width:0.52999997px"
+       inkscape:connector-curvature="0" /><g
        id="g3445"><use
          id="path4856"
          xlink:href="#_Image3"
@@ -252,17 +253,12 @@
        style="font-family:'HelveticaNeue';font-size:16px;fill:#fff;"
        id="text76">update</text>
 <g
-       transform="matrix(1,0,0,1,21.6898,-6.42113)"
+       transform="translate(7.2366748,-5.9002967)"
        id="g82"><text
-         x="511.54px"
-         y="205.677px"
-         style="font-family:'HelveticaNeue';font-size:16px;fill:#000;"
-         id="text78">Union F</text>
-<text
-         x="567.252px"
-         y="205.677px"
-         style="font-family:'HelveticaNeue';font-size:16px;fill:#000;"
-         id="text80">S</text>
+         x="511.54001"
+         y="205.677"
+         style="font-size:16px;font-family:HelveticaNeue;fill:#000000"
+         id="text78">Union FS</text>
 </g></g><defs
      id="defs95"><image
        id="_Image1"
