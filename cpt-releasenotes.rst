@@ -13,6 +13,8 @@ mode.
 
 For Stratum 1 servers, there should be no running snapshots during the upgrade.
 For Release Manager Machines, all transactions must be closed before upgrading.
+Together with CernVM-FS 2.5.1 we also release the CernVM-FS Gateway Services
+version 0.3.
 
 Note for upgrades from versions prior to 2.5.0: please also see the specific
 instructions in the release notes for version 2.5.0 and earlier.
