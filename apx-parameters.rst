@@ -143,6 +143,9 @@ CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small
 CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
 CVMFS_VIRTUAL_DIR                   Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
+CVMFS_STATISTICS_DB                 SQLite file path to store the statistics. Default is ``/var/spool/cvmfs/<REPO_NAME>/stats.db`` .
+CVMFS_PRINT_STATISTICS              Set to *true* to enable statistics printing to the standard output.
+CVMFS_EXTENDED_GC_STATS             Set to *true* to count condemned bytes in the garbage collector process.
 =================================== ============================================================================================================================================================
 
 
