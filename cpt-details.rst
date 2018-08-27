@@ -857,7 +857,7 @@ sz_condemned_bytes      Integer
 ====================== =============================================
 **Field**               **Type**
 ====================== =============================================
-publish_id                   Integer
+publish_id              Integer
 start_time              Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
 finished_time           Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
 files_added             Integer
