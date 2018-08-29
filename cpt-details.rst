@@ -822,6 +822,70 @@ scratch area and, once published, are re-mounted as repository revision
 :math:`r+1`. In this way, CernVM-FS provides snapshots. In case of
 errors, one can safely resume from a previously committed revision.
 
+Gathering statistics
+--------------------
+
+At the end of a publish, ingest or garbage collector subcommand the
+statistics are automatically stored in a SQLite database local file.
+
+Default location of the file is ``/var/spool/cvmfs/<REPO_NAME>/stats.db``,
+but it can be changed by assigning the desired, writable path to the `CVMFS_STATISTICS_DB` variable.
+
+
+The database file contains three tables in schema number 1.0:
+ - gc_statistics
+ - properties
+ - publish_statistics
+
+**gc_statistics**:
+
+====================== ==============================================
+**Field**               **Type**
+====================== ==============================================
+gc_id                   Integer
+start_time              Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+finished_time           Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+n_preserved_catalogs    Integer
+n_condemned_catalogs    Integer
+n_condemned_objects     Integer
+sz_condemned_bytes      Integer
+====================== ==============================================
+
+
+**publish_statistics**:
+
+====================== =============================================
+**Field**               **Type**
+====================== =============================================
+publish_id              Integer
+start_time              Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+finished_time           Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+files_added             Integer
+files_removed           Integer
+files_changed           Integer
+duplicated_files        Integer
+directories_added       Integer
+directories_removed     Integer
+directories_changed     Integer
+sz_bytes_added          Integer
+sz_bytes_removed        Integer
+sz_bytes_uploaded       Integer
+====================== =============================================
+
+**properties**:
+
+====================== ==========
+**Field**               **Type**
+====================== ==========
+key                     Text
+value                   Text
+====================== ==========
+
+In the properties table there are 3 records:
+ - schema
+ - schema_revision
+ - repo_name
+
 .. rubric:: Footnotes
 
 .. [#]
