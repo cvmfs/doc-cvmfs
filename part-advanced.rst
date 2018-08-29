@@ -10,4 +10,5 @@ Advanced Topics
    cpt-graphdriver
    cpt-xcache
    cpt-large-scale
+   cpt-shrinkwrap
    cpt-details
