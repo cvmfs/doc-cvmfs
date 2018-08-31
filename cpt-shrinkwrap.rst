@@ -107,16 +107,16 @@ a file named ``sft.cern.ch.spec``. ::
 Write the ``libcvmfs`` configuration file that will be used for ``cvmfs_shrinkwrap``.
 Example that uses the CERN HPC Stratum 0, written to ``sft.cern.ch.config``. ::
 
+    CVMFS_REPOSITORIES=sft.cern.ch
     CVMFS_REPOSITORY_NAME=sft.cern.ch
-    CVMFS_CACHE_BASE=/home/nhazekam/test/lib/cvmfs/shrinkwrap
     CVMFS_CONFIG_REPOSITORY=cvmfs-config.cern.ch
     CVMFS_DEFAULT_DOMAIN=cern.ch
-    CVMFS_HTTP_PROXY=DIRECT
-    CVMFS_KEYS_DIR=/etc/cvmfs/keys/cern.ch
+    CVMFS_SERVER_URL='http://cvmfs-stratum-zero-hpc.cern.ch/cvmfs/sft.cern.ch;http://cvmfs-stratum-one.cern.ch/cvmfs/sft.cern.ch'
+    CVMFS_HTTP_PROXY=DIRECT # Adjust to your site
     CVMFS_MOUNT_DIR=/cvmfs
-    CVMFS_REPOSITORIES=test.cern.ch,sft.cern.ch
-    CVMFS_SERVER_URL='http://cvmfs-stratum-zero-hpc.cern.ch/cvmfs/sft.cern.ch;http://cvmfs-stratum-one.cern.ch/cvmfs/sft.cern.ch;http://cernvmfs.gridpp.rl.ac.uk/cvmfs/sft.cern.ch;http://cvmfs-s1bnl.opensciencegrid.org/cvmfs/sft.cern.ch;http://cvmfs-s1fnal.opensciencegrid.org/cvmfs/sft.cern.ch'
-    CVMFS_SHARED_CACHE=no
+    CVMFS_CACHE_BASE=/var/lib/cvmfs/shrinkwrap
+    CVMFS_KEYS_DIR=/etc/cvmfs/keys/cern.ch
+    CVMFS_SHARED_CACHE=no # Important as libcvmfs does not support shared caches
     CVMFS_USER=cvmfs
 
 Using the cvmfs repository ``sft.cern.ch`` ::
