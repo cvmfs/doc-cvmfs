@@ -18,12 +18,12 @@ throughput and a file specification to create a subset of a repository.
 Installation
 ------------
 
-A prepackaged executable 
+Compiling ``cvmfs_shrinkwrap`` from Sources
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The folling steps install and activate the CernVM-FS Shrinkwrap utility.
+In order to compile ``cvmfs_shrinkwrap`` from sources, use the
+``-DBUILD_SHRINKWRAP=on`` cmake option.
 
- 1. Install the utility when building CVMFS. Add ``-DBUILD_SHRINKWRAP=on``
-    to cmake when configuring.
 
 CernVM-FS Shrinkwrap Layout
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,5 +122,4 @@ Example that uses the CERN HPC Stratum 0, written to ``sft.cern.ch.config``. ::
 Using the cvmfs repository ``sft.cern.ch`` ::
 
     sudo cvmfs_shrinkwrap -r sft.cern.ch -f sft.cern.ch.config -t sft.cern.ch.spec --dest-base /tmp/cvmfs -j 16
-
 
