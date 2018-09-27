@@ -32,6 +32,7 @@ CVMFS_DEBUGLOG                  If set, run CernVM-FS in debug mode and write a 
 CVMFS_DEFAULT_DOMAIN            The default domain will be automatically appended to repository names when given without a domain.
 CVMFS_DNS_RETRIES               Number of retries when resolving proxy names
 CVMFS_DNS_TIMEOUT               Timeout in seconds when resolving proxy names
+CVMFS_DNS_ROAMING               If true, watch /etc/resolv.conf for nameserver changes
 CVMFS_EXTERNAL_FALLBACK_PROXY   List of HTTP proxies similar to ``CVMFS_EXTERNAL_HTTP_PROXY``. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
 CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server

@@ -423,6 +423,14 @@ milliseconds precision randomly in the interval
 :math:`[1, \text{\$CVMFS\_BACKOFF\_INIT}\cdot 1000]`. With every retry,
 the backoff is then doubled.
 
+DNS Nameserver Changes
+~~~~~~~~~~~~~~~~~~~~~~
+
+CernVM-FS can watch /etc/resolv.conf and automatically follow changes to the
+DNS servers. This behavior is controlled by the ``CVMFS_DNS_ROAMING`` client
+configuration. It is by default turned on on macOS and turned off on Linux.
+
+
 .. _sct_cache:
 
 Cache Settings
