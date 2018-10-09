@@ -435,7 +435,7 @@ The bucket needs to be public for reading and require authorization for writing:
 
 ::
 
-      # The --configure is optional. For the CERN Ceph S3 instance, for example, use host cs3.cern.ch and the cs3.cern.ch/%(bucket) URL template.
+      # The --configure is optional. For the CERN Ceph S3 instance, for example, use host s3.cern.ch and the %(bucket).s3.cern.ch URL template.
       s3cmd --configure
       export AWS_ACCESS_KEY_ID=<ACCESS KEY>
       export AWS_SECRET_ACCESS_KEY=<SECRET KEY>
@@ -450,7 +450,7 @@ Once the bucket is available, the S3 storage settings are given as parameters to
 ::
 
       cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
-        -w http://s3.amazonaws.com/mybucket my.repo.name
+        -w http://mybucket.s3.amazonaws.com my.repo.name
 
 The file "mys3.conf" contains the S3 settings (see :ref: `table below
 <tab_s3confparameters>`). The "-w" option is used define the S3 server URL,
@@ -472,7 +472,7 @@ backend storage on S3.
                                                 used.
 ``CVMFS_S3_PORT``                               The port on which the S3 instance is
                                                 running
-``CVMFS_S3_BUCKET``                             S3 bucket name. The repository name as used
+``CVMFS_S3_BUCKET``                             S3 bucket name. The repository name is used
                                                 as a subdirectory inside the bucket.
 ``CVMFS_S3_TIMEOUT``                            Timeout in seconds for the connection to
                                                 the S3 server.
