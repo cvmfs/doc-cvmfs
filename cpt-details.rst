@@ -79,8 +79,8 @@ followed by the concatenated strings of the key and the value.
 132          External file (stored under path name)
 ============ ====================================
 
-As of bit 8, the flags the flags store the cryptographic content hash
-algorithm used to process the given file.  Bit eleven is 1 if the file is
+As of bit 8, the flags store the cryptographic content hash
+algorithm used to process the given file.  Bit 11 is 1 if the file is
 stored uncompressed.
 
 A file catalog contains a *time to live* (TTL), stored in seconds. The
