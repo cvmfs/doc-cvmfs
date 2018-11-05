@@ -234,8 +234,6 @@ meta data fields.
 | ``R``     | MD5 hash of the repository's root path         |br|         |
 |           | (usually always ``d41d8cd98f00b204e9800998ecf8427e``)       |
 +-----------+-------------------------------------------------------------+
-| ``B``     | File size of the root catalog in bytes                      |
-+-----------+-------------------------------------------------------------+
 | ``X``     | Cryptographic hash of the signing certificate               |
 +-----------+-------------------------------------------------------------+
 | ``G``     | "yes" if the repository is garbage-collectable              |
