@@ -49,8 +49,10 @@ CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to p
 CVMFS_KCACHE_TIMEOUT            Timeout for path names and file attributes in the kernel file system buffers.
 CVMFS_KEYS_DIR                  Directory containing \*.pub files used as repository signing keys.  If set, this parameter has precedence over ``CVMFS_PUBLIC_KEY``.
 CVMFS_LOW_SPEED_LIMIT           Minimum transfer rate a server or proxy must provide.
+CVMFS_MAX_EXTERNAL_SERVERS      Limit the number of (geo sorted) stratum 1 servers for external data that are effectively used.
 CVMFS_MAX_IPADDR_PER_PROXY      Limit the number of IP addresses a proxy names resolves into.  From all registered addresses, up to the limit are randomly selected.
 CVMFS_MAX_RETRIES               Maximum number of retries for a given proxy/host combination.
+CVMFS_MAX_SERVERS               Limit the number of (geo sorted) stratum 1 servers that are effectively used.
 CVMFS_MAX_TTL                   Maximum file catalog TTL in minutes.  Can overwrite the TTL stored in the catalog.
 CVMFS_MEMCACHE_SIZE             Size of the CernVM-FS meta-data memory cache in Megabyte.
 CVMFS_MOUNT_RW                  Mount CernVM-FS as a read/write file system.  Write operations will fail but this option can workaround faulty ``open()`` flags.
@@ -74,6 +76,7 @@ CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used
 CVMFS_SERVER_URL                Semicolon-separated chain of Stratum~1 servers.
 CVMFS_SHARED_CACHE              If set to *no*, makes a repository use an exclusive cache.
 CVMFS_STRICT_MOUNT              If set to *yes*, mount only repositories that are listed in ``CVMFS_REPOSITORIES``.
+CVMFS_SUID                      If set to *yes*, enable suid magic on the mounted repository. Requires mounting as root.
 CVMFS_SYSLOG_FACILITY           If set to a number between 0 and 7, uses the corresponding LOCAL$n$ facility for syslog messages.
 CVMFS_SYSLOG_LEVEL              If set to 1 or 2, sets the syslog level for CernVM-FS messages to LOG_DEBUG or LOG_INFO respectively.
 CVMFS_SYSTEMD_NOKILL            If set to *yes*, modify the command line to ``@vmfs2 ...`` in order to act as a systemd lowlevel storage manager.
@@ -136,6 +139,7 @@ CVMFS_ROOT_KCATALOG_LIMIT           Maximum thousands of files allowed in root c
 CVMFS_SPOOL_DIR                     Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
+CVMFS_SYNCFS_LEVEL                  Controls how often ``sync`` will by called by ``cvmfs_server`` operations. Possible levels are 'none', 'default', 'cautious'.
 CVMFS_UID_MAP                       Path of a file for the mapping of file owner user ids.
 CVMFS_UNION_DIR                     Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 Defines the union file system to be used for the repository. |br| (currently `aufs` and `overlayfs` are fully supported)
