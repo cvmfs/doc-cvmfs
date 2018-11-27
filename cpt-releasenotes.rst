@@ -1,3 +1,130 @@
+Release Notes for CernVM-FS 2.5.2
+=================================
+
+CernVM-FS 2.5.2 is a patch release.  It contains bugfixes and improvements for
+clients, stratum 0 and stratum 1 servers.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For Release Manager Machines, all transactions must be closed before upgrading.
+Together with CernVM-FS 2.5.2 we also release the CernVM-FS Gateway Services
+version 0.3.1.
+
+Note for upgrades from versions prior to 2.5.1: please also see the specific
+instructions in the release notes for version 2.5.1 and earlier.
+
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client: fix cache cleanup logic for chunks >25M
+    `CVM-1625 <https://sft.its.cern.ch/jira/browse/CVM-1625>`_
+
+  * Client: fix busy waiting in cache manager communication under heavy load
+    `CVM-1618 <https://sft.its.cern.ch/jira/browse/CVM-1618>`_
+
+  * Client: fix stale authz session cache when repository membership changes
+    `CVM-1653 <https://sft.its.cern.ch/jira/browse/CVM-1653>`_
+
+  * Client, macOS: add support for ``CVMFS_FUSE_NOTIFY_INVALIDATION``, disable
+    by default on macOS to fix stability issues
+    `CVM-1638 <https://sft.its.cern.ch/jira/browse/CVM-1638>`_
+
+  * Client: add support for ``CVMFS_MAX_[EXTERNAL_]SERVERS`` to restrict the
+    effective number of stratum 1 servers
+    `CVM-1631 <https://sft.its.cern.ch/jira/browse/CVM-1631>`_
+
+  * Client: add support for ``CVMFS_DNS_{MIN,MAX}_TTL`` for proxy name
+    resolution `CVM-1659 <https://sft.its.cern.ch/jira/browse/CVM-1659>`_
+
+  * Client: add support for ``CVMFS_SUID`` config parameter
+    `CVM-1591 <https://sft.its.cern.ch/jira/browse/CVM-1591>`_
+
+  * Client: log to syslog when session authorization disappears
+    `CVM-1658 <https://sft.its.cern.ch/jira/browse/CVM-1658>`_
+
+  * Client: change ``cvmfs_talk`` implementation from perl to C++ to improve
+    speed
+
+  * Server: more fine-grained syncfs control through
+    ``CVMFS_SYNCFS_LEVEL=[none,default,cautious]``, change default back to 2.5.0
+    behavior `CVM-1646 <https://sft.its.cern.ch/jira/browse/CVM-1646>`_
+
+  * Server: update Apache config to ignore If-Modified-Since on stratum 1s
+    `CVM-1655 <https://sft.its.cern.ch/jira/browse/CVM-1655>`_
+
+  * Server: add retry support for ``cvmfs_server transaction``
+    `CVM-1611 <https://sft.its.cern.ch/jira/browse/CVM-1611>`_
+
+  * Server: restrict lazy downloads of geodb to once a day
+    `CVM-1647 <https://sft.its.cern.ch/jira/browse/CVM-1647>`_
+
+  * Server: print the start of mark and sweep phases during garbage collection
+
+  * Server, replication/preloader: improve error reporting of network failures
+    `CVM-1624 <https://sft.its.cern.ch/jira/browse/CVM-1624>`_
+
+  * Server: print warnings during publish to stdout instead of stderr
+    `CVM-1630 <https://sft.its.cern.ch/jira/browse/CVM-1630>`_
+
+  * Server, S3: fix cache control headers for objects pushed to S3
+    `CVM-1606 <https://sft.its.cern.ch/jira/browse/CVM-1606>`_
+
+  * Server, S3: fix content type header for objects pushed to S3
+
+  * Server, S3: add support for URL subpaths and DNS-style bucket URLs
+    `CVM-1641 <https://sft.its.cern.ch/jira/browse/CVM-1641>`_
+
+  * Server, S3: add support for ``CVMFS_S3_DNS_BUCKETS=false`` to disable
+    DNS-style bucket URLs when S3 backend doesn't support them (e.g. Minio)
+    `CVM-1641 <https://sft.its.cern.ch/jira/browse/CVM-1641>`_
+
+  * Server, gateway: delete session tokens for transactions after use
+    `CVM-1643 <https://sft.its.cern.ch/jira/browse/CVM-1643>`_
+
+  * Server, gateway: fix permissions on temporary directory used by the receiver
+
+  * Server, gateway: automatically apply lease path to abort and publish
+    commands `CVM-1601 <https://sft.its.cern.ch/jira/browse/CVM-1601>`_
+
+  * Server, gateway: bump gateway protocol version to 2
+    `CVM-1626 <https://sft.its.cern.ch/jira/browse/CVM-1626>`_
+
+  * Fix potential memory corruption in catalog traversal
+
+  * Fix building on macOS 10.14
+
+
+Manual Migration from 2.5.1 Stratum 1 Servers
+---------------------------------------------
+
+If you do not want to use ``cvmfs_server migrate`` to automatically upgrade,
+stratum 1 servers that maintain repositories replicas using the Apache backend
+can be migrated from version 2.5.1 with the following steps:
+
+  1. Ensure that there are no active replication or garbage collection processes
+     before updating the server software and during the repository layout
+     migration.
+
+  2. Install the ``cvmfs-server`` 2.5.2 package.
+
+  3. Edit the Apache configuration for the repositories and add to the
+     ``<Directory>`` section of the repositories
+
+::
+
+    RequestHeader unset If-Modified-Since
+
+  4. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
+     ``CVMFS_CREATOR_VERSION=140``
+
+
+
 Release Notes for CernVM-FS 2.5.1
 =================================
 
