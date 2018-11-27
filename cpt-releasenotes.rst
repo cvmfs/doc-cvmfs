@@ -136,7 +136,7 @@ Updating from cvmfs-gateway 0.3.0
 
 The RPM package for ``cvmfs-gateway`` version 0.3.0 has a bug in the post uninstall
 scripts which interferes with the setup of the new package, when updating.
-The old package needs to be manually uninstalled, before installing the new package:
+The old package needs to be manually uninstalled, before the new one is installed:
 
 ::
 
