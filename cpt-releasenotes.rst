@@ -99,6 +99,13 @@ Bug Fixes and Improvements
 
   * Fix building on macOS 10.14
 
+  * Gateway: fixed bug allowing conflicting leases to be acquired
+    `CVM-1642 <https://sft.its.cern.ch/jira/browse/CVM-1642>`_
+
+  * Gateway: various improvements to the RPM and DEB packages; the cvmfs-gateway
+    package now depends on ``cvmfs-server >= 2.5.2``
+    `CVM-1615 <https://sft.its.cern.ch/jira/browse/CVM-1615>`_
+
 
 Manual Migration from 2.5.1 Stratum 1 Servers
 ---------------------------------------------
@@ -122,6 +129,20 @@ can be migrated from version 2.5.1 with the following steps:
 
   4. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
      ``CVMFS_CREATOR_VERSION=140``
+
+
+Updating from cvmfs-gateway 0.3.0
+---------------------------------
+
+The RPM package for ``cvmfs-gateway`` version 0.3.0 has a bug in the post uninstall
+scripts which interferes with the setup of the new package, when updating.
+The old package needs to be manually uninstalled, before installing the new package:
+
+::
+
+    systemctl stop cvmfs-gateway
+    yum remove cvmfs-gateway
+    yum install cvmfs-gateway-0.3.1-1.el7.x86_64.rpm
 
 
 
