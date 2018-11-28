@@ -1035,13 +1035,15 @@ installed.
 
 In addition, lines in ``.cvmfsdirtab`` that begin with an exclamation
 point (``!``) are shell patterns that will be excluded from those
-matched by lines without an exclamation point. For example a
-``.cvmfsdirtab`` might contain these lines for the repository of the
-previous subsection:
+matched by lines without an exclamation point. Empty lines and comment lines
+starting with a pound sign (`#`) are ignored. For example a ``.cvmfsdirtab``
+might contain these lines for the repository of the previous subsection:
 
 ::
 
+    # Nested catalogs for every platform
     /software/*
+    # Nested catalogs for every version
     /software/*/*
     ! */common
     /grid-certificates
