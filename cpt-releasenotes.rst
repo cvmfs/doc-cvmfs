@@ -122,10 +122,7 @@ can be migrated from version 2.5.1 with the following steps:
 
   3. Edit the Apache configuration for the repositories and add to the
      ``<Directory>`` section of the repositories
-
-::
-
-    RequestHeader unset If-Modified-Since
+     ``RequestHeader unset If-Modified-Since``
 
   4. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
      ``CVMFS_CREATOR_VERSION=140``
