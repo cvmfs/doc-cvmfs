@@ -1036,7 +1036,7 @@ installed.
 In addition, lines in ``.cvmfsdirtab`` that begin with an exclamation
 point (``!``) are shell patterns that will be excluded from those
 matched by lines without an exclamation point. Empty lines and comment lines
-starting with a pound sign (`#`) are ignored. For example a ``.cvmfsdirtab``
+starting with a pound sign (``#``) are ignored. For example a ``.cvmfsdirtab``
 might contain these lines for the repository of the previous subsection:
 
 ::
