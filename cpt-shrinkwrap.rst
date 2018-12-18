@@ -18,8 +18,8 @@ throughput and a file specification to create a subset of a repository.
 Installation
 ------------
 
-Compiling ``cvmfs_shrinkwrap`` from Sources
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compiling ``cvmfs_shrinkwrap`` from source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to compile ``cvmfs_shrinkwrap`` from sources, use the
 ``-DBUILD_SHRINKWRAP=on`` cmake option.
@@ -83,7 +83,7 @@ Negative entries will be left out of the traversal : ::
      !/lcg/releases/uuid
 
 
-Creating an Image for ROOT
+Creating an image for ROOT
 --------------------------
 
 Start out with either building ``cvmfs_shrinkwrap``, adding it to your path,
@@ -120,8 +120,8 @@ Using the cvmfs repository ``sft.cern.ch`` : ::
 
     sudo cvmfs_shrinkwrap -r sft.cern.ch -f sft.cern.ch.config -t sft.cern.ch.spec --dest-base /tmp/cvmfs -j 16
 
-Creating an Image for ROOT in userspace
----------------------------------------
+Creating an image in userspace
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Start by using the above setup.
 
@@ -139,4 +139,69 @@ Using the cvmfs repository ``sft.cern.ch`` : ::
 
    cvmfs_shrinkwrap -r sft.cern.ch -f sft.cern.ch.config -t sft.cern.ch.spec --dest-base /tmp/cvmfs -j 16
 
+Note on CVMFS Variables
+~~~~~~~~~~~~~~~~~~~~~~~
 
+CVMFS variables athat are used in the organization of repositories are
+evaluated at the time of image creation. As such, the OS the image is created
+on should be the expected OS the image will be used with. Specification rules 
+can be written to include other OS compatible version, but symlinks will
+resolve to the original OS.
+
+Using a shrinkwrap image
+------------------------
+
+Shrinkwrap was developed to address similar restriction as the CVMFS Preloader.
+Having created an image from your specification there are a number of ways this
+can be used and moved around.
+
+Exporting image
+~~~~~~~~~~~~~~~
+
+Having a fully loaded repository, including the hardlinked data, the image can
+be exported to a number of different formats and packages. Some examples of this
+could be ZIP, tarballs, or squashfs. The recommendation is to use squashfs as
+it provides a great amount of portability and is supported for directly mounting
+on most OS.
+
+If tools for creating squashfs are not already available try : ::
+
+   apt-get install squashfs-tools
+
+-- or -- ::
+
+   yum install squashfs-tools
+
+
+After this has been install a squashfs image can be created using the above image : ::
+
+   mksquashfs /tmp/cvmfs root-sft-image.sqsh
+
+This process may take time to create depending on the size of the shrinkwrapped image.
+The squashfs image can now be moved around and mounted using : ::
+
+   mount -t squashfs /PATH/TO/IMAGE/root-sft-image.sqsh /cvmfs
+
+Bind mounting an image
+~~~~~~~~~~~~~~~~~~~~~~
+
+The shrinkwrap image can also be directly moved and mounted 
+using bind mounts. ::
+
+  mount --bind /tmp/cvmfs /cvmfs
+
+This provides a quick method for testing created images and verifying
+the contents will run your expected workload.
+
+Important note on use
+~~~~~~~~~~~~~~~~~~~~~
+
+Shrinkwrap images mirror the data organization of CVMFS. As such it is important
+that the data and the filesystem tree be co-located in the filesystem/mountpoint.
+If the data is separated from the filesystem tree you are likely to encounter an
+error.
+
+
+.. Advanced : Docker Image injection
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   To be added later with formalized process
