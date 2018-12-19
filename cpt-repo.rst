@@ -483,6 +483,8 @@ backend storage on S3.
 ``CVMFS_S3_DNS_BUCKETS``                        Set to false to disable DNS-style bucket
                                                 URLs (http://<bucket>.<host>/<object>).
                                                 Enabled by default.
+``CVMFS_S3_PEEK_BEFORE_PUT``                    Make PUT requests conditional to a prior
+                                                HEAD request. Enabled by default.
 =============================================== ===========================================
 
 
