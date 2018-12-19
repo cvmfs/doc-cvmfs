@@ -480,6 +480,11 @@ backend storage on S3.
                                                 the S3 server.
 ``CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`` Number of parallel uploads to the S3
                                                 server, e.g. 400
+``CVMFS_S3_DNS_BUCKETS``                        Set to false to disable DNS-style bucket
+                                                URLs (http://<bucket>.<host>/<object>).
+                                                Enabled by default.
+``CVMFS_S3_PEEK_BEFORE_PUT``                    Make PUT requests conditional to a prior
+                                                HEAD request. Enabled by default.
 =============================================== ===========================================
 
 
