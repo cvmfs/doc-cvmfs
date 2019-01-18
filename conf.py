@@ -49,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'CernVM-FS'
-copyright = u'2018, CernVM Team'
+copyright = u'2019, CernVM Team'
 author = u'CernVM Team'
 
 # The version info for the project you're documenting, acts as replacement for
