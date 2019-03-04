@@ -47,6 +47,7 @@ Contents
    cpt-servermeta
    cpt-replica
    cpt-repository-gateway
+   cpt-notification-system
    part-advanced
    part-appendix
 
