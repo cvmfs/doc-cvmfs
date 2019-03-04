@@ -91,8 +91,10 @@ otherwise use the service command: ::
 
   # service cvmfs-gateway start
 
-The ports 80/TCP and 4929/TCP need to be opened in the firewall, to allow
-access to the repository contents and to the gateway service API.
+To access the gateway service API, port 4929/TCP needs to be open in the
+firewall. If the gateway machine also serves as a repository stratum 0 (i.e.
+the repository is created with "local" upstream), then port 80/TCP also needs
+to be open.
 
 In addition to ``repo.json``, there is another configuration
 file,``user.json``, which contains runtime parameters for the gateway
@@ -128,22 +130,21 @@ Example:
 * The repository keys have been copied from the gateway machine onto the
   publisher machine, in ``/tmp/test.cern.ch_keys``.
 
-To create the repository in the release manager configuration, run the
-following command on ``publisher.cern.ch`` as an unprivileged user with sudo
-access: ::
+To make the repository available for writing on ``publisher.cern.ch``, run the
+following command on that machine as an unprivileged user with sudo access: ::
 
   $ sudo cvmfs_server mkfs -w http://gateway.cern.ch/cvmfs/test.cern.ch \
                            -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:4929/api/v1 \
                            -k /tmp/test.cern.ch_keys -o `whoami` test.cern.ch
 
 At this point, it's possible to start writing into the repository from the
-publisher: ::
+publisher machine: ::
 
   $ cvmfs_server transaction test.cern.ch
 
   ... make changes to the repository ... ::
 
-  $ cvmfs_server publish test.cern.ch
+  $ cvmfs_server publish
 
 
 Advanced repository configuration
