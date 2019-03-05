@@ -8,3 +8,7 @@ In addition to various bugfixes, this version introduces an improved repository
 configuration format, which should greatly simplify the initial setup of the
 repository gateway in a large number of cases. Please consult the updated
 repository gateway documentation: :ref:`cpt_repository_gateway`.
+
+This release also includes an experimental preview of the new notification
+system. Please consult the relevant documentation page for more details:
+:ref:`cpt_notification_system`.
