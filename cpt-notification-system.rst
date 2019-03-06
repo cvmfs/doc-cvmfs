@@ -11,10 +11,10 @@ is used when a more precise propagation method is needed. One such use case is
 the distribution of conditions databases, which during data taking change at a
 much higher rate than software repositories. In a conditions data workflow, it
 is desired to process new data samples as soon as they are available, to avoid
-havingpileup of new samples. Another case is the construction of a complex
+the pileup of new samples. Another case is the construction of a complex
 software build and test pipeline, where later stages of the pipeline depend on
 artifacts published at earlier stages of the pipeline already being available
-on replicas of the repository.
+in replicas of the repository.
 
 The main components of the notification system are the message broker and a
 command-line tool used to publish new messages and subscribe to notifications.
@@ -54,9 +54,11 @@ configuration of RabbitMQ: ::
   # rabbitmq-plugins enable rabbitmq_management
 
 The default guest user should be deleted: ::
+
   # rabbitmqctl delete_user guest
 
 Add the "/cvmfs" vhost if needed: ::
+
   # rabbitmqctl add_vhost /cvmfs
 
 Add and configure the administrator user, which can be used to login to the web
@@ -76,7 +78,7 @@ Add and configure the worker user: ::
 As before, ``<WORKER_PASSWORD>`` should be substituted for a suitable strong
 password.
 
-With RabbitMQ installed and configured, the final steps is to install the
+With RabbitMQ installed and configured, the final steps are to install the
 ``cvmfs-notify`` package and open firewall port 4930/TCP.
 
 ``cvmfs-notify`` is configured in ``/etc/cvmfs/notify/config.json``: ::
@@ -107,7 +109,7 @@ Command-line tool for the notification system
 =============================================
 
 There is a new ``notify`` subcommand in the ``cvmfs_swissknife`` command, which
-can be used to publish and subscribe to activity messages for a specific
+is used to publish and subscribe to activity messages for a specific
 repository.
 
 Example:
@@ -132,8 +134,8 @@ By default, once a message is received, the command will exit.
 
 The subscription command has two optional flags:
 
-* ``-c`` enables "continuous" use. When messages are received, the command will
-  only output the message but will not exit.
+* ``-c`` enables "continuous" mode. When messages are received, the command
+  will output the message but will not exit.
 * ``-m NUM`` specifies of minimum repository revision number to react to. For
   messages with a revision number smaller than or equal to ``NUM``, no output
   is printed and the command will not exit (when the ``-c`` flag is not given).
@@ -144,6 +146,7 @@ CernVM-FS client configuration
 A CernVM-FS client can also be connected to a notification server, allowing the
 client to react to activity messages by triggering a remount of the repository.
 
-This functionality is enabled in the ``client.conf`` file as follows: ::
+This functionality is enabled with the following client configuration option:
+::
 
   CVMFS_NOTIFICATION_SERVER=http://notify.cern.ch:4930/api/v1/subscribe
