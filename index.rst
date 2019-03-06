@@ -59,10 +59,11 @@ Visit our website on `cernvm.cern.ch <http://cernvm.cern.ch/>`_.
 Authors of this documentation:
 
    * Jakob Blomer
-   * Predrag Buncic
+   * Brian Bockelman
+   * Daniel-Florin Dosaru
    * Dave Dykstra
    * Nikola Hardi
+   * Nick Hazekamp
    * René Meusel
-   * José Molina Colmenero
    * Radu Popescu
 
