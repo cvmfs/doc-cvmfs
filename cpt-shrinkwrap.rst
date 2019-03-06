@@ -18,8 +18,8 @@ throughput and a file specification to create a subset of a repository.
 Installation
 ------------
 
-Compiling ``cvmfs_shrinkwrap`` from source
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The ``cvmfs_shrinkwrap`` utility is packaged for Red Hat based and Debian based
+platforms in the ``cvmfs-shrinkwrap`` package.
 
 In order to compile ``cvmfs_shrinkwrap`` from sources, use the
 ``-DBUILD_SHRINKWRAP=on`` cmake option.
@@ -32,14 +32,14 @@ The structure used in the Shrinkwrap output mirrors that used internally
 by CernVM-FS. The visible files are hardlinked to a hidden data directory.
 By default ``cvmfs_shrinkwrap`` builds in a base directory (``/tmp/cvmfs``)
 where a directory exists for each repository and a ``.data`` directory
-containing the content-addressed files for deduplication. 
+containing the content-addressed files for deduplication.
 
 
 ======================================== =======================================
 **File Path**                            **Description**
 ======================================== =======================================
   ``/tmp/cvmfs``                         **Default base directory**
-                                         Single mount point that can be used to 
+                                         Single mount point that can be used to
                                          package repositories, containing both the
                                          directory tree and the data directory.
 
@@ -53,7 +53,7 @@ containing the content-addressed files for deduplication.
 
   ``<base>/.provenance``                 **Storage location for provenance**
                                          Hidden directory that stores the provenance
-                                         information, including ``libcvmfs`` 
+                                         information, including ``libcvmfs``
                                          configurations and specification files.
 
 ======================================== =======================================
@@ -64,7 +64,7 @@ Specification File
 ~~~~~~~~~~~~~~~~~~
 
 The specification file allows for both positive entries and exlusion statements.
-Inclusion can be specified directly for each file, can use wildcards for 
+Inclusion can be specified directly for each file, can use wildcards for
 directories trees, and an anchor to limit to only the specified directory.
 Directly specify file : ::
 
@@ -106,7 +106,7 @@ Here is an example that uses the CERN HPC Stratum 0, written to ``sft.cern.ch.co
     CVMFS_REPOSITORY_NAME=sft.cern.ch
     CVMFS_CONFIG_REPOSITORY=cvmfs-config.cern.ch
     CVMFS_DEFAULT_DOMAIN=cern.ch
-    CVMFS_SERVER_URL='http://cvmfs-stratum-zero-hpc.cern.ch/cvmfs/sft.cern.ch;http://cvmfs-stratum-one.cern.ch/cvmfs/sft.cern.ch'
+    CVMFS_SERVER_URL='http://cvmfs-stratum-zero-hpc.cern.ch/cvmfs/sft.cern.ch'
     CVMFS_HTTP_PROXY=DIRECT # Adjust to your site
     CVMFS_MOUNT_DIR=/cvmfs
     CVMFS_CACHE_BASE=/var/lib/cvmfs/shrinkwrap
@@ -128,7 +128,7 @@ Start by using the above setup.
 Alternatively, shrinkwrap images can be created in user space. This is achieved using
 the UID and GID mapping feature of ``libcvmfs``. First mapping files need to be written. ::
 
-Example (Assuming UID 1000). Write ``* 1000`` into ``uid.map`` at ``/tmp/cvmfs``. 
+Example (Assuming UID 1000). Write ``* 1000`` into ``uid.map`` at ``/tmp/cvmfs``.
 Add this rule ``sft.cern.ch.config``. : ::
 
    CVMFS_UID_MAP=/tmp/cvmfs/uid.map
@@ -142,16 +142,16 @@ Using the cvmfs repository ``sft.cern.ch`` : ::
 Note on CVMFS Variables
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-CVMFS variables athat are used in the organization of repositories are
+CVMFS variables that are used in the organization of repositories are
 evaluated at the time of image creation. As such, the OS the image is created
-on should be the expected OS the image will be used with. Specification rules 
+on should be the expected OS the image will be used with. Specification rules
 can be written to include other OS compatible version, but symlinks will
 resolve to the original OS.
 
 Using a shrinkwrap image
 ------------------------
 
-Shrinkwrap was developed to address similar restriction as the CVMFS Preloader.
+Shrinkwrap was developed to address similar restrictions as the CVMFS Preloader.
 Having created an image from your specification there are a number of ways this
 can be used and moved around.
 
@@ -185,7 +185,7 @@ The squashfs image can now be moved around and mounted using : ::
 Bind mounting an image
 ~~~~~~~~~~~~~~~~~~~~~~
 
-The shrinkwrap image can also be directly moved and mounted 
+The shrinkwrap image can also be directly moved and mounted
 using bind mounts. ::
 
   mount --bind /tmp/cvmfs /cvmfs
