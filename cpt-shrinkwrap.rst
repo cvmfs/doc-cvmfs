@@ -1,4 +1,4 @@
-.. _cpt_graphdriver:
+.. _cpt_shrinkwrap:
 
 CernVM-FS Shrinkwrap Utility
 ============================
@@ -126,7 +126,7 @@ Creating an image in userspace
 Start by using the above setup.
 
 Alternatively, shrinkwrap images can be created in user space. This is achieved using
-the UID and GID mapping feature of ``libcvmfs``. First mapping files need to be written. ::
+the UID and GID mapping feature of ``libcvmfs``. First mapping files need to be written.
 
 Example (Assuming UID 1000). Write ``* 1000`` into ``uid.map`` at ``/tmp/cvmfs``.
 Add this rule ``sft.cern.ch.config``. : ::
