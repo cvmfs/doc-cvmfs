@@ -6,6 +6,7 @@ Advanced Topics
    :maxdepth: 2
 
    cpt-plugins
+   cpt-tracer
    cpt-hpc
    cpt-graphdriver
    cpt-xcache
