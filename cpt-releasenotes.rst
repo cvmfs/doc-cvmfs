@@ -9,16 +9,16 @@ Brian Bockelman and Derek Weitzel (U. Nebraska) and Nick Hazekamp
 This release comes with several new, experimental satellite serivces around
 the CernVM-FS core components:
 
-  1) DUCC (Daemon that unpacks container images into CernVM-FS). This new
-  component automatizes the publication of container images from a Docker
-  registry into CernVM-FS.
+1. DUCC (Daemon that unpacks container images into CernVM-FS). This new
+   component automatizes the publication of container images from a Docker
+   registry into CernVM-FS.
 
-  2) Repository change notification system, which is complementary to the
-  default, pull-based approach to propagate repository updates.
+2. Repository change notification system, which is complementary to the
+   default, pull-based approach to propagate repository updates.
 
-  3) Repository shrinkwrap utility. This new utility allows for exporting large
-  parts of a CernVM-FS repository to an external file system or a "fat image" as
-  they are used in some HPC environments.
+3. Repository shrinkwrap utility. This new utility allows for exporting large
+   parts of a CernVM-FS repository to an external file system or a "fat image"
+   as they are used in some HPC environments.
 
 Together with CernVM-FS 2.6.0, we also release the CernVM-FS Repository Gateway
 version 1.0. The increased version number indicates that we are ready to assure
