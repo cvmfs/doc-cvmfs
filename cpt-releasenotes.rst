@@ -10,7 +10,7 @@ This release comes with several new, experimental satellite serivces around
 the CernVM-FS core components:
 
 1. DUCC (Daemon that unpacks container images into CernVM-FS). This new
-   component automatizes the publication of container images from a Docker
+   component automates the publication of container images from a Docker
    registry into CernVM-FS.
 
 2. Repository change notification system, which is complementary to the
@@ -27,7 +27,7 @@ backward compatibility for the component, in line with
 
 Other notable changes include
 
-  * A new server command ``cvmfs_server ingest``, that can be use to directly
+  * A new server command ``cvmfs_server ingest``, that can be used to directly
     publish tarballs without extracting them first.
 
   * A new server parameter ``CVMFS_PRINT_STATISTICS``. If enabled, publication
@@ -39,10 +39,10 @@ Other notable changes include
   * A file system call tracer that can be enabled on the client in order to
     log the file system accesses to a repository.
 
-  * Support for baerer token authentication in addition to X.509 authentication
+  * Support for bearer token authentication in addition to X.509 authentication
     for protected repositories.
 
-  * Various new routines in libcvmfs that provide access to cvmfs specific
+  * Various new routines in libcvmfs that provide access to cvmfs-specific
     meta-data, such as the nested catalog structure.
 
 
@@ -53,7 +53,7 @@ correctly. Please take special care when upgrading a client in NFS mode.
 
 For Stratum 0 servers, all transactions must be closed before upgrading.
 For Stratum 1 servers, there should be no running snapshots during the upgrade.
-After the software upgrade, publisher nodes (``stratum 0'') require doing
+After the software upgrade, publisher nodes (``stratum 0``) require doing
 ``cvmfs_server migrate`` for each repository.
 
 **Note**: if the configuration of the repostory publisher node is handled by a
