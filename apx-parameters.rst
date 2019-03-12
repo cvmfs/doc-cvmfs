@@ -48,6 +48,7 @@ CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``.
 CVMFS_HTTP_PROXY                Chain of HTTP proxy groups used by CernVM-FS. Necessary. Set to ``DIRECT`` if you don't use proxies.
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
+CVMFS_NFS_INTERLEAVED_INODES    In NFS mode, use only inodes of the form :math:`an+b`, specified as "b%a".
 CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to proxies.  Can be either 4 or 6.
 CVMFS_KCACHE_TIMEOUT            Timeout for path names and file attributes in the kernel file system buffers.
 CVMFS_KEYS_DIR                  Directory containing \*.pub files used as repository signing keys.  If set, this parameter has precedence over ``CVMFS_PUBLIC_KEY``.
@@ -132,6 +133,7 @@ CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes |br| (
 CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
 CVMFS_MIN_CHUNK_SIZE                Minimal size of a file chunk in bytes |br| (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_NESTED_KCATALOG_LIMIT         Maximum thousands of files allowed in nested catalogs, default 500 |br| (see also *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
+CVMFS_NUM_UPLOAD_TASKS              Number of threads used to commit data to storage during publication. Currently only used by the local backend.
 CVMFS_NUM_WORKERS                   Maximal number of concurrently downloaded files during a Stratum1 pull operation (Stratum~1 only).
 CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
 CVMFS_REPLICA_ACTIVE                Stratum1-only: Set to *no* to skip this repository when executing ``cvmfs_server snapshot -a``

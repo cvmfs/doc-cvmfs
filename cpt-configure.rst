@@ -682,6 +682,37 @@ The performance will benefit from large RAM on the NFS server
 (:math:`\geq` 16GB) and CernVM-FS caches hosted on an SSD
 hard drive.
 
+.. _sct_nfs_interleaved:
+
+Export of /cvmfs with Cray DVS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Cray DVS and possibly other systems that export /cvmfs as a whole instead of
+individual repositories as separate volumes, an additional effort is needed to
+ensure that inodes are distinct from each other across multiple repositories.
+The ``CVMFS_NFS_INTERLEAVED_INODES`` parameter can be used to configure
+repositories to only issue inodes of a particular residue class. To ensure
+pairwise distinct inodes across repositories, each repository should be
+configured with a different residue class.  For instance, in order to avoid
+inode clashes between the atlas.cern.ch and the cms.cern.ch repositories,
+there can be a configuration file /etc/cvmfs/config.d/atlas.cern.ch.local
+with
+
+::
+
+    CVMFS_NFS_INTERLEAVED_INODES=0%2 # issue inodes 0, 2, 4, ...
+
+and a configuration file /etc/cvmfs/config.d/cms.cern.ch.local with
+
+::
+
+    CVMFS_NFS_INTERLEAVED_INODES=1%2 # issue inodes 1, 3, 5, ...
+
+
+The maximum number of possibly exported repositories needs to be known in
+advance. The ``CVMFS_NFS_INTERLEAVED_INODES`` only has an effect in NFS mode.
+
+
 Shared NFS Maps (HA-NFS)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
