@@ -56,7 +56,7 @@ For Stratum 1 servers, there should be no running snapshots during the upgrade.
 After the software upgrade, publisher nodes (``stratum 0``) require doing
 ``cvmfs_server migrate`` for each repository.
 
-**Note**: if the configuration of the repostory publisher node is handled by a
+**Note**: if the configuration of the repository publisher node is handled by a
 configuration management system (Puppet, Chef, ...), please see Section
 :ref:`sct_manual_migration`.
 
