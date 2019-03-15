@@ -72,6 +72,7 @@ Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...`
 If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
 This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`. 
+
 Verify the file system
 ~~~~~~~~~~~~~~~~~~~~~~
 Check if CernVM-FS mounts the specified repositories by ``cvmfs_config probe``.
