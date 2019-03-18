@@ -9,4 +9,5 @@ Appendix
    apx-parameters
    apx-serverinfra
    apx-rpms
+   apx-contact
    apx-references
