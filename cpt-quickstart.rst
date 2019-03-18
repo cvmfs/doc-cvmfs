@@ -82,9 +82,11 @@ If the probe fails, try to restart autofs with ``sudo systemctl restart autofs``
 Building From Source
 ~~~~~~~~~~~~~~~~~~~~
 The CernVM-FS client is not relocatable and needs to be installed under /usr.
-On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and install from sources, use the following cmake command:
+On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and install from sources, use the following commands:
 ::
-      cmake .
+      cd <source directory>
+      mkdir build && cd build
+      cmake ../
       make
       sudo make install
 
