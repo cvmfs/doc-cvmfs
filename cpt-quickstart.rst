@@ -16,21 +16,20 @@ On macOS, mounting and un-mounting of the CernVM-FS is done by the user with ``s
 
 Getting the Software
 --------------------
-
 The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
 However it is recommended to use the available package repositories that are also provided for the supported operating systems.
 
 Scientific Linux/CentOS
 -----------------------
-
-To add the CVMFS repository and install CVMFS run::
+To add the CVMFS repository and install CVMFS run
+::
     sudo yum install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
 
 Debian/Ubuntu
 -------------
-
-To add the CVMFS repository and install CVMFS run::
+To add the CVMFS repository and install CVMFS run
+::
     wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
     sudo dpkg -i cvmfs-release-latest_all.deb
     rm -f cvmfs-release-latest_all.deb
@@ -39,8 +38,8 @@ To add the CVMFS repository and install CVMFS run::
 
 Fedora
 ------
-
-To install the CVMFS package run::
+To install the CVMFS package run
+::
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.5.2/cvmfs-2.5.2-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 Mac OS X
@@ -63,7 +62,8 @@ Mac OS X
 --------
 
 On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
-It is not integrated with autofs hence mount the individual repositories using::
+It is not integrated with autofs hence mount the individual repositories using
+::
     sudo mkdir -p /cvmfs/cms.cern.ch
     sudo mount -t cvmfs cms.cern.ch /cvmfs/cms.cern.ch
 
@@ -71,9 +71,11 @@ Create default.local
 --------------------
 
 Create ``/etc/cvmfs/default.local`` and open the file for editing.
-Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set::
+Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set
+::
     CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
-Specify the HTTP proxy servers on your site with::
+Specify the HTTP proxy servers on your site with
+::
     CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
 If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
 This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
@@ -89,7 +91,8 @@ Building From Source
 --------------------
 
 The CernVM-FS client is not relocatable and needs to be installed under /usr.
-On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and install from sources, use the following commands::
+On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and install from sources, use the following commands
+::
       cd <source directory>
       mkdir build && cd build
       cmake ../
@@ -99,19 +102,23 @@ On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc
 Troubleshooting
 ---------------
 
-In order to check for common misconfigurations in the base setup, run::
+In order to check for common misconfigurations in the base setup, run
+::
       cvmfs_config chksetup
 
 CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each others settings (default configuration, domain specific configuration, local setup, ...).
 To show the effective configuration for *repository*.cern.ch, run::
       cvmfs_config showconfig repository.cern.ch
 
-In order to exclude autofs/automounter as a source of problems, you can try to mount *repository*.cern.ch manually with the following::
+In order to exclude autofs/automounter as a source of problems, you can try to mount *repository*.cern.ch manually with the following
+::
       mkdir -p /mnt/cvmfs
       mount -t cvmfs repository.cern.ch /mnt/cvmfs
 
-In order to exclude SELinux as a source of problems, you can try mounting after SELinux has been disabled by::
+In order to exclude SELinux as a source of problems, you can try mounting after SELinux has been disabled by
+::
       /usr/sbin/setenforce 0
 
-Once the issue has been identified, ensure that the changes are taken by restarting autofs::
+Once the issue has been identified, ensure that the changes are taken by restarting autofs
+::
       systemctl restart autofs
