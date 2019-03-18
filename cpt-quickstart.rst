@@ -21,14 +21,14 @@ The CernVM-FS source code and binary packages are available from the `CernVM web
 However it is recommended to use the available package repositories that are also provided for the supported operating systems.
 
 Scientific Linux/CentOS
-~~~~~~~~~~~~~~~~
+-----------------------
 
 To add the CVMFS repository and install CVMFS run::
     sudo yum install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
 
 Debian/Ubuntu
-~~~~~~~~~~~~~
+-------------
 
 To add the CVMFS repository and install CVMFS run::
     wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
@@ -38,26 +38,29 @@ To add the CVMFS repository and install CVMFS run::
     sudo apt-get install cvmfs
 
 Fedora
-~~~~~~
+------
 
 To install the CVMFS package run::
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.5.2/cvmfs-2.5.2-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 Mac OS X
-~~~~~~~~
+--------
+
 Install the CernVM-FS package by opening the .pkg file.
 
 
 Seting up the Software
 ----------------------
+
 Configure AutoFS
-~~~~~~~~~~~~~~~~
+----------------
+
 For the basic setup, run ``cvmfs_config setup``. 
 This ensures that ``/cvmfs /etc/auto.cvmfs`` is set in /etc/auto.master and that the autofs service is running.
 Reload the autofs service in order to apply an updated configuration.
 
 Mac OS X
-~~~~~~~~
+--------
 
 On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
 It is not integrated with autofs hence mount the individual repositories using::
@@ -65,7 +68,7 @@ It is not integrated with autofs hence mount the individual repositories using::
     sudo mount -t cvmfs cms.cern.ch /cvmfs/cms.cern.ch
 
 Create default.local
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Create ``/etc/cvmfs/default.local`` and open the file for editing.
 Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set::
@@ -77,12 +80,13 @@ This should *only* be done for a small number of clients (< 5), because large nu
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`. 
 
 Verify the file system
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
+
 Check if CernVM-FS mounts the specified repositories by ``cvmfs_config probe``.
 If the probe fails, try to restart autofs with ``sudo systemctl restart autofs``.
 
 Building From Source
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 The CernVM-FS client is not relocatable and needs to be installed under /usr.
 On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and install from sources, use the following commands::
