@@ -2,16 +2,17 @@ Getting Started
 ===============
 
 This section describes how to install the CernVM-FS client.
-The CernVM-FS client is supported on x86, x86\_64, and ARMv7 architectures running Linux or Mac OS X \ :math:`\geq 10.12`.
-There is experimental support for AArch64 and Power 8.
+The CernVM-FS client is supported on x86, x86\_64, and ARM architectures running Linux or Mac OS X \ :math:`\geq 10.12`.
+There is experimental support for Power 8 and RISC-V.
 
 Overview
 --------
 The CernVM-FS repositories are located under /cvmfs. 
 Each repository is identified by a *fully qualified repository name*. 
-Mounting and un-mounting of the CernVM-FS is controlled by autofs and automount. 
+On Linux, mounting and un-mounting of the CernVM-FS is usually controlled by autofs and automount.
 That means that starting from the base directory /cvmfs different repositories are mounted automatically just by accessing them. 
 A repository will be automatically unmounted after some automount-defined idle time.
+On macOS, mounting and un-mounting of the CernVM-FS is done by the user with ``sudo mount -t cvmfs /cvmfs/...`` commands.
 
 Getting the Software
 --------------------
