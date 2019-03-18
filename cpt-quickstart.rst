@@ -50,7 +50,7 @@ Seting up the Software
 Configure AutoFS
 ~~~~~~~~~~~~~~~~
 For the basic setup, run ``cvmfs_config setup``. 
-This ensure that ``/cvmfs /etc/auto.cvmfs`` is set in /etc/auto.master and that the autofs service is running.
+This ensures that ``/cvmfs /etc/auto.cvmfs`` is set in /etc/auto.master and that the autofs service is running.
 Reload the autofs service in order to apply an updated configuration.
 
 Mac OS X
