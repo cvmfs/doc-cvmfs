@@ -1238,6 +1238,65 @@ revision containing :ref:`CernVM-FS catalogs <sct_filecatalog>` with updated
 UIDs and GIDs according to the provided rules. Thus, previous revisions of
 the CernVM-FS repository will *not* be affected by this update.
 
+Publisher Statistics
+--------------------
+
+The CernVM-FS server tools now record a number of metrics related to the publication and garbage collection processes.
+By default, the database is located at ``/var/spool/cvmfs/<REPOSITORY_NAME>/stats.db``, but the location can be changed through the ``CVMFS_STATISTICS_DB`` parameter.
+
+At the end of each successful transaction, a new row is inserted into the ``publish_statistics`` table of the database, with the following columns:
+
+====================== =============================================
+**Field**               **Type**
+====================== =============================================
+publish_id              Integer
+start_time              Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+finished_time           Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+files_added             Integer
+files_removed           Integer
+files_changed           Integer
+duplicated_files        Integer
+directories_added       Integer
+directories_removed     Integer
+directories_changed     Integer
+sz_bytes_added          Integer
+sz_bytes_removed        Integer
+sz_bytes_uploaded       Integer
+====================== =============================================
+
+By setting ``CVMFS_PRINT_STATISTICS=true``, in addition to being saved in the database, the metrics are printed to the console at the end of the ``cvmfs_server publish`` or ``cvmfs_server ingest`` commands.
+
+When the garbage collector is run, a new row is inserted into the ``gc_statistics`` table, with the following columns:
+
+======================= ================================================
+**Field**                **Type**
+======================= ================================================
+gc_id                    Integer
+start_time               Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+finished_time            Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
+n_preserved_catalogs     Integer
+n_condemned_catalogs     Integer
+n_condemned_objects      Integer
+sz_condemned_bytes (*)   Integer
+======================= ================================================
+
+(*) Disabled by default due to the non-negligible computation cost. Can be enabled with ``CVMFS_EXTENDED_GC_STATS=true``
+
+The ``properties`` table contains the name of the CernVM-FS repository and the current schema version of the statistics database.
+
+The contents of any table (``publish_statistics``, ``gc_statistics``, or ``properties``) in the database can be exported to text using: ::
+
+  # cvmfs_server print-stats [-t <TABLE_NAME>] <REPO_NAME>
+
+If the ``-t`` argument is omitted, the ``publish_statistics`` table is exported.
+
+Two database files can be merged as follows: ::
+
+  # cvmfs_server merge-stats [-o <OUTPUT_DB>] <DB_FILE_1> <DB_FILE_2>
+
+The merge can only take place if the two database files come from the same repository and have the same schema version.
+
+
 Repository Garbage Collection
 -----------------------------
 
