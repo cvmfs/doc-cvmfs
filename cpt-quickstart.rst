@@ -22,15 +22,13 @@ However it is recommended to use the available package repositories that are als
 
 Scientific Linux/CentOS
 ~~~~~~~~~~~~~~~~
-
-::
+To add the CVMFS repository and install CVMFS run::
     sudo yum install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
 
 Debian/Ubuntu
 ~~~~~~~~~~~~~
-
-::
+To add the CVMFS repository and install CVMFS run::
     wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
     sudo dpkg -i cvmfs-release-latest_all.deb
     rm -f cvmfs-release-latest_all.deb
@@ -39,8 +37,7 @@ Debian/Ubuntu
 
 Fedora
 ~~~~~~
-
-::
+To install the CVMFS package run::
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.5.2/cvmfs-2.5.2-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 Mac OS X
