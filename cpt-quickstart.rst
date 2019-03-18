@@ -22,12 +22,14 @@ However it is recommended to use the available package repositories that are als
 
 Scientific Linux/CentOS
 ~~~~~~~~~~~~~~~~
+
 To add the CVMFS repository and install CVMFS run::
     sudo yum install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
 
 Debian/Ubuntu
 ~~~~~~~~~~~~~
+
 To add the CVMFS repository and install CVMFS run::
     wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
     sudo dpkg -i cvmfs-release-latest_all.deb
@@ -37,6 +39,7 @@ To add the CVMFS repository and install CVMFS run::
 
 Fedora
 ~~~~~~
+
 To install the CVMFS package run::
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.5.2/cvmfs-2.5.2-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
@@ -55,6 +58,7 @@ Reload the autofs service in order to apply an updated configuration.
 
 Mac OS X
 ~~~~~~~~
+
 On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
 It is not integrated with autofs hence mount the individual repositories using::
     sudo mkdir -p /cvmfs/cms.cern.ch
@@ -62,6 +66,7 @@ It is not integrated with autofs hence mount the individual repositories using::
 
 Create default.local
 ~~~~~~~~~~~~~~~~~~~~
+
 Create ``/etc/cvmfs/default.local`` and open the file for editing.
 Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set::
     CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
@@ -78,6 +83,7 @@ If the probe fails, try to restart autofs with ``sudo systemctl restart autofs``
 
 Building From Source
 ~~~~~~~~~~~~~~~~~~~~
+
 The CernVM-FS client is not relocatable and needs to be installed under /usr.
 On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc :math:`\geq 4.7` compiler. In order to compile and install from sources, use the following commands::
       cd <source directory>
@@ -88,6 +94,7 @@ On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc
 
 Troubleshooting
 ---------------
+
 In order to check for common misconfigurations in the base setup, run::
       cvmfs_config chksetup
 
