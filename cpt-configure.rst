@@ -431,6 +431,108 @@ DNS servers. This behavior is controlled by the ``CVMFS_DNS_ROAMING`` client
 configuration. It is by default turned on on macOS and turned off on Linux.
 
 
+Network Path Selection
+~~~~~~~~~~~~~~~~~~~~~~
+
+This section summarized the CernVM-FS mechanics to select a network path from
+the client through an HTTP forward proxy to an HTTP endpoint. At any given point
+in time, there is only one combination of web proxy and web host that all new
+requests are going to utilize. In this section, it is this combination of proxy
+and host that is called "network path". The network path is chosen from the
+collection of web proxies and hosts in the CernVM-FS configuration according to
+the following rules.
+
+Host Selection
+^^^^^^^^^^^^^^
+
+The hosts specified as an ordered list. CernVM-FS will always start with the
+first host and fail-over one by one to the next hosts in the list.
+
+Proxy Selection
+^^^^^^^^^^^^^^^
+
+Web proxies are treated as an ordered list of load-balance groups. Like the
+hosts, load-balance groups will be probed one after another. Within a
+load-balance group, a proxy is chosen at random. DNS proxy names that resolve to
+multiple IP addresses are automatically transformed into a proxy load-balance
+group, whose maximum size can be limited by ``CVMFS_MAX_IPADDR_PER_PROXY``.
+
+Failover Rules
+^^^^^^^^^^^^^^
+
+On download failures, CernVM-FS tries to figure out if the failure is caused by
+the host or by the proxy.
+
+* Failures of host name resolution, HTTP 5XX and 404 return codes, and any
+  connection/timeout error, partial file transfer, or non 2XX return code in case
+  no proxy is in use are classified as host failure.
+* Failures of proxy name resolution and any connection/timeout error, partial
+  file transfer, or non 2XX return code (except 5XX and 404) are classified as
+  proxy failure if a proxy server is used.
+
+If CernVM-FS detects a host failure, it will fail-over to the next host in the
+list while keeping the proxy server untouched. If it detects a proxy failure, it
+will fail-over to to another proxy while keeping the host untouched. CernVM-FS
+will try all proxies of the current load-balance group in random order before
+trying proxies from the next load-balance group.
+
+The change of host or proxy is a global change affecting all subsequent
+requests. In order to avoid concurrent requests changing the global network path
+at the same time, the actual change of path is only performed if the global
+host/proxy is equal to the currently used host/proxy of the request. Otherwise,
+the request assumes that another request already performed the fail-over and
+only the request's fail-over counter is increased.
+
+In order to avoid endless loops, every request carries a host fail-over counter
+and a proxy fail-over counter. Once this counter reaches the number of
+host/proxies, CernVM-FS gives up and returns a failure.
+
+The failure classification can mistakenly take a host failure for a proxy
+failure. Therefore, after all proxies have been probed, a connection/timeout
+error, partial file transfer, or non 2XX return code is treated like a host
+failure in any case and the proxy server as well as the proxy server failure
+counter of the request at hand is reset. This way, eventually all possible
+network paths are examined.
+
+Network Path Reset Rules
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+On host or proxy fail-over, CernVM-FS will remember the timestamp of the
+failover. The first request after a given grace period
+(see :ref:`sct_network_defaults`) will reset the proxy to a random proxy of the
+first load-balance group or the host to the first host, respectively. If the
+default proxy/host is still unavailable, the fail-over routines again switch to
+a working network path.
+
+Retry and Backoff
+^^^^^^^^^^^^^^^^^
+
+On connection and timeout errors, CernVM-FS retries a fixed, limitied number of
+times on the same network path before performing a fail-over. Retrying involves
+an exponential backoff with a minimum and maximum waiting time.
+
+.. _sct_network_defaults:
+
+Default Values
+^^^^^^^^^^^^^^
+
+* Network timeout for connections using a proxy: 5 seconds
+  (adjustable by ``CVMFS_TIMEOUT``)
+* Network timeout for connections without a proxy: 10 seconds
+  (adjustable by ``CVMFS_TIMEOUT_DIRECT``)
+* Grace period for proxy reset after fail-over: 5 minutes
+  (adjustable by ``CVMFS_PROXY_RESET_AFTER``)
+* Grace period for host reset after fail-over: 30 minutes
+  (adjustable by ``CVMFS_HOST_RESET_AFTER``)
+* Maximum number of retries on the same network path: 1
+  (adjustable by ``CVMFS_MAX_RETRIES``)
+* Minimum waiting time on a retry: 2 seconds (adjustable by CVMFS_BACKOFF_MIN)
+* Maximum waiting time on a retry: 10 seconds (adjustable by CVMFS_BACKOFF_MAX)
+* Minimum/Maximum DNS name cache: 1 minute / 1 day
+
+**Note:** a continuous transfer rate below 1kB/s is treated like a network
+timeout.
+
 .. _sct_cache:
 
 Cache Settings
@@ -895,7 +997,7 @@ system for use with CernVM-FS.
 
 **bugreport**
     The ``bugreport`` command creates a tarball with collected system
-    information which helps to :ref:`debug a problem <sct_debugginghints>`.
+    information which can be attached to a bug report.
 
 cvmfs\_talk
 ~~~~~~~~~~~
@@ -951,10 +1053,9 @@ signals (such as a segmentation fault) are received. The watchdog writes
 the stack trace into syslog as well as into a file ``stacktrace`` in the
 cache directory.
 
-In addition to :ref:`these debugging hints <sct_debugginghints>`, CernVM-FS
-can be started in debug mode. In the debug mode, CernVM-FS will log with high
-verbosity which makes the debug mode unsuitable for production use. In order
-to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
+CernVM-FS can be started in debug mode. In the debug mode, CernVM-FS will log
+with high verbosity which makes the debug mode unsuitable for production use.
+In order to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
 
 
 .. rubric:: Footnotes
