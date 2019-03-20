@@ -895,7 +895,7 @@ system for use with CernVM-FS.
 
 **bugreport**
     The ``bugreport`` command creates a tarball with collected system
-    information which helps to :ref:`debug a problem <sct_debugginghints>`.
+    information which can be attached to a bug report.
 
 cvmfs\_talk
 ~~~~~~~~~~~
@@ -951,10 +951,9 @@ signals (such as a segmentation fault) are received. The watchdog writes
 the stack trace into syslog as well as into a file ``stacktrace`` in the
 cache directory.
 
-In addition to :ref:`these debugging hints <sct_debugginghints>`, CernVM-FS
-can be started in debug mode. In the debug mode, CernVM-FS will log with high
-verbosity which makes the debug mode unsuitable for production use. In order
-to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
+CernVM-FS can be started in debug mode. In the debug mode, CernVM-FS will log
+with high verbosity which makes the debug mode unsuitable for production use.
+In order to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
 
 
 .. rubric:: Footnotes

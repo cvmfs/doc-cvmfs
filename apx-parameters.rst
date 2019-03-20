@@ -19,7 +19,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
 **Parameter**                   **Meaning**
 =============================== ====================================================================================================================================================================================
 CVMFS_ALIEN_CACHE               If set, use an alien cache at the given location
-CVMFS_ALT_ROOT_PATH             If set to *yes*, use alternative root catalog path.  Only required for fixed catalogs (tag / hash) under the alternative path.
+CVMFS_ALT_ROOT_PATH             If set to *yes*, use alternative root catalog path. Only required for fixed catalogs (tag / hash) under the alternative path.
 CVMFS_AUTO_UPDATE               If set to *no*, disables the automatic update of file catalogs.
 CVMFS_AUTHZ_HELPER              Full path to an authz helper, overwrites the helper hint in the catalog.
 CVMFS_AUTHZ_SEARCH_PATH         Full path to the directory that contains the authz helpers.
@@ -156,8 +156,8 @@ CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentica
 CVMFS_STATISTICS_DB                 SQLite file path to store the statistics. Default is ``/var/spool/cvmfs/<REPO_NAME>/stats.db`` .
 CVMFS_PRINT_STATISTICS              Set to *true* to enable statistics printing to the standard output.
 CVMFS_EXTENDED_GC_STATS             Set to *true* to count condemned bytes in the garbage collector process.
-X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS connections (see :ref:`sct_data:`)
-X509_CERT_DIR                       Directory file with CA certificates for HTTPS connections, defaults to /etc/grid-security/certificates (see :ref:`sct_data:`)
+X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS connections (see :ref:`sct_data`)
+X509_CERT_DIR                       Directory file with CA certificates for HTTPS connections, defaults to /etc/grid-security/certificates (see :ref:`sct_data`)
 =================================== ============================================================================================================================================================
 
 
