@@ -34,12 +34,28 @@ The CernVM-FS software is available in form of several packages:
     configuration for the ATLAS Tier3s. Depends on cvmfs.
 
 **cvmfs-server**
-    Contains the CernVM-FS server tool kit for maintaining Stratum 0 and
+    Contains the CernVM-FS server tool kit for maintaining publishers and
     Stratum 1 servers.
+
+**cvmfs-gateway**
+    The publishing gateway services are installed on a node with access to the
+    authoritative storage.
+
+**cvmfs-ducc**
+    Daemon that unpacks container images into a repository. Supposed to run
+    on a publisher node.
+
+**cvmfs-notify**
+    Websockets frontend for used for repository update notifications. Supposed
+    to be co-located with a RabbitMQ service.
 
 **kernel-...-.aufs21**
     Scientific Linux 6 kernel with aufs. Required for SL6 based
     Stratum 0 servers.
+
+**cvmfs-shrinkwrap**
+    Stand-alone utility to export file system trees into containers for HPC
+    use cases.
 
 **cvmfs-unittests**
     Contains the ``cvmfs_unittests`` binary. Only required for testing.
