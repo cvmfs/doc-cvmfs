@@ -80,6 +80,26 @@ Content Publishing
 
 #. ``cvmfs_server publish <repository name>``
 
+Tarball Publishing
+~~~~~~~~~~~~~~~~~~
+
+It also possible to ingest a set of files stored as a tarball in a specific
+subdirectory using the ingest command.
+
+#. ``cvmfs_server ingest --tar_file <tarball.tar> --base_dir <path/where/extract/> <repository name>``
+
+The ingest command accept in input another argument ``--catalog`` that will
+automatically create a subcatalog file on the base directory where it is
+extracting the tarball. (See :ref:`sct_nestedcatalogs`)
+
+Moreover the ingest command allows to delete a subdirectory and its whole
+content from a repository.
+
+#. ``cvmfs_server ingest --delete <path/to/delete> <repository name>``
+
+The ingest command automatically open and close transactions. Indeed it won't
+work if a transaction is already open.
+
 Backup Policy
 ~~~~~~~~~~~~~
 
