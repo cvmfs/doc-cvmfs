@@ -142,3 +142,15 @@ Tiered Cache and Cache Plugins
 Diskless compute nodes can also combine an in-memory cache with a preloaded
 directory on the shared cluster file system. An example configuration can be
 found in Section :ref:`sct_cache_advanced_example`.
+
+NFS Export with Cray DVS
+------------------------
+
+Please see the :ref:`workaround <sct_nfs_interleaved>` on inode handling and
+DVS export.
+
+HPC Fat Container Image
+-----------------------
+
+The :ref:`shrinkwrap <cpt_shrinkwrap>` utility can be used to create an
+"HPC fat container image" with a partially exported CernVM-FS file system tree.
