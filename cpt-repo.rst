@@ -3,11 +3,10 @@ Creating a Repository (Stratum 0)
 
 CernVM-FS is a file system with a single source of (new) data. This
 single source, the repository *Stratum 0*, is maintained by a dedicated
-*release manager machine* or *installation box*. A read-writable copy of
-the repository is accessible on the release manager machine. The
-CernVM-FS server tool kit is used to *publish* the current state of the
-repository on the release manager machine. Publishing is an atomic
-operation.
+*release manager machine* or *publisher*. A read-writable copy of
+the repository is accessible on the publisher. The CernVM-FS server tool kit
+is used to *publish* the current state of the repository on the
+release manager machine. Publishing is an atomic operation.
 
 All data stored in CernVM-FS have to be converted into a
 CernVM-FS *repository* during the process of publishing. The
