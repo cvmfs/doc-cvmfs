@@ -147,6 +147,19 @@ publisher machine: ::
   $ cvmfs_server publish
 
 
+Displaying and clearing leases on the gateway machine
+=====================================================
+
+The ``cvmfs-gateway`` package includes two scripts intended to help gateway administrators debug or unblock the gateway in case of problems.
+The first one displays the list of currently active leases: ::
+
+  $ /usr/libexec/cvmfs-gateway/scripts/get_leases.sh
+
+The second one will clear all the currently active leases: ::
+
+  $ /usr/libexec/cvmfs-gateway/scripts/clear_leases.sh
+
+
 Advanced repository configuration
 =================================
 
