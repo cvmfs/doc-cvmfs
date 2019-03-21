@@ -29,11 +29,13 @@ common examples are:
 
 **Repository** This specifies a class of images, each image will be indexed,
 then by tag or digest. Common examples are:
+
 * library/redis 
 * library/ubuntu
 
 **Tag** is a way to identify an image inside a repository, tags are mutable and
 may change in a feature. Common examples are:
+
 * 4 
 * 3-alpine
 
@@ -41,6 +43,7 @@ may change in a feature. Common examples are:
 **immutable**, since they are the result of a hash function to the content of
 the image. Thanks to this technique the images are content addressable.  Common
 examples are:
+
 * sha256:2aa24e8248d5c6483c99b6ce5e905040474c424965ec866f7decd87cb316b541 
 * sha256:d582aa10c3355604d4133d6ff3530a35571bd95f97aadc5623355e66d92b6d2c
 
@@ -63,6 +66,7 @@ The final syntax will be:
     REGISTRY/REPOSITORY[:TAG][@DIGEST]
 
 Examples of images are: 
+
 * https://registry.hub.docker.com/library/redis:4 
 * https://registry.hub.docker.com/minio/minio@sha256:b1e5dd4a7be831107822243a0675ceb5eabe124356a9815f2519fe02beb3f167
 * https://registry.hub.docker.com/wurstmeister/kafka:1.1.0@sha256:3a63b48894bce633fb2f0d2579e162163367113d79ea12ca296120e90952b463
@@ -93,17 +97,17 @@ Recipe Syntax v1
 
 An example of recipe is show below.
 
-``` yaml
-version: 1
-user: smosciat
-cvmfs_repo: unpacked.cern.ch
-output_format: '$(scheme)://registry.gitlab.cern.ch/thin/$(image)'
-input:
+::
+
+    version: 1
+    user: smosciat
+    cvmfs_repo: unpacked.cern.ch
+    output_format: '$(scheme)://registry.gitlab.cern.ch/thin/$(image)'
+    input:
         - 'https://registry.hub.docker.com/econtal/numpy-mkl:latest'
         - 'https://registry.hub.docker.com/agladstein/simprily:version1'
         - 'https://registry.hub.docker.com/library/fedora:latest'
         - 'https://registry.hub.docker.com/library/debian:stable'
-```
 
 **version**: indicate what version of recipe we are using, at the moment only
 `1` is supported.  
@@ -147,9 +151,10 @@ convert
 
 The syntax of the `convert` command is the following
 
-```
-ducc convert recipe.yaml
-```
+::
+
+    ducc convert recipe.yaml
+
 
 where `recipe.yaml` is the path of a recipe file.
 
@@ -165,9 +170,10 @@ loop
 
 The syntax of the `loop` command is the following
 
-```
-ducc loop recipe.yaml
-```
+::
+
+    ducc loop recipe.yaml
+
 
 The `loop` comman will simply execute the `convert` command in a loop. For each
 iteration, the recipe file is read again, so changes are picked up.
