@@ -24,7 +24,7 @@ Repository gateway
   able to write to the authoritative storage of the managed repositories,
   either by mounting the storage volume or through an S3 API.
 
-  The role of the gateway is to intermediate access to a set of repositories by
+  The role of the gateway is to mediate access to a set of repositories by
   assigning exclusive leases for specific repository sub-paths to different
   publisher machines. The gateway receives payloads from publishers, in the
   form of object packs, which it processes and writes to the repository
@@ -60,9 +60,9 @@ with actual values): ::
   # chmod 600 /etc/cvmfs/keys/test.cern.ch.gw
 
 Since version 1.0 of ``cvmfs-gateway``, the repository and key configuration
-has been greatly simplified. If an API key file is present at the conventional
+have been greatly simplified. If an API key file is present at the conventional
 location (``/etc/cvmfs/keys/<REPOSITORY_NAME>.gw``), it will be used by default
-as key for the repository. The repository configuration file only needs to
+as the key for that repository. The repository configuration file only needs to
 specify which repositories are to be handled by the application: ::
 
   # cat <<EOF > /etc/cvmfs/gateway/repo.json
@@ -76,13 +76,13 @@ specify which repositories are to be handled by the application: ::
   EOF
 
 The ``"version": 2`` property enables the use of the improved configuration
-systax. If this property is omitted, the parser will interpret the file using
-the legacy configuration syncta, maintaining compatibility with existing
+syntax. If this property is omitted, the parser will interpret the file using
+the legacy configuration syntax, maintaining compatibility with existing
 configuration files (see `Legacy repository configuration syntax`_). The
 `Advanced repository configuration`_ section shows how to implement more
 complex key setups.
 
-To start the gateway application, either use `systemctl`, if systemd is
+To start the gateway application, use `systemctl` if systemd is
 available: ::
 
   # systemctl start cvmfs-gateway.service
@@ -97,7 +97,7 @@ the repository is created with "local" upstream), then port 80/TCP also needs
 to be open.
 
 In addition to ``repo.json``, there is another configuration
-file,``user.json``, which contains runtime parameters for the gateway
+file, ``user.json``, which contains runtime parameters for the gateway
 application. The most important are:
 
 * ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
@@ -123,12 +123,13 @@ Example:
 * The gateway machine is ``gateway.cern.ch``.
 * The publisher is ``publisher.cern.ch``.
 * The new repository's fully qualified name is ``test.cern.ch``.
-* The repository's public key is ``test.cern.ch.pub``.
+* The repository's public key (RSA) is ``test.cern.ch.pub``.
+* The repository's public key (encoded as a X.509 certificate) is ``test.cern.ch.crt``.
 * The gateway API key is ``test.cern.ch.gw``.
 * The gateway application is running on port 4929 at the URL
-  ``http:://gateway.cern.ch:4929/api/v1``.
-* The repository keys have been copied from the gateway machine onto the
-  publisher machine, in ``/tmp/test.cern.ch_keys``.
+  ``http://gateway.cern.ch:4929/api/v1``.
+* The three keys for the repository (.pub, .crt, and .gw) have been copied from the gateway machine onto the
+  publisher machine, in the directory ``/tmp/test.cern.ch_keys/``.
 
 To make the repository available for writing on ``publisher.cern.ch``, run the
 following command on that machine as an unprivileged user with sudo access: ::
@@ -142,7 +143,7 @@ publisher machine: ::
 
   $ cvmfs_server transaction test.cern.ch
 
-  ... make changes to the repository ... ::
+then make changes to the repository, and publish: ::
 
   $ cvmfs_server publish
 
