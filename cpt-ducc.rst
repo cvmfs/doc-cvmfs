@@ -1,101 +1,101 @@
 .. _cpt_ducc:
 
-===================================
-Working with DUCC and docker images
-===================================
+==================================================
+Working with DUCC and Docker Images (Experimental)
+==================================================
 
-DUCC (Daemon for Unpacking Containers in CernVM-FS) helps in ingesting container
-images into CernVM-FS.
+DUCC (Daemon that Unpacks Container Images into CernVM-FS) helps in publishing
+container images in CernVM-FS. The daemon publishes images in their extracted
+form in order for clients to benefit from CernVM-FS' on-demand loading of files.
+The DUCC service is deployed as an extra package and supposed to be co-located
+with a publisher node having the ``cvmfs-server`` package installed.
 
-Requirements
-============
-
-* DUCC is distributed as a simple binary. It publish images into CernVM-FS,
-  hence is necessary to execute it in a machine that can publish files into a
-  Stratum-0.
+Converted images are usable with Docker through the :ref:`CernVM-FS docker graph
+driver <cpt_graphdriver>` and with container engines that can use a flat root
+file system from CernVM-FS such as Singularity and runc. For use with Docker,
+DUCC will upload a so-called "thin image" to the registry for every converted
+image. Only the thin image makes an image available through CernVM-FS.
 
 Vocabulary
 ==========
 
-There are several concepts to keep track of in the process of ingesting
-containers images into CernVM-FS. and none of those concepts are common. Hence
-we believe is usefull to agree on a shared vocabulary.
+The following section introduces the terms used in the context of DUCC
+publishing container images.
 
-**Registry** does refer to the docker image registry, with protocol extensions,
-common examples are:
+**Registry** A Docker image registry such as:
 
-* https://registry.hub.docker.com 
+* https://registry.hub.docker.com
 * https://gitlab-registry.cern.ch
 
-**Repository** This specifies a class of images, each image will be indexed,
-then by tag or digest. Common examples are:
+**Image Repository** This specifies a group of images. Each image in an image
+repository is addressed by tag or by digest. Examples are:
 
-* library/redis 
+* library/redis
 * library/ubuntu
 
-**Tag** is a way to identify an image inside a repository, tags are mutable and
-may change in a feature. Common examples are:
+The term **image repository** is unrelated to a CernVM-FS repository.
 
-* 4 
+**Image Tag** An image tag identifies an image inside an image repository.
+Tags are mutable and may refer to different container images over time.
+Examples are:
+
+* 4
 * 3-alpine
 
-**Digest** is another way to identify images inside a repository, digests are
-**immutable**, since they are the result of a hash function to the content of
-the image. Thanks to this technique the images are content addressable.  Common
-examples are:
+**Image Digest** A digest is an immutable identifier for a container image.
+Digests are calculated based on the result of a hash function to the content of
+the image. Examples are:
 
-* sha256:2aa24e8248d5c6483c99b6ce5e905040474c424965ec866f7decd87cb316b541 
+* sha256:2aa24e8248d5c6483c99b6ce5e905040474c424965ec866f7decd87cb316b541
 * sha256:d582aa10c3355604d4133d6ff3530a35571bd95f97aadc5623355e66d92b6d2c
 
 
-An **image** belongs to a repository -- which in turns belongs to a registry --
-and it is identified by a tag, or a digest or both, if you can choose is always
-better to identify the image using at least the digest.
+To uniquely identify an image, we need to provide:
+1. registry
+2. image repository
+3. image tag or image digest (or both)
 
-To unique identify an image so we need to provide all those information:
-1. registry 
-2. repository 
-3. tag or digest or tag + digest
+We use a slash (`/`) to separate the `registry` from the `repository`, a
+colon (`:`) to separate the `repository` from the `tag` and the at (`@`) to
+separate the `digest` from the tag or from the `repository`.  The syntax is
 
-We will use slash (`/`) to separate the `registry` from the `repository` and the
-colon (`/`) to separate the `repository` from the `tag` and the at (`@`) to
-separate the `digest` from the tag or from the `repository`.
-
-The final syntax will be:
+::
 
     REGISTRY/REPOSITORY[:TAG][@DIGEST]
 
-Examples of images are: 
+Examples of fully identified images are:
 
-* https://registry.hub.docker.com/library/redis:4 
+* https://registry.hub.docker.com/library/redis:4
 * https://registry.hub.docker.com/minio/minio@sha256:b1e5dd4a7be831107822243a0675ceb5eabe124356a9815f2519fe02beb3f167
 * https://registry.hub.docker.com/wurstmeister/kafka:1.1.0@sha256:3a63b48894bce633fb2f0d2579e162163367113d79ea12ca296120e90952b463
 
 
-Concepts
-========
+**Thin Image** A Docker image that contains only a reference to the image
+contents in CernVM-FS. Requires the CernVM-FS Docker graph driver in order to
+start.
 
-DUCC follows a declarative approach. The user specify what is the end goal, and
-DUCC tries to reach it.
 
-The main component of this approach is the **wish** which is a triplet
-composed by the input image, the output image and in which cvmfs repository you
-want to store the data.
+Image Whish List
+=================
 
-    wish => (input_image, output_image, cvmfs_repository)
+The user specifices the set of images supposed to be published on CernVM-FS
+in the form of a whish list. The whish list consists of triplets of input image,
+the output thin image and the cvmfs destination repository for the unpacked
+data.
 
-The input image in your wish should be as more specific as possible,
-ideally specifying both the tag and the digest.
+::
 
-Recipes
-=======
+    wish => (input_image, output_thin_image, cvmfs_repository)
 
-Recipes are a way to describe the wishes that we want to convert.
+The input image in your wish should unambigously specify an image as decribed
+above.
 
-Recipe Syntax v1
-****************
 
-An example of recipe is show below.
+Whish List Syntax v1
+********************
+
+The whish list is provided as YAML file. An example of a whish list containing
+four images is show below.
 
 ::
 
@@ -109,105 +109,83 @@ An example of recipe is show below.
         - 'https://registry.hub.docker.com/library/fedora:latest'
         - 'https://registry.hub.docker.com/library/debian:stable'
 
-**version**: indicate what version of recipe we are using, at the moment only
-`1` is supported.  
+**version**: whish list version; at the moment only `1` is supported.
 
-**user**: the user that will push the thin docker images into
-the registry, the password must be stored in the
-`DOCKER2CVMFS_DOCKER_REGISTRY_PASS` environment variable.  
+**user**: the account that will push the thin images into the docker registry.
+The password must be stored in the ``DOCKER2CVMFS_DOCKER_REGISTRY_PASS``
+environment variable.
 
-**cvmfs_repo**: in
-which CVMFS repository store the layers and the singularity images.
+**cvmfs_repo**: the target CernVM-FS repository to store the layers and the
+flat root file systems.
 
-
-**output_format**: how to name the thin images. It accepts few "variables" that
+**output_format**: how to name the thin images. It accepts a few variables that
 reference to the input image.
 
-* $(scheme), the very first part of the image url, most likely `http` or `https`
+* $(scheme), the image url protocol, most likely `http` or `https`
 
-* $(registry), in which registry the image is locate, in the case of the example
-  it would be `registry.hub.docker.com`
+* $(registry), the Docker registry of the input image, in the case of the
+  example it would be `registry.hub.docker.com`
 
-* $(repository), the repository of the input image, so something like
+* $(repository), the image repository of the input image, like
   `library/ubuntu` or `atlas/athena`
 
-* $(tag), the tag of the image examples could be `latest` or `stable` or
+* $(tag), the tag of the image, which could be `latest`, `stable` or
   `v0.1.4`
 
-* $(image), the $(repository) plus the $(tag)
+* $(image), combines $(repository) and $(tag)
 
 **input**: list of docker images to convert
 
-This recipe format allow to specify only some wish, specifically all the images
-need to be stored in the same CVMFS repository and have the same format.
+The current whish list format reauires all the images to be stored in the same
+CernVM-FS repository and have the same thin output image format.
 
-Commands
-========
+DUCC Commands
+=============
 
-DUCC supports several commands.
+DUCC supports the following commands.
 
 convert
 *******
 
-The syntax of the `convert` command is the following
+The `convert` command provides the core functionality of DUCC:
 
 ::
 
-    ducc convert recipe.yaml
+    ducc convert whishlist.yaml
 
 
-where `recipe.yaml` is the path of a recipe file.
+where `whishlist.yaml` is the path of a whish list file.
 
-This command will try to ingest all the images into CernVM-FS.
+This command will try to ingest all the specified images into CernVM-FS.
 
-The process consist in downloading the manifest of the image, then it downloads
-and ingests the layers that compose each image, then we create the flat root
-file system necessary to work with Singularity and finally we write metadata
-inside the repository itself.
+The process consists of downloading the manifest of the image, downloading
+and ingesting the layers that compose each image, uploading the thin image,
+creating the flat root file system necessary to work with Singularity and
+writing DUCC specific metadata in the CernVM-FS repository next to the unpacked
+image data.
+
+The layers are stored in the `.layer` subdirectory in the CernVM-FS repository,
+while the flat root file systems are stored in the `.flat` subdirectory.
 
 loop
 ****
 
-The syntax of the `loop` command is the following
+The `loop` comman continously executes the `convert` command. For each
+iteration, the whish list file is read again in order to pick up changes.
 
 ::
 
     ducc loop recipe.yaml
 
 
-The `loop` comman will simply execute the `convert` command in a loop. For each
-iteration, the recipe file is read again, so changes are picked up.
 
+Incremental Conversion
+======================
 
-Convert workflow
-================
+The `convert` command will extract image contents into CernVM-FS only where
+necessary. In general, some parts of the wish list will be already converted
+while others will need to be converted ex-novo.
 
-The goal of convert is to actually create the thin images starting from the
-regular one.
-
-In order to convert we iterate for every wish in the recipe.
-
-In general, some wish will be already converted while others will need to be
-converted ex-novo.
-
-The first step is then to check if the wish is already been converted.  In order
-to do this check, we download the input image manifest and check in the
-repository if the specific image is been already converted, if it is we safely
-skip such conversion.
-
-Then, every image is made of different layers, some of them could already be on
-the repository.  In order to avoid expensive CVMFS transaction, before to
-download and ingest the layer we check if it is already in the repository, if it
-is we do not download nor ingest the layer.
-
-The conversion simply ingest every layer in an image, create a thin image and
-finally push the thin image to the registry.
-
-Such images can be used by docker with the  thin image plugins.
-
-The daemon also transform the images into singularity images and store them into
-the repository.
-
-The layers are stored into the `.layer` subdirectory, while the singularity
-images are stored in the `.singularity` subdirectory.
+An image that has been already unpacked in CernVM-FS will be skipped. For
+unconverted images, only the missing layers will be unpacked.
 
