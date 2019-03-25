@@ -1,3 +1,5 @@
+.. _cpt_tracer:
+
 Tracing File System Accesses
 ============================
 

@@ -1265,6 +1265,8 @@ revision containing :ref:`CernVM-FS catalogs <sct_filecatalog>` with updated
 UIDs and GIDs according to the provided rules. Thus, previous revisions of
 the CernVM-FS repository will *not* be affected by this update.
 
+.. _sct_repo_stats:
+
 Publisher Statistics
 --------------------
 
