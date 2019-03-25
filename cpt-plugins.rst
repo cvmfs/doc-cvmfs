@@ -229,7 +229,9 @@ field).  The status can be one of the following
 3        User is not member of the required groups (deny access)
 ======== ========================================================
 
-On success, the permit can optionally conatain a Base64 encoded version of an
-X.509 proxy certificate (``x509_proxy`` string field).  This certificate is used
-by the CernVM-FS client when downloading nested catalogs files as client-side
-HTTPS authentication certificate.
+On success, the permit can optionally conatain a Base64 encoded version of
+either an X.509 proxy certificate (``x509_proxy`` string field) or a bearer
+token (``bearer_token`` string field). These credentials are used by the
+CernVM-FS client when downloading nested catalogs files as client-side HTTPS
+authentication information.
+

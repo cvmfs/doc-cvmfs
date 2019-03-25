@@ -49,12 +49,12 @@ following key features:
 -  Transparent file compression/decompression and transparent file
    chunking
 
--  Capability to work in offline mode providing that all required files
+-  Capability to work in offline mode provided that all required files
    are cached
 
--  File system versioning
+-  File system data versioning
 
--  File system hotpatching
+-  File system client hotpatching
 
 -  Dynamic expansion of environment variables embedded in symbolic links
 
@@ -100,5 +100,5 @@ actually used are downloaded and cached.
 
    Opening a file on CernVM-FS. CernVM-FS resolves the name by means of
    an SQLite catalog. Downloaded files are verified against the
-   cryptographic hash of the corresponding catalog entry. The ``stat()`` system 
+   cryptographic hash of the corresponding catalog entry. The ``stat()`` system
    call can be entirely served from the in-kernel file system buffers.
