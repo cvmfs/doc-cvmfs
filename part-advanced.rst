@@ -9,6 +9,7 @@ Advanced Topics
    cpt-tracer
    cpt-hpc
    cpt-graphdriver
+   cpt-ducc
    cpt-xcache
    cpt-large-scale
    cpt-shrinkwrap
