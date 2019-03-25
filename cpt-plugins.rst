@@ -18,6 +18,10 @@ it maintains a set of content-addressed objects. Clients can read from these
 objects.  Depending on its capabilities, a cache plugin might also support
 addition of new objects, listing objects and eviction of objects from the cache.
 
+**Note:** The CernVM-FS client trusts the contents of the cache. Cache plugins
+that store data in untrusted locations need to perform their own content
+verification before data is provided to the clients.
+
 Cache plugins and clients exchange messages through a socket.  The messages are
 serialized by the Google protobuf library. A description of the wire protocol
 can be found in the ``cvmfs/cache.proto`` source file, although the cache
