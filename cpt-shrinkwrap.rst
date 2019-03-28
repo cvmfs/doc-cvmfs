@@ -105,10 +105,8 @@ Here is an example that uses the CERN HPC Stratum 0, written to ``sft.cern.ch.co
     CVMFS_REPOSITORIES=sft.cern.ch
     CVMFS_REPOSITORY_NAME=sft.cern.ch
     CVMFS_CONFIG_REPOSITORY=cvmfs-config.cern.ch
-    CVMFS_DEFAULT_DOMAIN=cern.ch
     CVMFS_SERVER_URL='http://cvmfs-stratum-zero-hpc.cern.ch/cvmfs/sft.cern.ch'
     CVMFS_HTTP_PROXY=DIRECT # Adjust to your site
-    CVMFS_MOUNT_DIR=/cvmfs
     CVMFS_CACHE_BASE=/var/lib/cvmfs/shrinkwrap
     CVMFS_KEYS_DIR=/etc/cvmfs/keys/cern.ch # Need to be provided for shrinkwrap
     CVMFS_SHARED_CACHE=no # Important as libcvmfs does not support shared caches
