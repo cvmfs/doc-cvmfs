@@ -75,11 +75,11 @@ contents in CernVM-FS. Requires the CernVM-FS Docker graph driver in order to
 start.
 
 
-Image Whish List
+Image Wish List
 =================
 
 The user specifices the set of images supposed to be published on CernVM-FS
-in the form of a whish list. The whish list consists of triplets of input image,
+in the form of a wish list. The wish list consists of triplets of input image,
 the output thin image and the cvmfs destination repository for the unpacked
 data.
 
@@ -91,10 +91,10 @@ The input image in your wish should unambigously specify an image as decribed
 above.
 
 
-Whish List Syntax v1
+Wish List Syntax v1
 ********************
 
-The whish list is provided as YAML file. An example of a whish list containing
+The wish list is provided as YAML file. An example of a wish list containing
 four images is show below.
 
 ::
@@ -109,7 +109,7 @@ four images is show below.
         - 'https://registry.hub.docker.com/library/fedora:latest'
         - 'https://registry.hub.docker.com/library/debian:stable'
 
-**version**: whish list version; at the moment only `1` is supported.
+**version**: wish list version; at the moment only `1` is supported.
 
 **user**: the account that will push the thin images into the docker registry.
 The password must be stored in the ``DOCKER2CVMFS_DOCKER_REGISTRY_PASS``
@@ -119,7 +119,7 @@ environment variable.
 flat root file systems.
 
 **output_format**: how to name the thin images. It accepts a few variables that
-reference to the input image.
+refer to the input image.
 
 * $(scheme), the image url protocol, most likely `http` or `https`
 
@@ -136,7 +136,7 @@ reference to the input image.
 
 **input**: list of docker images to convert
 
-The current whish list format reauires all the images to be stored in the same
+The current wish list format requires all the images to be stored in the same
 CernVM-FS repository and have the same thin output image format.
 
 DUCC Commands
@@ -151,10 +151,10 @@ The `convert` command provides the core functionality of DUCC:
 
 ::
 
-    ducc convert whishlist.yaml
+    ducc convert wishlist.yaml
 
 
-where `whishlist.yaml` is the path of a whish list file.
+where `wishlist.yaml` is the path of a wish list file.
 
 This command will try to ingest all the specified images into CernVM-FS.
 
@@ -170,8 +170,8 @@ while the flat root file systems are stored in the `.flat` subdirectory.
 loop
 ****
 
-The `loop` comman continously executes the `convert` command. For each
-iteration, the whish list file is read again in order to pick up changes.
+The `loop` command continously executes the `convert` command. On each
+iteration, the wish list file is read again in order to pick up changes.
 
 ::
 
