@@ -946,7 +946,7 @@ To do so, the command ``cvmfs_server checkout -b fixes_data-v201708``
 checks out the latest named snapshot from the given branch.  The command
 ``cvmfs_server checkout`` jumps back to the trunk of the repository.
 
-The comomand ``cvmfs_server tag -b`` displays the tree of branches and their
+The command ``cvmfs_server tag -b`` displays the tree of branches and their
 respective initial revisions.  The ``-x`` switch triggers displaying of the tree
 in a machines-readable format.
 
