@@ -3,8 +3,8 @@
 Setting up a Local Squid Proxy
 ==============================
 
-For clusters of nodes with CernVM-FS clients, we strongly recommend to
-setup two or more `Squid forward proxy <http://www.squid-
+For clusters of nodes with CernVM-FS clients, we strongly recommend 
+setting up two or more `Squid forward proxy <http://www.squid-
 cache.org>`_ servers as well. The forward proxies will reduce the
 latency for the local worker nodes, which is critical for cold cache
 performance. They also reduce the load on the Stratum 1 servers.
@@ -12,7 +12,7 @@ performance. They also reduce the load on the Stratum 1 servers.
 From what we have seen, a Squid server on commodity hardware scales well
 for at least a couple of hundred worker nodes. The more RAM and hard
 disk you can devote for caching the better. We have good experience with
-of memory cache and of hard disk cache. We suggest to setup two
+memory cache and hard disk cache. We suggest setting up two
 identical Squid servers for reliability and load-balancing. Assuming the
 two servers are A and B, set
 
@@ -45,7 +45,7 @@ appear accordingly:
 Furthermore, Squid needs to allow access to all Stratum 1 servers. This
 is controlled through Squid ACLs. For the Stratum 1 servers for the
 cern.ch, egi.eu, and opensciencegrid.org domains, add the following
-lines to you Squid configuration:
+lines to your Squid configuration:
 
 ::
 
