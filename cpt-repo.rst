@@ -573,7 +573,8 @@ tarball at a given subdirectory:
 
 The optional ``--catalog`` switch of the ``ingest`` command is used to
 automatically create a nested file catalog at the base directory where the
-tarball is extracted. (See :ref:`sct_nestedcatalogs`)
+tarball is extracted (see :ref:`sct_nestedcatalogs`). Note that currently the
+:ref:`.cvmfsdirtab file <sct_dirtab>` does not apply to the ingest command.
 
 The ``ingest`` command can also be used for the reverse operation of recursively
 removing a directory tree:
