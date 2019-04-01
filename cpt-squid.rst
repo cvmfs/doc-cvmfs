@@ -46,7 +46,7 @@ is controlled through Squid ACLs.  Most sites allow all of their IP
 addresses to connect to any destination address.  By default squid
 allows that for the standard private IP addresses, but if you're not
 using a private network then add your public address ranges, with
-somehing like this:
+something like this:
 
 ::
 
