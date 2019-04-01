@@ -22,8 +22,9 @@ two servers are A and B, set
 
 Squid is very powerful and has lots of configuration and tuning
 options. For CernVM-FS we require only the very basic static content
-caching. If you already have a `Frontier Squid <http://frontier.cern.ch>`_
-[Blumenfeld08]_ [Dykstra10]_ installed you can use it as well for CernVM-FS.
+caching. If you already have a
+`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`
+installed you can use it as well for CernVM-FS.
 
 Otherwise, cache sizes and access control needs to be configured in
 order to use the Squid server with CernVM-FS. In order to do so, browse
@@ -33,8 +34,6 @@ appear accordingly:
 ::
 
       minimum_expiry_time 0
-
-      max_filedesc 8192
       maximum_object_size 1024 MB
 
       cache_mem 128 MB
@@ -43,28 +42,23 @@ appear accordingly:
       cache_dir ufs /var/spool/squid 50000 16 256
 
 Furthermore, Squid needs to allow access to all Stratum 1 servers. This
-is controlled through Squid ACLs. For the Stratum 1 servers for the
-cern.ch, egi.eu, and opensciencegrid.org domains, add the following
-lines to your Squid configuration:
+is controlled through Squid ACLs.  Most sites allow all of their IP
+addresses to connect to any destination address.  By default squid
+allows that for the standard private IP addresses, but if you're not
+using a private network then add your public address ranges, with
+somehing like this:
 
 ::
 
-      acl cvmfs dst cvmfs-stratum-one.cern.ch
-      acl cvmfs dst cernvmfs.gridpp.rl.ac.uk
-      acl cvmfs dst cvmfs.racf.bnl.gov
-      acl cvmfs dst cvmfs02.grid.sinica.edu.tw
-      acl cvmfs dst cvmfs.fnal.gov
-      acl cvmfs dst cvmfs-atlas-nightlies.cern.ch
-      acl cvmfs dst cvmfs-egi.gridpp.rl.ac.uk
-      acl cvmfs dst klei.nikhef.nl
-      acl cvmfs dst cvmfsrepo.lcg.triumf.ca
-      acl cvmfs dst cvmfsrep.grid.sinica.edu.tw
-      acl cvmfs dst cvmfs-s1bnl.opensciencegrid.org
-      acl cvmfs dst cvmfs-s1fnal.opensciencegrid.org
-      http_access allow cvmfs
+      acl localnet src A.B.C.D/NN
+
+If you instead want to limit the destinations to major cvmfs Stratum 1s,
+it is better to use the list built in to 
+`Frontier Squid https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Restricting_the_destination`
+because the list is sometimes updated with new releases.
 
 The Squid configuration can be verified by ``squid -k parse``. Before
 the first service start, the cache space on the hard disk needs to be
-prepared by ``squid -z``. In order to make the increased number of file
-descriptors effective for Squid, execute ``ulimit -n 8192`` prior to
-starting the squid service.
+prepared by ``squid -z``. In order to make enough file descriptors
+available to squid, execute ``ulimit -n 8192`` or some higher number
+prior to starting the squid service.
