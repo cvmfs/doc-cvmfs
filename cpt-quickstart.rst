@@ -74,7 +74,7 @@ This ensures that the file /etc/auto.master.d/cvmfs.autofs exists containing ``/
 NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /etc/auto.master and restart the autofs service.
 
 ::
-sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' sed 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%'
+sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master 
 systemctrl restart autofs
 
 
