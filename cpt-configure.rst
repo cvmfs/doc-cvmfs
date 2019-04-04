@@ -13,11 +13,11 @@ corresponding .conf file.
 
 In a typical installation, a handful of parameters need to be set in
 /etc/cvmfs/default.local. Most likely, this is the list of repositories
-(``CVMFS_REPOSITORIES``), HTTP proxies (see :ref:sct_network`),
+(``CVMFS_REPOSITORIES``), HTTP proxies (see :ref:`network settings <sct_network>`),
 and perhaps the cache directory and the cache quota (see
-:ref:sct_cache`) In a few cases, one might change a parameter
-for a specific domain or a specific repository, provide an exclusive cache for
-a specific repository (see :ref:sct_cache`). For a list of all
+:ref:`cache settings <sct_cache>`). In a few cases, one might change a parameter
+for a specific domain or a specific repository, or provide an exclusive cache for
+a specific repository. For a list of all
 parameters, see Appendix ":ref:`apxsct_clientparameters`".
 
 The .conf and .local configuration files are key-value pairs in the form
@@ -52,11 +52,11 @@ set to the parent directory of the configuration file at hand.
 
 .. _sct_config_repository:
 
-The "Config Repository"
+The Config Repository
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 In addition to the local system configuration, a client can configure a
-dedicated "config repository". A config repository is a standard
+dedicated config repository. A config repository is a standard
 mountable CernVM-FS repository that resembles the directory structure of
 /etc/cvmfs. It can be used to centrally maintain the public keys and
 configuration of repositories that should not be distributed with rather
