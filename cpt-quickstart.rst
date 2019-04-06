@@ -47,6 +47,15 @@ To install the CVMFS package run
 ::
 
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.6.0/cvmfs-2.6.0-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    
+OpenSUSE
+~~~~~~
+To install the CVMFS package run
+
+::    
+
+    zypper install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.6.0/cvmfs-2.6.0-1.suse1320.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+
 
 Mac OS X
 ~~~~~~~~
@@ -61,8 +70,15 @@ Configure AutoFS
 ~~~~~~~~~~~~~~~~
 
 For the basic setup, run ``cvmfs_config setup``.
-This ensures that ``/cvmfs /etc/auto.cvmfs`` is set in /etc/auto.master and that the autofs service is running.
-Reload the autofs service in order to apply an updated configuration.
+This ensures that the file /etc/auto.master.d/cvmfs.autofs exists containing ``/cvmfs /etc/auto.cvmfs`` and that the autofs service is running. Reload the autofs service in order to apply an updated configuration.
+
+NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /etc/auto.master and restart the autofs service.
+
+::
+
+    sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master 
+    systemctrl restart autofs
+
 
 Mac OS X
 ~~~~~~~~
