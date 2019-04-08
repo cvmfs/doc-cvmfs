@@ -82,7 +82,23 @@ configuration files (see `Legacy repository configuration syntax`_). The
 `Advanced repository configuration`_ section shows how to implement more
 complex key setups.
 
-To start the gateway application, use `systemctl` if systemd is
+In addition to ``repo.json``, there is another configuration
+file, ``user.json``, which contains runtime parameters for the gateway
+application, including:
+
+* ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
+* ``fe_tcp_port`` - the TCP port on which the gateway application listens,
+  4929 by default
+*  the ``size`` entry in the ``receiver_config`` map determines the number of ``cvmfs_receiver``
+worker processes that are spawned (default value is 1, should not be increased beyond the number of
+available CPU cores)
+
+To access the gateway service API, the specified ``fe_tcp_port`` needs to be open in the
+firewall. If the gateway machine also serves as a repository stratum 0 (i.e.
+the repository is created with "local" upstream), then port 80/TCP also needs
+to be open.
+
+Finally, to start the gateway application, use `systemctl` if systemd is
 available: ::
 
   # systemctl start cvmfs-gateway.service
@@ -91,24 +107,7 @@ otherwise use the service command: ::
 
   # service cvmfs-gateway start
 
-To access the gateway service API, port 4929/TCP needs to be open in the
-firewall. If the gateway machine also serves as a repository stratum 0 (i.e.
-the repository is created with "local" upstream), then port 80/TCP also needs
-to be open.
-
-In addition to ``repo.json``, there is another configuration
-file, ``user.json``, which contains runtime parameters for the gateway
-application. The most important are:
-
-* ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
-* ``fe_tcp_port`` - the port on which the gateway application listens,
-  4929 by default
-
-By default, the gateway application only spawns a single ``cvmfs_receiver``
-worker process. It is possible to run multiple worker processes by increasing
-the value of the ``size`` entry in the ``receiver_config`` map, found in
-``user.json``. This value should not be increased beyond the number of
-available CPU cores.
+Note that in order to apply any gateway configuration changes, including changes to the API keys, the gateway service must be restarted.
 
 Publisher configuration
 =============================
