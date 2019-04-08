@@ -77,7 +77,7 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /e
 ::
 
     sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master 
-    systemctrl restart autofs
+    systemctl restart autofs
 
 
 Mac OS X
