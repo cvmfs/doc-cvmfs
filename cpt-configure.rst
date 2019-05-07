@@ -541,7 +541,7 @@ Cache Settings
 Downloaded files will be stored in a local cache directory. The
 CernVM-FS cache has a soft quota; as a safety margin, the partition
 hosting the cache should provide more space than the soft quota limit,
-we recomment to leave at least 20% + 1GB.
+we recommend to leave at least 20% + 1GB.
 
 Once the quota limit is reached, CernVM-FS will automatically remove
 files from the cache according to the least recently used policy.
