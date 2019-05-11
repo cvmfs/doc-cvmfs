@@ -1142,7 +1142,7 @@ stated :ref:`here <sct_nestedrecommendations>` the recommended
 maximal file entry count of a single catalog should not exceed
 :math:`\approx`\ 200000. One can use the switch ``list-catalogs -e`` to
 inspect the current nested catalog entry counts in the repository.
-Furthermore ``list-catalgos -s`` will print the file sizes of the
+Furthermore ``list-catalogs -s`` will print the file sizes of the
 catalogs in bytes.
 
 Repository Mount Point Management
