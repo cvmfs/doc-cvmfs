@@ -43,7 +43,7 @@ to the graph driver plugin.
 Installation
 ------------
 
-The folling steps install and activate the CernVM-FS graph driver plugin.
+The following steps install and activate the CernVM-FS graph driver plugin.
 
  1. Install the plugin with ``docker plugin install cvmfs/graphdriver``. The
     command ``docker plugin ls`` should now show the new plugin as being
@@ -101,7 +101,7 @@ and untar a graph driver plugin tarball.  Run ::
     docker plugin enable my-graphdriver
 
 **Note**: currently, the graph driver name (``my-graphdriver``) must not contain
-a colon (``:``) nor a comma (``,``).  This issue will be fixed in a lalter
+a colon (``:``) nor a comma (``,``).  This issue will be fixed in a later
 version.
 
 
@@ -111,7 +111,7 @@ Conversion of Images
 A simple way to ingest docker images inside a cvmfs repository is available
 through a small utility ``docker2cvmfs``.
 
-At the moment is possible to directly download the executable:
+At the moment it is possible to directly download the executable:
 `docker2cvmfs v0.3 <https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/0.3/docker2cvmfs>`_
 
 ``docker2cvmfs`` provides different commands to manipulate docker images but
@@ -120,7 +120,7 @@ the simplest way is to use the ``make-thin`` sub-command.
 This sub-command expects to find on the host machine a recent version of
 ``cvmfs`` that support the ``ingest`` commands.
 
-Invoking the help of the subcommand ``docker2cvmfs make-thin --help`` explain
+Invoking the help of the subcommand ``docker2cvmfs make-thin --help`` explains
 what options are available and how to use them.
 
 Below we provide a complete example on how to use ``docker2cvmfs`` to convert
@@ -135,11 +135,11 @@ image to ingest into ``cvmfs`` along with the reference to associate to the
 new thin image (``thin/redis:4``) and the repository where we want to store
 the several layers (``example.cern.ch``).
 
-The utility download every layer that compose the image, store them into the
-repository, create then new thin image and import that into docker.
+The utility downloads every layer that composes the image, stores them into the
+repository, creates the new thin image and imports that into docker.
 
 By default the layers are stored into the ``layers/`` subdirectory of the
-repository, this can be modified using the ``--subdirectory`` parameters.
+repository; this can be modified using the ``--subdirectory`` parameters.
 
 The images are downloaded, by default, from the official docker hub registry,
 this can be modified as well using the ``--registry`` parameter.
