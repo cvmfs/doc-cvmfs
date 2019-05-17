@@ -1064,7 +1064,8 @@ Those paths may contain shell wildcards such as asterisk (``*``) and
 question mark (``?``). This is useful for specifying patterns for
 creating nested catalogs as new files are installed. A very good use of
 the patterns is to identify directories where software releases will be
-installed.
+installed. Manually-placed ``.cvmfscatalog`` files can still be used 
+along with ``.cvmfsdirtab``.
 
 In addition, lines in ``.cvmfsdirtab`` that begin with an exclamation
 point (``!``) are shell patterns that will be excluded from those
@@ -1137,7 +1138,7 @@ of a repository.
 
     cvmfs_server list-catalogs
 
-Additionally this command allows to spot degenerated nested catalogs. As
+This command also allows problematic nested catalogs to be identified. As
 stated :ref:`here <sct_nestedrecommendations>` the recommended
 maximal file entry count of a single catalog should not exceed
 :math:`\approx`\ 200000. One can use the switch ``list-catalogs -e`` to
