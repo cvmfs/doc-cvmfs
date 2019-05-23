@@ -27,7 +27,7 @@ CVMFS_AUTHZ_SEARCH_PATH         Full path to the directory that contains the aut
 CVMFS_BACKOFF_INIT              Seconds for the maximum initial backoff when retrying to download data.
 CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to download data.
 CVMFS_CATALOG_WATERMARK         | Try to release pinned catalogs when their number surpasses the given watermark.
-                                | Used in shrinkwrap.
+                                | Defaults to 1/4 CVMFS_NFILES; explicitly set by shrinkwrap.
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
 CVMFS_CLAIM_OWNERSHIP           If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
