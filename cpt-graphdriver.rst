@@ -118,7 +118,7 @@ At the moment it is possible to directly download the executable:
 the simplest way is to use the ``make-thin`` sub-command.
 
 This sub-command expects to find on the host machine a recent version of
-``cvmfs`` that support the ``ingest`` commands.
+``cvmfs_server`` that supports the ``ingest`` command.
 
 Invoking the help of the subcommand ``docker2cvmfs make-thin --help`` explains
 what options are available and how to use them.
