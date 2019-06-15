@@ -139,6 +139,10 @@ refer to the input image.
 The current wish list format requires all the images to be stored in the same
 CernVM-FS repository and have the same thin output image format.
 
+DUCC Requirements
+=============
+DUCC requires Singularity to be installed, and requires a cvmfs_server publishing interface.
+
 DUCC Commands
 =============
 
