@@ -151,7 +151,7 @@ The `convert` command provides the core functionality of DUCC:
 
 ::
 
-    ducc convert wishlist.yaml
+    cvmfs_ducc convert wishlist.yaml
 
 
 where `wishlist.yaml` is the path of a wish list file.
@@ -175,7 +175,7 @@ iteration, the wish list file is read again in order to pick up changes.
 
 ::
 
-    ducc loop recipe.yaml
+    cvmfs_ducc loop recipe.yaml
 
 
 
