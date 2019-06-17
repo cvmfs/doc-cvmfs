@@ -139,6 +139,10 @@ refer to the input image.
 The current wish list format requires all the images to be stored in the same
 CernVM-FS repository and have the same thin output image format.
 
+DUCC Requirements
+=============
+DUCC requires Singularity to be installed, and requires a cvmfs_server publishing interface.
+
 DUCC Commands
 =============
 
@@ -151,7 +155,7 @@ The `convert` command provides the core functionality of DUCC:
 
 ::
 
-    ducc convert wishlist.yaml
+    cvmfs_ducc convert wishlist.yaml
 
 
 where `wishlist.yaml` is the path of a wish list file.
@@ -175,7 +179,7 @@ iteration, the wish list file is read again in order to pick up changes.
 
 ::
 
-    ducc loop recipe.yaml
+    cvmfs_ducc loop recipe.yaml
 
 
 
