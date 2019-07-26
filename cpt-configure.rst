@@ -346,14 +346,14 @@ the perceived "hang duration" while CernVM-FS performs fail-overs.
 
 The ``DIRECT`` keyword for a hostname avoids using a proxy altogether. Note that 
 ``CVMFS_HTTP_PROXY`` must be defined in order to mount CVMFS, but to avoid using any
-proxies, set the parameter to ``DIRECT``. However, note that this is not recommended 
+proxies, you can set the parameter to ``DIRECT``. However, note that this is not recommended 
 for large numbers of clients accessing remote stratum servers, and stratum server 
 administrators may ask you to deploy and use proxies.
 
-``CVMFS_HTTP_PROXY`` is often configured with a primary proxy group at
-the local site, and backup proxy groups at remote sites. In order to
-avoid CernVM-FS getting stuck using proxies at a remote site after a
-fail-over, CernVM-FS will automatically retry the first group in the list
+``CVMFS_HTTP_PROXY`` is typically configured with a primary proxy group listed first, 
+and potentially other proxy groups listed after that for backup. In order to
+prevent CernVM-FS from permanently using the backup proxies after a
+fail-over, CernVM-FS will automatically retry the first proxy group in the list
 after some time. The delay for re-trying is set in seconds by ``CVMFS_PROXY_RESET_AFTER``. 
 This reset behaviour can be disabled by setting this parameter to 0.
 
