@@ -30,7 +30,7 @@ CernVM-FS repository served by a Stratum 0 server. To this end, the
 ``cvmfs_server`` utility provides the ``add-replica`` command. This
 command will register the Stratum 0 URL and prepare the local web
 server. Periodical synchronization has to be scheduled, for instance
-with ``cron``, using the ``cvmfs_server snapshot`` command. The
+with ``cron``, using the ``cvmfs_server snapshot -a`` command. The
 advantage over general purpose mirroring tools such as rSync is that all
 CernVM-FS file integrity verifications mechanisms from the Fuse client
 are reused. Additionally, by the aid of the CernVM-FS file catalogs, the
