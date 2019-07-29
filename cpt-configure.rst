@@ -325,35 +325,37 @@ system-wide settings. Instead of a single proxy, CernVM-FS uses a *chain
 of load-balanced proxy groups*. The CernVM-FS proxies are set by the
 ``CVMFS_HTTP_PROXY`` parameter.
 
-Proxies within the same proxy group are considered as a load-balance
-group and a proxy is selected randomly. If a proxy fails,
-CernVM-FS automatically switches to another proxy from the current
-group. If all proxies from a group have failed, CernVM-FS switches to
+Proxy groups are used for load-balancing among several proxies of equal priority.
+Starting with the first group, one proxy within a group is selected at random. 
+If it fails, CernVM-FS automatically switches to another proxy from the current
+group. If all proxies in a group have failed, CernVM-FS switches to
 the next proxy group. After probing the last proxy group in the chain,
-the first proxy is probed again. To avoid endless loops, for each file
-download the number of switches is restricted by the total number of
-proxies.
+the first is probed again. To avoid endless loops, for each file
+download the number of switches is limited by the total number of
+proxies. 
 
-The chain of proxy groups is specified by a string of semicolon
-separated entries, each group is a list of pipe separated
-hostnames [#]_. Multiple IP addresses behind a single proxy host name
-(DNS *round-robin* entry) are automatically transformed into a
-load-balanced group.  In order to limit the number of proxy servers used from
-a round-robin DNS entry, set ``CVMFS_MAX_IPADDR_PER_PROXY``.  This also limits
+Proxies within the same group are separated by a pipe character ``|``, while 
+groups are separated from each other by a semicolon character ``;`` [#]_. 
+Note that it is possible for a proxy group to consist of only one proxy.
+In the case of proxies that use a DNS *round-robin* entry, wherein a single host name
+resolves to multiple IP addresses, CVMFS automatically internally transforms the name 
+into a load-balanced group, so you should use the host name and a semicolon.
+In order to limit the number of individual proxy servers used in
+a round-robin DNS entry, set ``CVMFS_MAX_IPADDR_PER_PROXY``.  This can also limit
 the perceived "hang duration" while CernVM-FS performs fail-overs.
 
-The ``DIRECT`` keyword for a hostname avoids using proxies. Note that the
-``CVMFS_HTTP_PROXY`` parameter is necessary in order to mount. If you don't use
-proxies, set the parameter to ``DIRECT``.
+The ``DIRECT`` keyword for a hostname avoids using a proxy altogether. Note that 
+``CVMFS_HTTP_PROXY`` must be defined in order to mount CVMFS, but to avoid using any
+proxies, you can set the parameter to ``DIRECT``. However, note that this is not recommended 
+for large numbers of clients accessing remote stratum servers, and stratum server 
+administrators may ask you to deploy and use proxies.
 
-Multiple proxy groups are often organized as a primary proxy group at
-the local site and backup proxy groups at remote sites. In order to
-avoid CernVM-FS being stuck with proxies at a remote site after a
-fail-over, CernVM-FS will automatically retry to use proxies from the
-primary group after some time. The delay for re-trying a proxies from
-the primary group is set in seconds by ``CVMFS_PROXY_RESET_AFTER``. The
-distinction of primary and backup proxy groups can be turned off by
-setting this parameter to 0.
+``CVMFS_HTTP_PROXY`` is typically configured with a primary proxy group listed first, 
+and potentially other proxy groups listed after that for backup. In order to
+prevent CernVM-FS from permanently using the backup proxies after a
+fail-over, CernVM-FS will automatically retry the first proxy group in the list
+after some time. The delay for re-trying is set in seconds by ``CVMFS_PROXY_RESET_AFTER``. 
+This reset behaviour can be disabled by setting this parameter to 0.
 
 
 Automatic Proxy Configuration
