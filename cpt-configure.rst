@@ -357,6 +357,23 @@ fail-over, CernVM-FS will automatically retry the first proxy group in the list
 after some time. The delay for re-trying is set in seconds by ``CVMFS_PROXY_RESET_AFTER``. 
 This reset behaviour can be disabled by setting this parameter to 0.
 
+Proxy List Examples
+^^^^^^^^^^^^^^^^^^^
+Suppose there are two proxy servers local to your site, ``p1.site.example.org`` and ``p2.site.example.org``, and two regional proxy servers nearby available for backup use, ``p3.region.example.org`` and ``p4.region.example.org``. In this example all proxy servers are configured to listen on port 3128. If the two local proxies are equally preferable to use and configured identically to each other, and the same applies for the two regional proxies, use
+::
+
+    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128|http://p2.site.example.org:3128;http://p3.region.example.org:3128|http://p4.region.example.org:3128"
+
+However, if ``p1`` should always be preferred over ``p2`` (for example if it has a faster network or larger cache), use
+::
+
+    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128;http://p2.site.example.org:3128;http://p3.region.example.org:3128|http://p4.region.example.org:3128"
+
+Moreover, if ``p3`` should always be preferred over ``p4`` (for example if it is significantly closer to your site), use
+::
+
+    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128;http://p2.site.example.org:3128;http://p3.region.example.org:3128;http://p4.region.example.org:3128"
+
 
 Automatic Proxy Configuration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
