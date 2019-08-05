@@ -107,7 +107,28 @@ otherwise use the service command: ::
 
   # service cvmfs-gateway start
 
-Note that in order to apply any gateway configuration changes, including changes to the API keys, the gateway service must be restarted.
+Note that in order to apply any gateway configuration changes, including
+changes to the API keys, the gateway service must be restarted.
+
+If systemd is available, the application logs can be consulted with: ::
+
+  # journalctl -u cvmfs-gateway
+
+On CentOS 6, where systemd is not available, the log file can be accessed
+directly at `/var/log/cvmfs-gateway.log`.
+
+Running under a different user
+******************************
+
+By default, the `cvmfs-gateway` application is run as `root`. An included
+systemd service template file allows running it as an arbitrary user: ::
+
+  # systemctl start cvmfs-gateway@<USER>
+
+To consult the logs of the application instance running as `<USER>`, run: ::
+
+  # journalctl -u cvmfs-gateway@<USER>
+
 
 Publisher configuration
 =============================
@@ -240,6 +261,10 @@ Keys can be either be loaded from a file, or declared inline: ::
 
 The ``"version": 2`` property needs to be specified for this configuration
 format to be accepted.
+
+It should be noted that when keys are loaded from a file, an `id` field needs
+not be specified in the configuration file. The public id of the loaded key is
+the one specified in the key file itself.
 
 Legacy repository configuration syntax
 ======================================
