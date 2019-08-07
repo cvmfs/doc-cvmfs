@@ -1,3 +1,122 @@
+Release Notes for CernVM-FS 2.6.1
+=================================
+
+CernVM-FS 2.6.1 is a patch release.  It contains bugfixes and improvements for
+clients, stratum 0 and stratum 1 servers.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Together with CernVM-FS 2.6.1 we also release the CernVM-FS Gateway Services
+version 1.1.0. This version of the gateway services includes the notification
+service and therefore obsoletes the dedicated cvmfs-notify package.
+
+Note for upgrades from versions prior to 2.6.0: please also see the specific
+instructions in the release notes for version 2.6.0 and earlier.
+
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client: fix potential hang during reload if a config repository is used
+    `CVM-1466 <https://sft.its.cern.ch/jira/browse/CVM-1466>`_
+
+  * Client: fix file descriptor exhaustion when browsing many small catalogs
+    `CVM-1742 <https://sft.its.cern.ch/jira/browse/CVM-1742>`_
+
+  * Client: fix potential mix-up of chunked files in NFS mode
+    `CVM-1791 <https://sft.its.cern.ch/jira/browse/CVM-1791>`_
+
+  * Client: disable active kernel cache eviction as workaround for stale
+    negative file system entries
+    `CVM-1759 <https://sft.its.cern.ch/jira/browse/CVM-1759>`_
+
+  * Client: fix placement of cvmfschecksum.* files for uncommon cache setups
+    `CVM-1728 <https://sft.its.cern.ch/jira/browse/CVM-1728>`_
+
+  * Client: fix host file parsing in DNS resolver, triggered by gcc >= 9
+    `CVM-1763 <https://sft.its.cern.ch/jira/browse/CVM-1763>`_
+
+  * Client: check for missing autofs map directory include in
+    `cvmfs_config chksetup`
+    `CVM-1686 <https://sft.its.cern.ch/jira/browse/CVM-1686>`_
+
+  * Server: fix exhaustive memory consumption in file processing pipeline
+    `CVM-1687 <https://sft.its.cern.ch/jira/browse/CVM-1687>`_
+
+  * Server: fix `snapshot -a` when no replicas are defined
+
+  * Server: fix tarball ingestion at deeply nested catalog structures
+    `CVM-1721 <https://sft.its.cern.ch/jira/browse/CVM-1721>`_
+
+  * Server: fix Geo-API's Cloudflare support for known proxies
+    `CVM-1774 <https://sft.its.cern.ch/jira/browse/CVM-1774>`_
+
+  * Server: fix locking logic in Geo-API web service
+    `CVM-1777 <https://sft.its.cern.ch/jira/browse/CVM-1777>`_
+
+  * Server: periodically reload Geo-IP database
+    `CVM-1739 <https://sft.its.cern.ch/jira/browse/CVM-1739>`_
+
+  * Server: add GC support for legacy catalogs before 1.0 schema stabilized
+    `CVM-1698 <https://sft.its.cern.ch/jira/browse/CVM-1698>`_
+
+  * Server: fix master key card handling with openssl-pkcs11 >= 0.4.7
+    `CVM-1788 <https://sft.its.cern.ch/jira/browse/CVM-1788>`_
+
+  * Server: fix grafting of empty files
+    `CVM-1785 <https://sft.its.cern.ch/jira/browse/CVM-1785>`_
+
+  * Server: add `-g <snapshot group>` option to replication commands
+    `CVM-1779 <https://sft.its.cern.ch/jira/browse/CVM-1779>`_
+
+  * Server, S3: fix various issues in the HTTP 429 rate throttling behavior
+    `CVM-1755 <https://sft.its.cern.ch/jira/browse/CVM-1755>`_
+
+  * Server, S3: Fix name resolution with DNS style buckets
+
+  * Server, S3: fix small memory leak
+
+  * Server, S3: fix AWSv4 authentication when using a non standard port
+
+  * Server, S3: fix potential race condition in the stats collector for the S3
+    uploader
+
+  * Server, gateway: fix repository checks from publisher nodes
+    `CVM-1732 <https://sft.its.cern.ch/jira/browse/CVM-1732>`_
+
+  * Gateway: fix garbage collection on the repository gateway node
+    `CVM-1705 <https://sft.its.cern.ch/jira/browse/CVM-1705>`_
+
+  * Gateway: relocation temporary files so that repository integrity checks pass
+    `CVM-1704 <https://sft.its.cern.ch/jira/browse/CVM-1704>`_
+
+  * Gateway: fix file mode for gateway keys in cvmfs_server import_keychain
+    `CVM-1746 <https://sft.its.cern.ch/jira/browse/CVM-1746>`_
+
+  * Gateway: fix key parser for keys containing repeated characters
+
+  * Gateway: fix transaction lock name for tarball ingest
+
+  * Gateway: more robust parsing of gateway API keys
+    `CVM-1693 <https://sft.its.cern.ch/jira/browse/CVM-1693>`_
+
+  * Notification service: use server-sent events instead of WebSockets
+
+  * DUCC: fix usage of singularity in container publishing service
+
+  * Fix syntax errors in external libraries build system
+    `CVM-1781 <https://sft.its.cern.ch/jira/browse/CVM-1781>`_
+    `CVM-1782 <https://sft.its.cern.ch/jira/browse/CVM-1782>`_
+
+
 Release Notes for CernVM-FS 2.6.0
 =================================
 
