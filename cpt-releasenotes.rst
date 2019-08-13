@@ -1,3 +1,11 @@
+Release Notes for CernVM-FS 2.6.2
+=================================
+
+CernVM-FS 2.6.2 is a patch release.  It fixes a rare block during hotpatch
+introduced with version 2.6.1
+(`CVM-1795 <https://sft.its.cern.ch/jira/browse/CVM-1795>`_).  Otherwise it is
+identical to version 2.6.1.
+
 Release Notes for CernVM-FS 2.6.1
 =================================
 
