@@ -1459,8 +1459,10 @@ those sites. Web proxies may also need to be engineered with faster
 disks if the data causes their cache hit ratios to be reduced.
 
 If you need to publish files with much larger working set sizes than
-a typical software environment, refer to :doc:`"large-scale" repositories <cpt-large-scale>`
-document.
+a typical software environment, refer to :doc:`large-scale repositories <cpt-large-scale>`
+and :doc:`alien caches <cpt-configure.html#alien-cache>`. Using an alien
+cache is a good way to distribute large data sets when multiple users on the cluster
+are accessing the same data files.
 
 Also, keep in mind that the total amount of data distributed is not
 unlimited. The files are stored and distributed compressed, and files
