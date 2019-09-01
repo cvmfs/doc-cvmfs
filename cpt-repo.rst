@@ -1436,7 +1436,7 @@ sites, clouds, or clusters. Worker node cache sizes and web proxy
 bandwidth are generally engineered to accommodate that application. The
 total amount read per job is expected to be roughly limited by the
 amount of RAM per job slot. The same files are also expected to be read
-from the worker node cache multiple times for the same type of job, and
+from the worker node cache multiple times by similar jobs, and
 read from a caching web proxy by multiple worker nodes.
 
 If there are data files distributed by CernVM-FS that follow similar
@@ -1448,19 +1448,21 @@ because web proxies have to be engineered for handling bursts at the
 beginning of jobs and so they tend to be lightly loaded a majority of
 the time.
 
-In general, a good rule of thumb is to calculate the maximum rate at
+As a general rule of thumb, calculate the maximum rate at
 which jobs typically start and limit the amount of data that might be
-read from a web proxy to per thousand jobs, assuming a reasonable amount
-of overlap of jobs onto the same worker nodes. Also, limit the amount of
-data that will be put into any one worker node cache to . Of course, if
+read from a web proxy to around 100 MB/s per thousand jobs, assuming a reasonable amount
+of overlap of jobs on the same worker nodes. Also, limit the amount of
+data that will be put into any one worker node cache to around 5 GB. Of course, if
 you have a special arrangement with particular sites to have large
 caches and bandwidths available, these limits can be made higher at
 those sites. Web proxies may also need to be engineered with faster
 disks if the data causes their cache hit ratios to be reduced.
 
 If you need to publish files with much larger working set sizes than
-a typical software environment, refer to :doc:`"large-scale" repositories <cpt-large-scale>`
-document.
+a typical software environment, refer to :doc:`large-scale repositories <cpt-large-scale>`
+and :doc:`alien caches <cpt-configure.html#alien-cache>`. Using an alien
+cache is a good way to distribute large data sets when multiple users on the cluster
+are accessing the same data files.
 
 Also, keep in mind that the total amount of data distributed is not
 unlimited. The files are stored and distributed compressed, and files
