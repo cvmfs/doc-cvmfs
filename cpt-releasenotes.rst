@@ -1,3 +1,12 @@
+Release Notes for CernVM-FS 2.6.3
+=================================
+
+CernVM-FS 2.6.3 is a patch release.  It fixes parsing of the /etc/hosts file
+for several corner cases
+(`CVM-1796 <https://sft.its.cern.ch/jira/browse/CVM-1796>`_)
+(`CVM-1797 <https://sft.its.cern.ch/jira/browse/CVM-1797>`_).  Otherwise it is
+identical to version 2.6.2.
+
 Release Notes for CernVM-FS 2.6.2
 =================================
 
