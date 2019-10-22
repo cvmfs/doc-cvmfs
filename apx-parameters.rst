@@ -179,7 +179,7 @@ CVMFS_NUM_UPLOAD_TASKS              | Number of threads used to commit data to s
                                     | Currently only used by the local backend.
 CVMFS_NUM_WORKERS                   | Maximal number of concurrently downloaded files during a Stratum1 pull operation
                                     | (Stratum~1 only).
-CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
+CVMFS_PUBLIC_KEY                    Colon-separated path to the public key file(s) or directory(ies) of the repository to be replicated. (Stratum 1 only).
 CVMFS_REPLICA_ACTIVE                | Stratum1-only: Set to *no* to skip this repository when executing
                                     | ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
