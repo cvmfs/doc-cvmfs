@@ -564,9 +564,9 @@ Loader
 
 The CernVM-FS Fuse module comprises a minimal *loader* loader process
 (the ``cvmfs2`` binary) and a shared library containing the actual
-Fuse module (``libcvmfs_fuse.so``). This structure makes it possible to
-reload CernVM-FS code and parameters without unmounting the file system.
-Loader and library don't share any symbols except for two global structs
+Fuse module (``libcvmfs_fuse.so``, ``libcvmfs_fuse3.so``). This structure makes
+it possible to reload CernVM-FS code and parameters without unmounting the file
+system. Loader and library don't share any symbols except for two global structs
 ``cvmfs_exports`` and ``loader_exports`` used to call each others
 functions. The loader process opens the Fuse channel and implements stub
 Fuse callbacks that redirect all calls to the CernVM-FS shared library.
@@ -726,6 +726,13 @@ information. There are several supported attributes:
 
 **rawlink**
     Shows unresolved variant symbolic links; only accessible as root.
+
+**repo\_counters**
+    Shows the aggregate counters of the repository contents (number of files
+    etc.)
+
+**repo\_metainfo**
+    Shows the :ref:`repository meta info <sct_metainfo>` file, if available
 
 **revision**
     Shows the file catalog revision of the mounted root catalog, an

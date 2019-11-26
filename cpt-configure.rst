@@ -144,9 +144,33 @@ The private mount points can also be used to use the CernVM-FS Fuse
 module in case it has not been installed under /usr and /etc. If the
 public keys are not installed under /etc/cvmfs/keys, the directory of
 the keys needs to be specified in the config file by
-``CVMFS_KEYS_DIR=<directory>``. If the libcvmfs\_fuse.so library is not
-installed in one of the standard search paths, the ``LD_LIBRARY_PATH``
-variable has to be set accordingly for the ``cvmfs2`` command.
+``CVMFS_KEYS_DIR=<directory>``. If the libcvmfs\_fuse.so resp.
+libcvmfs\_fuse3.so library is not installed in one of the standard search paths,
+the ``CVMFS_LIBRARY_PATH`` variable has to be set accordingly for the ``cvmfs2``
+command.
+
+.. _sct_premount:
+
+
+Pre-mounting
+~~~~~~~~~~~~
+
+In usual deployments, the ``fusermount`` utility from the system fuse package
+takes care of mounting a repository before handing of control to the CernVM-FS
+client. The ``fusermount`` utility is a suid binary because on older kernel and
+outside user name spaces mounting is a privileged operation.
+
+As of libfuse3, the task of mounting /dev/fuse can be performed by any utility.
+This functionality has been added, for instance, to
+`Singularity 3.4 <https://github.com/sylabs/singularity/releases/tag/v3.4.0>`_.
+
+An executable that pre-mounts /dev/fuse has to call the ``mount()`` system call
+in order to open a file descriptor. The file descriptor number is than passed
+as command line parameter to the CernVM-FS client. A working code example is
+available in the
+`CernVM-FS tests <https://github.com/cvmfs/cvmfs/blob/cvmfs-2.7/test/src/084-premounted/fuse_premount.c>`_.
+
+
 
 Docker Containers
 ~~~~~~~~~~~~~~~~~
@@ -326,35 +350,35 @@ of load-balanced proxy groups*. The CernVM-FS proxies are set by the
 ``CVMFS_HTTP_PROXY`` parameter.
 
 Proxy groups are used for load-balancing among several proxies of equal priority.
-Starting with the first group, one proxy within a group is selected at random. 
+Starting with the first group, one proxy within a group is selected at random.
 If it fails, CernVM-FS automatically switches to another proxy from the current
 group. If all proxies in a group have failed, CernVM-FS switches to
 the next proxy group. After probing the last proxy group in the chain,
 the first is probed again. To avoid endless loops, for each file
 download the number of switches is limited by the total number of
-proxies. 
+proxies.
 
-Proxies within the same group are separated by a pipe character ``|``, while 
-groups are separated from each other by a semicolon character ``;`` [#]_. 
+Proxies within the same group are separated by a pipe character ``|``, while
+groups are separated from each other by a semicolon character ``;`` [#]_.
 Note that it is possible for a proxy group to consist of only one proxy.
 In the case of proxies that use a DNS *round-robin* entry, wherein a single host name
-resolves to multiple IP addresses, CVMFS automatically internally transforms the name 
+resolves to multiple IP addresses, CVMFS automatically internally transforms the name
 into a load-balanced group, so you should use the host name and a semicolon.
 In order to limit the number of individual proxy servers used in
 a round-robin DNS entry, set ``CVMFS_MAX_IPADDR_PER_PROXY``.  This can also limit
 the perceived "hang duration" while CernVM-FS performs fail-overs.
 
-The ``DIRECT`` keyword for a hostname avoids using a proxy altogether. Note that 
+The ``DIRECT`` keyword for a hostname avoids using a proxy altogether. Note that
 ``CVMFS_HTTP_PROXY`` must be defined in order to mount CVMFS, but to avoid using any
-proxies, you can set the parameter to ``DIRECT``. However, note that this is not recommended 
-for large numbers of clients accessing remote stratum servers, and stratum server 
+proxies, you can set the parameter to ``DIRECT``. However, note that this is not recommended
+for large numbers of clients accessing remote stratum servers, and stratum server
 administrators may ask you to deploy and use proxies.
 
-``CVMFS_HTTP_PROXY`` is typically configured with a primary proxy group listed first, 
+``CVMFS_HTTP_PROXY`` is typically configured with a primary proxy group listed first,
 and potentially other proxy groups listed after that for backup. In order to
 prevent CernVM-FS from permanently using the backup proxies after a
 fail-over, CernVM-FS will automatically retry the first proxy group in the list
-after some time. The delay for re-trying is set in seconds by ``CVMFS_PROXY_RESET_AFTER``. 
+after some time. The delay for re-trying is set in seconds by ``CVMFS_PROXY_RESET_AFTER``.
 This reset behaviour can be disabled by setting this parameter to 0.
 
 Proxy List Examples

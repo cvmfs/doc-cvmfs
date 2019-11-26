@@ -21,8 +21,31 @@ After the software upgrade, publisher nodes (``stratum 0``) require doing
 Fuse 3 Support
 --------------
 
+The CernVM-FS client support both libfuse 2 and libfuse 3 platforms. The
+libfuse libraries are part of the system's fuse package. The libfuse libraries
+take care of the low-level communication with the Fuse kernel module. The
+libfuse 3 libraries provide new features and performance improvements; they
+can be installed side-by-side to the libfuse 2 libraries. If libfuse 3 is
+available and the ``cvmfs-fuse3`` package is installed, the CernVM-FS client
+will automatically use libfuse 3, otherwise it falls back to libfuse 2. A
+libfuse version can be enforced by setting the ``libfuse=[2,3]`` mount option.
+
+For the EL6 and EL7 platforms, libfuse 3 libraries are provided in the
+fuse3-libs package through EPEL.
+
+
 Pre-mounted Repository
 ----------------------
+
+Mounting a CernVM-FS repository involves calling the ``mount()`` system call
+on /dev/fuse. This is ususally done by the ``fusermount`` utility, which is
+part of the fuse system package. As of libfuse 3, the task of mounting
+/dev/fuse can be offloaded to an external, custom utility.  Such an external
+executable "pre-mounts" the repository and allows for easier integration in
+special environments. This functionality has been integrated with
+`Singularity 3.4 <https://github.com/sylabs/singularity/releases/tag/v3.4.0>`_.
+See :ref:`Pre-mounting <sct_premount>` for more details.
+
 
 POSIX ACLs
 ----------
@@ -40,11 +63,16 @@ distribution infrastructure (see :ref:`Large-Scale Data <sct_data>`,
 :ref:`Authorization Helpers <sct_authz>`).
 
 
-
 Client Performance Instrumentation
 ----------------------------------
 
-(CVM-1770)
+The CernVM-FS client can record a histogram of wall-clock time spent in the
+different Fuse callback routines
+(`CVM-1770 <https://sft.its.cern.ch/jira/browse/CVM-1770>`_).
+Recording is enabled by setting the client configuration variable
+``CVMFS_INSTRUMENT_FUSE=true``. The time distribution historgrams are displayed
+in the ``cvmfs_talk internal affairs`` command.
+
 
 Bug Fixes
 ---------
@@ -74,11 +102,7 @@ Bug Fixes
     (`CVM-1813 <https://sft.its.cern.ch/jira/browse/CVM-1813>`_)
 
   * Server: fix publish statistics for several corner cases
-    (`CVM-1716 <https://sft.its.cern.ch/jira/browse/CVM-1716>`_,
-     `CVM-1717 <https://sft.its.cern.ch/jira/browse/CVM-1717>`_,
-     `CVM-1718 <https://sft.its.cern.ch/jira/browse/CVM-1718>`_,
-     `CVM-1719 <https://sft.its.cern.ch/jira/browse/CVM-1719>`_,
-     `CVM-1720 <https://sft.its.cern.ch/jira/browse/CVM-1720>`_)
+    (`CVM-1716 <https://sft.its.cern.ch/jira/browse/CVM-1716>`_ - `CVM-1720 <https://sft.its.cern.ch/jira/browse/CVM-1720>`_)
 
   * Server, gateway: fix clashing generic tags for short transactions
     (`CVM-1735 <https://sft.its.cern.ch/jira/browse/CVM-1735>`_)
@@ -94,10 +118,10 @@ Other Improvements
     (`CVM-1794 <https://sft.its.cern.ch/jira/browse/CVM-1794>`_)
 
   * Client: add new magic extended attribute ``repo_counters``
-    (`CVM-1499 <https://sft.its.cern.ch/jira/browse/CVM-1499>`_)
+    (`CVM-1733 <https://sft.its.cern.ch/jira/browse/CVM-1733>`_)
 
   * Client: add new magic extended attribute ``repo_metainfo``
-    (`CVM-1733 <https://sft.its.cern.ch/jira/browse/CVM-1733>`_)
+    (`CVM-1499 <https://sft.its.cern.ch/jira/browse/CVM-1499>`_)
 
   * Client: enforce ``CVMFS_NFILES`` parameter only when mounting through
     mount helper
@@ -112,4 +136,3 @@ Other Improvements
 
   * Server: add ``list_reflog`` command to ``cvmfs_swisknife``
     (`CVM-1756 <https://sft.its.cern.ch/jira/browse/CVM-1760>`_)
-
