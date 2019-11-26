@@ -150,6 +150,7 @@ CVMFS_CREATOR_VERSION               | The CernVM-FS version that was used to cre
                                     | (do not change manually).
 CVMFS_DONT_CHECK_OVERLAYFS_VERSION  | Disable checking of OverlayFS version before usage.
                                     | (see :ref:`sct_reporequirements`)
+CVMFS_ENFORCE_ACLS                  | Enforce POSIX ACLs stored in the repository. Requires libfuse 3.
 CVMFS_ENFORCE_LIMITS                | Set to *true* to cause exceeding \*LIMIT variables to be fatal to a publish
                                     | instead of a warning
 CVMFS_EXTERNAL_DATA                 | Set to *true* to mark repository to contain external data

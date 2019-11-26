@@ -27,6 +27,20 @@ Pre-mounted Repository
 POSIX ACLs
 ----------
 
+CernVM-FS repositories can store and enforce POSIX ACLs. In order to store ACLs
+during publication, simply enable extended attributes by setting
+``CVMFS_INCLUDE_XATTRS=true`` in the repository's server.conf coniguration
+file. In order to enforce ACLs on client side, set ``CVMFS_ENFORCE_ACLS=true``
+in the client configuration. Enforcing POSIX ACLs requires libfuse 3 on the
+client node. If only libfuse 2 is available, the client will reject to mount
+with enforced ACLs.
+
+Note that enforcing ALCs usually only makes sense in concert with a secure
+distribution infrastructure (see :ref:`Large-Scale Data <sct_data>`,
+:ref:`Authorization Helpers <sct_authz>`).
+
+
+
 Client Performance Instrumentation
 ----------------------------------
 
