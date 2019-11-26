@@ -25,7 +25,7 @@ This release adds support for libfuse 3 platforms in addition to libfuse 2. The
 libfuse libraries are part of the system's fuse package. The libfuse libraries
 take care of the low-level communication with the Fuse kernel module. The
 libfuse 3 libraries provide new features and performance improvements; they
-can be installed side-by-side to the libfuse 2 libraries. If libfuse 3 is
+can be installed side-by-side with the libfuse 2 libraries. If libfuse 3 is
 available and the ``cvmfs-fuse3`` package is installed, the CernVM-FS client
 will automatically use libfuse 3, otherwise it falls back to libfuse 2. A
 libfuse version can be enforced by setting the ``libfuse=[2,3]`` mount option.
@@ -37,9 +37,9 @@ fuse3-libs package through EPEL.
 Pre-mounted Repository
 ----------------------
 
-This release add support for "pre-mounted" repositories.  Mounting a CernVM-FS
+This release adds support for "pre-mounted" repositories.  Mounting a CernVM-FS
 repository involves calling the ``mount()`` system call on /dev/fuse. This is
-ususally done by the ``fusermount`` utility, which is part of the fuse system
+usually done by the ``fusermount`` utility, which is part of the fuse system
 package. As of libfuse 3, the task of mounting /dev/fuse can be offloaded to an
 external, custom utility.  Such an external executable "pre-mounts" the
 repository and allows for easier integration in special environments. This
@@ -51,12 +51,12 @@ See :ref:`Pre-mounting <sct_premount>` for more details.
 POSIX ACLs
 ----------
 
-This release add support for storing and enforcing POSIX ACLs. In order to store
+This release adds support for storing and enforcing POSIX ACLs. In order to store
 ACLs during publication, simply enable extended attributes by setting
-``CVMFS_INCLUDE_XATTRS=true`` in the repository's server.conf coniguration
-file. In order to enforce ACLs on client side, set ``CVMFS_ENFORCE_ACLS=true``
+``CVMFS_INCLUDE_XATTRS=true`` in the repository's server.conf configuration
+file. In order to enforce ACLs on the client side, set ``CVMFS_ENFORCE_ACLS=true``
 in the client configuration. Enforcing POSIX ACLs requires libfuse 3 on the
-client node. If only libfuse 2 is available, the client will reject to mount
+client node. If only libfuse 2 is available, the client will refuse to mount
 with enforced ACLs.
 
 Note that enforcing ACLs usually only makes sense in concert with a secure
@@ -94,7 +94,7 @@ Bug Fixes
 
   * Client: fix spurious error message when starting external cache manager
 
-  * Client: fix sprious error message with ``auto;DIRECT`` if proxy auto
+  * Client: fix spurious error message with ``auto;DIRECT`` if proxy auto
     discovery returns an empty list
     (`CVM-1818 <https://sft.its.cern.ch/jira/browse/CVM-1818>`_)
 
