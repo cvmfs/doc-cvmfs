@@ -1,1 +1,1 @@
-Release Notes for CernVM-FS 2.7
+Release Notes for CernVM-FS 2.8
