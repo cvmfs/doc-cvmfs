@@ -14,14 +14,14 @@ correctly. Please take special care when upgrading a client in NFS mode.
 
 For Stratum 0 servers, all transactions must be closed before upgrading.
 For Stratum 1 servers, there should be no running snapshots during the upgrade.
-After the software upgrade, publisher nodes (``stratum 0``) require doing
+After the software upgrade, publisher nodes require doing
 ``cvmfs_server migrate`` for each repository.
 
 
 Fuse 3 Support
 --------------
 
-The CernVM-FS client support both libfuse 2 and libfuse 3 platforms. The
+This release adds support for libfuse 3 platforms in addition to libfuse 2. The
 libfuse libraries are part of the system's fuse package. The libfuse libraries
 take care of the low-level communication with the Fuse kernel module. The
 libfuse 3 libraries provide new features and performance improvements; they
@@ -37,12 +37,13 @@ fuse3-libs package through EPEL.
 Pre-mounted Repository
 ----------------------
 
-Mounting a CernVM-FS repository involves calling the ``mount()`` system call
-on /dev/fuse. This is ususally done by the ``fusermount`` utility, which is
-part of the fuse system package. As of libfuse 3, the task of mounting
-/dev/fuse can be offloaded to an external, custom utility.  Such an external
-executable "pre-mounts" the repository and allows for easier integration in
-special environments. This functionality has been integrated with
+This release add support for "pre-mounted" repositories.  Mounting a CernVM-FS
+repository involves calling the ``mount()`` system call on /dev/fuse. This is
+ususally done by the ``fusermount`` utility, which is part of the fuse system
+package. As of libfuse 3, the task of mounting /dev/fuse can be offloaded to an
+external, custom utility.  Such an external executable "pre-mounts" the
+repository and allows for easier integration in special environments. This
+functionality has been integrated with
 `Singularity 3.4 <https://github.com/sylabs/singularity/releases/tag/v3.4.0>`_.
 See :ref:`Pre-mounting <sct_premount>` for more details.
 
@@ -50,8 +51,8 @@ See :ref:`Pre-mounting <sct_premount>` for more details.
 POSIX ACLs
 ----------
 
-CernVM-FS repositories can store and enforce POSIX ACLs. In order to store ACLs
-during publication, simply enable extended attributes by setting
+This release add support for storing and enforcing POSIX ACLs. In order to store
+ACLs during publication, simply enable extended attributes by setting
 ``CVMFS_INCLUDE_XATTRS=true`` in the repository's server.conf coniguration
 file. In order to enforce ACLs on client side, set ``CVMFS_ENFORCE_ACLS=true``
 in the client configuration. Enforcing POSIX ACLs requires libfuse 3 on the
@@ -66,7 +67,7 @@ distribution infrastructure (see :ref:`Large-Scale Data <sct_data>`,
 Client Performance Instrumentation
 ----------------------------------
 
-The CernVM-FS client can record a histogram of wall-clock time spent in the
+The CernVM-FS client can now record a histogram of wall-clock time spent in the
 different Fuse callback routines
 (`CVM-1770 <https://sft.its.cern.ch/jira/browse/CVM-1770>`_).
 Recording is enabled by setting the client configuration variable
