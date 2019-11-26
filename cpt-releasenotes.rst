@@ -59,7 +59,7 @@ in the client configuration. Enforcing POSIX ACLs requires libfuse 3 on the
 client node. If only libfuse 2 is available, the client will reject to mount
 with enforced ACLs.
 
-Note that enforcing ALCs usually only makes sense in concert with a secure
+Note that enforcing ACLs usually only makes sense in concert with a secure
 distribution infrastructure (see :ref:`Large-Scale Data <sct_data>`,
 :ref:`Authorization Helpers <sct_authz>`).
 
@@ -71,7 +71,7 @@ The CernVM-FS client can now record a histogram of wall-clock time spent in the
 different Fuse callback routines
 (`CVM-1770 <https://sft.its.cern.ch/jira/browse/CVM-1770>`_).
 Recording is enabled by setting the client configuration variable
-``CVMFS_INSTRUMENT_FUSE=true``. The time distribution historgrams are displayed
+``CVMFS_INSTRUMENT_FUSE=true``. The time distribution histograms are displayed
 in the ``cvmfs_talk internal affairs`` command.
 
 
@@ -132,8 +132,8 @@ Other Improvements
 
   * Server: add support for extended attributes on directories
 
-  * Server: add ``filestats`` command to ``cvmfs_swisknife``
+  * Server: add ``filestats`` command to ``cvmfs_swissknife``
     (`CVM-1756 <https://sft.its.cern.ch/jira/browse/CVM-1756>`_)
 
-  * Server: add ``list_reflog`` command to ``cvmfs_swisknife``
+  * Server: add ``list_reflog`` command to ``cvmfs_swissknife``
     (`CVM-1756 <https://sft.its.cern.ch/jira/browse/CVM-1760>`_)
