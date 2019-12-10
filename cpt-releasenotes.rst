@@ -1,188 +1,11 @@
-Release Notes for CernVM-FS 2.6.3
+Release Notes for CernVM-FS 2.7.0
 =================================
 
-CernVM-FS 2.6.3 is a patch release.  It fixes parsing of the /etc/hosts file
-for several corner cases
-(`CVM-1796 <https://sft.its.cern.ch/jira/browse/CVM-1796>`_,
-`CVM-1797 <https://sft.its.cern.ch/jira/browse/CVM-1797>`_).  Otherwise it is
-identical to version 2.6.2.
+CernVM-FS 2.7 is a feature release that comes with performance improvements,
+new functionality, and bugfixes.
 
-Release Notes for CernVM-FS 2.6.2
-=================================
-
-CernVM-FS 2.6.2 is a patch release.  It fixes a rare block during hotpatch
-introduced with version 2.6.1
-(`CVM-1795 <https://sft.its.cern.ch/jira/browse/CVM-1795>`_).  Otherwise it is
-identical to version 2.6.1.
-
-Release Notes for CernVM-FS 2.6.1
-=================================
-
-CernVM-FS 2.6.1 is a patch release.  It contains bugfixes and improvements for
-clients, stratum 0 and stratum 1 servers.
-
-As with previous releases, upgrading clients should be seamless just by
-installing the new package from the repository. As usual, we recommend to update
-only a few worker nodes first and gradually ramp up once the new version proves
-to work correctly. Please take special care when upgrading a cvmfs client in NFS
-mode.
-
-For Stratum 1 servers, there should be no running snapshots during the upgrade.
-For publisher and gateway nodes, all transactions must be closed and no active
-leases must be present before upgrading.
-
-Together with CernVM-FS 2.6.1 we also release the CernVM-FS Gateway Services
-version 1.1.0. This version of the gateway services includes the notification
-service and therefore obsoletes the dedicated cvmfs-notify package.
-
-Note for upgrades from versions prior to 2.6.0: please also see the specific
-instructions in the release notes for version 2.6.0 and earlier.
-
-
-Bug Fixes and Improvements
---------------------------
-
-  * Client: fix potential hang during reload if a config repository is used
-    `CVM-1466 <https://sft.its.cern.ch/jira/browse/CVM-1466>`_
-
-  * Client: fix file descriptor exhaustion when browsing many small catalogs
-    `CVM-1742 <https://sft.its.cern.ch/jira/browse/CVM-1742>`_
-
-  * Client: fix potential mix-up of chunked files in NFS mode
-    `CVM-1791 <https://sft.its.cern.ch/jira/browse/CVM-1791>`_
-
-  * Client: disable active kernel cache eviction as workaround for stale
-    negative file system entries
-    `CVM-1759 <https://sft.its.cern.ch/jira/browse/CVM-1759>`_
-
-  * Client: fix placement of cvmfschecksum.* files for uncommon cache setups
-    `CVM-1728 <https://sft.its.cern.ch/jira/browse/CVM-1728>`_
-
-  * Client: fix host file parsing in DNS resolver, triggered by gcc >= 9
-    `CVM-1763 <https://sft.its.cern.ch/jira/browse/CVM-1763>`_
-
-  * Client: check for missing autofs map directory include in
-    `cvmfs_config chksetup`
-    `CVM-1686 <https://sft.its.cern.ch/jira/browse/CVM-1686>`_
-
-  * Server: fix exhaustive memory consumption in file processing pipeline
-    `CVM-1687 <https://sft.its.cern.ch/jira/browse/CVM-1687>`_
-
-  * Server: fix `snapshot -a` when no replicas are defined
-
-  * Server: fix tarball ingestion at deeply nested catalog structures
-    `CVM-1721 <https://sft.its.cern.ch/jira/browse/CVM-1721>`_
-
-  * Server: fix Geo-API's Cloudflare support for known proxies
-    `CVM-1774 <https://sft.its.cern.ch/jira/browse/CVM-1774>`_
-
-  * Server: fix locking logic in Geo-API web service
-    `CVM-1777 <https://sft.its.cern.ch/jira/browse/CVM-1777>`_
-
-  * Server: periodically reload Geo-IP database
-    `CVM-1739 <https://sft.its.cern.ch/jira/browse/CVM-1739>`_
-
-  * Server: add GC support for legacy catalogs before 1.0 schema stabilized
-    `CVM-1698 <https://sft.its.cern.ch/jira/browse/CVM-1698>`_
-
-  * Server: fix master key card handling with openssl-pkcs11 >= 0.4.7
-    `CVM-1788 <https://sft.its.cern.ch/jira/browse/CVM-1788>`_
-
-  * Server: fix grafting of empty files
-    `CVM-1785 <https://sft.its.cern.ch/jira/browse/CVM-1785>`_
-
-  * Server: add `-g <snapshot group>` option to replication commands
-    `CVM-1779 <https://sft.its.cern.ch/jira/browse/CVM-1779>`_
-
-  * Server, S3: fix various issues in the HTTP 429 rate throttling behavior
-    `CVM-1755 <https://sft.its.cern.ch/jira/browse/CVM-1755>`_
-
-  * Server, S3: Fix name resolution with DNS style buckets
-
-  * Server, S3: fix small memory leak
-
-  * Server, S3: fix AWSv4 authentication when using a non standard port
-
-  * Server, S3: fix potential race condition in the stats collector for the S3
-    uploader
-
-  * Server, gateway: fix repository checks from publisher nodes
-    `CVM-1732 <https://sft.its.cern.ch/jira/browse/CVM-1732>`_
-
-  * Gateway: fix garbage collection on the repository gateway node
-    `CVM-1705 <https://sft.its.cern.ch/jira/browse/CVM-1705>`_
-
-  * Gateway: relocation temporary files so that repository integrity checks pass
-    `CVM-1704 <https://sft.its.cern.ch/jira/browse/CVM-1704>`_
-
-  * Gateway: fix file mode for gateway keys in cvmfs_server import_keychain
-    `CVM-1746 <https://sft.its.cern.ch/jira/browse/CVM-1746>`_
-
-  * Gateway: fix key parser for keys containing repeated characters
-
-  * Gateway: fix transaction lock name for tarball ingest
-
-  * Gateway: more robust parsing of gateway API keys
-    `CVM-1693 <https://sft.its.cern.ch/jira/browse/CVM-1693>`_
-
-  * Notification service: use server-sent events instead of WebSockets
-
-  * DUCC: fix usage of singularity in container publishing service
-
-  * Fix syntax errors in external libraries build system
-    `CVM-1781 <https://sft.its.cern.ch/jira/browse/CVM-1781>`_
-    `CVM-1782 <https://sft.its.cern.ch/jira/browse/CVM-1782>`_
-
-
-Release Notes for CernVM-FS 2.6.0
-=================================
-
-CernVM-FS 2.6 is a feature release that comes with performance improvements,
-new functionality, and bugfixes. We would like to thank Dave Dykstra (FNAL),
-Brian Bockelman and Derek Weitzel (U. Nebraska) and Nick Hazekamp
-(U. Notre Dame) for their contributions to this release!
-
-This release comes with several new, experimental satellite serivces around
-the CernVM-FS core components:
-
-  1. DUCC (daemon that unpacks container images into CernVM-FS).
-     This new component automates the publication of container images from a
-     Docker registry into CernVM-FS.
-
-  2. Repository change notification system, which
-     is complementary to the default, pull-based approach to propagate
-     repository updates.
-
-  3. Repository shrinkwrap utility. This new utility
-     allows for exporting large parts of a CernVM-FS repository to an external
-     file system or a "fat image" as they are used in some HPC environments.
-
-Together with CernVM-FS 2.6.0, we also release the CernVM-FS Repository Gateway
-version 1.0. The increased version number indicates that we are ready to assure
-backward compatibility for the component, in line with
-`semantic versioning <https://semver.org/>`_ rules.
-
-Other notable changes include
-
-  * A new server command ``cvmfs_server ingest``, that can be used to
-    :ref:`directly publish tarballs <sct_tarball>` without extracting them
-    first.
-
-  * Publishing and garbage collection now maintain
-    :ref:`operational statistics <sct_repo_stats>`, for instance about the
-    number of files added and deleted.
-
-  * Various improvements for the S3 backend.
-
-  * A :ref:`file system call tracer <cpt_tracer>` that can be enabled on the
-    client in order to log the file system accesses to a repository.
-
-  * Support for bearer token authentication in addition to X.509 authentication
-    for protected repositories.
-
-  * Various new routines in libcvmfs that provide access to cvmfs-specific
-    meta-data, such as the nested catalog structure.
-
+CernVM-FS 2.7 includes support for the new platform EL8 (RHEL8, CentOS8, etc.),
+Debian 10, and macOS 10.15 "Catalina".
 
 As with previous releases, upgrading should be seamless just by installing the
 new package from the repository. As usual, we recommend to update only a few
@@ -191,132 +14,126 @@ correctly. Please take special care when upgrading a client in NFS mode.
 
 For Stratum 0 servers, all transactions must be closed before upgrading.
 For Stratum 1 servers, there should be no running snapshots during the upgrade.
-After the software upgrade, publisher nodes (``stratum 0``) require doing
+After the software upgrade, publisher nodes require doing
 ``cvmfs_server migrate`` for each repository.
 
-**Note**: if the configuration of the repository publisher node is handled by a
-configuration management system (Puppet, Chef, ...), please see Section
-:ref:`sct_manual_migration`.
+
+Fuse 3 Support
+--------------
+
+This release adds support for libfuse 3 platforms in addition to libfuse 2. The
+libfuse libraries are part of the system's fuse package. The libfuse libraries
+take care of the low-level communication with the Fuse kernel module. The
+libfuse 3 libraries provide new features and performance improvements; they
+can be installed side-by-side with the libfuse 2 libraries. If libfuse 3 is
+available and the ``cvmfs-fuse3`` package is installed, the CernVM-FS client
+will automatically use libfuse 3, otherwise it falls back to libfuse 2. A
+libfuse version can be enforced by setting the ``libfuse=[2,3]`` mount option.
+
+For the EL6 and EL7 platforms, libfuse 3 libraries are provided in the
+fuse3-libs package through EPEL.
 
 
-Container Image Unpacker (DUCC)
--------------------------------
+Pre-mounted Repository
+----------------------
 
-The :ref:`DUCC system <cpt_ducc>` manages the conversion of container images
-from a Docker registry into an unpacked form on a CernVM-FS repository. The
-converted images can be used with Docker and the :ref:`CernVM-FS graph driver
-plugin <cpt_graphdriver>` for Docker.  They can also be used with Singularity
-and other container engines that work with a flat root file system.
-
-Starting containers from unpacked images in CernVM-FS often provides significant
-time and network traffic savings, as only a small fraction of the files in the
-container image is actually used at runtime.
-
-
-Repository Change Notifications
--------------------------------
-
-The new :ref:`repository change notification system <cpt_notification_system>`
-provides a publish-subscribe service to instantaneously distribute repository
-updates. On publish, a change notification can be pushed, which is sent to
-via WebSockets to registered clients. The CernVM-FS client can be configured
-to show the new content within few seconds. This facilitates, for instance,
-CI pipelines where build artifacts from one build phase need to be available
-as an input to the next build phase.
+This release adds support for "pre-mounted" repositories.  Mounting a CernVM-FS
+repository involves calling the ``mount()`` system call on /dev/fuse. This is
+usually done by the ``fusermount`` utility, which is part of the fuse system
+package. As of libfuse 3, the task of mounting /dev/fuse can be offloaded to an
+external, custom utility.  Such an external executable "pre-mounts" the
+repository and allows for easier integration in special environments. This
+functionality has been integrated with
+`Singularity 3.4 <https://github.com/sylabs/singularity/releases/tag/v3.4.0>`_.
+See :ref:`Pre-mounting <sct_premount>` for more details.
 
 
-Shrinkwrap
+POSIX ACLs
 ----------
 
-The :ref:`shrinkwrap <cpt_shrinkwrap>` utility is a stand-alone tool that
-exports a part of a CernVM-FS repository directory hierarchy to another file
-system.  This exported tree can then be re-packaged into a "fat image" for
-HPC systems, or it can be used for benchmarks that exclude possible performance
-effects caused by the CernVM-FS client, such as network accesses to populate the
-cache.
+This release adds support for storing and enforcing POSIX ACLs. In order to store
+ACLs during publication, simply enable extended attributes by setting
+``CVMFS_INCLUDE_XATTRS=true`` in the repository's server.conf configuration
+file. In order to enforce ACLs on the client side, set ``CVMFS_ENFORCE_ACLS=true``
+in the client configuration. Enforcing POSIX ACLs requires libfuse 3 on the
+client node. If only libfuse 2 is available, the client will refuse to mount
+with enforced ACLs.
 
+Note that enforcing ACLs usually only makes sense in concert with a secure
+distribution infrastructure (see :ref:`Large-Scale Data <sct_data>`,
+:ref:`Authorization Helpers <sct_authz>`).
+
+
+Client Performance Instrumentation
+----------------------------------
+
+The CernVM-FS client can now record a histogram of wall-clock time spent in the
+different Fuse callback routines
+(`CVM-1770 <https://sft.its.cern.ch/jira/browse/CVM-1770>`_).
+Recording is enabled by setting the client configuration variable
+``CVMFS_INSTRUMENT_FUSE=true``. The time distribution histograms are displayed
+in the ``cvmfs_talk internal affairs`` command.
 
 
 Bug Fixes
 ---------
 
-  * Client, macOS: fix hang during ``cvmfs_config reload``
+  * Client: fix stale negative entries in active cache eviction
+    (`CVM-1759 <https://sft.its.cern.ch/jira/browse/CVM-1759>`_)
 
-  * Client: fix credentials handling on HTTP retries for protected repositories
-    (`CVM-1660 <https://sft.its.cern.ch/jira/browse/CVM-1660>`_)
+  * Client: fix potentially incomplete parsing of /etc/hosts
 
-  * Server: prevent following dirtab entries that point outside the repository
-    (`CVM-1608 <https://sft.its.cern.ch/jira/browse/CVM-1608>`_)
+  * Client: fix potential file descriptor mix-up of external cache manager
+    after reload
 
-  * Server, S3: fix rare crash during file upload
+  * Client: fix repository updates on shared, writable alien cache
+    (`CVM-1803 <https://sft.its.cern.ch/jira/browse/CVM-1803>`_)
 
-  * Server, S3: throttle upload frequency on HTTP 429 "too many requests"
-    replies (`CVM-1584 <https://sft.its.cern.ch/jira/browse/CVM-1584>`_)
+  * Client: fix missing package dependency on Debian 9 and Ubuntu 18.04
+    (`CVM-1789 <https://sft.its.cern.ch/jira/browse/CVM-1789>`_)
 
-  * Fix building on macOS Mojave
+  * Client: fix spurious error message when starting external cache manager
 
-  * Fix warnings and errors in Debian packaging
+  * Client: fix spurious error message with ``auto;DIRECT`` if proxy auto
+    discovery returns an empty list
+    (`CVM-1818 <https://sft.its.cern.ch/jira/browse/CVM-1818>`_)
+
+  * Client, macOS >= 10.15: set default mount point to /Users/Shared/cvmfs
+    with a firm link from /cvmfs to the new destination
+    (`CVM-1813 <https://sft.its.cern.ch/jira/browse/CVM-1813>`_)
+
+  * Server: fix publish statistics for several corner cases
+    (`CVM-1716 <https://sft.its.cern.ch/jira/browse/CVM-1716>`_ - `CVM-1720 <https://sft.its.cern.ch/jira/browse/CVM-1720>`_)
+
+  * Server, gateway: fix clashing generic tags for short transactions
+    (`CVM-1735 <https://sft.its.cern.ch/jira/browse/CVM-1735>`_)
+
+  * Server, DUCC: use relative symbolic links
+    (`CVM-1817 <https://sft.its.cern.ch/jira/browse/CVM-1817>`_)
 
 
 Other Improvements
 ------------------
 
-  * Client: log more details on HTTP host and proxy connection errors
-    (`CVM-1662 <https://sft.its.cern.ch/jira/browse/CVM-1662>`_)
+  * Client: enable default config repository on Debian stretch and newer
+    (`CVM-1794 <https://sft.its.cern.ch/jira/browse/CVM-1794>`_)
 
-  * Client: generally replace ``@fqrn@`` and ``@org@`` in configuration files
-    (`CVM-1526 <https://sft.its.cern.ch/jira/browse/CVM-1526>`_)
+  * Client: add new magic extended attribute ``repo_counters``
+    (`CVM-1733 <https://sft.its.cern.ch/jira/browse/CVM-1733>`_)
 
-  * Client: add support for ``CVMFS_NFS_INTERLEAVED_INODES`` parameter
-    (`CVM-1561 <https://sft.its.cern.ch/jira/browse/CVM-1561>`_,
-    `Documentation <cpt-configure.html#sct-nfs-interleaved>`_)
+  * Client: add new magic extended attribute ``repo_metainfo``
+    (`CVM-1499 <https://sft.its.cern.ch/jira/browse/CVM-1499>`_)
 
-  * Client: new parameter ``CVMFS_CATALOG_WATERMARK`` to unpin catalogs when
-    their number surpasses the given watermark
+  * Client: enforce ``CVMFS_NFILES`` parameter only when mounting through
+    mount helper
 
-  * Server: make publication process less likely to run out of file descriptors
-    on the read-only union file system mount
+  * Client: add support for ``CVMFS_LIBRARY_PATH`` environment variable in
+    order to facilitate standalone deployment
 
-  * Server, S3: retry upload requests on HTTP 502 errors in order to better
-    handle high load on load-balancers
+  * Server: add support for extended attributes on directories
 
-  * Server, S3: add support for CVMFS_S3_PEEK_BEFORE_PUT parameter, enabled by
-    default (`CVM-1584 <https://sft.its.cern.ch/jira/browse/CVM-1584>`_)
+  * Server: add ``filestats`` command to ``cvmfs_swissknife``
+    (`CVM-1756 <https://sft.its.cern.ch/jira/browse/CVM-1756>`_)
 
-  * Server: reduce number of I/O operations to the local storage backend
-
-  * Server: add support for ``CVMFS_NUM_UPLOAD_TASKS`` parameter for local
-    storage backend
-
-
-
-.. _sct_manual_migration:
-
-Manual Migration from 2.5.2 Release Manager Machines
-----------------------------------------------------
-
-If you do not want to use ``cvmfs_server migrate`` to automatically upgrade,
-publisher nodes that maintain Stratum 0 repositories can be migrated from
-version 2.5.2 with the following steps:
-
-  1. Ensure that there are no open transactions and garbage collection processes
-     before updating the server software and during the repository layout
-     migration.
-
-  2. Install the ``cvmfs-server`` 2.6.0 package.
-
-  3. For each repository: adjust
-     /etc/cvmfs/repositories.d/<REPOSITORY>/client.conf and add the
-     ``CVMFS_NFILES=65536`` parameter.
-
-  4. Update /etc/cvmfs/repositories.d/<REPOSITORY>/server.conf and set
-     ``CVMFS_CREATOR_VERSION=141``
-
-In agreement with the repository owner it's recommended to make a test publish
-
-::
-
-    cvmfs_server transaction <REPOSITORY>
-    cvmfs_server publish <REPOSITORY>
-
-before resuming normal operation.
+  * Server: add ``list_reflog`` command to ``cvmfs_swissknife``
+    (`CVM-1756 <https://sft.its.cern.ch/jira/browse/CVM-1760>`_)

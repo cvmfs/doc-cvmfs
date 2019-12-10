@@ -82,21 +82,21 @@ configuration files (see `Legacy repository configuration syntax`_). The
 `Advanced repository configuration`_ section shows how to implement more
 complex key setups.
 
-In addition to ``repo.json``, there is another configuration
-file, ``user.json``, which contains runtime parameters for the gateway
-application, including:
+In addition to ``repo.json``, the ``user.json`` configuration file contains
+runtime parameters for the gateway application. The most important are:
 
 * ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
-* ``fe_tcp_port`` - the TCP port on which the gateway application listens,
-  4929 by default
-*  the ``size`` entry in the ``receiver_config`` map determines the number of ``cvmfs_receiver``
-worker processes that are spawned (default value is 1, should not be increased beyond the number of
-available CPU cores)
+* ``port`` - the TCP port on which the gateway application listens,
+  4929 by default (the legacy name for this option is "fe_tcp_port")
+* ``num_receivers`` - the number of parallel ``cvmfs_receiver`` worker
+processes to be spawned. Default value is 1, and it should not be increased
+beyond the number of available CPU cores (the legacy name of this option is the
+``size`` entry in the ``receiver_config`` map).
 
-To access the gateway service API, the specified ``fe_tcp_port`` needs to be open in the
-firewall. If the gateway machine also serves as a repository stratum 0 (i.e.
-the repository is created with "local" upstream), then port 80/TCP also needs
-to be open.
+To access the gateway service API, the specified ``port`` needs to be open in
+the firewall. If the gateway machine also serves as a repository stratum 0
+(i.e. the repository is created with "local" upstream), then port 80/TCP also
+needs to be open.
 
 Finally, to start the gateway application, use `systemctl` if systemd is
 available: ::
@@ -107,7 +107,28 @@ otherwise use the service command: ::
 
   # service cvmfs-gateway start
 
-Note that in order to apply any gateway configuration changes, including changes to the API keys, the gateway service must be restarted.
+Note that in order to apply any gateway configuration changes, including
+changes to the API keys, the gateway service must be restarted.
+
+If systemd is available, the application logs can be consulted with: ::
+
+  # journalctl -u cvmfs-gateway
+
+On CentOS 6, where systemd is not available, the log file can be accessed
+directly at `/var/log/cvmfs-gateway.log`.
+
+Running under a different user
+******************************
+
+By default, the `cvmfs-gateway` application is run as `root`. An included
+systemd service template file allows running it as an arbitrary user: ::
+
+  # systemctl start cvmfs-gateway@<USER>
+
+To consult the logs of the application instance running as `<USER>`, run: ::
+
+  # journalctl -u cvmfs-gateway@<USER>
+
 
 Publisher configuration
 =============================
@@ -147,18 +168,54 @@ then make changes to the repository, and publish: ::
   $ cvmfs_server publish
 
 
-Displaying and clearing leases on the gateway machine
-=====================================================
+Querying the gateway machine
+============================
 
-The ``cvmfs-gateway`` package includes two scripts intended to help gateway administrators debug or unblock the gateway in case of problems.
-The first one displays the list of currently active leases: ::
+The configuration and current state of the gateway application can be queried using standard HTTP requests. A "GET" request to the "repos" endpoint returns the key configuration for all the repositories: ::
 
-  $ /usr/libexec/cvmfs-gateway/scripts/get_leases.sh
+  $ curl http://example.gateway.org:4929/api/v1/repos | jq
 
-The second one will clear all the currently active leases: ::
+  {
+    "data": {
+      "example.repo.org": {
+        "key1": "/"
+      }
+    },
+    "status": "ok"
+  }
 
-  $ /usr/libexec/cvmfs-gateway/scripts/clear_leases.sh
+The configuration of a single repository can also be obtained: ::
 
+  $ curl http://example.gateway.org:4929/api/v1/repos/example.repo.org | jq
+
+  {
+    "data": {
+      "key1": "/"
+    },
+    "status": "ok"
+  }
+
+The list of current active leases can be obtained as follows: ::
+
+  $ curl http://example.gateway.org:4929/api/v1/leases | jq
+
+  {
+    "data": {
+      "example.repo.org/sub/dir/1": {
+        "key_id": "key1",
+        "expires": "2019-05-09 23:10:31.730136676 +0200 CEST"
+      },
+      "example.repo.org/sub/dir/2": {
+        "key_id": "key1",
+        "expires": "2019-05-09 23:10:32.497061458 +0200 CEST"
+      },
+      "example.repo.org/sub/dir/3": {
+        "key_id": "key1",
+        "expires": "2019-05-09 23:10:31.935336579 +0200 CEST"
+      }
+    },
+    "status": "ok"
+  }
 
 Advanced repository configuration
 =================================
@@ -204,6 +261,10 @@ Keys can be either be loaded from a file, or declared inline: ::
 
 The ``"version": 2`` property needs to be specified for this configuration
 format to be accepted.
+
+It should be noted that when keys are loaded from a file, an `id` field needs
+not be specified in the configuration file. The public id of the loaded key is
+the one specified in the key file itself.
 
 Legacy repository configuration syntax
 ======================================

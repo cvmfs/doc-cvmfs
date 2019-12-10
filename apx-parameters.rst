@@ -150,6 +150,7 @@ CVMFS_CREATOR_VERSION               | The CernVM-FS version that was used to cre
                                     | (do not change manually).
 CVMFS_DONT_CHECK_OVERLAYFS_VERSION  | Disable checking of OverlayFS version before usage.
                                     | (see :ref:`sct_reporequirements`)
+CVMFS_ENFORCE_ACLS                  | Enforce POSIX ACLs stored in the repository. Requires libfuse 3.
 CVMFS_ENFORCE_LIMITS                | Set to *true* to cause exceeding \*LIMIT variables to be fatal to a publish
                                     | instead of a warning
 CVMFS_EXTERNAL_DATA                 | Set to *true* to mark repository to contain external data
@@ -179,7 +180,7 @@ CVMFS_NUM_UPLOAD_TASKS              | Number of threads used to commit data to s
                                     | Currently only used by the local backend.
 CVMFS_NUM_WORKERS                   | Maximal number of concurrently downloaded files during a Stratum1 pull operation
                                     | (Stratum~1 only).
-CVMFS_PUBLIC_KEY                    Path to the public key file of the repository to be replicated. (Stratum 1 only).
+CVMFS_PUBLIC_KEY                    Colon-separated path to the public key file(s) or directory(ies) of the repository to be replicated. (Stratum 1 only).
 CVMFS_REPLICA_ACTIVE                | Stratum1-only: Set to *no* to skip this repository when executing
                                     | ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.

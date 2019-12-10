@@ -22,6 +22,10 @@ The CernVM-FS software is available in form of several packages:
     dependencies to at least one of the cvmfs-config-\ :math:`\cdots`
     packages.
 
+**cvmfs-fuse3**
+    Contains the additional client libraries necessary to mount with the
+    libfuse3 system libraries.
+
 **cvmfs-devel**
     Contains the ``libcvmfs.a`` static library and the ``libcvmfs.h``
     header file for use of CernVM-FS with Parrot [Thain05]_ as well as the
