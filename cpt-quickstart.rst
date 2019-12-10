@@ -49,7 +49,7 @@ To install the CVMFS package run
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.0/cvmfs-2.7.0-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 OpenSUSE
-~~~~~~
+~~~~~~~~
 To install the CVMFS package run
 
 ::
