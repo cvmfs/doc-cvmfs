@@ -5,7 +5,8 @@ CernVM-FS 2.7 is a feature release that comes with performance improvements,
 new functionality, and bugfixes.
 
 CernVM-FS 2.7 includes support for the new platform EL8 (RHEL8, CentOS8, etc.),
-Debian 10, and macOS 10.15 "Catalina".
+Debian 10, and macOS 10.15 "Catalina". Note that on Catalina, in contrast to
+previous versions a reboot is required to finalize the installation.
 
 As with previous releases, upgrading should be seamless just by installing the
 new package from the repository. As usual, we recommend to update only a few
