@@ -100,13 +100,15 @@ a file named ``sft.cern.ch.spec``. ::
      /lcg/releases/lcgenv/*
 
 Write the ``libcvmfs`` configuration file that will be used for ``cvmfs_shrinkwrap``.
-Here is an example that uses the CERN HPC Stratum 0, written to ``sft.cern.ch.config``. ::
+``cvmfs_shrinkwrap`` puts a heavy load on servers, so please do not configure it to read from production Stratum 1s.
+CERN provides a separate server at http://cvmfs-stratum-zero-hpc.cern.ch and OSG provides one at http://cvmfs-s1goc.opensciencegrid.org:8001.
+Here is an example that uses the CERN server, written to ``sft.cern.ch.config``. ::
 
     CVMFS_REPOSITORIES=sft.cern.ch
     CVMFS_REPOSITORY_NAME=sft.cern.ch
     CVMFS_CONFIG_REPOSITORY=cvmfs-config.cern.ch
     CVMFS_SERVER_URL='http://cvmfs-stratum-zero-hpc.cern.ch/cvmfs/sft.cern.ch'
-    CVMFS_HTTP_PROXY=DIRECT # Adjust to your site
+    CVMFS_HTTP_PROXY=DIRECT # Avoid filling up any local squid's cache
     CVMFS_CACHE_BASE=/var/lib/cvmfs/shrinkwrap
     CVMFS_KEYS_DIR=/etc/cvmfs/keys/cern.ch # Need to be provided for shrinkwrap
     CVMFS_SHARED_CACHE=no # Important as libcvmfs does not support shared caches
