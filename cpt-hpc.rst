@@ -13,6 +13,14 @@ other nodes with respect to CernVM-FS
 These problems can be overcome as described in the following sections.
 
 
+Using Singularity pre-mounts
+----------------------------
+If the fuse package is not available but `Singularity` 3.4 or later is
+installed on the supercomputer, the CernVM-FS Fuse client can be used
+from inside of a container via the Fuse3 "pre-mount" feature.  See
+:ref:`Pre-mounting <sct_premount>`.
+
+
 Parrot-Mounted CernVM-FS in lieu of Fuse Module
 -----------------------------------------------
 Instead of accessing /cvmfs through a Fuse module, processes can use the
