@@ -170,6 +170,23 @@ as command line parameter to the CernVM-FS client. A working code example is
 available in the
 `CernVM-FS tests <https://github.com/cvmfs/cvmfs/blob/cvmfs-2.7/test/src/084-premounted/fuse_premount.c>`_.
 
+In order to use the pre-mount functionality in Singularity, create a
+container that has the ``cvmfs`` package and configuration installed in
+it, and also the corresponding ``cvmfs-fuse3`` package.  Bind-mount scratch
+space at ``/var/run/cvmfs`` and cache space at ``/var/lib/cvmfs``.
+For each desired repository, add a ``--fusemount`` option with
+``container:cvmfs2`` followed by the repository name and mountpoint,
+separated by whitespace.  First mount the configuration repository if
+required.  For example:
+
+::
+
+    CONFIGREPO=config-osg.opensciencegrid.org
+    singularity exec -S /var/run/cvmfs -B $HOME/cvmfs_cache:/var/lib/cvmfs \
+        --fusemount "container:cvmfs2 $CONFIGREPO /cvmfs/$CONFIGREPO" \
+        --fusemount "container:cvmfs2 cms.cern.ch /cvmfs/cms.cern.ch" \
+        docker://davedykstra/cvmfs-fuse3 bash
+
 
 
 Docker Containers
