@@ -89,17 +89,27 @@ root privileges and changes the persona to the ``cvmfs`` user early in the file
 system initialization.  The client RPM package installs SElinux rules for RHEL6
 and RHEL7.  The cache directory should be labeled as ``cvmfs_cache_t``.
 
+
+Running the client as a normal user
+-----------------------------------
+
 The client can also be started as a normal user. In this case, the user needs
 to have access to /dev/fuse.  On Linux kernels < 4.18, mounting /dev/fuse is
 either performed by fuse's ``fusermount`` utility or through a pre-mounted file
 descriptor. On newer Linux kernels, the client can mount as an unprivileged
 user in a user namespace with a detached mount namespace.
 
+The easiest way to run the client as a normal user is with the cvmfs-contrib
+tool called [cvmfsexec](https://github.com/cvmfs-contrib/cvmfsexec).  It
+creates an unprivileged mount namespace, starts the client in the namespace,
+runs a given command which sees the mounted repositories show up at ``/cvmfs``,
+and automatically cleans up when the command exits.
+
 
 CernVM-FS Software Distribution
 -------------------------------
 
 CernVM-FS software is distributed through HTTPS in packages.  There are yum and
-apt repositories for Linux and ``pkg`` packages for OS X.  Sofware is available
+apt repositories for Linux and ``pkg`` packages for OS X.  Software is available
 from HTTPS servers.  The Linux packages and repositories are signed with a GPG
 key.
