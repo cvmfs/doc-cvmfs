@@ -57,6 +57,8 @@ CVMFS_HTTP_PROXY                | Chain of HTTP proxy groups used by CernVM-FS. 
                                 | Set to ``DIRECT`` if you don't use proxies.
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
+CVMFS_INSTRUMENT_FUSE           | When set to *true* gather performance statistics about the FUSE callbacks.
+                                | The results are displayed with `cvmfs_talk internal affairs`.
 CVMFS_NFS_INTERLEAVED_INODES    In NFS mode, use only inodes of the form :math:`an+b`, specified as "b%a".
 CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to proxies.  Can be either 4 or 6.
 CVMFS_KCACHE_TIMEOUT            Timeout for path names and file attributes in the kernel file system buffers.
