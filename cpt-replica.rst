@@ -132,6 +132,56 @@ disk cache area with ``squid -z``. In order to make the increased number
 of file descriptors effective for Squid, execute ``ulimit -n 8192``
 prior to starting the squid service.
 
+Geo API Setup
+-------------
+
+One of the essential services supplied by Stratum 1s to CernVM-FS
+clients is the Geo API.  This enables clients to share configurations
+worldwide while automatically sorting Stratum 1s geographically to
+prioritize connecting to the closest ones.  This makes use of a GeoIP
+database from [Maxmind](https://dev.maxmind.com/geoip/geoip2/geolite2/)
+that translates IP addresses of clients to longitude and latitude.
+
+The database is free, but the Maxmind
+[End User License Agreement](https://www.maxmind.com/en/geolite2/eula/)
+requires that each user of the database
+[sign up for an account](https://www.maxmind.com/en/geolite2/signup/)
+and promise to update the database to the latest version within 30 days
+of when they issue a new version.  The signup process will end with
+giving you a License Key.  The ``cvmfs_server`` ``add-replica`` and
+``snapshot`` commands will take care of automatically updating the
+database if you put a line like the following in
+``/etc/cvmfs/server.local``, replacing ``<license key>`` with the key
+you get from the signup process:
+
+::
+    CVMFS_GEO_LICENSE_KEY=<license key>
+
+To keep the key secret, set the mode of ``/etc/cvmfs/server.local`` to 600.
+
+Alternatively, if you have a separate mechanism of installing and
+updating the Geolite2 City database file, you can instead set
+``CVMFS_GEO_DB_FILE`` to the full path where you have installed it.  If
+the path is ``NONE``, then no database will be required, but note that
+this will break the client Geo API so only use it for testing, when the
+server is not used by production clients.  If the database is installed
+in the default path used by Maxmind's own
+[geoipupdate](https://dev.maxmind.com/geoip/geoipupdate/) tool,
+``/usr/share/GeoIP``, then ``cvmfs_server`` will use it from there and
+neither variable needs to be set.
+
+Normally repositories on Stratum 1s are created owned by root, and the
+``cvmfs_server snapshot`` command is run by root.  If you want to use a
+different user id while still using the builtin mechanism for updating
+the geo database, change the owner of ``/var/lib/cvmfs-server/geo`` and
+``/etc/cvmfs/server.local`` to the user id.
+
+The builtin geo database update mechanism normally checks for updates
+once a week on Tuesdays but can be controlled through a set of variables
+defined in ``cvmfs_server`` beginning with ``CVMFS_UPDATEGEO_``.  Look
+in the ``cvmfs_server`` script for the details.  An update can also be
+forced at any time by running ``cvmfs_server update-geodb``.
+
 Monitoring
 ----------
 
