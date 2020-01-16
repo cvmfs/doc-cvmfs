@@ -139,13 +139,13 @@ One of the essential services supplied by Stratum 1s to CernVM-FS
 clients is the Geo API.  This enables clients to share configurations
 worldwide while automatically sorting Stratum 1s geographically to
 prioritize connecting to the closest ones.  This makes use of a GeoIP
-database from [Maxmind](https://dev.maxmind.com/geoip/geoip2/geolite2/)
+database from `Maxmind <https://dev.maxmind.com/geoip/geoip2/geolite2/>`_
 that translates IP addresses of clients to longitude and latitude.
 
 The database is free, but the Maxmind
-[End User License Agreement](https://www.maxmind.com/en/geolite2/eula/)
+`End User License Agreement <https://www.maxmind.com/en/geolite2/eula/>`_
 requires that each user of the database
-[sign up for an account](https://www.maxmind.com/en/geolite2/signup/)
+`sign up for an account <https://www.maxmind.com/en/geolite2/signup/>`_
 and promise to update the database to the latest version within 30 days
 of when they issue a new version.  The signup process will end with
 giving you a License Key.  The ``cvmfs_server`` ``add-replica`` and
@@ -155,7 +155,8 @@ database if you put a line like the following in
 you get from the signup process:
 
 ::
-    CVMFS_GEO_LICENSE_KEY=<license key>
+
+      CVMFS_GEO_LICENSE_KEY=<license key>
 
 To keep the key secret, set the mode of ``/etc/cvmfs/server.local`` to 600.
 
@@ -166,7 +167,7 @@ the path is ``NONE``, then no database will be required, but note that
 this will break the client Geo API so only use it for testing, when the
 server is not used by production clients.  If the database is installed
 in the default path used by Maxmind's own
-[geoipupdate](https://dev.maxmind.com/geoip/geoipupdate/) tool,
+`geoipupdate <https://dev.maxmind.com/geoip/geoipupdate/>`_ tool,
 ``/usr/share/GeoIP``, then ``cvmfs_server`` will use it from there and
 neither variable needs to be set.
 
