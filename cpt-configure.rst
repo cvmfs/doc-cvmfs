@@ -157,8 +157,8 @@ Pre-mounting
 
 In usual deployments, the ``fusermount`` utility from the system fuse package
 takes care of mounting a repository before handing of control to the CernVM-FS
-client. The ``fusermount`` utility is a suid binary because on older kernel and
-outside user name spaces mounting is a privileged operation.
+client. The ``fusermount`` utility is a suid binary because on older kernels
+and outside user name spaces, mounting is a privileged operation.
 
 As of libfuse3, the task of mounting /dev/fuse can be performed by any utility.
 This functionality has been added, for instance, to
