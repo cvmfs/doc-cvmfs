@@ -166,6 +166,8 @@ CVMFS_GENERATE_LEGACY_BULK_CHUNKS   | Set to *false* to disable generation of wh
                                     | Requires clients >= 2.1.7.
 CVMFS_GC_DELETION_LOG               | Log file path to track all garbage collected objects during sweeping
                                     | for bookkeeping or debugging
+CVMFS_GEO_DB_FILE                   Path to externally updated location of geolite2 city database, or 'None' for no database.
+CVMFS_GEO_LICENSE_KEY               A license key for downloading the geolite2 city database from maxmind.
 CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.
 CVMFS_HASH_ALGORITHM                | Define which secure hash algorithm should be used by CernVM-FS for CAS objects
                                     | (supported are: *sha1*, *rmd160* and *shake128*)
