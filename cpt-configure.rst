@@ -102,6 +102,18 @@ Otherwise multiple CernVM-FS processes would collide in the same cache
 location. If a repository is needed under several paths, use a *bind
 mount* or use a :ref:`private file system mount point <sct_privatemount>`.
 
+If a configuration repository is required to mount other repositories,
+it will need to be mounted first.  Since /etc/fstab mounts are done in
+parallel at boot time, the order in /etc/fstab is not sufficient to make
+sure that happens.  On systemd-based systems this can be done by adding
+the option ``x-systemd.requires-mounts-for=<configrepo>`` on all the
+other mounts.  For example:
+
+::
+
+      config-egi.egi.eu /cvmfs/config-egi.egi.eu cvmfs defaults,_netdev,nodev 0 0
+      cms.cern.ch /cvmfs/cms.cern.ch cvmfs defaults,_netdev,nodev,x-systemd.requires-mounts-for=/cvmfs/config-egi.egi.eu 0 0
+
 .. _sct_privatemount:
 
 Private Mount Points
