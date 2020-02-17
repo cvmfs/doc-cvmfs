@@ -825,7 +825,7 @@ Linux 5. The NFS server should run a lock server as well. For proper NFS
 support, set ``CVMFS_NFS_SOURCE=yes``. On the client side, all available nfs
 implementations should work.
 
-In the NFS mode, upon mount an additionally directory
+In the NFS mode, upon mount an additional directory
 nfs\_maps.$repository\_name appears in the CernVM-FS cache directory.
 These *NFS maps* use leveldb to store the virtual inode CernVM-FS issues
 for any accessed path. The virtual inode may be requested by NFS clients

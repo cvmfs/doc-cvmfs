@@ -132,6 +132,8 @@ disk cache area with ``squid -z``. In order to make the increased number
 of file descriptors effective for Squid, execute ``ulimit -n 8192``
 prior to starting the squid service.
 
+.. _sct_geoip_db:
+
 Geo API Setup
 -------------
 
