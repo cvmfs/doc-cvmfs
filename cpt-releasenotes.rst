@@ -1,3 +1,42 @@
+Release Notes for CernVM-FS 2.7.1
+=================================
+
+CernVM-FS 2.7.1 is a patch release. It contains bugfixes and improvements for
+clients and stratum 1 servers. Upgrading on publisher and gateway nodes is
+not necessary.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Note for stratum 1 servers: the upstream delivery mechanism for the GeoIP
+database changed. See :ref:`Geo API Setup <sct_geoapi_db>` for more details.
+
+Note for upgrades from versions prior to 2.7.0: please also see the specific
+instructions in the release notes for version 2.7.0 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client: fix host fail-over for redirected stratum 1 sources
+    (`CVM-1675 <https://sft.its.cern.ch/jira/browse/CVM-1675>`_)
+
+  * Client: add Fuse 3 support on Debian 10 "buster"
+    (`CVM-1825 <https://sft.its.cern.ch/jira/browse/CVM-1825>`_)
+
+  * Client: add reboot notice to macOS Catalina installation screen
+
+  * Server: add support for CVMFS_GEO_DB_FILE and CVMFS_GEO_LICENSE_KEY
+    to adjust to upstream GeoIP database delivery mechanism
+    (`CVM-1833 <https://sft.its.cern.ch/jira/browse/CVM-1833>`_)
+
+
 Release Notes for CernVM-FS 2.7.0
 =================================
 
