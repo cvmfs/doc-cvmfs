@@ -16,7 +16,7 @@ For publisher and gateway nodes, all transactions must be closed and no active
 leases must be present before upgrading.
 
 Note for stratum 1 servers: the upstream delivery mechanism for the GeoIP
-database changed. See :ref:`Geo API Setup <sct_geoapi_db>`_ for more details.
+database changed. See :ref:`Geo API Setup <sct_geoip_db>` for more details.
 
 Note for upgrades from versions prior to 2.7.0: please also see the specific
 instructions in the release notes for version 2.7.0 and earlier.
