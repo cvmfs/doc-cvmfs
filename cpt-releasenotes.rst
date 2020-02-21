@@ -94,7 +94,11 @@ POSIX ACLs
 This release adds support for storing and enforcing POSIX ACLs. In order to store
 ACLs during publication, simply enable extended attributes by setting
 ``CVMFS_INCLUDE_XATTRS=true`` in the repository's server.conf configuration
-file. In order to enforce ACLs on the client side, set ``CVMFS_ENFORCE_ACLS=true``
+file. Note that ACLs require overlayfs as a union file system; aufs does not
+support storing ACLs. For systems with both aufs and overlayfs installed, the
+``CVMFS_UNION_FS_TYPE`` parameter can be used to select overlayfs.
+
+In order to enforce ACLs on the client side, set ``CVMFS_ENFORCE_ACLS=true``
 in the client configuration. Enforcing POSIX ACLs requires libfuse 3 on the
 client node. If only libfuse 2 is available, the client will refuse to mount
 with enforced ACLs.
