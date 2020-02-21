@@ -1064,7 +1064,7 @@ Those paths may contain shell wildcards such as asterisk (``*``) and
 question mark (``?``). This is useful for specifying patterns for
 creating nested catalogs as new files are installed. A very good use of
 the patterns is to identify directories where software releases will be
-installed. Manually-placed ``.cvmfscatalog`` files can still be used 
+installed. Manually-placed ``.cvmfscatalog`` files can still be used
 along with ``.cvmfsdirtab``.
 
 In addition, lines in ``.cvmfsdirtab`` that begin with an exclamation
@@ -1609,13 +1609,12 @@ Repositories for Container Images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Repositories containing Linux container image contents (that is: container root
-file systems) should have the following configuration::
+file systems) should use overlayfs as a union file system and have the following
+configuration::
 
-    CVMFS_IGNORE_SPECIAL_FILES=true
     CVMFS_INCLUDE_XATTRS=true
     CVMFS_VIRTUAL_DIR=true
 
-This ensures that left-over device files in the root file system do not break
-publication on CernVM-FS but instead they get silently dropped.  Extended
-attributes of files, such as file capabilities and SElinux attributes, are
-recorded.  And previous file system revisions can be accessed from the clients.
+Extended attributes of files, such as file capabilities and SElinux attributes,
+are recorded. And previous file system revisions can be accessed from the
+clients.
