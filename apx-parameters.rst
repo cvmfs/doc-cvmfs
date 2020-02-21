@@ -41,6 +41,7 @@ CVMFS_DNS_MAX_TTL               | Maximum effective TTL in seconds for DNS queri
 CVMFS_DNS_RETRIES               Number of retries when resolving proxy names
 CVMFS_DNS_TIMEOUT               Timeout in seconds when resolving proxy names
 CVMFS_DNS_ROAMING               If true, watch /etc/resolv.conf for nameserver changes
+CVMFS_ENFORCE_ACLS              | Enforce POSIX ACLs stored in the repository. Requires libfuse 3.
 CVMFS_EXTERNAL_FALLBACK_PROXY   | List of HTTP proxies similar to ``CVMFS_EXTERNAL_HTTP_PROXY``.
                                 | The fallback proxies are added to the end of the normal proxies,
                                 | and disable DIRECT connections.
@@ -152,7 +153,6 @@ CVMFS_CREATOR_VERSION               | The CernVM-FS version that was used to cre
                                     | (do not change manually).
 CVMFS_DONT_CHECK_OVERLAYFS_VERSION  | Disable checking of OverlayFS version before usage.
                                     | (see :ref:`sct_reporequirements`)
-CVMFS_ENFORCE_ACLS                  | Enforce POSIX ACLs stored in the repository. Requires libfuse 3.
 CVMFS_ENFORCE_LIMITS                | Set to *true* to cause exceeding \*LIMIT variables to be fatal to a publish
                                     | instead of a warning
 CVMFS_EXTERNAL_DATA                 | Set to *true* to mark repository to contain external data
