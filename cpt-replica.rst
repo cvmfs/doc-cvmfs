@@ -161,6 +161,7 @@ you get from the signup process:
       CVMFS_GEO_LICENSE_KEY=<license key>
 
 To keep the key secret, set the mode of ``/etc/cvmfs/server.local`` to 600.
+You can test that it works by running ``cvmfs_server update-geodb``.
 
 Alternatively, if you have a separate mechanism of installing and
 updating the Geolite2 City database file, you can instead set
