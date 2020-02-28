@@ -34,6 +34,9 @@ By default ``cvmfs_shrinkwrap`` builds in a base directory (``/tmp/cvmfs``)
 where a directory exists for each repository and a ``.data`` directory
 containing the content-addressed files for deduplication.
 
+The shrinkwrap output directory should be formatted with XFS.  The ext file
+systems limit the number of hard links to 64k.
+
 
 ======================================== =======================================
 **File Path**                            **Description**
@@ -139,10 +142,10 @@ Using the cvmfs repository ``sft.cern.ch`` : ::
 
    cvmfs_shrinkwrap -r sft.cern.ch -f sft.cern.ch.config -t sft.cern.ch.spec --dest-base /tmp/cvmfs -j 16
 
-Note on CVMFS Variables
-~~~~~~~~~~~~~~~~~~~~~~~
+Note on CernVM-FS Variant Symlinks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CVMFS variables that are used in the organization of repositories are
+CernVM-FS variant symlinks that are used in the organization of repositories are
 evaluated at the time of image creation. As such, the OS the image is created
 on should be the expected OS the image will be used with. Specification rules
 can be written to include other OS compatible version, but symlinks will
