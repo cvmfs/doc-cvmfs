@@ -1,3 +1,51 @@
+Release Notes for CernVM-FS 2.7.2
+=================================
+
+CernVM-FS 2.7.2 is a patch release. It contains bugfixes and improvements for
+clients and servers. Together with version 2.7.2, we release the cvmfs-gateway
+1.1.1 patch release.  Publishers using the gateway should upgrade in lockstep.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading. The cvmfs-gateway package 1.1.1 should
+be rolled out together with the cvmfs-server 2.7.2 package.
+
+Note for upgrades from versions prior to 2.7.1: please also see the specific
+instructions in the release notes for version 2.7.1 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client: optimize loading of nested catalogs
+    (`CVM-1848 <https://sft.its.cern.ch/jira/browse/CVM-1848>`_)
+
+  * Client: improve logging when switching hosts
+    (`CVM-1844 <https://sft.its.cern.ch/jira/browse/CVM-1844>`_)
+
+  * Client: add `cvmfs_talk latency` command
+
+  * Server: fix creation of nested catalogs by ingestion command
+    (`CVM-1862 <https://sft.its.cern.ch/jira/browse/CVM-1862>`_)
+
+  * Server: minor improvements to geo db command line interface
+    (`CVM-1850 <https://sft.its.cern.ch/jira/browse/CVM-1850>`_,
+     `CVM-1851 <https://sft.its.cern.ch/jira/browse/CVM-1851>`_)
+
+  * Gateway: fix lease acquisiton on non-existing path
+    (`CVM-1696 <https://sft.its.cern.ch/jira/browse/CVM-1696>`_)
+
+  * Gateway: use watchdog for cvmfs_receiver
+    (`CVM-1864 <https://sft.its.cern.ch/jira/browse/CVM-1864>`_)
+
+  * Fix packaging for Fedora 31
+
+
 Release Notes for CernVM-FS 2.7.1
 =================================
 
