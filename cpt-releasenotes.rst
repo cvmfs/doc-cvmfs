@@ -34,8 +34,7 @@ Bug Fixes and Improvements
     (`CVM-1862 <https://sft.its.cern.ch/jira/browse/CVM-1862>`_)
 
   * Server: minor improvements to geo db command line interface
-    (`CVM-1850 <https://sft.its.cern.ch/jira/browse/CVM-1850>`_,
-     `CVM-1851 <https://sft.its.cern.ch/jira/browse/CVM-1851>`_)
+    (`CVM-1850 <https://sft.its.cern.ch/jira/browse/CVM-1850>`_, `CVM-1851 <https://sft.its.cern.ch/jira/browse/CVM-1851>`_)
 
   * Gateway: fix lease acquisiton on non-existing path
     (`CVM-1696 <https://sft.its.cern.ch/jira/browse/CVM-1696>`_)
