@@ -169,7 +169,7 @@ updating the Geolite2 City database file, you can instead set
 the path is ``NONE``, then no database will be required, but note that
 this will break the client Geo API so only use it for testing, when the
 server is not used by production clients.  If the database is installed
-in the default path used by Maxmind's own
+in the default directory used by Maxmind's own
 `geoipupdate <https://dev.maxmind.com/geoip/geoipupdate/>`_ tool,
 ``/usr/share/GeoIP``, then ``cvmfs_server`` will use it from there and
 neither variable needs to be set.
