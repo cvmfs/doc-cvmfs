@@ -725,7 +725,8 @@ information. There are several supported attributes:
     The loaded public RSA keys used for repository whitelist verification.
 
 **rawlink**
-    Shows unresolved variant symbolic links; only accessible as root.
+    Shows unresolved variant symbolic links; only accessible from the
+    root attribute namespace (use `attr -Rg rawlink`).
 
 **repo\_counters**
     Shows the aggregate counters of the repository contents (number of files
