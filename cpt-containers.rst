@@ -211,8 +211,8 @@ All the tags of the image ``pyhf/pyhf`` that are published in the docker hub
 will be published in unpacked.cern.ch.
 
 
-Update images and new tags
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Updated images and new tags
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 DUCC polls the docker registries continuously. As soon as a new or modified
 container image is detected it starts the conversion process.
