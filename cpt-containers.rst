@@ -1,7 +1,7 @@
 .. _cpt_containers:
 
-Containers Images and CernVM-FS
-===============================
+Container Images and CernVM-FS
+==============================
 
 CernVM-FS interacts with containers technologies in two main ways:
 
