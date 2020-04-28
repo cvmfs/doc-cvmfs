@@ -3,7 +3,7 @@
 Container Images and CernVM-FS
 ==============================
 
-CernVM-FS interacts with containers technologies in two main ways:
+CernVM-FS interacts with container technologies in two main ways:
 
 1. CernVM-FS application repositories (e.g. /cvmfs/atlas.cern.ch) can be mounted into a stock container (e.g. CentOS 8)
 2. The container root filesystem (e.g. the root file system "/" of CentOS 8) itself can be served directly from CernVM-FS
@@ -34,7 +34,7 @@ This is supported by all the common containers runtimes, including:
 Examples
 ~~~~~~~~
 
-To bind-mount CVMFS inside a container docker, it is sufficient to use the
+To bind-mount CVMFS inside a docker container, it is sufficient to use the
 ``--volume/-v`` flag.
 
 For instance:
@@ -44,7 +44,7 @@ For instance:
     docker run -it --volume /cvmfs:/cvmfs:shared ubuntu ls -lna /cvmfs/atlas.cern.ch
 
 
-Of course, it is also possible to limit the bind-mount to only one repository, or few repositories:
+Of course, it is also possible to limit the bind-mount to only one repository, or a few repositories:
 
 ::
 
@@ -56,7 +56,7 @@ Of course, it is also possible to limit the bind-mount to only one repository, o
     drwxr-xr-x  8  125  130 4096 Oct 15  2018 sft.cern.ch/
 
 
-Podman has the same interface of docker, but it requires the ``ro`` options when mounting a single repository.
+Podman has the same interface as docker, but it requires the ``ro`` options when mounting a single repository.
 
 ::
 
@@ -70,8 +70,7 @@ A similar approach is possible with Singularity, but the syntax is a little diff
 
 ::
 
-    $ singularity exec --bind /cvmfs docker://library/ubuntu:18.04 /bin/bash
-    Singularity> ll /cvmfs/lhcb.cern.ch/
+    $ singularity exec --bind /cvmfs docker://library/ubuntu ls -l /cvmfs/lhcb.cern.ch
     total 2
     drwxrwxr-x.  3 cvmfs cvmfs  3 Jan  6  2011 etc
     lrwxrwxrwx.  1 cvmfs cvmfs 16 Aug  6  2011 group_login.csh -> lib/etc/LHCb.csh
@@ -79,18 +78,15 @@ A similar approach is possible with Singularity, but the syntax is a little diff
     drwxrwxr-x. 20 cvmfs cvmfs  3 Apr 24 12:39 lib
 
 
-Also in singularity is possible to use the syntax
+Also in singularity it is possible to use the syntax
 ``host_directory:container_directory`` and it is possible to mount multiple
 paths at the same time separating the ``--bind`` arguments with a comma.
 
 ::
 
     $ singularity exec --bind /cvmfs/alice.cern.ch:/cvmfs/alice.cern.ch,/cvmfs/lhcb.cern.ch \
-	docker://library/ubuntu:18.04 /bin/bash
-    Singularity> ll /cvmfs/
+	docker://library/ubuntu ls -l /cvmfs/
     total 5
-    drwxr-xr-x  4 smosciat smosciat   80 Apr 20 11:16 ./
-    drwxr-xr-x  1 smosciat smosciat  100 Apr 20 11:16 ../
     drwxr-xr-x 17      125      130 4096 Nov 27  2012 alice.cern.ch/
     drwxrwxr-x  4      125      130    6 Nov 16  2010 lhcb.cern.ch/
 
@@ -108,7 +104,7 @@ Distributing container images on CernVM-FS
 Image distribution on CernVM-FS works with _unpacked_ layers or image root
 file systems.  Any CernVM-FS repository can store container images.
 
-A number of images is already provided by ``/cvmfs/unpacked.cern.ch``, a
+A number of images are already provided in ``/cvmfs/unpacked.cern.ch``, a
 repository managed at CERN to host containers images for various purposes and
 groups. The repository is managed using
 `the DUCC utility <https://github.com/cvmfs/cvmfs/tree/devel/ducc>`_.
@@ -123,8 +119,8 @@ Storing the layers of an image in CernVM-FS allows using (after creation) the
 containers that compose the image's filesystem from the layers stored in
 CernVM-FS. The docker thin image can be created using the DUCC utility.
 
-If the whole filesystem of an image is stored in the repository is possible to
-run the image using ``singularity``:
+If the whole filesystem of an image is stored in the repository it is
+possible to run the image using ``singularity``:
 
 ::
 
@@ -135,9 +131,10 @@ Using unpacked.cern.ch
 ~~~~~~~~~~~~~~~~~~~~~~
 
 The ``unpacked.cern.ch`` repository provides a centrally managed container
-image hub without burden users with managing their CernVM-FS repositories or
-conversion of images.  The repository publicly available including on lxplus,
-lxbatch and on the WLCG.
+image hub without burdening users with managing their CernVM-FS repositories
+or conversion of images.  It also enables saving storage space because
+of cvmfs deduplication of files that are common between different images.
+The repository is publicly available.
 
 To add your image to ``unpacked.cern.ch`` you can add the image name to any one
 of the following two files.
@@ -154,7 +151,7 @@ publishes the image to /cvmfs/unpacked.cern.ch. Depending on the size of the
 image, ingesting an image in unpacked.cern.ch takes ~15 minutes.
 
 The images are continuously checked for updates. If you push another version of
-the image with the same tag, DUCC updates the image on CVMFS. Again with ~15
+the image with the same tag, DUCC updates the image on CVMFS, again with ~15
 minutes of delay.
 
 DUCC syntax for images
@@ -183,7 +180,7 @@ For instance:
 
     https://registry.hub.docker.com/atlas/analysisbase:21.2.1*
 
-Is a valid image specification, and triggers conversion of all the
+is a valid image specification, and triggers conversion of all the
 ``atlas/analysisbase`` images whose tags start with ``21.2.1``, including:
 
 ::
@@ -207,7 +204,7 @@ in this example:
 
     https://registry.hub.docker.com/pyhf/pyhf:*
 
-All the tags of the image ``pyhf/pyhf`` that are published in the docker hub
+All the tags of the image ``pyhf/pyhf`` that are published in docker hub
 will be published in unpacked.cern.ch.
 
 
@@ -221,7 +218,7 @@ container image is detected it starts the conversion process.
 Work in progress
 ----------------
 
-There are several lines of development that we are pursuing to make improve
+There are several lines of development that we are pursuing improving
 the CernVM-FS container integration
 
 ``containerd`` remote-snapshotter plugin
@@ -237,15 +234,15 @@ standard docker registry.
 
 Similarly to the ``containerd`` integration, this development will allow running
 a standard docker image using podman fetching the layers, unpacked, from a
-CernVM-FS repository. Falling back to downloading the files from the registry if
-necessary.
+CernVM-FS repository, falling back to downloading the files from the
+registry if necessary.
 
 
 DUCC registry interface
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 This development will allow for pushing the image to a special registry and
-for finding the image already in the CernVM-FS repository as soon as the push
-finishes. While this will results in slower push operations since the
+for finding the image in the CernVM-FS repository as soon as the push
+finishes. While this will result in slower push operations since the
 layers need to be ingested into CernVM-FS, it will guarantee full distribution
-of the image as soon as the push complete.
+of the image as soon as the push completes.
