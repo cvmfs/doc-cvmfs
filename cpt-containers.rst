@@ -105,7 +105,7 @@ Image distribution on CernVM-FS works with _unpacked_ layers or image root
 file systems.  Any CernVM-FS repository can store container images.
 
 A number of images are already provided in ``/cvmfs/unpacked.cern.ch``, a
-repository managed at CERN to host containers images for various purposes and
+repository managed at CERN to host container images for various purposes and
 groups. The repository is managed using
 `the DUCC utility <https://github.com/cvmfs/cvmfs/tree/devel/ducc>`_.
 
@@ -218,8 +218,8 @@ container image is detected it starts the conversion process.
 Work in progress
 ----------------
 
-There are several lines of development that we are pursuing improving
-the CernVM-FS container integration
+There are several lines of development that we are pursuing to improve
+the CernVM-FS container integration.
 
 ``containerd`` remote-snapshotter plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
