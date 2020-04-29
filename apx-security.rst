@@ -100,7 +100,7 @@ descriptor. On newer Linux kernels, the client can mount as an unprivileged
 user in a user namespace with a detached mount namespace.
 
 The easiest way to run the client as a normal user is with the cvmfs-contrib
-tool called [cvmfsexec](https://github.com/cvmfs-contrib/cvmfsexec).  It
+tool called `cvmfsexec <https://github.com/cvmfs-contrib/cvmfsexec>`_.  It
 creates an unprivileged mount namespace, starts the client in the namespace,
 runs a given command which sees the mounted repositories show up at ``/cvmfs``,
 and automatically cleans up when the command exits.
