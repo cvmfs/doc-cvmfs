@@ -23,7 +23,7 @@ two servers are A and B, set
 Squid is very powerful and has lots of configuration and tuning
 options. For CernVM-FS we require only the very basic static content
 caching. If you already have a
-`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`
+`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`_
 installed you can use it as well for CernVM-FS.
 
 Otherwise, cache sizes and access control needs to be configured in
@@ -54,7 +54,7 @@ something like this:
 
 If you instead want to limit the destinations to major cvmfs Stratum 1s,
 it is better to use the list built in to 
-`Frontier Squid https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Restricting_the_destination`
+`Frontier Squid https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Restricting_the_destination`_
 because the list is sometimes updated with new releases.
 
 The Squid configuration can be verified by ``squid -k parse``. Before
