@@ -99,11 +99,10 @@ either performed by fuse's ``fusermount`` utility or through a pre-mounted file
 descriptor. On newer Linux kernels, the client can mount as an unprivileged
 user in a user namespace with a detached mount namespace.
 
-The easiest way to run the client as a normal user is with the cvmfs-contrib
-tool called `cvmfsexec <https://github.com/cvmfs-contrib/cvmfsexec>`_.  It
-creates an unprivileged mount namespace, starts the client in the namespace,
-runs a given command which sees the mounted repositories show up at ``/cvmfs``,
-and automatically cleans up when the command exits.
+The easiest way to run the client as a normal user is with the 
+`cvmfsexec <https://github.com/cvmfs/cvmfsexec>`_ package.  It supports
+four ways to run cvmfs as an unprivileged user, depending on the
+capabilities available on the host.  See the README there for details.
 
 
 CernVM-FS Software Distribution
