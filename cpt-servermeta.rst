@@ -51,7 +51,7 @@ for arbitrary information.
 Note that this JSON file is stored inside CernVM-FS's backend data structure and
 gets replicated to Stratum1 servers automatically.
 
-Editing is done per repository using the ``cvmfs_server`` utilitiy. As with the
+Editing is done per repository using the ``cvmfs_server`` utility. As with the
 :ref:`global meta information <sct_globalmetainfo>` ``cvmfs_server`` uses ``jq``
 to validate edited JSON information before storing it::
 
