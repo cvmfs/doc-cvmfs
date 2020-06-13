@@ -3,7 +3,7 @@
 CernVM-FS Server Meta Information
 =================================
 
-The CernVM-FS server automatically maintains both global and repository specifc
+The CernVM-FS server automatically maintains both global and repository-specific
 meta information as JSON data. Release manager machines keep a list of hosted
 Stratum0 and Stratum1 repositories and user-defined administrative meta
 information.
@@ -41,7 +41,7 @@ user-defined JSON files.
 Repository Specific Meta Information
 ------------------------------------
 
-Each repository contains a JSON object with repository specific meta data. The
+Each repository contains a JSON object with repository-specific meta data. The
 information is maintained by the repository's owner on the Stratum0 release
 manager machine. It contains the maintainer's contact information, a description
 of the repository's content, the recommended Stratum 0 URL and a list of
@@ -51,7 +51,7 @@ for arbitrary information.
 Note that this JSON file is stored inside CernVM-FS's backend data structure and
 gets replicated to Stratum1 servers automatically.
 
-Editing is done per repository using the ``cvmfs_server`` utilitiy. As with the
+Editing is done per repository using the ``cvmfs_server`` utility. As with the
 :ref:`global meta information <sct_globalmetainfo>` ``cvmfs_server`` uses ``jq``
 to validate edited JSON information before storing it::
 
@@ -62,7 +62,7 @@ that should be stored as the repository's meta information::
 
   cvmfs_server update-repoinfo -f <path to JSON file> <repo name>
 
-An example of a repository specific meta information file can be found in
+An example of a repository-specific meta information file can be found in
 :ref:`the section below <sct_repometainfo_example>`.
 
 .. _sct_jsonexamples:
