@@ -124,8 +124,8 @@ Repository Specific Meta Information
     "organisation"  : "Your Organisation",
     "description"   : "Repository content",
     "url"           : "https://www.example.com/",
-    "recommended-stratum0"  : "stratum 0 url",
-    "recommended-stratum1s" : [ "stratum1 url", "stratum1 url" ],
+    "recommended-stratum0"  : "http://cvmfs-s0.example.com/cvmfs/repo.example.com",
+    "recommended-stratum1s" : [ "http://cvmfs-s1-a.example.com/cvmfs/repo.example.com", "http://cvmfs-s1-b.example.com/cvmfs/repo.example.com" ],
 
     "custom" : {
       "_comment" : "Put arbitrary structured data here"
