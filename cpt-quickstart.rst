@@ -46,15 +46,7 @@ To install the CVMFS package run
 
 ::
 
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.2/cvmfs-2.7.2-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
-
-OpenSUSE
-~~~~~~
-To install the CVMFS package run
-
-::
-
-    zypper install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.2/cvmfs-2.7.2-1.suse1320.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.3/cvmfs-2.7.3-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
 Mac OS X
