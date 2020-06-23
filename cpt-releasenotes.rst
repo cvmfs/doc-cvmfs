@@ -1,3 +1,38 @@
+Release Notes for CernVM-FS 2.7.3
+=================================
+
+CernVM-FS 2.7.3 is a patch release. It contains bugfixes and improvements for
+clients and servers.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Note for upgrades from versions prior to 2.7.2: please also see the specific
+instructions in the release notes for version 2.7.2 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Add Ubuntu 20 and Fedora 32 packages
+  * Client / EL8: fix spurious SElinux error message during package upgrade
+    (`CVM-1878 <https://sft.its.cern.ch/jira/browse/CVM-1878>`_)
+  * Client: fix `cvmfs_config chksetup` for squashed NFS alien cache
+    (`CVM-1888 <https://sft.its.cern.ch/jira/browse/CVM-1888>`_)
+  * Server: fix handling of .cvmfs_status.json after garbage collection
+    (`CVM-1887 <https://sft.its.cern.ch/jira/browse/CVM-1887>`_)
+  * Server: add `add-replica -P` option to create pass-through replicas
+    (`CVM-1845 <https://sft.its.cern.ch/jira/browse/CVM-1845>`_)
+  * Fix building with GCC >= 10
+    (`CVM-1894 <https://sft.its.cern.ch/jira/browse/CVM-1894>`_)
+
+
 Release Notes for CernVM-FS 2.7.2
 =================================
 
