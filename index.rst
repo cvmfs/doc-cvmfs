@@ -49,6 +49,7 @@ Contents
    cpt-repository-gateway
    cpt-notification-system
    cpt-containers
+   cpt-building-for-cvmfs
    part-advanced
    part-appendix
 
