@@ -4,7 +4,7 @@
 Building software for CVMFS distribution
 ========================================
 
-This chapter try to collect the best practise of the community around building software to be distributed with CVMFS.
+This chapter tries to collect the best practice of the community around building software to be distributed with CVMFS.
 
 Each project has different needs and tradeoffs and this page is only offering suggestions.
 
@@ -16,18 +16,17 @@ Sometimes is necessary to set up a writable /cvmfs directory. For instance durin
 
 The simplest way to create a writable /cvmfs directory is to start a transaction, but this is not always possible. The repository manager can be busy publishing other files or the access to it is limited.
 
-The simplest option in this case is to use an overlay filesystem. This method works on any CVMFS client, with and without `sudo` rights.
+In such a case, it is possible to use an overlay filesystem. This method works on any CVMFS client, with and without `sudo` rights.
 
 A writable overlay filesystem needs tree directories:
 
-* a lower, readable, directory which provide the bulk of the filesystem (this will be your /cvmfs directory)
+* a lower, readable, directory which provides the bulk of the filesystem (this will be your /cvmfs directory)
 * a work directory, used internally by the software
 * an upper directory, again used internally by the software.
 
-Finally the overlay filesystem is mounted on a fourth directory, that, even if backed by a read-only mounted CVMFS directory, will now appear readable.
+Finally, the overlay filesystem is mounted on a fourth directory, that, even if backed by a read-only mounted CVMFS directory, will now appear readable.
 
-We show now how to practically use this technologies with CVMFS. 
-We start with a simple example in a fully privileged enviroment and then we will move into more complex examples.
+We show now how to practically use these technologies with CVMFS. 
 
 Simple example
 **************
@@ -59,7 +58,7 @@ We start by creating the work and upper directory and the mount directory.
     sudo mkdir /writable
 
 
-At this point we can create our overlay mount.
+At this point, we can create our overlay mount.
 
 ::
 
@@ -89,7 +88,7 @@ We can now see that `/writable` has the exact same content than `/cvmfs/unpacked
     -rw-r--r--   1 cvmfs    cvmfs       4 Apr 22 17:11 test_gateway
     drwxr-xr-x   3 cvmfs    cvmfs      17 Mai  4 15:59 util/
 
-All the modification to the filesystem are recorded in the upper directory, in this case we can see a new empty file.
+All the modifications to the filesystem are recorded in the upper directory. In this case, we can see a new empty file.
 
 ::
 
@@ -99,14 +98,15 @@ All the modification to the filesystem are recorded in the upper directory, in t
     drwxr-xr-x 4 smosciat smosciat 4096 Aug 18 12:16 ../
     -rw-r--r-- 1 smosciat smosciat    0 Aug 18 12:25 baz
 
-This first example was useful to understand how work with overlayfs, however it creates a writable directory, with the same content of the CVMFS repository, but it is an different directory, ideally we would like the directory to be on `/cvmfs`.
+This first example was useful to understand how to work with overlayfs, however, it creates a writable directory, with the same content of the CVMFS repository, but it is a different directory. 
+Ideally, we would like the directory to be on `/cvmfs`.
 
 The second example address just this other use case.
 
 A writable /cvmfs directory
 ***************************
 
-Building upon the first example, we can manually mount cvmfs in a directory which is not `/cvmfs` and then use overlayfs to mount the writable filesystem on /cvmfs.
+Building upon the first example, we can manually mount cvmfs in a directory which is not `/cvmfs`, and then use overlayfs to mount the writable filesystem on /cvmfs.
 
 The first step is making sure that the directory we want to mount `/cvmfs/unpacked.cern.ch` is available, hence it is not mounted by the cvmfs automounter.
 
@@ -124,7 +124,7 @@ Now, we need a directory where the mount the default CVMFS filesystem, along wit
     sudo mkdir -p /cvmfs/unpacked.cern.ch
     
 
-At this point we can mount the CVMFS filesystem in the new directory.
+Now we can mount the CVMFS filesystem in the new directory.
 
 ::
 
@@ -142,6 +142,6 @@ Now we have mounted the content of the CVMFS repository in a third directory, th
         /cvmfs/unpacked.cern.ch
 
 
-At this point the directory `/cvmfs/unpacked.cern.ch` is mounted as writable directory by overlay and it contains the content of the `unpacked.cern.ch` repository.
+At this point, the directory `/cvmfs/unpacked.cern.ch` is mounted as a writable directory by overlay and it contains the content of the `unpacked.cern.ch` repository.
 
-As before, the modification done to the overlay directory are stored in the upper directory.
+As before, the modifications done to the overlay directory are stored in the upper directory.
