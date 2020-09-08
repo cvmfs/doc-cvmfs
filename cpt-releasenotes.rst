@@ -2,7 +2,8 @@ Release Notes for CernVM-FS 2.7.4
 =================================
 
 CernVM-FS 2.7.4 is a patch release. It contains bugfixes and improvements for
-Ubuntu clients and servers.
+Ubuntu clients and servers. At the same time, we release a new
+cvmfs-config-default package (see below).
 
 As with previous releases, upgrading clients should be seamless just by
 installing the new package from the repository. As usual, we recommend to
@@ -16,6 +17,40 @@ leases must be present before upgrading.
 
 Note for upgrades from versions prior to 2.7.3: please also see the specific
 instructions in the release notes for version 2.7.3 and earlier.
+
+
+Updates in cvmfs-config-default 2.0
+-----------------------------------
+
+The new cvmfs-config-default packages brings several improvements and
+simplifications.
+
+Please note that this does _not_ affect clients that use
+the cvmfs-config-egi or the cvmfs-config-osg package (or another alternative
+config package). In particular, most of the grid worker nodes do not use the
+cvmfs-config-default package.
+
+Note that while released together with CernVM-FS 2.7.4, the client package
+and the cvmfs-config-default package can be deployed indepently from each
+other and in any order.
+
+The new cvmfs-config-default package brings the following changes:
+
+  1. A number of minor improvements to the default configuration (tuning
+     parameters, documentation, etc.)
+
+  2. Making better use of the cvmfs config repository
+     (/cvmfs/cvmfs-config.cern.ch), which now should, if available, override
+     the configuration from the package; this allows for faster configuration
+     fixes if necessary
+
+  3. Auto-configuration of the proxy servers for users having the clients on
+     roaming machines (laptops). For instance, CernVM-FS can now automatically
+     pick the CERN site proxy when on site, while connecting directly to the
+     stratum 1 server when the node is at home. Users with a single client (not
+     a cluster) can now use ``CVMFS_CLIENT_PROFILE=single`` and do not need
+     to explicitly set a proxy server.
+
 
 Bug Fixes and Improvements
 --------------------------
