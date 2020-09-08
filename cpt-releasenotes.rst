@@ -1,3 +1,42 @@
+Release Notes for CernVM-FS 2.7.4
+=================================
+
+CernVM-FS 2.7.4 is a patch release. It contains bugfixes and improvements for
+Ubuntu clients and servers.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Note for upgrades from versions prior to 2.7.3: please also see the specific
+instructions in the release notes for version 2.7.3 and earlier.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * Client / Debian, Ubuntu: remove deprecated packages from the dependency list
+    (`CVM-1897 <https://sft.its.cern.ch/jira/browse/CVM-1897>`_)
+  * Client / Ubuntu: provide cvmfs-fuse3 package on Ubuntu 20.04
+    (`CVM-1898 <https://sft.its.cern.ch/jira/browse/CVM-1898>`_)
+  * Server: fix ingestion of tarballs with leading slashes
+    (`CVM-1907 <https://sft.its.cern.ch/jira/browse/CVM-1907>`_)
+  * Server: fix name clash with certain, concurrently hosted repository names
+    (`CVM-1899 <https://sft.its.cern.ch/jira/browse/CVM-1899>`_)
+  * Gateway: fix statistics counting when renaming trees with nested catalogs
+    (`CVM-1906 <https://sft.its.cern.ch/jira/browse/CVM-1906>`_)
+
+Note: there is a new `cvmfs_server fix-stats` command that can be used to
+fix-up statistics counters for a repository.  This command allows to recover
+from the bug fixed in CVM-1906.
+
+
+
 Release Notes for CernVM-FS 2.7.3
 =================================
 
