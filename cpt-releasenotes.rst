@@ -66,7 +66,7 @@ Bug Fixes and Improvements
   * Gateway: fix statistics counting when renaming trees with nested catalogs
     (`CVM-1906 <https://sft.its.cern.ch/jira/browse/CVM-1906>`_)
 
-Note: there is a new `cvmfs_server fix-stats` command that can be used to
+Note: there is a new ``cvmfs_server fix-stats`` command that can be used to
 fix-up statistics counters for a repository.  This command allows to recover
 from the bug fixed in CVM-1906.
 
