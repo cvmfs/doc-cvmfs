@@ -103,6 +103,8 @@ If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
 This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`.
 
+If you install CernVM-FS on a single, possibly roaming computer, you can specifiy ``CVMFS_CLIENT_PROFILE=single`` in which case CernVM-FS will choose a suitable proxy automatically.
+
 Verify the file system
 ~~~~~~~~~~~~~~~~~~~~~~
 
