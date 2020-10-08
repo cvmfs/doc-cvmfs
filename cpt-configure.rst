@@ -1129,7 +1129,7 @@ cache directory.
 
 CernVM-FS can be started in debug mode. In the debug mode, CernVM-FS will log
 with high verbosity which makes the debug mode unsuitable for production use.
-In order to turn on the debug mode, set ``CVMFS_DEBUGFILE=/tmp/cvmfs.log``.
+In order to turn on the debug mode, set ``CVMFS_DEBUGLOG=/tmp/cvmfs.log``.
 
 
 .. rubric:: Footnotes
