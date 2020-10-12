@@ -1,3 +1,27 @@
+Release Notes for CernVM-FS 2.7.5
+=================================
+
+CernVM-FS 2.7.5 is a patch release. It contains several bugfixes for the client.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+Stratum 0 and stratum 1 servers do not necessarily need to update from version
+2.7.4.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * [client] fix rare crash when kernel meta-data caches operate close to 4GB
+    (`CVM-1818 <https://sft.its.cern.ch/jira/browse/CVM-1818>`_)
+  * [client] let mount helper detect when CVMFS_HTTP_PROXY is defined but empty
+  * [client] add CVMFS_CLIENT_PROFILE and CVMFS_USE_CDN to the list of
+    known parameters in cvmfs_config
+
+
 Release Notes for CernVM-FS 2.7.4
 =================================
 
