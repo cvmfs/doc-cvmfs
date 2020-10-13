@@ -16,7 +16,7 @@ Bug Fixes and Improvements
 --------------------------
 
   * [client] fix rare crash when kernel meta-data caches operate close to 4GB
-    (`CVM-1818 <https://sft.its.cern.ch/jira/browse/CVM-1818>`_)
+    (`CVM-1918 <https://sft.its.cern.ch/jira/browse/CVM-1918>`_)
   * [client] let mount helper detect when CVMFS_HTTP_PROXY is defined but empty
   * [client] add CVMFS_CLIENT_PROFILE and CVMFS_USE_CDN to the list of
     known parameters in cvmfs_config
