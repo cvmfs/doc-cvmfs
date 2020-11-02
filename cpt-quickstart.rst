@@ -46,15 +46,7 @@ To install the CVMFS package run
 
 ::
 
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.2/cvmfs-2.7.2-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
-
-OpenSUSE
-~~~~~~~~
-To install the CVMFS package run
-
-::
-
-    zypper install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.2/cvmfs-2.7.2-1.suse1320.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.5/cvmfs-2.7.5-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
 Mac OS X
@@ -110,6 +102,8 @@ Specify the HTTP proxy servers on your site with
 If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
 This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`.
+
+If you install CernVM-FS on a single, possibly roaming computer, you can specifiy ``CVMFS_CLIENT_PROFILE=single`` in which case CernVM-FS will choose a suitable proxy automatically.
 
 Verify the file system
 ~~~~~~~~~~~~~~~~~~~~~~
