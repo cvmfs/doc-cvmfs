@@ -117,6 +117,8 @@ CVMFS_USYSLOG                   | All messages that normally are logged to syslo
                                 | This file can grow up to 500kB and there is one step of log rotation.
                                 | Required for $\mu$CernVM.
 CVMFS_WORKSPACE                 Set the local directory for storing special files (defaults to the cache directory).
+CVMFS_USE_SSL_SYSTEM_CA         | When connecting to an HTTPS endpoints, 
+                                | it will load the certificate provded by the system.
 =============================== ========================================================================================
 
 
@@ -221,6 +223,7 @@ CVMFS_EXTENDED_GC_STATS             Set to *true* to count condemned bytes in th
 X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS connections (see :ref:`sct_data`)
 X509_CERT_DIR                       | Directory file with CA certificates for HTTPS connections,
                                     | defaults to /etc/grid-security/certificates (see :ref:`sct_data`)
+CVMFS_S3_USE_HTTPS                  Allow to use S3 implementation over HTTPS and not over HTTP
 =================================== ====================================================================================
 
 
