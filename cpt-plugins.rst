@@ -162,7 +162,7 @@ repository and on every publish operation.  It has the form
       <helper>%<membership string>
 
 The ``<helper>`` component helps the client find an authz helper.  The client
-searches for a binary ``${CVMFS_AUTHZ_SEARCH_PATH}/cvmfs_helper_<helper>``.  By
+searches for a binary ``${CVMFS_AUTHZ_SEARCH_PATH}/cvmfs_<helper>_helper``.  By
 default, the search path is ``/usr/libexec/cvmfs/authz``.  CernVM-FS comes with
 two helpers: ``cvmfs_helper_allow`` and ``cvmfs_helper_deny``.  Both helpers
 make static decisions and disregard the membership string.  Other helpers can
