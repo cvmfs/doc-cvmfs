@@ -223,7 +223,6 @@ CVMFS_EXTENDED_GC_STATS             Set to *true* to count condemned bytes in th
 X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS connections (see :ref:`sct_data`)
 X509_CERT_DIR                       | Directory file with CA certificates for HTTPS connections,
                                     | defaults to /etc/grid-security/certificates (see :ref:`sct_data`)
-CVMFS_S3_USE_HTTPS                  Allow to use S3 implementation over HTTPS and not over HTTP
 =================================== ====================================================================================
 
 
