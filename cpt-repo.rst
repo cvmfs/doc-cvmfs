@@ -484,6 +484,8 @@ backend storage on S3.
                                                 Enabled by default.
 ``CVMFS_S3_PEEK_BEFORE_PUT``                    Make PUT requests conditional to a prior
                                                 HEAD request. Enabled by default.
+``CVMFS_S3_USE_HTTPS``                          Allow to use S3 implementation over HTTPS
+                                                and not over HTTP
 =============================================== ===========================================
 
 
