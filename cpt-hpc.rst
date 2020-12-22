@@ -16,8 +16,8 @@ These problems can be overcome as described in the following sections.
 Running CernVM-FS as an unprivileged user
 -----------------------------------------
 CernVM-FS can be run as an unprivileged user under several different
-scenarios.  See documentation about that in the relevant
-[Security section](apx-security.html#running-the-client-as-a-normal-user).
+scenarios.  See documentation about that in the Security 
+:ref:`sct_running_client_as_normal_user` section.
 
 
 Parrot-Mounted CernVM-FS in lieu of Fuse Module
@@ -48,11 +48,24 @@ Downloading complete snapshots of CernVM-FS repositories
 --------------------------------------------------------
 
 When there is no possible way to run the CernVM-FS client, an option
-that has been used on some HPC systems is to download entire snapshots
-of CernVM-FS repositories using the
-[cvmfs_shrinkwrap tool](cpt-shrinkwrap.html).  This has many
+that has been used on some HPC systems is to download entire or
+partial snapshots of CernVM-FS repositories using the
+:ref:`cvmfs_shrinkwrap utility <cpt_shrinkwrap>`.  These snapshots
+are also sometimes called "HPC fat container images".
+This has many
 disadvantages compared to running a CernVM-FS client so it is typically
-a last resort.
+a last resort.  
+
+
+NFS Export with Cray DVS
+------------------------
+
+Some HPC sites have tried running the cvmfs client on just one server
+and exporting to worker nodes over :ref:`NFS <sct_nfs_server_mode>`.
+These installations can be made to work but it is very inefficient and
+they often run into operational problems.   If you want to try it using
+the Cray DVS please see the :ref:`workaround <sct_nfs_interleaved>` on
+inode handling and DVS export.
 
 
 Preloading the CernVM-FS Cache
@@ -68,8 +81,8 @@ binary with no further dependencies and should work on a majority of x86_64
 Linux hosts.  Note however that this method can significantly strain the
 cluster file system's meta-data server(s) and that many HPC systems have
 had better results with
-[loopback filesystems](#loopback-file-systems-for-nodes-caches) as node
-caches as discussed below.
+:ref `loopback filesystems <sct_loopback_filesystems>`
+as node caches as discussed below.
 
 The ``cvmfs_preload`` command replicates from a stratum 0 (not from a
 stratum 1). Because this induces significant load on the source server,
@@ -138,6 +151,8 @@ In order to compile ``cvmfs_preload`` from sources, use the
 ``-DBUILD_PRELOADER=yes`` cmake option.
 
 
+.. _sct_loopback_filesystems:
+
 Loopback File Systems for Nodes' Caches
 ---------------------------------------
 
@@ -168,14 +183,3 @@ Diskless compute nodes can also combine an in-memory cache with a preloaded
 directory on the shared cluster file system. An example configuration can be
 found in Section :ref:`sct_cache_advanced_example`.
 
-NFS Export with Cray DVS
-------------------------
-
-Please see the :ref:`workaround <sct_nfs_interleaved>` on inode handling and
-DVS export.
-
-HPC Fat Container Image
------------------------
-
-The :ref:`shrinkwrap <cpt_shrinkwrap>` utility can be used to create an
-"HPC fat container image" with a partially exported CernVM-FS file system tree.

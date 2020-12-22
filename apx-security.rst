@@ -90,6 +90,8 @@ system initialization.  The client RPM package installs SElinux rules for RHEL6
 and RHEL7.  The cache directory should be labeled as ``cvmfs_cache_t``.
 
 
+.. _sct_running_client_as_normal_user:
+
 Running the client as a normal user
 -----------------------------------
 
