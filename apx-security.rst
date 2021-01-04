@@ -107,7 +107,7 @@ four ways to run cvmfs as an unprivileged user, depending on the
 capabilities available on the host.  See the README there for details.
 
 
-SETUID Bit and File capabilities
+SETUID bit and file capabilities
 --------------------------------
 
 By default, CernVM-FS repositories are mounted with the ``nosuid`` option.
