@@ -81,7 +81,7 @@ binary with no further dependencies and should work on a majority of x86_64
 Linux hosts.  Note however that this method can significantly strain the
 cluster file system's meta-data server(s) and that many HPC systems have
 had better results with
-:ref `loopback filesystems <sct_loopback_filesystems>`
+:ref:`loopback filesystems <sct_loopback_filesystems>`
 as node caches as discussed below.
 
 The ``cvmfs_preload`` command replicates from a stratum 0 (not from a
