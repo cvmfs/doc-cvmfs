@@ -810,6 +810,8 @@ The example configuration for the in-memory cache plugin in
     CVMFS_CACHE_PLUGIN_SIZE=2000
 
 
+.. _sct_nfs_server_mode:
+
 NFS Server Mode
 ---------------
 
