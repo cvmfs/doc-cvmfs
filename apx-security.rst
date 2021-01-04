@@ -101,10 +101,20 @@ either performed by fuse's ``fusermount`` utility or through a pre-mounted file
 descriptor. On newer Linux kernels, the client can mount as an unprivileged
 user in a user namespace with a detached mount namespace.
 
-The easiest way to run the client as a normal user is with the 
+The easiest way to run the client as a normal user is with the
 `cvmfsexec <https://github.com/cvmfs/cvmfsexec>`_ package.  It supports
 four ways to run cvmfs as an unprivileged user, depending on the
 capabilities available on the host.  See the README there for details.
+
+
+SETUID Bit and File capabilities
+--------------------------------
+
+By default, CernVM-FS repositories are mounted with the ``nosuid`` option.
+Therefore, file capabilities and the setuid bit of files in the repository
+are ignored. The root user can decide to mount a CernVM-FS repository with the
+``cvmfs_suid`` option, in which case the original behavior of the suid flag
+and file capabilities is restored.
 
 
 CernVM-FS Software Distribution
