@@ -48,6 +48,7 @@ Contents
    cpt-replica
    cpt-repository-gateway
    cpt-notification-system
+   cpt-containers
    part-advanced
    part-appendix
 

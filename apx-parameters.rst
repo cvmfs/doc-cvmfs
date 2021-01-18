@@ -117,6 +117,8 @@ CVMFS_USYSLOG                   | All messages that normally are logged to syslo
                                 | This file can grow up to 500kB and there is one step of log rotation.
                                 | Required for $\mu$CernVM.
 CVMFS_WORKSPACE                 Set the local directory for storing special files (defaults to the cache directory).
+CVMFS_USE_SSL_SYSTEM_CA         | When connecting to an HTTPS endpoints, 
+                                | it will load the certificates provided by the system.
 =============================== ========================================================================================
 
 
