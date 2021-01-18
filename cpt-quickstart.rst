@@ -2,8 +2,9 @@ Getting Started
 ===============
 
 This section describes how to install the CernVM-FS client.
-The CernVM-FS client is supported on x86, x86\_64, and ARM architectures running Linux or Mac OS X \ :math:`\geq 10.12`.
-There is experimental support for Power 8 and RISC-V.
+The CernVM-FS client is supported on x86, x86\_64, and ARM architectures running Linux and
+macOS \ :math:`\geq 10.14` as well as on Windows Services for Linux (WSL2).
+There is experimental support for Power and RISC-V architectures.
 
 Overview
 --------
@@ -93,7 +94,13 @@ Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...`
 
     CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
 
-Specify the HTTP proxy servers on your site with
+For an individual workstation or laptop, set
+
+::
+
+    CVMFS_CLIENT_PROFILE=single
+
+If you setup a cluster of cvmfs nodes, specify the HTTP proxy servers on your site with
 
 ::
 
@@ -102,8 +109,7 @@ Specify the HTTP proxy servers on your site with
 If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
 This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`.
-
-If you install CernVM-FS on a single, possibly roaming computer, you can specifiy ``CVMFS_CLIENT_PROFILE=single`` in which case CernVM-FS will choose a suitable proxy automatically.
+If there are no HTTP proxies yet at your site, see :ref:`cpt_squid` for instructions on how to set them up.
 
 Verify the file system
 ~~~~~~~~~~~~~~~~~~~~~~
