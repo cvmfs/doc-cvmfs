@@ -36,11 +36,11 @@ CernVM-FS Client Service Container
 
 As of this release, we provide the CernVM-FS client in addition to the regular
 distribution packages as a minimal Docker container.  The container is available
-from Dockerhub and as a standalone tarball to be used with `docker load`.
+`from Dockerhub <https://hub.docker.com/r/cvmfs/service>`_ and as a standalone tarball to be used with `docker load`.
 
 The service container can be used to expose /cvmfs mountpoint to the container
 host. It is meant for fully containerized Linux distributions such as
-Fedora CoreOS. It can also be deployed as a _deamon set_ to provide /cvmfs
+Fedora CoreOS. It can also be deployed as a Kubernetes DaemonSet to provide /cvmfs
 to pods in kubernetes clusters.
 
 
@@ -117,7 +117,7 @@ Bug Fixes
 
   * Server: fix ``cvmfs_server ingest`` into root directory
 
-  * Server" fix ingestion of hardlinked catalog markers
+  * Server: fix ingestion of hardlinked catalog markers
     (`CVM-1931 <https://sft.its.cern.ch/jira/browse/CVM-1931>`_)
 
   * Server: refuse non-regular .cvmfscatalog files during publish
