@@ -383,8 +383,8 @@ licensed software.
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CernVM-FS can store data directly to S3 compatible storage systems, such as
-Amazon S3, or Ceph. The S3 target bucket needs to be created beforehand, for example with ``s3cmd``.
+CernVM-FS can store data directly to S3 compatible storage systems, such as Amazon S3, Azure Blob Storage or Ceph.
+The S3 target bucket needs to be created beforehand, for example with ``s3cmd``.
 The bucket needs to be public for reading and require authorization for writing:
 
 ::
@@ -421,6 +421,7 @@ backend storage on S3.
 ``CVMFS_S3_HOST``                               S3 server hostname, e.g. s3.amazonaws.com.
                                                 The hostname should NOT be prefixed by
                                                 "http\:\/\/"
+``CVMFS_S3_FLAVOR``                             Set to "azure" if you store files in Microsoft Azure Blob Storage
 ``CVMFS_S3_REGION``                             The S3 region, e.g. eu-central-1. If
                                                 specified, AWSv4 authorization protocol is
                                                 used.
