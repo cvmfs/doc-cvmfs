@@ -51,6 +51,37 @@ To install the CVMFS package run
     sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.8.0/cvmfs-2.8.0-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
+Docker Container
+~~~~~~~~~~~~~~~~
+
+The CernVM-FS service container can expose the /cvmfs directory tree to the host.
+Import the container with
+
+::
+
+    docker pull cvmfs/service
+
+or with
+
+::
+
+    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.8.0/cvmfs-service-2.8.0-1.x86_64.docker.tar.gz | docker load
+
+Run the container as a system service with
+
+::
+
+    docker run -d --rm \
+      -e CVMFS_CLIENT_PROFILE=single \
+      -e CVMFS_REPOSITORIES=sft.cern.ch,... \
+      --cap-add SYS_ADMIN \
+      --device /dev/fuse \
+      --volume /cvmfs:/cvmfs:shared \
+      cvmfs/service:2.8.0-1
+
+Use ``docker stop`` to unmount the /cvmfs tree.
+Note that if you run multiple nodes (a cluster), you should use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
+
 Mac OS X
 ~~~~~~~~
 
