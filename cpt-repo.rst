@@ -1235,7 +1235,7 @@ Publisher Statistics
 --------------------
 
 The CernVM-FS server tools now record a number of metrics related to the publication and garbage collection processes.
-By default, the database is located at ``/var/spool/cvmfs/<REPOSITORY_NAME>/stats.db``, but the location can be changed through the ``CVMFS_STATISTICS_DB`` parameter.
+By default, the database is located at ``/var/spool/cvmfs/<REPOSITORY_NAME>/stats.db``, but the location can be changed through the ``F`` parameter.
 
 At the end of each successful transaction, a new row is inserted into the ``publish_statistics`` table of the database, with the following columns:
 
@@ -1275,7 +1275,8 @@ sz_condemned_bytes (*)   Integer
 
 (*) Disabled by default due to the non-negligible computation cost. Can be enabled with ``CVMFS_EXTENDED_GC_STATS=true``
 
-The ``properties`` table contains the name of the CernVM-FS repository and the current schema version of the statistics database.
+Entries in the statistics database are kept, by default, for 1 year.
+This interval can be changed by the ``CVMFS_STATS_DB_DAYS_TO_KEEP`` parameter.
 
 The contents of any table (``publish_statistics``, ``gc_statistics``, or ``properties``) in the database can be exported to text using: ::
 
@@ -1288,6 +1289,10 @@ Two database files can be merged as follows: ::
   # cvmfs_server merge-stats [-o <OUTPUT_DB>] <DB_FILE_1> <DB_FILE_2>
 
 The merge can only take place if the two database files come from the same repository and have the same schema version.
+
+By setting ``CVMFS_UPLOAD_STATS_DB=true``, the statistics database together with a web page with relevant plots
+will be published to the stratum 0 ``/stats`` location.
+This provides a lightweight monitoring for repository maintainers.
 
 
 Repository Garbage Collection

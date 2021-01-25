@@ -157,6 +157,7 @@ CVMFS_DONT_CHECK_OVERLAYFS_VERSION  | Disable checking of OverlayFS version befo
                                     | (see :ref:`sct_reporequirements`)
 CVMFS_ENFORCE_LIMITS                | Set to *true* to cause exceeding \*LIMIT variables to be fatal to a publish
                                     | instead of a warning
+CVMFS_EXTENDED_GC_STATS             | Set to *true* to keep track of the volume of garbage collected files (increases GC running time)
 CVMFS_EXTERNAL_DATA                 | Set to *true* to mark repository to contain external data
                                     | that is served from an external HTTP server
 CVMFS_FILE_MBYTE_LIMIT              | Maximum number of megabytes for a published file, default value: 1024
@@ -187,6 +188,7 @@ CVMFS_NUM_UPLOAD_TASKS              | Number of threads used to commit data to s
 CVMFS_NUM_WORKERS                   | Maximal number of concurrently downloaded files during a Stratum1 pull operation
                                     | (Stratum~1 only).
 CVMFS_PUBLIC_KEY                    Colon-separated path to the public key file(s) or directory(ies) of the repository to be replicated. (Stratum 1 only).
+CVMFS_PRINT_STATISTICS              | Set to *true* to show publisher statistics on the console
 CVMFS_REPLICA_ACTIVE                | Stratum1-only: Set to *no* to skip this repository when executing
                                     | ``cvmfs_server snapshot -a``
 CVMFS_REPOSITORY_NAME               The fully qualified name of the specific repository.
@@ -199,6 +201,8 @@ CVMFS_SNAPSHOT_GROUP                | Group name for subset of repositories used
                                     | Added with ``cvmfs_server add-replica -g``.
 CVMFS_SPOOL_DIR                     | Location of the upstream spooler scratch directories;
                                     | the read-only CernVM-FS moint point and copy-on-write storage reside here.
+CVMFS_STATISTICS_DB                 | Set a custom path for the publisher statistics database
+CVMFS_STATS_DB_DAYS_TO_KEEP         | Sets the pruning interval for the publisher statistics database
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
 CVMFS_SYNCFS_LEVEL                  | Controls how often ``sync`` will by called by ``cvmfs_server`` operations.
