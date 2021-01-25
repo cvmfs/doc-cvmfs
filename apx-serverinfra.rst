@@ -22,8 +22,6 @@ setup and tools to be in place:
 
    -   kernel 4.2.x or later.
    -   RHEL7.3 kernel (for OverlayFS)
-   -   Custom kernel compilation with `aufs` support the kernel (see
-       Section :ref:`sct_customkernelinstall`)
 
 -  Backend storage location available through HTTP
 

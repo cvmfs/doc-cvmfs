@@ -2,8 +2,9 @@ Getting Started
 ===============
 
 This section describes how to install the CernVM-FS client.
-The CernVM-FS client is supported on x86, x86\_64, and ARM architectures running Linux or Mac OS X \ :math:`\geq 10.12`.
-There is experimental support for Power 8 and RISC-V.
+The CernVM-FS client is supported on x86, x86\_64, and ARM architectures running Linux and
+macOS \ :math:`\geq 10.14` as well as on Windows Services for Linux (WSL2).
+There is experimental support for Power and RISC-V architectures.
 
 Overview
 --------
@@ -13,6 +14,7 @@ On Linux, mounting and un-mounting of the CernVM-FS is usually controlled by aut
 That means that starting from the base directory /cvmfs different repositories are mounted automatically just by accessing them.
 A repository will be automatically unmounted after some automount-defined idle time.
 On macOS, mounting and un-mounting of the CernVM-FS is done by the user with ``sudo mount -t cvmfs /cvmfs/...`` commands.
+
 
 Getting the Software
 --------------------
@@ -46,13 +48,74 @@ To install the CVMFS package run
 
 ::
 
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.7.5/cvmfs-2.7.5-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.8.0/cvmfs-2.8.0-1.fc29.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
+
+Docker Container
+~~~~~~~~~~~~~~~~
+
+The CernVM-FS service container can expose the /cvmfs directory tree to the host.
+Import the container with
+
+::
+
+    docker pull cvmfs/service
+
+or with
+
+::
+
+    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.8.0/cvmfs-service-2.8.0-1.x86_64.docker.tar.gz | docker load
+
+Run the container as a system service with
+
+::
+
+    docker run -d --rm \
+      -e CVMFS_CLIENT_PROFILE=single \
+      -e CVMFS_REPOSITORIES=sft.cern.ch,... \
+      --cap-add SYS_ADMIN \
+      --device /dev/fuse \
+      --volume /cvmfs:/cvmfs:shared \
+      cvmfs/service:2.8.0-1
+
+Use ``docker stop`` to unmount the /cvmfs tree.
+Note that if you run multiple nodes (a cluster), you should use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
 
 Mac OS X
 ~~~~~~~~
 
-Install the CernVM-FS package by opening the .pkg file.
+On Mac OS X, CernVM-FS is based on `macFUSE <http://osxfuse.github.io>`_.
+Note that as of macOS 11 Big Sur, `kernel extensions need to be enabled <https://support.apple.com/guide/mac-help/change-startup-disk-security-settings-a-mac-mchl768f7291/mac>`_
+to install macFUSE.
+Verify that fuse is available with
+
+::
+
+    kextstat | grep -i fuse
+
+Download the CernVM-FS client package in the terminal in order to avoid signature warnings
+
+::
+
+    curl -o ~/Downloads/cvmfs-2.8.0.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.8.0/cvmfs-2.8.0.pkg
+
+Install the CernVM-FS package by opening the .pkg file and reboot.
+Future releases will provide a signed and notarized package.
+
+
+Windows / WSL2
+~~~~~~~~~~~~~~
+
+Follow the `Windows instructions <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_ to install the Windows Subsytem for Linux (WSL2).
+Install any of the Linux distributions and follow the instructions for the distribution in this guide.
+Whenever you open the Linux distribution, run
+
+::
+
+    sudo cvmfs_config wsl2_start
+
+to start the CernVM-FS service.
 
 
 Setting up the Software
@@ -75,13 +138,15 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /e
 Mac OS X
 ~~~~~~~~
 
-On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
-It is not integrated with autofs hence mount the individual repositories using
+Due to the lack of autofs on macOS, mount the individual repositories manually like
 
 ::
 
-    sudo mkdir -p /cvmfs/cms.cern.ch
-    sudo mount -t cvmfs cms.cern.ch /cvmfs/cms.cern.ch
+    sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
+    sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
+
+For optimal configuration settings, mount the config repository before any other repositories.
+
 
 Create default.local
 ~~~~~~~~~~~~~~~~~~~~
@@ -93,7 +158,13 @@ Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...`
 
     CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
 
-Specify the HTTP proxy servers on your site with
+For an individual workstation or laptop, set
+
+::
+
+    CVMFS_CLIENT_PROFILE=single
+
+If you setup a cluster of cvmfs nodes, specify the HTTP proxy servers on your site with
 
 ::
 
@@ -102,8 +173,7 @@ Specify the HTTP proxy servers on your site with
 If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
 This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`.
-
-If you install CernVM-FS on a single, possibly roaming computer, you can specifiy ``CVMFS_CLIENT_PROFILE=single`` in which case CernVM-FS will choose a suitable proxy automatically.
+If there are no HTTP proxies yet at your site, see :ref:`cpt_squid` for instructions on how to set them up.
 
 Verify the file system
 ~~~~~~~~~~~~~~~~~~~~~~

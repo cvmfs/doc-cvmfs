@@ -7,6 +7,7 @@ Advanced Topics
 
    cpt-plugins
    cpt-tracer
+   cpt-enter
    cpt-hpc
    cpt-graphdriver
    cpt-ducc
