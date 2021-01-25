@@ -15,6 +15,7 @@ That means that starting from the base directory /cvmfs different repositories a
 A repository will be automatically unmounted after some automount-defined idle time.
 On macOS, mounting and un-mounting of the CernVM-FS is done by the user with ``sudo mount -t cvmfs /cvmfs/...`` commands.
 
+
 Getting the Software
 --------------------
 The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
@@ -53,7 +54,28 @@ To install the CVMFS package run
 Mac OS X
 ~~~~~~~~
 
-Install the CernVM-FS package by opening the .pkg file.
+In order to avoid signature warnings, download the package in the terminal
+
+::
+
+    curl -o ~/Downloads/cvmfs-2.8.0.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.8.0/cvmfs-2.8.0.pkg
+
+Install the CernVM-FS package by opening the .pkg file and reboot.
+Future releases will provide a signed and notarized package.
+
+
+Windows / WSL2
+~~~~~~~~~~~~~~
+
+Follow the `Windows instructions <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_ to install the Windows Subsytem for Linux (WSL2).
+Install any of the Linux distributions and follow the instructions for the distribution in this guide.
+Whenever you open the Linux distribution, run
+
+::
+
+    sudo cvmfs_config wsl2_start
+
+to start the CernVM-FS service.
 
 
 Setting up the Software
