@@ -13,12 +13,11 @@ other nodes with respect to CernVM-FS
 These problems can be overcome as described in the following sections.
 
 
-Using Singularity pre-mounts
-----------------------------
-If the fuse package is not available but `Singularity` 3.4 or later is
-installed on the supercomputer, the CernVM-FS Fuse client can be used
-from inside of a container via the Fuse3 "pre-mount" feature.  See
-:ref:`Pre-mounting <sct_premount>`.
+Running CernVM-FS as an unprivileged user
+-----------------------------------------
+CernVM-FS can be run as an unprivileged user under several different
+scenarios.  See documentation about that in the Security 
+:ref:`sct_running_client_as_normal_user` section.
 
 
 Parrot-Mounted CernVM-FS in lieu of Fuse Module
@@ -45,16 +44,45 @@ this approach has the following advantages:
     and variant symlinks (symlinks resolved according to environment variables).
 
 
+Downloading complete snapshots of CernVM-FS repositories
+--------------------------------------------------------
+
+When there is no possible way to run the CernVM-FS client, an option
+that has been used on some HPC systems is to download entire or
+partial snapshots of CernVM-FS repositories using the
+:ref:`cvmfs_shrinkwrap utility <cpt_shrinkwrap>`.  These snapshots
+are also sometimes called "HPC fat container images".
+This has many
+disadvantages compared to running a CernVM-FS client so it is typically
+a last resort.  
+
+
+NFS Export with Cray DVS
+------------------------
+
+Some HPC sites have tried running the cvmfs client on just one server
+and exporting to worker nodes over :ref:`NFS <sct_nfs_server_mode>`.
+These installations can be made to work but it is very inefficient and
+they often run into operational problems.   If you want to try it using
+the Cray DVS please see the :ref:`workaround <sct_nfs_interleaved>` on
+inode handling and DVS export.
+
+
 Preloading the CernVM-FS Cache
 ------------------------------
 
-The
+When the CernVM-FS client can be installed on the worker node but for
+whatever reason on-demand downloading to a local cache is difficult, the
 `cvmfs_preload utility <http://cernvm.cern.ch/portal/filesystem/downloads>`_
 can be used to preload a CernVM-FS cache onto the shared cluster file system.
 Internally it uses the same code that is used to replicate between CernVM-FS
 stratum 0 and stratum 1.  The ``cvmfs_preload`` command is a self-extracting
 binary with no further dependencies and should work on a majority of x86_64
-Linux hosts.
+Linux hosts.  Note however that this method can significantly strain the
+cluster file system's meta-data server(s) and that many HPC systems have
+had better results with
+:ref:`loopback filesystems <sct_loopback_filesystems>`
+as node caches as discussed below.
 
 The ``cvmfs_preload`` command replicates from a stratum 0 (not from a
 stratum 1). Because this induces significant load on the source server,
@@ -123,6 +151,8 @@ In order to compile ``cvmfs_preload`` from sources, use the
 ``-DBUILD_PRELOADER=yes`` cmake option.
 
 
+.. _sct_loopback_filesystems:
+
 Loopback File Systems for Nodes' Caches
 ---------------------------------------
 
@@ -139,9 +169,11 @@ an xfs file system. These files can be created with the ``dd`` and ``mkfs``
 utilities. Nodes can mount these files as loopback file systems from the
 shared file system.
 
-Because there is only a single file for every node, the parallelism of the
-cluster file system can be exploited and all the requests from CernVM-FS
-circumvent the cluster file system's meta-data server(s).
+Because there is only a single file for every node, the parallelism of
+the cluster file system can be exploited and all the requests from
+CernVM-FS circumvent the cluster file system's meta-data server(s).
+That can be a very large advantage because very often the meta-data
+server is the bottleneck under typical workloads.
 
 
 Tiered Cache and Cache Plugins
@@ -151,14 +183,3 @@ Diskless compute nodes can also combine an in-memory cache with a preloaded
 directory on the shared cluster file system. An example configuration can be
 found in Section :ref:`sct_cache_advanced_example`.
 
-NFS Export with Cray DVS
-------------------------
-
-Please see the :ref:`workaround <sct_nfs_interleaved>` on inode handling and
-DVS export.
-
-HPC Fat Container Image
------------------------
-
-The :ref:`shrinkwrap <cpt_shrinkwrap>` utility can be used to create an
-"HPC fat container image" with a partially exported CernVM-FS file system tree.

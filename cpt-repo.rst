@@ -32,21 +32,18 @@ System Requirements
 
 -  union file system in the kernel
 
-   - AUFS (see :ref:`sct_customkernelinstall`)
+   - AUFS
 
    - OverlayFS (as of kernel version 4.2.x or RHEL7.3)
 
 -  Officially supported platforms
-
-   -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
-      Appendix ":ref:`apx_rpms`")
 
    -  CentOS/SL >= 7.3, provided that /var/spool/cvmfs is served by an ext4
       file system.
 
    -  Fedora 25 and above (with kernel :math:`\ge` 4.2.x)
 
-   -  Ubuntu 12.04 64 bit and above
+   -  Ubuntu 14.04 64 bit and above
 
        - Ubuntu < 15.10: with installed AUFS kernel module
          (cf. `linux-image-extra` package)
@@ -90,45 +87,6 @@ Backup Policy
    -  For local storage: ``/srv/cvmfs``
 
    -  Stratum 1s can serve as last-ressort backup of repository content
-
-.. _sct_customkernelinstall:
-
-Installing the AUFS-enabled Kernel on Scientific Linux 6
---------------------------------------------------------
-
-CernVM-FS uses the union file-system `aufs
-<http://aufs.sourceforge.net>`_ to efficiently determine file-system
-tree updates while publishing repository transactions on the server
-(see Figure :ref:`below <fig_updateprocess>`). Note that this is
-*only* required on a CernVM-FS server and *not* on the client
-machines.
-
-| We provide customised kernel packages for Scientific Linux 6 (see
-  Appendix ":ref:`apx_rpms`") and keep them up-to-date with upstream kernel
-  updates. The kernel RPMs are published in the ``cernvm-kernel`` yum
-  repository.
-| Please follow these steps to install the provided customised kernel:
-
-#. Download the latest cvmfs-release package from `the CernVM website
-   <https://cernvm.cern.ch/portal/filesystem/downloads>`_
-
-#. | Install the cvmfs-release package:
-     ``yum install cvmfs-release*.rpm``
-   | This adds the CernVM yum repositories to your machine's
-     configuration.
-
-#. | Install the aufs enabled kernel from ``cernvm-kernel``:
-   | ``yum --disablerepo=* --enablerepo=cernvm-kernel install kernel``
-
-#. | Install the aufs user utilities:
-   | ``yum --enablerepo=cernvm-kernel install aufs2-util``
-
-#. Reboot the machine
-
-Once a new kernel version is released ``yum update`` will *not* pick the
-upstream version but it will wait until the patched kernel with
-aufs support is published by the CernVM team. We always try to follow
-the kernel updates as quickly as possible.
 
 .. _sct_publish_revision:
 
@@ -182,13 +140,10 @@ Requirements for a new Repository
 In order to create a repository, the server and client part of
 CernVM-FS must be installed on the release manager machine. Furthermore
 you will need a kernel containing a union file system implementation as
-well as a running ``Apache2`` web server. Currently we support Scientific
-Linux 6, Ubuntu 12.04+ and Fedora 25+ distributions. Please note, that
-Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
-we provide a compatible patched kernel as RPMs (see
-:ref:`sct_customkernelinstall` for details).
+well as a running ``Apache2`` web server. Currently we support EL >= 7.3,
+Ubuntu 14.04+ and Fedora 25+ distributions.
 
-CernVM-FS 2.2.0 supports both OverlayFS and aufs as a union file system.
+CernVM-FS supports both OverlayFS and aufs as a union file system.
 At least a 4.2.x kernel is needed to use CernVM-FS with OverlayFS. (Red Hat)
 Enterprise Linux >= 7.3 works, too, provided that /var/spool/cvmfs is served by
 an ext3 or ext4 file system. Furthermore note that OverlayFS cannot fully comply
@@ -428,8 +383,8 @@ licensed software.
 S3 Compatible Storage Systems
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-CernVM-FS can store data directly to S3 compatible storage systems, such as
-Amazon S3, or Ceph. The S3 target bucket needs to be created beforehand, for example with ``s3cmd``.
+CernVM-FS can store data directly to S3 compatible storage systems, such as Amazon S3, Azure Blob Storage or Ceph.
+The S3 target bucket needs to be created beforehand, for example with ``s3cmd``.
 The bucket needs to be public for reading and require authorization for writing:
 
 ::
@@ -466,6 +421,7 @@ backend storage on S3.
 ``CVMFS_S3_HOST``                               S3 server hostname, e.g. s3.amazonaws.com.
                                                 The hostname should NOT be prefixed by
                                                 "http\:\/\/"
+``CVMFS_S3_FLAVOR``                             Set to "azure" if you store files in Microsoft Azure Blob Storage
 ``CVMFS_S3_REGION``                             The S3 region, e.g. eu-central-1. If
                                                 specified, AWSv4 authorization protocol is
                                                 used.
@@ -484,6 +440,8 @@ backend storage on S3.
                                                 Enabled by default.
 ``CVMFS_S3_PEEK_BEFORE_PUT``                    Make PUT requests conditional to a prior
                                                 HEAD request. Enabled by default.
+``CVMFS_S3_USE_HTTPS``                          Allow to use S3 implementation over HTTPS
+                                                and not over HTTP
 =============================================== ===========================================
 
 
@@ -510,6 +468,8 @@ create a new revision of a repository:
 
    -  Run ``cvmfs_server abort`` to clear all changes and start over
       again
+
+In order to see the current set of staged changes, use the ``cvmfs_server diff --worktree`` command.
 
 CernVM-FS supports having more than one repository on a single server
 machine. In case of a multi-repository host, the target repository of a
@@ -638,6 +598,24 @@ This command outputs both the ``.cvmfsgraft`` file and and zero-length "real" fi
 A typical invocation would look like this::
 
    cat /path/to/some/file | cvmfs_swissknife graft -i - -o /cvmfs/repo.example.com/my_file
+
+Template Transactions
+~~~~~~~~~~~~~~~~~~~~~
+
+In a "template transaction", an existing directory is used as a template for the changes to be published.
+Open a template transaction with the ``-T`` option like
+
+::
+
+    cvmfs_server transaction -T /foo=/bar
+
+The command clones the existing directory /foo to /bar before the transaction becomes available to writing.
+This can be useful to publish a new directory tree that is almost identical to an existing one,
+for instance to publish a patch release.
+Cloning the existing directory tree is a fast, meta-data only operation.
+Note that template transactions should be used with care -- excessive use can quickly explode the repository size
+with negative consequences such as much increased garbage collection times.
+
 
 Variant Symlinks
 ~~~~~~~~~~~~~~~~
@@ -888,6 +866,9 @@ It also shows the difference in total number of files and nested catalogs.
 Unless named snapshots are provided by the ``-s`` and ``-d`` flags, the command
 shows the difference from the last snapshot ("trunk-previous") to the current
 one ("trunk").
+
+Note that the command ``cvmfs_server diff`` shows the changes of the currently
+active transaction.
 
 
 .. _sct_instantsnapshotaccess:
@@ -1313,7 +1294,8 @@ sz_condemned_bytes (*)   Integer
 
 (*) Disabled by default due to the non-negligible computation cost. Can be enabled with ``CVMFS_EXTENDED_GC_STATS=true``
 
-The ``properties`` table contains the name of the CernVM-FS repository and the current schema version of the statistics database.
+Entries in the statistics database are kept, by default, for 1 year.
+This interval can be changed by the ``CVMFS_STATS_DB_DAYS_TO_KEEP`` parameter.
 
 The contents of any table (``publish_statistics``, ``gc_statistics``, or ``properties``) in the database can be exported to text using: ::
 
@@ -1326,6 +1308,10 @@ Two database files can be merged as follows: ::
   # cvmfs_server merge-stats [-o <OUTPUT_DB>] <DB_FILE_1> <DB_FILE_2>
 
 The merge can only take place if the two database files come from the same repository and have the same schema version.
+
+By setting ``CVMFS_UPLOAD_STATS_DB=true``, the statistics database together with a web page with relevant plots
+will be published to the stratum 0 ``/stats`` location.
+This provides a lightweight monitoring for repository maintainers.
 
 
 Repository Garbage Collection
@@ -1513,20 +1499,7 @@ files in CernVM-FS if they won't be able to be read by anyone.
 Hardlinks
 ~~~~~~~~~
 
-By default CernVM-FS does not allow hardlinks of a file to be in
-different directories. If there might be any such hardlinks in a
-repository, set the option
-
-::
-
-        CVMFS_IGNORE_XDIR_HARDLINKS=true
-
-in the repository's ``server.conf``. The file will not appear to be
-hardlinked to the client, but it will still be stored as only one file
-in the repository just like any other files that have identical content.
-Note that if, in a subsequent publish operation, only one of these
-cross-directory hardlinks gets changed, the other hardlinks remain
-unchanged (the hardlink got "broken").
+CernVM-FS breaks hardlinks on publishing into multiple, independent regular files.
 
 
 Configuration Recommendation by Use Case
@@ -1539,22 +1512,14 @@ other typical use cases, the configuration should be adapted.
 General Recommendations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-**NOTE:** Do _not_ use ``CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false`` together
-with a hash algorithm other than SHA-1 in CernVM-FS <= 2.4.3.
-
 Unless an older client base needs to be supported, we recommend to the following
 configuration changes::
 
     CVMFS_AUTO_TAG_TIMESPAN="2 weeks ago"
-    CVMFS_IGNORE_XDIR_HARDLINKS=true
-    CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false
     CVMFS_HASH_ALGORITHM=shake128
 
-These changes make unreferenced objects older than two weeks subject to garbage
-collection (without enabling garbage collection).  It tolerates that hard links
-among different directories (see :ref:`sct_limit_hardlink`), creates only
-chunked versions of large files and uses the more future-proof SHA-3 derived
-content hash algorithm.
+These changes make unreferenced objects older than two weeks subject to garbage collection (without enabling garbage collection)
+and uses the more future-proof SHA-3 derived content hash algorithm.
 
 
 Multi-Tenant Repositories

@@ -73,6 +73,34 @@ cvmfs-config.cern.ch.
 The ``CVMFS_CONFIG_REPO_REQUIRED`` parameter can be used to force availability
 of the config repository in order for other repositories to get mounted.
 
+The config repository is a very convenient method for updating the
+configuration on a lot of CernVM-FS clients at once.  This also means
+that it is very easy to break configurations on a lot of clients at
+once.  Also note that only one config repository may be used per client,
+and this is a technical limitation that is not expected to change.  For
+these reasons, it makes the most sense to reserve the use of this
+feature for large groups of sites that share a common infrastructure
+with trusted people that maintain the configuration repository.  In
+order to facilitate sharing of configurations between the
+infrastructures, a
+`github repository <https://github.com/cvmfs-contrib/config-repo>`_
+has been set up.  Infrastructure maintainers are invited to collaborate
+there.
+
+Some large sites that prefer to maintain control over their own client
+configurations publish their own config repository but have automated
+processes to compare it to a repository from a larger infrastructure.
+They then quickly update their own config repository with whatever
+changes have been made to the infrastructure's config repository.
+
+Exchanges of configurations between limited numbers of sites that are
+also depending separately on a configuration repository is encouraged to
+be done by making rpm and/or dpkg packages and distributing them through 
+`cvmfs-contrib package repositories <https://cvmfs-contrib.github.io>`_.
+Keeping configurations up to date through packages is less convenient
+than the configuration repository but better than manually maintaining
+configuration files.
+
 Mounting
 --------
 
@@ -809,6 +837,8 @@ The example configuration for the in-memory cache plugin in
     # 2G RAM
     CVMFS_CACHE_PLUGIN_SIZE=2000
 
+
+.. _sct_nfs_server_mode:
 
 NFS Server Mode
 ---------------
