@@ -598,6 +598,24 @@ A typical invocation would look like this::
 
    cat /path/to/some/file | cvmfs_swissknife graft -i - -o /cvmfs/repo.example.com/my_file
 
+Template Transactions
+~~~~~~~~~~~~~~~~~~~~~
+
+In a "template transaction", an existing directory is used as a template for the changes to be published.
+Open a template transaction with the ``-T`` option like
+
+::
+
+    cvmfs_server transaction -T /foo=/bar
+
+The command clones the existing directory /foo to /bar before the transaction becomes available to writing.
+This can be useful to publish a new directory tree that is almost identical to an existing one,
+for instance to publish a patch release.
+Cloning the existing directory tree is a fast, meta-data only operation.
+Note that template transactions should be used with care -- excessive use can quickly explode the repository size
+with negative consequences such as much increased garbage collection times.
+
+
 Variant Symlinks
 ~~~~~~~~~~~~~~~~
 
