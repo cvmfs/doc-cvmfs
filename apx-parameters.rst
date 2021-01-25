@@ -165,8 +165,7 @@ CVMFS_FILE_MBYTE_LIMIT              | Maximum number of megabytes for a publishe
 CVMFS_FORCE_REMOUNT_WARNING         | Enable/disable warning through ``wall`` and grace period before forcefully
                                     | remounting a CernVM-FS repository on the release managere machine.
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
-CVMFS_GENERATE_LEGACY_BULK_CHUNKS   | Set to *false* to disable generation of whole-file objects for large files.
-                                    | Requires clients >= 2.1.7.
+CVMFS_GENERATE_LEGACY_BULK_CHUNKS   | Deprecated, set to *true* to enable generation of whole-file objects for large files.
 CVMFS_GC_DELETION_LOG               | Log file path to track all garbage collected objects during sweeping
                                     | for bookkeeping or debugging
 CVMFS_GEO_DB_FILE                   Path to externally updated location of geolite2 city database, or 'None' for no database.
@@ -175,7 +174,7 @@ CVMFS_GID_MAP                       Path of a file for the mapping of file owner
 CVMFS_HASH_ALGORITHM                | Define which secure hash algorithm should be used by CernVM-FS for CAS objects
                                     | (supported are: *sha1*, *rmd160* and *shake128*)
 CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files during publish without aborting.
-CVMFS_IGNORE_XDIR_HARDLINKS         | If set to *true*, do not abort the publish operation when cross-directory
+CVMFS_IGNORE_XDIR_HARDLINKS         | Deprecated, defaults to *true*
                                     | hardlinks are found. Instead automatically break the hardlinks across directories.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)

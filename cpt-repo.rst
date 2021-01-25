@@ -1480,20 +1480,7 @@ files in CernVM-FS if they won't be able to be read by anyone.
 Hardlinks
 ~~~~~~~~~
 
-By default CernVM-FS does not allow hardlinks of a file to be in
-different directories. If there might be any such hardlinks in a
-repository, set the option
-
-::
-
-        CVMFS_IGNORE_XDIR_HARDLINKS=true
-
-in the repository's ``server.conf``. The file will not appear to be
-hardlinked to the client, but it will still be stored as only one file
-in the repository just like any other files that have identical content.
-Note that if, in a subsequent publish operation, only one of these
-cross-directory hardlinks gets changed, the other hardlinks remain
-unchanged (the hardlink got "broken").
+CernVM-FS breaks hardlinks on publishing into multiple, independent regular files.
 
 
 Configuration Recommendation by Use Case
@@ -1506,22 +1493,14 @@ other typical use cases, the configuration should be adapted.
 General Recommendations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-**NOTE:** Do _not_ use ``CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false`` together
-with a hash algorithm other than SHA-1 in CernVM-FS <= 2.4.3.
-
 Unless an older client base needs to be supported, we recommend to the following
 configuration changes::
 
     CVMFS_AUTO_TAG_TIMESPAN="2 weeks ago"
-    CVMFS_IGNORE_XDIR_HARDLINKS=true
-    CVMFS_GENERATE_LEGACY_BULK_CHUNKS=false
     CVMFS_HASH_ALGORITHM=shake128
 
-These changes make unreferenced objects older than two weeks subject to garbage
-collection (without enabling garbage collection).  It tolerates that hard links
-among different directories (see :ref:`sct_limit_hardlink`), creates only
-chunked versions of large files and uses the more future-proof SHA-3 derived
-content hash algorithm.
+These changes make unreferenced objects older than two weeks subject to garbage collection (without enabling garbage collection)
+and uses the more future-proof SHA-3 derived content hash algorithm.
 
 
 Multi-Tenant Repositories
