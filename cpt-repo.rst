@@ -1235,7 +1235,7 @@ Publisher Statistics
 --------------------
 
 The CernVM-FS server tools now record a number of metrics related to the publication and garbage collection processes.
-By default, the database is located at ``/var/spool/cvmfs/<REPOSITORY_NAME>/stats.db``, but the location can be changed through the ``F`` parameter.
+By default, the database is located at ``/var/spool/cvmfs/<REPOSITORY_NAME>/stats.db``, but the location can be changed through the ``CVMFS_STATISTICS_DB`` parameter.
 
 At the end of each successful transaction, a new row is inserted into the ``publish_statistics`` table of the database, with the following columns:
 
