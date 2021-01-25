@@ -26,13 +26,21 @@ caching. If you already have a
 `Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`_
 installed you can use it as well for CernVM-FS.
 
-Otherwise, cache sizes and access control needs to be configured in
+One option that is particularly important when there are a lot of worker
+nodes and jobs that start close together is the `collapsed_forwarding`
+option.  This combines multiple simultaneous requests for the same
+object into a single request to a Stratum 1 server.  This did not work
+properly on squid versions prior to 3.5.28, which includes the default
+squid on EL7.  This also works properly in Frontier Squid.
+
+In any case, cache sizes and access control needs to be configured in
 order to use the Squid server with CernVM-FS. In order to do so, browse
 through your /etc/squid/squid.conf and make sure the following lines
 appear accordingly:
 
 ::
 
+      collapsed_forwarding on
       minimum_expiry_time 0
       maximum_object_size 1024 MB
 
@@ -54,7 +62,7 @@ something like this:
 
 If you instead want to limit the destinations to major cvmfs Stratum 1s,
 it is better to use the list built in to 
-`Frontier Squid https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Restricting_the_destination`_
+`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Restricting_the_destination>`_
 because the list is sometimes updated with new releases.
 
 The Squid configuration can be verified by ``squid -k parse``. Before
