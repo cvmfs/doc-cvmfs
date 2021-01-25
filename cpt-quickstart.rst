@@ -76,7 +76,7 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /e
 Mac OS X
 ~~~~~~~~
 
-On Mac OS X, CernVM-FS is based on `OSXFuse <http://osxfuse.github.io>`_.
+On Mac OS X, CernVM-FS is based on `macFUSE <http://osxfuse.github.io>`_.
 It is not integrated with autofs hence mount the individual repositories using
 
 ::
