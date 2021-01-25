@@ -54,7 +54,16 @@ To install the CVMFS package run
 Mac OS X
 ~~~~~~~~
 
-In order to avoid signature warnings, download the package in the terminal
+On Mac OS X, CernVM-FS is based on `macFUSE <http://osxfuse.github.io>`_.
+Note that as of macOS 11 Big Sur, `kernel extensions need to be enabled <https://support.apple.com/guide/mac-help/change-startup-disk-security-settings-a-mac-mchl768f7291/mac>`_
+to install macFUSE.
+Verify that fuse is available with
+
+::
+
+    kextstat | grep -i fuse
+
+Download the CernVM-FS client package in the terminal in order to avoid signature warnings
 
 ::
 
@@ -98,13 +107,15 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /e
 Mac OS X
 ~~~~~~~~
 
-On Mac OS X, CernVM-FS is based on `macFUSE <http://osxfuse.github.io>`_.
-It is not integrated with autofs hence mount the individual repositories using
+Due to the lack of autofs on macOS, mount the individual repositories manually like
 
 ::
 
-    sudo mkdir -p /cvmfs/cms.cern.ch
-    sudo mount -t cvmfs cms.cern.ch /cvmfs/cms.cern.ch
+    sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
+    sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
+
+For optimal configuration settings, mount the config repository before any other repositories.
+
 
 Create default.local
 ~~~~~~~~~~~~~~~~~~~~
