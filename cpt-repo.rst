@@ -32,21 +32,18 @@ System Requirements
 
 -  union file system in the kernel
 
-   - AUFS (see :ref:`sct_customkernelinstall`)
+   - AUFS
 
    - OverlayFS (as of kernel version 4.2.x or RHEL7.3)
 
 -  Officially supported platforms
-
-   -  Scientific Linux 6 (64 bit - with custom AUFS enabled kernel -
-      Appendix ":ref:`apx_rpms`")
 
    -  CentOS/SL >= 7.3, provided that /var/spool/cvmfs is served by an ext4
       file system.
 
    -  Fedora 25 and above (with kernel :math:`\ge` 4.2.x)
 
-   -  Ubuntu 12.04 64 bit and above
+   -  Ubuntu 14.04 64 bit and above
 
        - Ubuntu < 15.10: with installed AUFS kernel module
          (cf. `linux-image-extra` package)
@@ -90,45 +87,6 @@ Backup Policy
    -  For local storage: ``/srv/cvmfs``
 
    -  Stratum 1s can serve as last-ressort backup of repository content
-
-.. _sct_customkernelinstall:
-
-Installing the AUFS-enabled Kernel on Scientific Linux 6
---------------------------------------------------------
-
-CernVM-FS uses the union file-system `aufs
-<http://aufs.sourceforge.net>`_ to efficiently determine file-system
-tree updates while publishing repository transactions on the server
-(see Figure :ref:`below <fig_updateprocess>`). Note that this is
-*only* required on a CernVM-FS server and *not* on the client
-machines.
-
-| We provide customised kernel packages for Scientific Linux 6 (see
-  Appendix ":ref:`apx_rpms`") and keep them up-to-date with upstream kernel
-  updates. The kernel RPMs are published in the ``cernvm-kernel`` yum
-  repository.
-| Please follow these steps to install the provided customised kernel:
-
-#. Download the latest cvmfs-release package from `the CernVM website
-   <https://cernvm.cern.ch/portal/filesystem/downloads>`_
-
-#. | Install the cvmfs-release package:
-     ``yum install cvmfs-release*.rpm``
-   | This adds the CernVM yum repositories to your machine's
-     configuration.
-
-#. | Install the aufs enabled kernel from ``cernvm-kernel``:
-   | ``yum --disablerepo=* --enablerepo=cernvm-kernel install kernel``
-
-#. | Install the aufs user utilities:
-   | ``yum --enablerepo=cernvm-kernel install aufs2-util``
-
-#. Reboot the machine
-
-Once a new kernel version is released ``yum update`` will *not* pick the
-upstream version but it will wait until the patched kernel with
-aufs support is published by the CernVM team. We always try to follow
-the kernel updates as quickly as possible.
 
 .. _sct_publish_revision:
 
@@ -182,13 +140,10 @@ Requirements for a new Repository
 In order to create a repository, the server and client part of
 CernVM-FS must be installed on the release manager machine. Furthermore
 you will need a kernel containing a union file system implementation as
-well as a running ``Apache2`` web server. Currently we support Scientific
-Linux 6, Ubuntu 12.04+ and Fedora 25+ distributions. Please note, that
-Scientific Linux 6 *does not* ship with an aufs enabled kernel, therefore
-we provide a compatible patched kernel as RPMs (see
-:ref:`sct_customkernelinstall` for details).
+well as a running ``Apache2`` web server. Currently we support EL >= 7.3,
+Ubuntu 14.04+ and Fedora 25+ distributions.
 
-CernVM-FS 2.2.0 supports both OverlayFS and aufs as a union file system.
+CernVM-FS supports both OverlayFS and aufs as a union file system.
 At least a 4.2.x kernel is needed to use CernVM-FS with OverlayFS. (Red Hat)
 Enterprise Linux >= 7.3 works, too, provided that /var/spool/cvmfs is served by
 an ext3 or ext4 file system. Furthermore note that OverlayFS cannot fully comply
@@ -512,6 +467,8 @@ create a new revision of a repository:
 
    -  Run ``cvmfs_server abort`` to clear all changes and start over
       again
+
+In order to see the current set of staged changes, use the ``cvmfs_server diff --worktree`` command.
 
 CernVM-FS supports having more than one repository on a single server
 machine. In case of a multi-repository host, the target repository of a
