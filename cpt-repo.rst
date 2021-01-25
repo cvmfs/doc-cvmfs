@@ -848,6 +848,9 @@ Unless named snapshots are provided by the ``-s`` and ``-d`` flags, the command
 shows the difference from the last snapshot ("trunk-previous") to the current
 one ("trunk").
 
+Note that the command ``cvmfs_server diff`` shows the changes of the currently
+active transaction.
+
 
 .. _sct_instantsnapshotaccess:
 
