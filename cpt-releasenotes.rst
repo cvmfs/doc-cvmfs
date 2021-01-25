@@ -128,6 +128,9 @@ Bug Fixes
   * Server, stratum 1: fix stuck Apache processes with disabled geo API
     (`CVM-1956 <https://sft.its.cern.ch/jira/browse/CVM-1956>`_)
 
+  * Gateway: fix corrupted catalog when a nested catalog is replaced by a symlink
+    (`CVM-1930 <https://sft.its.cern.ch/jira/browse/CVM-1930>`_)
+
   * Gateway: fix accidental creation of undeletable content caused by improper
     handling of the reflog
 
