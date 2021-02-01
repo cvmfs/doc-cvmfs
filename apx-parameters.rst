@@ -212,7 +212,7 @@ CVMFS_UNION_DIR                     | Mount point of the union file system for c
                                     | (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 | Defines the union file system to be used for the repository.
                                     | (currently `aufs` and `overlayfs` are fully supported)
-CVMFS_UPLOAD_STATS_DB               | Publish repository staticis plots to the Stratum 0 /stats location
+CVMFS_UPLOAD_STATS_DB               | Publish repository statistics plots to the Stratum 0 /stats location
 CVMFS_UPSTREAM_STORAGE              | Upstream spooler description defining the basic upstream storage type
                                     | and configuration.
 CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
