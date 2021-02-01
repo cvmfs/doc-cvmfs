@@ -62,7 +62,7 @@ be started like
     cvmfs_server publish
 
 Template transactions are an experimental feature for the time being.
-Note that template transaction do not yet work for remote publishers connected
+Note that template transactions do not yet work for remote publishers connected
 to a gateway. This limitation will be lifted in a future release.
 
 
@@ -73,10 +73,10 @@ This release provides the new ``cvmfs_server enter`` command that can open
 an ephemeral, writable container for a repository. The ephemeral container
 effectively promotes a regular, read-only client mountpoint under /cvmfs to
 a writable mountpoint. Starting an ephemeral publish container does not require
-a full installation of publisher node; availability of the ``cvmfs``,
+a full installation of a publisher node; availability of the ``cvmfs``,
 ``cvmfs-server``, and ``fuse-overlayfs`` packages is sufficient.
 
-Opening an ephemeral publish container is an unprivilged operation. It does
+Opening an ephemeral publish container is an unprivileged operation. It does
 require, however, the relatively recent "user namespaces" and "unprivileged
 fuse mounts" features from the Linux kernel.  CentOS 8, for instance, provides
 a recent enough kernel.
