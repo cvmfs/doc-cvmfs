@@ -163,7 +163,7 @@ publisher machine: ::
 
   $ cvmfs_server transaction test.cern.ch
 
-Alternatively, to take advantage of the gateway functionality which allows concurrent transactions on different paths of a repository , or fine-grained permission to only publish changes in certain paths, you can request a publishing lease that is scoped to a subdirectory of the repository by starting a transaction like this: :: 
+Alternatively, to take advantage of the gateway functionality which allows concurrent transactions on different paths of a repository, or fine-grained permission to only publish changes in certain paths, you can request a publishing lease that is scoped to a subdirectory of the repository by starting a transaction like this: :: 
 
   $ cvmfs_server transaction test.cern.ch/example/path
 
