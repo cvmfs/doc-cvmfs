@@ -652,11 +652,17 @@ requests are translated into the ``pread()`` system call.
 getxattr
 ~~~~~~~~
 
-CernVM-FS uses extended attributes to display additional repository
-information. There are several supported attributes:
+CernVM-FS uses synthetic extended attributes to display additional repository
+information. There are the following supported magic attributes:
+
+**catalog\_counters**
+    Like ``repo_counters`` but only for the nested catalog that hosts the given path.
 
 **chunks**
     Number of chunks of a regular file.
+
+**chunk\_list**
+    Hashes and sizes of the chunks of a regular (large) file.
 
 **compression**
     Compression algorithm, for regular files only.  Either "zlib" or "none".
