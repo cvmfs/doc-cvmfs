@@ -68,30 +68,52 @@ We suggest the following key parameters:
 **Squid frontend**
     Squid should be used as a frontend to Apache, configured as a
     reverse proxy. It is recommended to run it on the same machine as
-    Apache to reduce the number of points of failure. In that case
-    caching can be disabled for the data (since there's no need to
-    store it again on the same disk), but caching is helpful for the
-    geo api calls.  Alternatively, separate Squid server machines may
-    be configured in a round-robin DNS and each forward to the Apache
-    server, but note that if any of them are down the entire service
-    will be considered down by CernVM-FS clients. The Squid frontend
-    should listen on ports 80 and 8000. The more RAM that the
-    operating system can use for file system caching, the better.
+    Apache instead of a separate machine, to reduce the number of points
+    of failure. In that case caching can be disabled for the data (since
+    there's no need to store it again on the same disk), but caching is
+    helpful for the responses to geo api calls. Using a squid is also
+    helpful for participating in shared monitoring such as the `WLCG
+    Squid Monitor <http://wlcg-squid-monitor.cern.ch>`.
+    
+    Alternatively, separate Squid server machines may be configured in a
+    round-robin DNS and each forward to the Apache server, but note that
+    if any of them are down the entire service will be considered down
+    by CernVM-FS clients.  A front end hardware load balancer that
+    quickly takes a machine that is down out of service would help
+    reduce the impact.
 
-    **Note**: Port 8000 might be assigned to ``soundd``.  On SElinux systems,
-    this assignment must be changed to the HTTP service by
-    ``semanage port -m -t http_port_t -p tcp 8000``.  The ``cvmfs-server``
-    RPM for EL7 executes this command as a post-installation script.
+**High availability**
+    On the subject of availability, note that it is not advised to use
+    two separate complete Stratum 1 servers in a single round-robin
+    service because they will be updated at different rates.  That would
+    cause errors when a client sees an updated catalog from one Stratum
+    1 but tries to read corresponding data files from the other that does
+    not yet have the files.  Different Stratum 1s should either be
+    separately configured on the clients, or a pair can be configured as
+    a high availability active/standby pair using the cvmfs-contrib
+    `cvmfs-hastratum1 package <https://github.com/cvmfs-contrib/cvmfs-hastratum1>`.
+    An active/standby pair can also be managed by switching a DNS name
+    between two different servers.
 
 **DNS cache**
-    A Stratum 1 does a lot of DNS lookups, so we recommend installing a
-    DNS caching mechanism on the machine such as ``dnsmasq`` or
-    ``bind``. We do not recommend ``nscd`` since it does not honor the
-    DNS Time-To-Live protocol.
+    The geo api on a Stratum 1 does DNS lookups.  It caches lookups
+    for 5 minutes so the DNS server load does not tend to be severe, but
+    we still recommend installing a DNS caching mechanism on the machine
+    such as ``dnsmasq`` or ``bind``.  We do not recommend ``nscd`` since
+    it does not honor the DNS Time-To-Live protocol.  
 
 Squid Configuration
 -------------------
 
+If you participate in the Open Science Grid (OSG) or the European Grid
+Infrastructure (EGI), you are encouraged to use their distribution of
+squid called frontier-squid.  It is kept up to date with the latest
+squid bug fixes and has features for easier upgrading and monitoring.
+Step-by-step instructions for setting it up with a Stratum 1 is
+available in the `OSG documentation
+https://opensciencegrid.org/docs/other/install-cvmfs-stratum1/#configuring-frontier-squid`.
+
+Otherwise, a `squid` package is available in most Linux operating systems.
 The Squid configuration differs from the site-local Squids because the
 Stratum 1 Squid servers are transparent to the clients (*reverse
 proxy*). As the expiry rules are set by the web server, Squid cache
@@ -101,7 +123,6 @@ The following lines should appear accordingly in /etc/squid/squid.conf:
 
 ::
 
-      http_port 80 accel
       http_port 8000 accel
       http_access allow all
       cache_peer <APACHE_HOSTNAME> parent <APACHE_PORT> 0 no-query originserver
@@ -126,11 +147,33 @@ The following lines should appear accordingly in /etc/squid/squid.conf:
 
 Then the squid will only cache API calls. You can then set
 ``MEM_CACHE_SIZE`` and ``DISK_CACHE_SIZE`` quite small.
+Even if squid is configured to cache everything it is best to keep
+``MEM_CACHE_SIZE`` small, because it is generally better to leave as
+much RAM to the operating system for file system caching as possible.
 
 Check the configuration syntax by ``squid -k parse``. Create the hard
 disk cache area with ``squid -z``. In order to make the increased number
 of file descriptors effective for Squid, execute ``ulimit -n 8192``
 prior to starting the squid service.
+
+The Squid also needs to respond to port 80, but Squid might not have the
+ability to directly listen there if it is run unprivileged, plus Apache
+listens on port 80 by default.  Direct external port 80 traffic to port
+8000 with the following command:
+
+::
+
+    iptables -t nat -A PREROUTING -p tcp -m tcp --dport 80 -j REDIRECT --to-ports 8000
+
+If IPv6 is supported, do the same command with ``ip6tables``.  This will
+leave localhost traffic to port 80 going directly to Apache, which is
+good because cvmfs_server uses it that and it doesn't need to go
+through squid.
+
+**Note**: Port 8000 might be assigned to ``soundd``.  On SElinux systems,
+this assignment must be changed to the HTTP service by
+``semanage port -m -t http_port_t -p tcp 8000``.  The ``cvmfs-server``
+RPM for EL7 executes this command as a post-installation script.
 
 .. _sct_geoip_db:
 

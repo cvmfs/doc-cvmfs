@@ -36,11 +36,11 @@ CernVM-FS Client Service Container
 
 As of this release, we provide the CernVM-FS client in addition to the regular
 distribution packages as a minimal Docker container.  The container is available
-from Dockerhub and as a standalone tarball to be used with `docker load`.
+`from Dockerhub <https://hub.docker.com/r/cvmfs/service>`_ and as a standalone tarball to be used with `docker load`.
 
 The service container can be used to expose /cvmfs mountpoint to the container
 host. It is meant for fully containerized Linux distributions such as
-Fedora CoreOS. It can also be deployed as a _deamon set_ to provide /cvmfs
+Fedora CoreOS. It can also be deployed as a Kubernetes DaemonSet to provide /cvmfs
 to pods in kubernetes clusters.
 
 
@@ -62,7 +62,7 @@ be started like
     cvmfs_server publish
 
 Template transactions are an experimental feature for the time being.
-Note that template transaction do not yet work for remote publishers connected
+Note that template transactions do not yet work for remote publishers connected
 to a gateway. This limitation will be lifted in a future release.
 
 
@@ -73,10 +73,10 @@ This release provides the new ``cvmfs_server enter`` command that can open
 an ephemeral, writable container for a repository. The ephemeral container
 effectively promotes a regular, read-only client mountpoint under /cvmfs to
 a writable mountpoint. Starting an ephemeral publish container does not require
-a full installation of publisher node; availability of the ``cvmfs``,
+a full installation of a publisher node; availability of the ``cvmfs``,
 ``cvmfs-server``, and ``fuse-overlayfs`` packages is sufficient.
 
-Opening an ephemeral publish container is an unprivilged operation. It does
+Opening an ephemeral publish container is an unprivileged operation. It does
 require, however, the relatively recent "user namespaces" and "unprivileged
 fuse mounts" features from the Linux kernel.  CentOS 8, for instance, provides
 a recent enough kernel.
@@ -117,7 +117,7 @@ Bug Fixes
 
   * Server: fix ``cvmfs_server ingest`` into root directory
 
-  * Server" fix ingestion of hardlinked catalog markers
+  * Server: fix ingestion of hardlinked catalog markers
     (`CVM-1931 <https://sft.its.cern.ch/jira/browse/CVM-1931>`_)
 
   * Server: refuse non-regular .cvmfscatalog files during publish
@@ -127,6 +127,9 @@ Bug Fixes
 
   * Server, stratum 1: fix stuck Apache processes with disabled geo API
     (`CVM-1956 <https://sft.its.cern.ch/jira/browse/CVM-1956>`_)
+
+  * Gateway: fix corrupted catalog when a nested catalog is replaced by a symlink
+    (`CVM-1930 <https://sft.its.cern.ch/jira/browse/CVM-1930>`_)
 
   * Gateway: fix accidental creation of undeletable content caused by improper
     handling of the reflog

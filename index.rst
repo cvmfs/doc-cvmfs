@@ -68,4 +68,5 @@ Authors of this documentation:
    * Nick Hazekamp
    * René Meusel
    * Radu Popescu
+   * Simone Mosciatti
 
