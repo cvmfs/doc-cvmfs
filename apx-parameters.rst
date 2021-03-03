@@ -214,7 +214,7 @@ CVMFS_UNION_FS_TYPE                 | Defines the union file system to be used f
                                     | (currently `aufs` and `overlayfs` are fully supported)
 CVMFS_UPLOAD_STATS_DB               | Publish repository staticis plots to the Stratum 0 /stats location
 CVMFS_UPSTREAM_STORAGE              | Upstream spooler description defining the basic upstream storage type
-                                    | and configuration.
+                                    | and configuration (see below).
 CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
 CVMFS_USER                          The user name that owns and manipulates the files inside the repository.
 CVMFS_VIRTUAL_DIR                   | Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory
@@ -228,6 +228,35 @@ X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS c
 X509_CERT_DIR                       | Directory file with CA certificates for HTTPS connections,
                                     | defaults to /etc/grid-security/certificates (see :ref:`sct_data`)
 =================================== ====================================================================================
+
+Format of CVMFS_UPSTREAM_STORAGE
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The format of the ``CVMFS_UPSTREAM_STORAGE`` parameter depends on the storage backend.
+Note that this parameter is initialized by ``cvmfs_server mkfs`` resp. ``cvmfs_server add-replica``.
+The internals of the parameter are only relevant
+if the configuration is maintained by a configuration management system.
+
+For the local storage backend, the parameter specifies the storage directory (to be served by Apache)
+and a temporary directory in the form ``local,<path for temporary files>,<path to storage>``, e.g.
+
+::
+
+    CVMFS_UPSTREAM_STORAGE=local,/srv/cvmfs/sw.cvmfs.io/data/txn,/srv/cvmfs/sw.cvmfs.io
+
+For the S3 backend, the parameter specifies a temporary directory and the location of the S3 config file
+in the form ``s3,<path for temporary files>,<repository entry URL on the S3 server>@<S3 config file>``, e.g.
+
+::
+
+    CVMFS_UPSTREAM_STORAGE=S3,/var/spool/cvmfs/sw.cvmfs.io/tmp,cvmfs/sw.cvmfs.io@/etc/cvmfs/s3.conf
+
+The gateway backend can only be used on a remote publisher (not on a stratum 1).
+The parameter specifies a temporary directory and the endpoint of the gateway service, e.g.
+
+::
+
+    CVMFS_UPSTREAM_STORAGE=gw,/var/spool/cvmfs/sw.cvmfs.io/tmp,http://cvmfs-gw.cvmfs.io:4929/api/v1
 
 
 .. _apxsct_cacheparams:
