@@ -224,9 +224,32 @@ the CernVM-FS container integration.
 ``containerd`` remote-snapshotter plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This will allow running images from Kubernetes looking for the layers first in
-CernVM-FS and if the layers are not to be found, downloading them from the
-standard docker registry.
+CernVM-FS integration with ``containerd`` is achieved by the snapshotter plugin,
+a specialized component responsible for assembling all the layers of container
+images into a stacked filesystem that ``containerd`` can use.
+The snapshotter takes as input the list of required layers and outputs a directory
+containing the final filesystem. It is also responsible to clean-up the output
+directory when containers using it are stopped.
+
+From version 1.4.0, containerd introduce the concept of remote snapshotter.
+It allows starting containers in which the filesystem is provided externally from the containerd machinery.
+Therefore, there is no need to download all the layers for each image getting rid of the pulling time.
+Overall this new mechanism should bring down the time to start-up a new container image.
+
+We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
+We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
+filesystem, like NFS. If the layers are not in the local filesystem, `containerd` simply follow the
+standard path downloading them from the standard docker registry.
+
+## Configuration
+
+This remote snapshotter communicates with `containerd` via gRPC over linux socket.
+The default socket is `/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock`.
+The socket is created automatically by the snapshotter if it does not exists.
+
+
+Sock under: /run/containerd
+Configuration file under: /root/containerd-remote-snapshotter/script/config/etc/containerd
 
 
 ``podman`` integration
