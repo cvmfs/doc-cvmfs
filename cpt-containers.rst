@@ -222,7 +222,7 @@ There are several lines of development that we are pursuing to improve
 the CernVM-FS container integration.
 
 ``containerd`` remote-snapshotter plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
 CernVM-FS integration with ``containerd`` is achieved by the snapshotter plugin,
 a specialized component responsible for assembling all the layers of container
@@ -231,29 +231,72 @@ The snapshotter takes as input the list of required layers and outputs a directo
 containing the final filesystem. It is also responsible to clean-up the output
 directory when containers using it are stopped.
 
-From version 1.4.0, containerd introduce the concept of remote snapshotter.
+From version 1.4.0, containerd introduced the concept of remote snapshotter.
 It allows starting containers in which the filesystem is provided externally from the containerd machinery.
-Therefore, there is no need to download all the layers for each image getting rid of the pulling time.
-Overall this new mechanism should bring down the time to start-up a new container image.
+Therefore, there is no need to download all the layers for each image, getting rid of the pulling time.
+Overall, this new mechanism brings down the time to start-up a new container image.
 
 We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
 We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
 filesystem, like NFS. If the layers are not in the local filesystem, `containerd` simply follow the
 standard path downloading them from the standard docker registry.
 
-## Configuration
+Configuration
+~~~~~~~~~~~~~
 
-This remote snapshotter communicates with `containerd` via gRPC over linux socket.
-The default socket is `/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock`.
-The socket is created automatically by the snapshotter if it does not exists.
+This remote snapshotter communicates with ``containerd`` via gRPC over linux socket.
+The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
+This socket is created automatically by the snapshotter when building the binary, if it does not exist.
 
+To build the binary, use the following commands:
 
-Sock under: /run/containerd
-Configuration file under: /root/containerd-remote-snapshotter/script/config/etc/containerd
+::
 
+    cd <source directory>
+    make
+
+Then, a new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
+It is necessary to configure containerd to use this new remote snapshotter.
+A basic configuration file would look like:
+
+```
+# tell containerd to use this particular snapshotter
+[plugins."io.containerd.grpc.v1.cri".containerd]
+  snapshotter = "cvmfs-snapshotter"
+  disable_snapshot_annotations = false
+
+# tell containerd how to communicate with this snapshotter
+[proxy_plugins]
+  [proxy_plugins.cvmfs-snapshotter]
+    type = "snapshot"
+    address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
+```
+and it should be stored at ``containerd-remote-snapshotter/script/config/etc/containerd-cvmfs-grpc``.
+
+Testing
+~~~~~~~
+
+This plugin is tested using ``kind``.
+
+```
+$ docker build -t cvmfs-kind-node https://github.com/cvmfs/containerd-remote-snapshotter.git
+$ cat kind-mount-cvmfs.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraMounts:
+    - hostPath: /cvmfs/unpacked.cern.ch
+      containerPath: /cvmfs/unpacked.cern.ch
+
+$ kind create cluster --config kind-mount-cvmfs.yaml --image cvmfs-kind-node
+```
+At this point, it is possible to use ``kubectl`` to start containers.
+If the filesystem of the container is available on the local filesystem used by the plugin,
+it won't download the tarball, but just mount the local filesystem.
 
 ``podman`` integration
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 Similarly to the ``containerd`` integration, this development will allow running
 a standard docker image using podman fetching the layers, unpacked, from a
@@ -262,7 +305,7 @@ registry if necessary.
 
 
 DUCC registry interface
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 This development will allow for pushing the image to a special registry and
 for finding the image in the CernVM-FS repository as soon as the push
