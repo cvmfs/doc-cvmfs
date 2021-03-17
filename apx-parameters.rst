@@ -201,7 +201,7 @@ CVMFS_SNAPSHOT_GROUP                | Group name for subset of repositories used
 CVMFS_SPOOL_DIR                     | Location of the upstream spooler scratch directories;
                                     | the read-only CernVM-FS moint point and copy-on-write storage reside here.
 CVMFS_STATISTICS_DB                 | Set a custom path for the publisher statistics database
-CVMFS_STATS_DB_DAYS_TO_KEEP         | Sets the pruning interval for the publisher statistics database
+CVMFS_STATS_DB_DAYS_TO_KEEP         | Sets the pruning interval for the publisher statistics database (365 by default)
 CVMFS_STRATUM0                      URL of the master copy (*stratum0*) of this specific repository.
 CVMFS_STRATUM1                      URL of the Stratum1 HTTP server for this specific repository.
 CVMFS_SYNCFS_LEVEL                  | Controls how often ``sync`` will by called by ``cvmfs_server`` operations.
@@ -212,7 +212,12 @@ CVMFS_UNION_DIR                     | Mount point of the union file system for c
                                     | (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 | Defines the union file system to be used for the repository.
                                     | (currently `aufs` and `overlayfs` are fully supported)
+<<<<<<< HEAD
 CVMFS_UPLOAD_STATS_DB               | Publish repository staticis plots to the Stratum 0 /stats location
+=======
+CVMFS_UPLOAD_STATS_DB               | Publish repository statistics data file to the Stratum 0 /stats location
+CVMFS_UPLOAD_STATS_PLOTS            | Publish repository statistics plots and webpage to the Stratum 0 /stats location (requires ROOT)
+>>>>>>> ec9f11e (update stats parameters)
 CVMFS_UPSTREAM_STORAGE              | Upstream spooler description defining the basic upstream storage type
                                     | and configuration (see below).
 CVMFS_USE_FILE_CHUNKING             Allows backend to split big files into small chunks (*true* | *false*)
@@ -223,7 +228,6 @@ CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentica
 CVMFS_STATISTICS_DB                 | SQLite file path to store the statistics. Default is
                                     | ``/var/spool/cvmfs/<REPO_NAME>/stats.db`` .
 CVMFS_PRINT_STATISTICS              Set to *true* to enable statistics printing to the standard output.
-CVMFS_EXTENDED_GC_STATS             Set to *true* to count condemned bytes in the garbage collector process.
 X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS connections (see :ref:`sct_data`)
 X509_CERT_DIR                       | Directory file with CA certificates for HTTPS connections,
                                     | defaults to /etc/grid-security/certificates (see :ref:`sct_data`)
