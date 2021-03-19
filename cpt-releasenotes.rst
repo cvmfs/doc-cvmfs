@@ -98,8 +98,9 @@ Publisher Statistics Plots
 
 An automatically generated web page can present key figures of publish and
 garbage collections operations, such as number of files and processed volume.
-To activate, set ``CVMFS_UPLOAD_STATS_DB=true`` in the repository server.conf
-file. The raw data and the page are published to the stratum 0 /stats location.
+To publish only the raw data file, set ``CVMFS_UPLOAD_STATS_DB=true`` in the repository server.conf
+file. Plots and a webpage are also published to the stratum 0 /stats location
+if ``CVMFS_UPLOAD_STATS_PLOTS=true`` is set and `ROOT <https://root.cern>`_ is installed.
 
 
 Bug Fixes
