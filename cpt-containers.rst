@@ -232,9 +232,10 @@ containing the final filesystem. It is also responsible to clean-up the output
 directory when containers using it are stopped.
 
 From version 1.4.0, containerd introduced the concept of remote snapshotter.
-It allows starting containers in which the filesystem is provided externally from the containerd machinery.
-Therefore, there is no need to download all the layers for each image, getting rid of the pulling time.
-Overall, this new mechanism brings down the time to start-up a new container image.
+It allows starting containers in which the container root filesystem is provided by an external plugin.
+Given such a suitable plugin (remote snapshotter), there is no need to download all the layers for each image,
+which can greatly improve the start-up time of containers.
+The CernVM-FS remote snapshotter uses this new capability to mount the container image layers directly from a CernVM-FS repository.
 
 We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
 We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
@@ -244,7 +245,7 @@ standard path downloading them from the standard docker registry.
 Configuration
 ~~~~~~~~~~~~~
 
-This remote snapshotter communicates with ``containerd`` via gRPC over linux socket.
+The CernVM-FS remote snapshotter communicates with ``containerd`` via gRPC over a UNIX domain socket.
 The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
 This socket is created automatically by the snapshotter when building the binary, if it does not exist.
 
@@ -255,7 +256,7 @@ To build the binary, use the following commands:
     cd <source directory>
     make
 
-Then, a new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
+A new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
 It is necessary to configure containerd to use this new remote snapshotter.
 A basic configuration file would look like:
 
@@ -292,7 +293,7 @@ nodes:
 $ kind create cluster --config kind-mount-cvmfs.yaml --image cvmfs-kind-node
 ```
 At this point, it is possible to use ``kubectl`` to start containers.
-If the filesystem of the container is available on the local filesystem used by the plugin,
+If the filesystem of the container is available on the CernVM-FS repository used by the plugin,
 it won't download the tarball, but just mount the local filesystem.
 
 ``podman`` integration
