@@ -92,7 +92,7 @@ Creating an image for ROOT
 Start out with either building ``cvmfs_shrinkwrap``, adding it to your path,
 or locating it in your working directory.
 
-Optional (for repository subset):  Create a file specification to limit files.
+Create a file specification to limit the files subject to being shrinkwrapped.
 Here is an example for ROOT version 6.10 (~8.3 GB). For our example put this in
 a file named ``sft.cern.ch.spec``. ::
 
