@@ -231,7 +231,7 @@ The snapshotter takes as input the list of required layers and outputs a directo
 containing the final filesystem. It is also responsible to clean-up the output
 directory when containers using it are stopped.
 
-From version 1.4.0, containerd introduced the concept of remote snapshotter.
+From version 1.4.0, ``containerd`` introduced the concept of remote snapshotter.
 It allows starting containers in which the container root filesystem is provided by an external plugin.
 Given such a suitable plugin (remote snapshotter), there is no need to download all the layers for each image,
 which can greatly improve the start-up time of containers.
@@ -239,7 +239,8 @@ The CernVM-FS remote snapshotter uses this new capability to mount the container
 
 We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
 We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
-filesystem, like NFS. If the layers are not in the local filesystem, `containerd` simply follow the
+filesystem, like NFS. In CernVM-FS, the available layers are stored at ``/cvmfs/unpacked.cern.ch/.layers``.
+If the desired layers are not in the local filesystem, `containerd` simply follow the
 standard path downloading them from the standard docker registry.
 
 Configuration
@@ -274,27 +275,15 @@ A basic configuration file would look like:
 ```
 and it should be stored at ``containerd-remote-snapshotter/script/config/etc/containerd-cvmfs-grpc``.
 
-Testing
-~~~~~~~
-
-This plugin is tested using ``kind``.
-
-```
-$ docker build -t cvmfs-kind-node https://github.com/cvmfs/containerd-remote-snapshotter.git
-$ cat kind-mount-cvmfs.yaml
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-- role: control-plane
-  extraMounts:
-    - hostPath: /cvmfs/unpacked.cern.ch
-      containerPath: /cvmfs/unpacked.cern.ch
-
-$ kind create cluster --config kind-mount-cvmfs.yaml --image cvmfs-kind-node
-```
-At this point, it is possible to use ``kubectl`` to start containers.
-If the filesystem of the container is available on the CernVM-FS repository used by the plugin,
-it won't download the tarball, but just mount the local filesystem.
+How to use the CernVM-FS Snapshotter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The binary accepts different command line options:
+* ``--log-level`` - address for the snapshotter's GRPC server. 
+The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
+* ``--config`` - path to the configuration file.
+* ``--address`` - logging level [trace, debug, info, warn, error, fatal, panic].
+* ``--root`` - path to the root directory for this snapshotter.
+The default one is ``/var/lib/containerd-cvmfs-grpc``.
 
 ``podman`` integration
 ----------------------
