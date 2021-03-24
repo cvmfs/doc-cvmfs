@@ -235,7 +235,8 @@ From version 1.4.0, ``containerd`` introduced the concept of remote snapshotter.
 It allows starting containers in which the container root filesystem is provided by an external plugin.
 Given such a suitable plugin (remote snapshotter), there is no need to download all the layers for each image,
 which can greatly improve the start-up time of containers.
-The CernVM-FS remote snapshotter uses this new capability to mount the container image layers directly from a CernVM-FS repository.
+The CernVM-FS remote snapshotter uses this new capability to mount the container image layers directly
+from a CernVM-FS repository.
 
 We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
 We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
@@ -274,6 +275,7 @@ A basic configuration file would look like:
     address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 ```
 and it should be stored at ``containerd-remote-snapshotter/script/config/etc/containerd-cvmfs-grpc``.
+One can directly run the binary indicating the path to the configuration file by using the ``--config`` option.
 
 How to use the CernVM-FS Snapshotter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
