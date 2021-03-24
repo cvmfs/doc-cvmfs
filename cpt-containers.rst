@@ -239,7 +239,7 @@ The CernVM-FS remote snapshotter uses this new capability to mount the container
 
 We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
 We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
-filesystem, like NFS. In CernVM-FS, the available layers are stored at ``/cvmfs/unpacked.cern.ch/.layers``.
+filesystem, like NFS. In CernVM-FS, the available layers are stored at ``/cvmfs/<repo_name>/.layers``.
 If the desired layers are not in the local filesystem, `containerd` simply follow the
 standard path downloading them from the standard docker registry.
 
@@ -284,6 +284,11 @@ The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
 * ``--address`` - logging level [trace, debug, info, warn, error, fatal, panic].
 * ``--root`` - path to the root directory for this snapshotter.
 The default one is ``/var/lib/containerd-cvmfs-grpc``.
+
+By default, the repository used to search for the layers is ``unpacked.cern.ch``.
+One can specify another repository in the ``config.toml`` file with the key value ``repository``
+and the mountpoint with the key value ``absolute-mountpoint``. If only the repository is specified,
+the mountpoint is by default constructed as ``/cvmfs/<repo_name>``.
 
 ``podman`` integration
 ----------------------
