@@ -231,17 +231,9 @@ The snapshotter takes as input the list of required layers and outputs a directo
 containing the final filesystem. It is also responsible to clean-up the output
 directory when containers using it are stopped.
 
-From version 1.4.0, ``containerd`` introduced the concept of remote snapshotter.
-It allows starting containers in which the container root filesystem is provided by an external plugin.
-Given such a suitable plugin (remote snapshotter), there is no need to download all the layers for each image,
-which can greatly improve the start-up time of containers.
-The CernVM-FS remote snapshotter uses this new capability to mount the container image layers directly
-from a CernVM-FS repository.
-
-We exploit this new capability to mount OCI layers directly from a filesystem on the local machine.
-We focus on layers provided by CernVM-FS, but with minor changes is possible to mount layers from any
+We focus on the layers provided by CernVM-FS, but with minor changes it is possible to mount layers from any
 filesystem, like NFS. In CernVM-FS, the available layers are stored at ``/cvmfs/<repo_name>/.layers``.
-If the desired layers are not in the local filesystem, `containerd` simply follow the
+If the desired layers are not in the local filesystem, ``containerd`` simply follows the
 standard path downloading them from the standard docker registry.
 
 Configuration
@@ -259,10 +251,29 @@ To build the binary, use the following commands:
     make
 
 A new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
-It is necessary to configure containerd to use this new remote snapshotter.
-A basic configuration file would look like:
+
+How to use the CernVM-FS Snapshotter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The binary accepts different command line options:
+* ``--address`` - address for the snapshotter's GRPC server.
+The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
+* ``--config`` - path to the configuration file.
+Creating a configuration file is useful to customize the default values.
+* ``--log-level`` - logging level [trace, debug, info, warn, error, fatal, panic].
+The default values is ``info``.
+* ``--root`` - path to the root directory for this snapshotter.
+The default one is ``/var/lib/containerd-cvmfs-grpc``.
+
+By default, the repository used to search for the layers is ``unpacked.cern.ch``.
+The default values can be overrided by running the binary indicating the path to a
+configuration file ``config.toml`` using the ``--config`` option. A basic configuration
+file with the default values would look like:
 
 ```
+# tell containerd the repository and the mountpoint
+repository = "unpacked.cern.ch"
+absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
+
 # tell containerd to use this particular snapshotter
 [plugins."io.containerd.grpc.v1.cri".containerd]
   snapshotter = "cvmfs-snapshotter"
@@ -274,23 +285,9 @@ A basic configuration file would look like:
     type = "snapshot"
     address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 ```
-and it should be stored at ``containerd-remote-snapshotter/script/config/etc/containerd-cvmfs-grpc``.
-One can directly run the binary indicating the path to the configuration file by using the ``--config`` option.
+Note that if only the repository is specified under the key value ``repository``, the mountpoint
+(under the key value ``absolute-mountpoint``) is by default constructed as ``/cvmfs/<repo_name>``.
 
-How to use the CernVM-FS Snapshotter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The binary accepts different command line options:
-* ``--log-level`` - address for the snapshotter's GRPC server. 
-The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
-* ``--config`` - path to the configuration file.
-* ``--address`` - logging level [trace, debug, info, warn, error, fatal, panic].
-* ``--root`` - path to the root directory for this snapshotter.
-The default one is ``/var/lib/containerd-cvmfs-grpc``.
-
-By default, the repository used to search for the layers is ``unpacked.cern.ch``.
-One can specify another repository in the ``config.toml`` file with the key value ``repository``
-and the mountpoint with the key value ``absolute-mountpoint``. If only the repository is specified,
-the mountpoint is by default constructed as ``/cvmfs/<repo_name>``.
 
 ``podman`` integration
 ----------------------
