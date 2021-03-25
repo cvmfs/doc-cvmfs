@@ -254,6 +254,7 @@ A new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
 
 How to use the CernVM-FS Snapshotter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The binary accepts different command line options:
 * ``--address`` - address for the snapshotter's GRPC server.
 The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
@@ -285,6 +286,7 @@ absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
     type = "snapshot"
     address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 ```
+
 Note that if only the repository is specified under the key value ``repository``, the mountpoint
 (under the key value ``absolute-mountpoint``) is by default constructed as ``/cvmfs/<repo_name>``.
 
