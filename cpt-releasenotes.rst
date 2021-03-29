@@ -1,3 +1,37 @@
+Release Notes for CernVM-FS 2.8.1
+=================================
+
+CernVM-FS 2.8.1 is a patch release.
+It contains bugfixes for clients and servers.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * [client] fix cache hitrate reporting, add new extended attribute ``hitrate``
+    (`CVM-1965 <https://sft.its.cern.ch/jira/browse/CVM-1965>`_)
+  * [server] fix server statistics display for JSROOT 6
+    (`CVM-1970 <https://sft.its.cern.ch/jira/browse/CVM-1970>`_)
+  * [server] fix ``cvmfs_server diff --worktree`` on managed publishers
+    (`CVM-1972 <https://sft.its.cern.ch/jira/browse/CVM-1972>`_)
+  * [server] gracefully handle template transaction failures
+    (`CVM-1964 <https://sft.its.cern.ch/jira/browse/CVM-1964>`_)
+  * [server] fix enter shell when repository uses multiple stratum 1 hosts
+    (`CVM-1969 <https://sft.its.cern.ch/jira/browse/CVM-1969>`_)
+  * [container] set ``CVMFS_USE_CDN=yes`` in service container
+  * [shrinkwrap] fix parsing of the spec file
+    (`CVM-1708 <https://sft.its.cern.ch/jira/browse/CVM-1708>`_)
+
+
 Release Notes for CernVM-FS 2.8.0
 =================================
 
