@@ -90,7 +90,9 @@ CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
 CVMFS_QUOTA_LIMIT               Soft-limit of the cache in Megabyte.
 CVMFS_RELOAD_SOCKETS            Directory of the sockets used by the CernVM-FS loader to trigger hotpatching/reloading.
 CVMFS_REPOSITORIES              | Comma-separated list of fully qualified repository names
-                                | that shall be mountable under /cvmfs.
+                                | to include in use of client utilities such as ``cvmfs_talk`` and ``cvmfs_config``.
+                                | Does not limit which repositories may be mounted, unless ``CVMFS_STRICT_MOUNT`` is
+                                | set to *yes*.
 CVMFS_REPOSITORY_DATE           | A timestamp in ISO format (e.g. ``2007-03-01T13:00:00Z``).
                                 | Selects the repository state as of the given date.
 CVMFS_REPOSITORY_TAG            Select a named repository snapshot that should be mounted instead of ``trunk``.
