@@ -139,10 +139,6 @@ refer to the input image.
 The current wish list format requires all the images to be stored in the same
 CernVM-FS repository and have the same thin output image format.
 
-DUCC Requirements
-=============
-DUCC requires Singularity to be installed, and requires a cvmfs_server publishing interface.
-
 DUCC Commands
 =============
 
@@ -181,6 +177,21 @@ iteration, the wish list file is read again in order to pick up changes.
 
     cvmfs_ducc loop recipe.yaml
 
+convert-single-image
+********************
+
+The `convert-single-image` command is useful when only a single image need to
+be converted and pushed into a CernVM-FS repository.
+
+::
+
+    cvmfs_ducc convert-single-image image-to-convert repository.cern.ch
+
+The command takes two arguments as input, the image to convert and the CernVM-FS
+repository where to store it.
+
+The `image-to-convert` argument follow the same syntax of the wishlist, for
+instance it could be something like `https://registry.hub.docker.com/library/fedora:latest`.
 
 
 Incremental Conversion
@@ -193,3 +204,46 @@ while others will need to be converted ex-novo.
 An image that has been already unpacked in CernVM-FS will be skipped. For
 unconverted images, only the missing layers will be unpacked.
 
+Layer Aware
+===========
+
+DUCC is now aware that containers images are build incrementally on top of
+smaller layers.
+
+Converting an image based on an image already inside the repository will skip
+most of the work.
+
+As long as the lower layers of an image don't change this allows a very fast
+ingestion of software images, irrespectively of their size.
+
+Notification
+============
+
+DUCC provides a basic notification system to alert external services of
+updates in the filesystem.
+
+The notifications are appended to a simple text file as JSON objects.
+
+Human operator or software can follow the file and react on notification of
+interest.
+
+The notification file, eventually can grow large. The suggestion is to treat it
+as a standard log file with tools like `logrotate`.
+
+Multiple DUCC processes can write on the same notification file at the same
+time, multiple consumer can read from it.
+
+The notification are activated if and only if the user ask for them providing
+a file where to write them.
+To provide a notification file the flag `-n/--notification-file` is available.
+
+Multiprocess
+============
+
+DUCC is able to run multiprocess against the same CernVM-FS repository.
+
+Before to interact with the CernVM-FS repository, DUCC takes a filesystem
+level lock against `/tmp/DUCC.lock`.
+
+This allows to run multiple instances of DUCC at the same time, one instance
+could listen to a web socket, while one could be doing wishlist conversion.
