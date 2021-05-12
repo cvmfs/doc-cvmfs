@@ -256,13 +256,13 @@ How to use the CernVM-FS Snapshotter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The binary accepts different command line options:
-* ``--address`` - address for the snapshotter's GRPC server.
+-  ``--address``: address for the snapshotter's GRPC server.
 The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
-* ``--config`` - path to the configuration file.
+-  ``--config``: path to the configuration file.
 Creating a configuration file is useful to customize the default values.
-* ``--log-level`` - logging level [trace, debug, info, warn, error, fatal, panic].
+-  ``--log-level``: logging level [trace, debug, info, warn, error, fatal, panic].
 The default values is ``info``.
-* ``--root`` - path to the root directory for this snapshotter.
+-  ``--root``: path to the root directory for this snapshotter.
 The default one is ``/var/lib/containerd-cvmfs-grpc``.
 
 By default, the repository used to search for the layers is ``unpacked.cern.ch``.
@@ -270,22 +270,22 @@ The default values can be overrided by running the binary indicating the path to
 configuration file ``config.toml`` using the ``--config`` option. A basic configuration
 file with the default values would look like:
 
-```
-# tell containerd the repository and the mountpoint
-repository = "unpacked.cern.ch"
-absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
+::
+    # tell containerd the repository and the mountpoint
+    repository = "unpacked.cern.ch"
+    absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
 
-# tell containerd to use this particular snapshotter
-[plugins."io.containerd.grpc.v1.cri".containerd]
-  snapshotter = "cvmfs-snapshotter"
-  disable_snapshot_annotations = false
+    # tell containerd to use this particular snapshotter
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+    snapshotter = "cvmfs-snapshotter"
+    disable_snapshot_annotations = false
 
-# tell containerd how to communicate with this snapshotter
-[proxy_plugins]
-  [proxy_plugins.cvmfs-snapshotter]
-    type = "snapshot"
-    address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
-```
+    # tell containerd how to communicate with this snapshotter
+    [proxy_plugins]
+    [proxy_plugins.cvmfs-snapshotter]
+        type = "snapshot"
+        address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
+
 
 Note that if only the repository is specified under the key value ``repository``, the mountpoint
 (under the key value ``absolute-mountpoint``) is by default constructed as ``/cvmfs/<repo_name>``.
