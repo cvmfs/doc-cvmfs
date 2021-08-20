@@ -134,7 +134,7 @@ Publisher configuration
 
 This section describes how to set up a publisher for a specific CVMFS
 repository. The precondition is a working gateway machine where the repository
-has been created as a Stratum 0. 
+has been created as a Stratum 0.
 
 Example procedure
 *****************
