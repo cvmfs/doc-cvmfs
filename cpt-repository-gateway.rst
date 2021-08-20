@@ -35,15 +35,14 @@ Repository gateway
 Repository gateway configuration
 ================================
 
-The ``cvmfs-gateway`` application needs to run on the gateway machine. The
-application is currently packaged for CentOS 7, SLC 6, and Ubuntu 16.04 and
-18.04.
+Install the ``cvmfs-gateway`` package on the gateway machine. Packages
+for various platforms are available for download `here <https://cernvm.cern.ch/fs/#download>`_.
 
-When the CernVM-FS client and server packages are also installed, it's possible
-to use the gateway machine as a "master" publisher, reserved for performing
-some initial repository transformations, before a separate publisher machine is
-set up. To avoid any possible repository corruption, the gateway application
-should always be stopped before opening a repository transaction on the gateway
+When the CernVM-FS client and server packages are also installed and set up as a stratum 0,
+it's possible to use the gateway machine as a "master" publisher (for example to perform
+some initialization operations on a repository, before a separate publisher machine is
+set up). To avoid any possible repository corruption, the gateway application
+should always be stopped before starting a local repository transaction on the gateway
 machine.
 
 With the gateway application installed, create the repository which will be
@@ -88,15 +87,15 @@ runtime parameters for the gateway application. The most important are:
 * ``max_lease_time`` - the maximum duration, in seconds, of an acquired lease
 * ``port`` - the TCP port on which the gateway application listens,
   4929 by default (the legacy name for this option is "fe_tcp_port")
-* ``num_receivers`` - the number of parallel ``cvmfs_receiver`` worker
-processes to be spawned. Default value is 1, and it should not be increased
-beyond the number of available CPU cores (the legacy name of this option is the
-``size`` entry in the ``receiver_config`` map).
+* ``num_receivers`` - the number of parallel ``cvmfs_receiver`` worker processes
+  to be spawned. Default value is 1, and it should not be increased beyond the
+  number of available CPU cores (the legacy name of this option is the
+  ``size`` entry in the ``receiver_config`` map).
 
 To access the gateway service API, the specified ``port`` needs to be open in
 the firewall. If the gateway machine also serves as a repository stratum 0
-(i.e. the repository is created with "local" upstream), then port 80/TCP also
-needs to be open.
+(i.e. the repository is created with "local" upstream), then the port on
+which httpd listens (80 by default) also needs to be open for TCP.
 
 Finally, to start the gateway application, use `systemctl` if systemd is
 available: ::
@@ -114,8 +113,8 @@ If systemd is available, the application logs can be consulted with: ::
 
   # journalctl -u cvmfs-gateway
 
-On CentOS 6, where systemd is not available, the log file can be accessed
-directly at `/var/log/cvmfs-gateway.log`.
+Additional log files may also be found in `/var/log/cvmfs-gateway`
+and `/var/log/cvmfs-gateway-runner`.
 
 Running under a different user
 ******************************
@@ -135,10 +134,10 @@ Publisher configuration
 
 This section describes how to set up a publisher for a specific CVMFS
 repository. The precondition is a working gateway machine where the repository
-has been created as a Stratum 0.
+has been created as a Stratum 0. 
 
-Example:
---------
+Example procedure
+*****************
 
 * The gateway machine is ``gateway.cern.ch``.
 * The publisher is ``publisher.cern.ch``.
@@ -148,11 +147,11 @@ Example:
 * The gateway API key is ``test.cern.ch.gw``.
 * The gateway application is running on port 4929 at the URL
   ``http://gateway.cern.ch:4929/api/v1``.
-* The three keys for the repository (.pub, .crt, and .gw) have been copied from the gateway machine onto the
+* The three key files for the repository (.pub, .crt, and .gw) have been copied from the gateway machine onto the
   publisher machine, in the directory ``/tmp/test.cern.ch_keys/``.
 
 To make the repository available for writing on ``publisher.cern.ch``, run the
-following command on that machine as an unprivileged user with sudo access: ::
+following command on that machine as a non-root user with sudo access: ::
 
   $ sudo cvmfs_server mkfs -w http://gateway.cern.ch/cvmfs/test.cern.ch \
                            -u gw,/srv/cvmfs/test.cern.ch/data/txn,http://gateway.cern.ch:4929/api/v1 \
@@ -266,8 +265,8 @@ Keys can be either be loaded from a file, or declared inline: ::
 The ``"version": 2`` property needs to be specified for this configuration
 format to be accepted.
 
-It should be noted that when keys are loaded from a file, an `id` field needs
-not be specified in the configuration file. The public id of the loaded key is
+It should be noted that when keys are loaded from a file, an `id` field does not need
+to be specified in the configuration file. The public id of the loaded key is
 the one specified in the key file itself.
 
 Legacy repository configuration syntax
