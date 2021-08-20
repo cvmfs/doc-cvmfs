@@ -39,7 +39,7 @@ Install the ``cvmfs-gateway`` package on the gateway machine. Packages
 for various platforms are available for download `here <https://cernvm.cern.ch/fs/#download>`_.
 
 When the CernVM-FS client and server packages are also installed and set up as a stratum 0,
-it's possible to use the gateway machine as a "master" publisher (for example to perform
+it's possible to use the gateway machine as a master publisher (for example to perform
 some initialization operations on a repository, before a separate publisher machine is
 set up). To avoid any possible repository corruption, the gateway application
 should always be stopped before starting a local repository transaction on the gateway
@@ -97,7 +97,7 @@ the firewall. If the gateway machine also serves as a repository stratum 0
 (i.e. the repository is created with "local" upstream), then the port on
 which httpd listens (80 by default) also needs to be open for TCP.
 
-Finally, to start the gateway application, use `systemctl` if systemd is
+Finally, to start the gateway application, use ``systemctl`` if systemd is
 available: ::
 
   # systemctl start cvmfs-gateway.service
@@ -113,13 +113,13 @@ If systemd is available, the application logs can be consulted with: ::
 
   # journalctl -u cvmfs-gateway
 
-Additional log files may also be found in `/var/log/cvmfs-gateway`
-and `/var/log/cvmfs-gateway-runner`.
+Additional log files may also be found in ``/var/log/cvmfs-gateway``
+and ``/var/log/cvmfs-gateway-runner``.
 
 Running under a different user
 ******************************
 
-By default, the `cvmfs-gateway` application is run as `root`. An included
+By default, the ``cvmfs-gateway`` application is run as root. An included
 systemd service template file allows running it as an arbitrary user: ::
 
   # systemctl start cvmfs-gateway@<USER>
@@ -265,7 +265,7 @@ Keys can be either be loaded from a file, or declared inline: ::
 The ``"version": 2`` property needs to be specified for this configuration
 format to be accepted.
 
-It should be noted that when keys are loaded from a file, an `id` field does not need
+It should be noted that when keys are loaded from a file, an ``id`` field does not need
 to be specified in the configuration file. The public id of the loaded key is
 the one specified in the key file itself.
 
