@@ -189,8 +189,11 @@ libcvmfs\_fuse3.so library is not installed in one of the standard search paths,
 the ``CVMFS_LIBRARY_PATH`` variable has to be set accordingly for the ``cvmfs2``
 command.
 
-.. _sct_premount:
+The easiest way to make use of CernVM-FS private mount points is with
+the ``cvmfsexec`` package.  Read about that in the Security
+:ref:`sct_running_client_as_normal_user` section.
 
+.. _sct_premount:
 
 Pre-mounting
 ~~~~~~~~~~~~
