@@ -1,3 +1,36 @@
+Release Notes for CernVM-FS 2.8.2
+=================================
+
+CernVM-FS 2.8.2 is a patch release.
+It contains bugfixes and for clients and the preloader and
+new diagnostics commands for the client.
+Publishers and stratum 1 servers do not necessarily need to upgrade.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to
+update only a few worker nodes first and gradually ramp up once the new version
+proves to work correctly. Please take special care when upgrading a cvmfs
+client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * [client] Add ``cvmfs_config fuser`` command
+    (`CVM-2004 <https://sft.its.cern.ch/jira/browse/CVM-2004>`_)
+  * [client] Add ``device id`` command to ``cvmfs_talk``
+  * [client] Fix authentication plugin connection with Linux namespaces
+    (`CVM-2011 <https://sft.its.cern.ch/jira/browse/CVM-2011>`_)
+  * [client] Improve error handling when parsing config files
+  * [preloader] Make network timeout an number of connect retries configurable
+    (`CVM-1992 <https://sft.its.cern.ch/jira/browse/CVM-1992>`_)
+  * Add Debian 11 "bullseye" packages
+    (`CVM-2020 <https://sft.its.cern.ch/jira/browse/CVM-2020>`_)
+
+
 Release Notes for CernVM-FS 2.8.1
 =================================
 
