@@ -97,6 +97,13 @@ the firewall. If the gateway machine also serves as a repository stratum 0
 (i.e. the repository is created with "local" upstream), then the port on
 which httpd listens (80 by default) also needs to be open for TCP.
 
+.. note::
+   The gateway service receives data from publishers via HTTP transport. However, since the
+   gateway and publisher have a shared secret (the API key), it is not strictly necessary to
+   use TLS certificates and HTTPS to secure the connection to the gateway. Instead, to ensure
+   the integrity and authenticity of content during the publishing process, a hash-based message
+   authentication code (HMAC) is produced by a publisher, and verified by the gateway.
+
 Finally, to start the gateway application, use ``systemctl`` if systemd is
 available: ::
 
