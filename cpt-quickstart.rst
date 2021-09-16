@@ -229,3 +229,6 @@ Once the issue has been identified, ensure that the changes are taken by restart
 ::
 
     systemctl restart autofs
+
+If the problem is that a repository can be mounted and unmounted but
+later cannot be remounted, see :ref:`sct_remounting_namespaces_containers`.

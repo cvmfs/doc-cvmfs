@@ -231,6 +231,37 @@ required.  For example:
         docker://davedykstra/cvmfs-fuse3 bash
 
 
+The ``singcvmfs`` command in the ``cvmfsexec`` package makes use of
+fuse pre-mounting.  Read more about that package in the Security
+:ref:`sct_running_client_as_normal_user` section.
+
+.. _sct_remounting_namespaces_containers:
+
+Remounting and Namespaces/Containers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is common practice to use CernVM-FS from within containers,
+especially with Singularity.
+This sometimes results in a problem because the Linux kernel does
+not prevent unmounting a CernVM-FS repository if the only processes
+accessing it are in mount namespaces,
+even though the fuse processes managing the repository need to keep
+running until all processes using the repository exit.
+The problem in that case is that the repository cannot be remounted
+as long as the background processes keep running.
+This can be easily reproduced by interactively running a Singularity
+container out of CernVM-FS (without the ``-p`` option), running
+``sleep`` in the background, and exiting Singularity.
+The repository can then be unmounted, but it cannot be remounted
+until the ``sleep`` process dies.
+
+When this happens, ``cvmfs_config fuser <repo>`` can be used to identify
+all the processes using ``<repo>``. 
+The system administrator can then contact the owners of the procesess to
+ask to change the application behavior to avoid this situation (for
+example by using Singularity ``-p``), and the processes can be killed to
+enable the repository to be remounted.
+
 
 Docker Containers
 ~~~~~~~~~~~~~~~~~
@@ -1082,6 +1113,11 @@ system for use with CernVM-FS.
 
 **fsck**
     Run ``cvmfs_fsck`` on all repositories specified in ``CVMFS_REPOSITORIES``.
+
+**fuser**
+    Identify all the processes that are accessing a cvmfs repository,
+    preventing it from either being unmounted or mounted.
+    See :ref:`sct_remounting_namespaces_containers`.
 
 **reload**
     The ``reload`` command is used to :ref:`reload or hotpatch
