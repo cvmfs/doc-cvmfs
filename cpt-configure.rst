@@ -603,6 +603,8 @@ the host or by the proxy.
 * Failures of proxy name resolution and any connection/timeout error, partial
   file transfer, or non 2XX return code (except 5XX and 404) are classified as
   proxy failure if a proxy server is used.
+* Explicit proxy errors (indicated via the `X-Squid-Error` or `Proxy-Status`
+  headers) will always be classified as proxy failure.
 
 If CernVM-FS detects a host failure, it will fail-over to the next host in the
 list while keeping the proxy server untouched. If it detects a proxy failure, it
