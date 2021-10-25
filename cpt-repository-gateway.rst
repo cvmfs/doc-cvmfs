@@ -169,7 +169,7 @@ publisher machine: ::
 
   $ cvmfs_server transaction test.cern.ch
 
-Alternatively, to take advantage of the gateway functionality which allows concurrent transactions on different paths of a repository, or fine-grained permission to only publish changes in certain paths, you can request a publishing lease that is scoped to a subdirectory of the repository by starting a transaction like this: :: 
+Alternatively, to take advantage of the gateway functionality which allows concurrent transactions on different paths of a repository, or fine-grained permission to only publish changes in certain paths, you can request a publishing lease that is scoped to a subdirectory of the repository by starting a transaction like this: ::
 
   $ cvmfs_server transaction test.cern.ch/example/path
 
@@ -319,3 +319,253 @@ At this point, the new version of the application can be started. If the
 old directories are still present, they can be deleted: ::
 
   # rm -r /opt/cvmfs-{gateway,mnesia}
+
+
+API reference
+=============
+
+This sections describes the HTTP API exposed by the gateway application.
+
+Repositories
+************
+
+GET /repos
+^^^^^^^^^^
+
+Retrieve the list of all configured repositories
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "test1.cern.ch": {
+        "keys": {
+          "k1": "/"
+        },
+        "enabled": true
+      }
+    },
+    "status": "ok"
+  }
+
+GET /repos/<REPO_NAME>
+^^^^^^^^^^^^^^^^^^^^^^
+
+Retrieve the configuration for a repository
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "keys": {
+        "k1": "/"
+      },
+      "enabled": true
+    },
+    "status": "ok"
+  }
+
+Leases
+******
+
+GET /leases
+^^^^^^^^^^^
+
+Retrieve the current list of leases
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "test1.cern.ch/": {
+        "key_id": "k1",
+        "expires": "2021-10-25 22:02:12.688703553 +0000 UTC"
+      }
+    },
+    "status": "ok"
+  }
+
+GET /leases/<TOKEN>
+^^^^^^^^^^^^^^^^^^^
+
+Retrieve information about the lease identified by the given token
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "key_id": "k1",
+      "path": "test1.cern.ch/",
+      "expires": "2021-10-25 22:14:12.695939889 +0000 UTC"
+    }
+  }
+
+POST /leases
+^^^^^^^^^^^^
+
+Request a new lease
+
+This request requires an authorization header of the form:
+
+.. code-block::
+
+  Authorization: KEY_ID HMAC
+
+where ``KEY_ID`` identifies a gateway key used to sign the message and ``HMAC`` is the keyed-hash message authentication code (HMAC) of the request body.
+
+**Request**
+
+.. code-block:: json
+
+  {
+    "api_version": "3",                   // API version requested by the client
+    "path": "test1.cern.ch/path/to/lease" // repository subpath on which a lease
+                                          // is requested
+  }
+
+**Response**
+
+Success:
+
+.. code-block:: json
+
+  {
+    "status": "ok",
+    "session_token": "<TOKEN>",
+    "max_api_version": 3
+  }
+
+Path busy:
+
+.. code-block:: json
+
+  {
+    "status": "path_busy",
+    "time_remaining": 1234 // remaining lease time in seconds
+  }
+
+Error:
+
+.. code-block:: json
+
+  {
+    "status": "error",
+    "reason": "ERROR_STRING"
+  }
+
+
+POST /leases/<TOKEN>
+^^^^^^^^^^^^^^^^^^^^
+
+Commit a lease
+
+This request requires an authorization header of the form:
+
+.. code-block::
+
+  Authorization: KEY_ID HMAC
+
+where ``KEY_ID`` identifies a gateway key used to sign the message and ``HMAC`` is the keyed-hash message authentication code (HMAC) of the request path component (``/lease/<TOKEN>``).
+
+**Request**
+
+.. code-block:: json
+
+  {
+    "old_root_hash": "abcd3f",
+    "new_root_hash": "bfa42b",
+    "tag_name": "<TAG_NAME>",
+    "tag_channel": "<TAG_CHANNEL>",
+    "tag_description": "<TAG_DESCRIPTION">
+  }
+
+**Response**
+
+Success:
+
+.. code-block:: json
+
+  {
+    "status": "ok",
+    "final_revision": 12345,
+  }
+
+
+Error:
+
+.. code-block:: json
+
+  {
+    "status": "error",
+    "reason": "ERROR_STRING"
+  }
+
+
+DELETE /leases/<TOKEN>
+^^^^^^^^^^^^^^^^^^^^^^
+
+Cancel a lease
+
+This request requires an authorization header of the form:
+
+.. code-block::
+
+  Authorization: KEY_ID HMAC
+
+where ``KEY_ID`` identifies a gateway key used to sign the message and ``HMAC`` is the keyed-hash message authentication code (HMAC) of the request path component (``/lease/<TOKEN>``).
+
+**Response**
+
+Success:
+
+.. code-block:: json
+
+  {
+    "status": "ok"
+  }
+
+
+Error:
+
+.. code-block:: json
+
+  {
+    "status": "error",
+    "reason": "ERROR_STRING"
+  }
+
+Payload submission
+******************
+
+POST /payloads (deprecated)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+POST /payloads/<TOKEN>
+^^^^^^^^^^^^^^^^^^^^^^
+
+Notifications
+*************
+
+POST /notifications/publish
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+GET /notifications/subscribe
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Publication workflow
+====================
+
+.. mermaid::
+
+  sequenceDiagram
+    participant Publisher
+    participant Gateway
+    Publisher -> Gateway: "May I have a lease for path?"
