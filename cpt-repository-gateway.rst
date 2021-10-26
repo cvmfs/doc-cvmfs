@@ -413,100 +413,144 @@ POST /leases
 
 Request a new lease
 
-This request requires an authorization header of the form:
+**Headers**
 
-.. code-block::
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-  Authorization: KEY_ID HMAC
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the request body.
 
-where ``KEY_ID`` identifies a gateway key used to sign the message and ``HMAC`` is the keyed-hash message authentication code (HMAC) of the request body.
+**Request parameters**
 
-**Request**
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-.. code-block:: json
-
-  {
-    "api_version": "3",                   // API version requested by the client
-    "path": "test1.cern.ch/path/to/lease" // repository subpath on which a lease
-                                          // is requested
-  }
+   * - Parameter
+     - Example value
+     - Description
+   * - ``api_version``
+     - "3"
+     - API version requested by the client (passed as a string)
+   * - ``path``
+     - "test1.cern.ch/path/to/lease"
+     - Repository subpath on which a lease is requested
 
 **Response**
 
-Success:
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-.. code-block:: json
-
-  {
-    "status": "ok",
-    "session_token": "<TOKEN>",
-    "max_api_version": 3
-  }
-
-Path busy:
-
-.. code-block:: json
-
-  {
-    "status": "path_busy",
-    "time_remaining": 1234 // remaining lease time in seconds
-  }
-
-Error:
-
-.. code-block:: json
-
-  {
-    "status": "error",
-    "reason": "ERROR_STRING"
-  }
-
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * -
+     - ``session_token``
+     - "<TOKEN>"
+     - String containing the session token associated with the new lease
+   * -
+     - ``max_api_version``
+     - 3
+     - Max API version usable for the remainder of the session
+   * - **Path busy**
+     - ``status``
+     - "path_busy"
+     - There is a conflicting lease for the requested path
+   * -
+     - "time_remaining"
+     - 1234
+     - Remaining lease time in seconds
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
 
 POST /leases/<TOKEN>
 ^^^^^^^^^^^^^^^^^^^^
 
-Commit a lease
+Commit all changes associated with a lease
 
-This request requires an authorization header of the form:
+**Headers**
 
-.. code-block::
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-  Authorization: KEY_ID HMAC
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the request's path component (``/lease/<TOKEN>``).
 
-where ``KEY_ID`` identifies a gateway key used to sign the message and ``HMAC`` is the keyed-hash message authentication code (HMAC) of the request path component (``/lease/<TOKEN>``).
+**Request parameters**
 
-**Request**
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-.. code-block:: json
-
-  {
-    "old_root_hash": "abcd3f",
-    "new_root_hash": "bfa42b",
-    "tag_name": "<TAG_NAME>",
-    "tag_channel": "<TAG_CHANNEL>",
-    "tag_description": "<TAG_DESCRIPTION">
-  }
+   * - Parameter
+     - Example value
+     - Description
+   * - ``old_root_hash``
+     - "abcd3f"
+     - Initial root hash of the repository
+   * - ``new_root_hash``
+     - "bfa42b"
+     - New root hash of the repository
+   * - ``tag name``
+     - "Monday"
+     - Tag associated with the publication
+   * - ``tag_channel``
+     - "Nightlies"
+     - Name of the publication channel
+   * - ``tag_description``
+     - "Nightly builds, Monday's batch"
+     - Description of the tag
 
 **Response**
 
-Success:
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-.. code-block:: json
-
-  {
-    "status": "ok",
-    "final_revision": 12345,
-  }
-
-
-Error:
-
-.. code-block:: json
-
-  {
-    "status": "error",
-    "reason": "ERROR_STRING"
-  }
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * -
+     - ``final_revision``
+     - 1234
+     - New revision of the repository after committing the changes
+       associated with a lease
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
 
 
 DELETE /leases/<TOKEN>
@@ -514,33 +558,41 @@ DELETE /leases/<TOKEN>
 
 Cancel a lease
 
-This request requires an authorization header of the form:
+**Headers**
 
-.. code-block::
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-  Authorization: KEY_ID HMAC
-
-where ``KEY_ID`` identifies a gateway key used to sign the message and ``HMAC`` is the keyed-hash message authentication code (HMAC) of the request path component (``/lease/<TOKEN>``).
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the request's path component (``/lease/<TOKEN>``).
 
 **Response**
 
-Success:
+.. list-table::
+   :widths: auto
+   :header-rows: 1
 
-.. code-block:: json
-
-  {
-    "status": "ok"
-  }
-
-
-Error:
-
-.. code-block:: json
-
-  {
-    "status": "error",
-    "reason": "ERROR_STRING"
-  }
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
 
 Payload submission
 ******************
@@ -548,8 +600,135 @@ Payload submission
 POST /payloads (deprecated)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Upload an object pack payload
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the JSON message at the start of the request body.
+   * - ``message-size``
+     - 1234
+     - Total length of the JSON message at the start of the request body
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``session_token``
+     - "<SESSION_TOKEN>"
+     - Session token associated with the lease
+   * - ``payload_digest``
+     - "bfa42b"
+     - Digest of the payload part (serialized object pack) of the request
+   * - ``header_size``
+     - 1234
+     - Size of the payload header (the header of the serialized object pack)
+   * - ``api_version``
+     - "3"
+     - API version tag (unused)
+
+The upload payload (the serialized object pack) comes after the JSON part of the message.
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
 POST /payloads/<TOKEN>
 ^^^^^^^^^^^^^^^^^^^^^^
+
+Upload an object pack payload
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the session token.
+   * - ``message-size``
+     - 1234
+     - Total length of the JSON message at the start of the request body
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``payload_digest``
+     - "bfa42b"
+     - Digest of the payload part (serialized object pack) of the request
+   * - ``header_size``
+     - 1234
+     - Size of the payload header (the header of the serialized object pack)
+   * - ``api_version``
+     - "3"
+     - API version tag (unused)
+
+The upload payload (the serialized object pack) comes after the JSON part of the message.
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
 
 Notifications
 *************
@@ -557,8 +736,107 @@ Notifications
 POST /notifications/publish
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Publish a notification
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``version``
+     - 1
+     - API version tag (unused)
+   * - ``timestamp``
+     - "26 Oct 2021 15:00:00"
+     - Timestamp
+   * - ``type``
+     - "activity"
+     - Message type (no other values are currently used)
+   * - ``repository``
+     - "test.cern.ch"
+     - Repository name
+   * - ``manifest``
+     - "<MANIFEST STRING>"
+     - The serialized signed repository manifest
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
 GET /notifications/subscribe
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Subscribe to notifications
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``version``
+     - 1
+     - API version tag (unused)
+   * - ``repository``
+     - "test.cern.ch"
+     - Target repository name
+
+This request opens a long-running connection to the notification server. Messages are delivered as server-sent events (SSE), one per line:
+
+.. code-block::
+
+  data: <JSON MESSAGE>
+
+**Messages**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``version``
+     - 1
+     - API version tag (unused)
+   * - ``timestamp``
+     - "26 Oct 2021 15:00:00"
+     - Timestamp
+   * - ``type``
+     - "activity"
+     - Message type (no other values are currently used)
+   * - ``repository``
+     - "test.cern.ch"
+     - Repository name
+   * - ``manifest``
+     - "<MANIFEST STRING>"
+     - The serialized signed repository manifest
 
 Publication workflow
 ====================
