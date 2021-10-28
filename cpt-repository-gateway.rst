@@ -838,3 +838,45 @@ This request opens a long-running connection to the notification server. Message
      - "<MANIFEST STRING>"
      - The serialized signed repository manifest
 
+Publication workflow
+====================
+
+.. mermaid::
+
+  sequenceDiagram
+    participant Pub as Publisher
+    participant GW as Gateway Services
+    participant Receiver as Receiver process
+    participant S0 as Stratum 0
+
+    Note right of Pub: Request lease for a path in the repository
+    Note right of Pub: $ cvmfs_server transaction test.cern.ch/some/path
+    Pub ->> GW: POST /api/v1/leases
+    GW ->> Pub: <TOKEN> (Session token for lease)
+
+    Note right of Pub: Make changes on the publisher
+    Note right of Pub: Commit transaction
+    Note right of Pub: $ cvmfs_server publish
+
+    loop For each object pack
+      Note right of Pub: Upload object pack
+      Pub ->> GW: POST /api/v1/payloads/<TOKEN>
+      GW ->> Receiver: Stream object pack
+      Note right of Receiver: Deserialize files from object pack
+      loop For each file in object pack
+        Receiver ->> S0: Upload file
+      end
+    end
+
+    Note right of Pub: Commit lease
+    Pub ->> GW: POST /api/v1/leases/<TOKEN>
+    GW ->> Receiver: Commit
+
+    Note right of Receiver: Reconciliate local and remote changes
+    Note right of Receiver: Create new catalogs up to the repository root
+
+    Receiver ->> S0: Upload catalogs
+
+    Note right of Receiver: Sign and upload new manifest
+
+    Receiver ->> S0: Upload manifest
