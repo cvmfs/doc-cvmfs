@@ -222,15 +222,77 @@ There are several lines of development that we are pursuing to improve
 the CernVM-FS container integration.
 
 ``containerd`` remote-snapshotter plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
-This will allow running images from Kubernetes looking for the layers first in
-CernVM-FS and if the layers are not to be found, downloading them from the
-standard docker registry.
+CernVM-FS integration with ``containerd`` is achieved by the snapshotter plugin,
+a specialized component responsible for assembling all the layers of container
+images into a stacked filesystem that ``containerd`` can use.
+The snapshotter takes as input the list of required layers and outputs a directory
+containing the final filesystem. It is also responsible to clean-up the output
+directory when containers using it are stopped.
+
+We focus on the layers provided by CernVM-FS, but with minor changes it is possible to mount layers from any
+filesystem, like NFS. In CernVM-FS, the available layers are stored at ``/cvmfs/<repo_name>/.layers``.
+If the desired layers are not in the local filesystem, ``containerd`` simply follows the
+standard path downloading them from the standard docker registry.
+
+Configuration
+~~~~~~~~~~~~~
+
+The CernVM-FS remote snapshotter communicates with ``containerd`` via gRPC over a UNIX domain socket.
+The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
+This socket is created automatically by the snapshotter when building the binary, if it does not exist.
+
+To build the binary, use the following commands:
+
+::
+
+    cd <source directory>
+    make
+
+A new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
+
+How to use the CernVM-FS Snapshotter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The binary accepts different command line options:
+-  ``--address``: address for the snapshotter's GRPC server.
+The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
+-  ``--config``: path to the configuration file.
+Creating a configuration file is useful to customize the default values.
+-  ``--log-level``: logging level [trace, debug, info, warn, error, fatal, panic].
+The default values is ``info``.
+-  ``--root``: path to the root directory for this snapshotter.
+The default one is ``/var/lib/containerd-cvmfs-grpc``.
+
+By default, the repository used to search for the layers is ``unpacked.cern.ch``.
+The default values can be overrided by running the binary indicating the path to a
+configuration file ``config.toml`` using the ``--config`` option. A basic configuration
+file with the default values would look like:
+
+::
+    # tell containerd the repository and the mountpoint
+    repository = "unpacked.cern.ch"
+    absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
+
+    # tell containerd to use this particular snapshotter
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+    snapshotter = "cvmfs-snapshotter"
+    disable_snapshot_annotations = false
+
+    # tell containerd how to communicate with this snapshotter
+    [proxy_plugins]
+    [proxy_plugins.cvmfs-snapshotter]
+        type = "snapshot"
+        address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
+
+
+Note that if only the repository is specified under the key value ``repository``, the mountpoint
+(under the key value ``absolute-mountpoint``) is by default constructed as ``/cvmfs/<repo_name>``.
 
 
 ``podman`` integration
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 Similarly to the ``containerd`` integration, this development will allow running
 a standard docker image using podman fetching the layers, unpacked, from a
@@ -239,7 +301,7 @@ registry if necessary.
 
 
 DUCC registry interface
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 This development will allow for pushing the image to a special registry and
 for finding the image in the CernVM-FS repository as soon as the push

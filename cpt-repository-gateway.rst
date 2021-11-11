@@ -169,7 +169,7 @@ publisher machine: ::
 
   $ cvmfs_server transaction test.cern.ch
 
-Alternatively, to take advantage of the gateway functionality which allows concurrent transactions on different paths of a repository, or fine-grained permission to only publish changes in certain paths, you can request a publishing lease that is scoped to a subdirectory of the repository by starting a transaction like this: :: 
+Alternatively, to take advantage of the gateway functionality which allows concurrent transactions on different paths of a repository, or fine-grained permission to only publish changes in certain paths, you can request a publishing lease that is scoped to a subdirectory of the repository by starting a transaction like this: ::
 
   $ cvmfs_server transaction test.cern.ch/example/path
 
@@ -319,3 +319,564 @@ At this point, the new version of the application can be started. If the
 old directories are still present, they can be deleted: ::
 
   # rm -r /opt/cvmfs-{gateway,mnesia}
+
+
+API reference
+=============
+
+This sections describes the HTTP API exposed by the gateway application.
+
+Repositories
+************
+
+GET /repos
+^^^^^^^^^^
+
+Retrieve the list of all configured repositories
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "test1.cern.ch": {
+        "keys": {
+          "k1": "/"
+        },
+        "enabled": true
+      }
+    },
+    "status": "ok"
+  }
+
+GET /repos/<REPO_NAME>
+^^^^^^^^^^^^^^^^^^^^^^
+
+Retrieve the configuration for a repository
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "keys": {
+        "k1": "/"
+      },
+      "enabled": true
+    },
+    "status": "ok"
+  }
+
+Leases
+******
+
+GET /leases
+^^^^^^^^^^^
+
+Retrieve the current list of leases
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "test1.cern.ch/": {
+        "key_id": "k1",
+        "expires": "2021-10-25 22:02:12.688703553 +0000 UTC"
+      }
+    },
+    "status": "ok"
+  }
+
+GET /leases/<TOKEN>
+^^^^^^^^^^^^^^^^^^^
+
+Retrieve information about the lease identified by the given token
+
+**Response**
+
+.. code-block:: json
+
+  {
+    "data": {
+      "key_id": "k1",
+      "path": "test1.cern.ch/",
+      "expires": "2021-10-25 22:14:12.695939889 +0000 UTC"
+    }
+  }
+
+POST /leases
+^^^^^^^^^^^^
+
+Request a new lease
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the request body.
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``api_version``
+     - "3"
+     - API version requested by the client (passed as a string)
+   * - ``path``
+     - "test1.cern.ch/path/to/lease"
+     - Repository subpath on which a lease is requested
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * -
+     - ``session_token``
+     - "<TOKEN>"
+     - String containing the session token associated with the new lease
+   * -
+     - ``max_api_version``
+     - 3
+     - Max API version usable for the remainder of the session
+   * - **Path busy**
+     - ``status``
+     - "path_busy"
+     - There is a conflicting lease for the requested path
+   * -
+     - "time_remaining"
+     - 1234
+     - Remaining lease time in seconds
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
+POST /leases/<TOKEN>
+^^^^^^^^^^^^^^^^^^^^
+
+Commit all changes associated with a lease
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the request's path component (``/lease/<TOKEN>``).
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``old_root_hash``
+     - "abcd3f"
+     - Initial root hash of the repository
+   * - ``new_root_hash``
+     - "bfa42b"
+     - New root hash of the repository
+   * - ``tag name``
+     - "Monday"
+     - Tag associated with the publication
+   * - ``tag_channel``
+     - "Nightlies"
+     - Name of the publication channel
+   * - ``tag_description``
+     - "Nightly builds, Monday's batch"
+     - Description of the tag
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * -
+     - ``final_revision``
+     - 1234
+     - New revision of the repository after committing the changes
+       associated with a lease
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
+
+DELETE /leases/<TOKEN>
+^^^^^^^^^^^^^^^^^^^^^^
+
+Cancel a lease
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the request's path component (``/lease/<TOKEN>``).
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
+Payload submission
+******************
+
+POST /payloads (deprecated)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Upload an object pack payload
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the JSON message at the start of the request body.
+   * - ``message-size``
+     - 1234
+     - Total length of the JSON message at the start of the request body
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``session_token``
+     - "<SESSION_TOKEN>"
+     - Session token associated with the lease
+   * - ``payload_digest``
+     - "bfa42b"
+     - Digest of the payload part (serialized object pack) of the request
+   * - ``header_size``
+     - 1234
+     - Size of the payload header (the header of the serialized object pack)
+   * - ``api_version``
+     - "3"
+     - API version tag (unused)
+
+The upload payload (the serialized object pack) comes after the JSON part of the message.
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
+POST /payloads/<TOKEN>
+^^^^^^^^^^^^^^^^^^^^^^
+
+Upload an object pack payload
+
+**Headers**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Header
+     - Value
+     - Description
+   * - ``Authorization``
+     - "<KEY_ID> <HMAC>"
+     - "<KEY_ID>" identifies a gateway key used to sign the message and "<HMAC>" is the keyed-hash message authentication code (HMAC) of the session token.
+   * - ``message-size``
+     - 1234
+     - Total length of the JSON message at the start of the request body
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``payload_digest``
+     - "bfa42b"
+     - Digest of the payload part (serialized object pack) of the request
+   * - ``header_size``
+     - 1234
+     - Size of the payload header (the header of the serialized object pack)
+   * - ``api_version``
+     - "3"
+     - API version tag (unused)
+
+The upload payload (the serialized object pack) comes after the JSON part of the message.
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
+Notifications
+*************
+
+POST /notifications/publish
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Publish a notification
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``version``
+     - 1
+     - API version tag (unused)
+   * - ``timestamp``
+     - "26 Oct 2021 15:00:00"
+     - Timestamp
+   * - ``type``
+     - "activity"
+     - Message type (no other values are currently used)
+   * - ``repository``
+     - "test.cern.ch"
+     - Repository name
+   * - ``manifest``
+     - "<MANIFEST STRING>"
+     - The serialized signed repository manifest
+
+**Response**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Outcome
+     - Field
+     - Value
+     - Description
+   * - **Success**
+     - ``status``
+     - "ok"
+     - Response status
+   * - **Error**
+     - ``status``
+     - "error"
+     - An error occurred
+   * -
+     - ``reason``
+     - "Something went wrong"
+     - Description text of the error
+
+GET /notifications/subscribe
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Subscribe to notifications
+
+**Request parameters**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``version``
+     - 1
+     - API version tag (unused)
+   * - ``repository``
+     - "test.cern.ch"
+     - Target repository name
+
+This request opens a long-running connection to the notification server. Messages are delivered as server-sent events (SSE), one per line:
+
+.. code-block::
+
+  data: <JSON MESSAGE>
+
+**Messages**
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Example value
+     - Description
+   * - ``version``
+     - 1
+     - API version tag (unused)
+   * - ``timestamp``
+     - "26 Oct 2021 15:00:00"
+     - Timestamp
+   * - ``type``
+     - "activity"
+     - Message type (no other values are currently used)
+   * - ``repository``
+     - "test.cern.ch"
+     - Repository name
+   * - ``manifest``
+     - "<MANIFEST STRING>"
+     - The serialized signed repository manifest
+
+Publication workflow
+====================
+
+.. mermaid::
+
+  sequenceDiagram
+    participant Pub as Publisher
+    participant GW as Gateway Services
+    participant Receiver as Receiver process
+    participant S0 as Stratum 0
+
+    Note right of Pub: Request lease for a path in the repository
+    Note right of Pub: $ cvmfs_server transaction test.cern.ch/some/path
+    Pub ->> GW: POST /api/v1/leases
+    GW ->> Pub: <TOKEN> (Session token for lease)
+
+    Note right of Pub: Make changes on the publisher
+    Note right of Pub: Commit transaction
+    Note right of Pub: $ cvmfs_server publish
+
+    loop For each object pack
+      Note right of Pub: Upload object pack
+      Pub ->> GW: POST /api/v1/payloads/<TOKEN>
+      GW ->> Receiver: Stream object pack
+      Note right of Receiver: Deserialize files from object pack
+      loop For each file in object pack
+        Receiver ->> S0: Upload file
+      end
+    end
+
+    Note right of Pub: Commit lease
+    Pub ->> GW: POST /api/v1/leases/<TOKEN>
+    GW ->> Receiver: Commit
+
+    Note right of Receiver: Reconciliate local and remote changes
+    Note right of Receiver: Create new catalogs up to the repository root
+
+    Receiver ->> S0: Upload catalogs
+
+    Note right of Receiver: Sign and upload new manifest
+
+    Receiver ->> S0: Upload manifest
