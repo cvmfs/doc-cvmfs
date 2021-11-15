@@ -47,7 +47,7 @@ Improvements and changes
   * Add initial implementation of cvmfs_publish commit (`CVM-2029 <https://sft.its.cern.ch/jira/browse/CVM-2029>`_)
   * [libcvmfs_server] Require repo key & certificate only on non-gw publishers
   * Add `cvmfs_server check -a` command (`CVM-1524 <https://sft.its.cern.ch/jira/browse/CVM-1524>`_)
-  * Add timestamp_last_error magic extended attribute (`CVM-2003 <https://sft.its.cern.ch/jira/browse/CVM-2003>`_)
+  * Add timestamp_last_ioerr magic extended attribute (`CVM-2003 <https://sft.its.cern.ch/jira/browse/CVM-2003>`_)
   * Add logbuffer magic extended attribute
   * Add check for usyslog writability in cvmfs_config (`CVM-1946 <https://sft.its.cern.ch/jira/browse/CVM-1946>`_)
   * [ducc] make output_format line in wish list optional (`CVM-1786 <https://sft.its.cern.ch/jira/browse/CVM-1786>`_)
