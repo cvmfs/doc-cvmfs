@@ -235,14 +235,35 @@ Monitoring
 The ``cvmfs_server`` utility reports status and problems to ``stdout``
 and ``stderr``.
 
-For the web server infrastructure, we recommend standard Nagios HTTP
-checks. They should be configured with the URL
-http://$replica-server/cvmfs/$repository_name/.cvmfspublished. This file
-can also be used to monitor if the same repository revision is served by
-the Stratum 0 server and all the Stratum 1 servers. In order to tune the
-hardware and cache sizes, keep an eye on the Squid server's CPU and I/O
-load.
+For the web server infrastructure, we recommend 
+`cvmfs-servermon <https://github.com/cvmfs-contrib/cvmfs-servermon>`
+which watches for problems in every repository's ``.cvmfs_status.json``
+status file.
+
+In order to tune the hardware and cache sizes, keep an eye on the Squid
+server's CPU and I/O load.
 
 Keep an eye on HTTP 404 errors. For normal CernVM-FS traffic, such
 failures should not occur. Traffic from CernVM-FS clients is marked by
 an ``X-CVMFS2`` header.
+
+.. _sct_stratum1_maintenance:
+
+Maintenance processes
+---------------------
+
+If any replicated repositories have Garbage Collection enabled, the
+Stratum 1 also needs to run garbage collection in order to prevent the
+disk space usage from growing rapidly.  Run ``cvmfs_server gc -af``
+periodically (e.g daily or weekly) from cron to run garbage collection
+on all repositories that have garbage collection enabled.  Logs will
+go into /var/log/cvmfs/gc.log. 
+
+In addition, over time problems can show up with a small percentage of
+files stored on a large Stratum 1.  Run ``cvmfs_server check -a`` daily
+from cron to start a check process.  On a large Stratum 1 it will run
+for many days, but only with a single thread so it is not very
+intrusive.  If another check is still in process a new one will not
+start.  Each repository by default will only be checked at most once
+every 30 days.  Logs will go into /var/log/cvmfs/checks.log and 
+problems will be recorded in a repository's ``.cvmfs_status.json``.
