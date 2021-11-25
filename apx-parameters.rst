@@ -85,6 +85,8 @@ CVMFS_OOM_SCORE_ADJ             | Set the Linux kernel's out-of-memory killer pr
                                 | for the CernVM-FS client [-1000 - 1000].
 CVMFS_PROXY_RESET_AFTER         | Delay in seconds after which CernVM-FS will retry the primary proxy group
                                 | in case of a fail-over to another group.
+CVMFS_PROXY_SHARD               | If set to *yes*, shard requests across all proxies within the current
+                                | load-balancing group using consistent hashing.
 CVMFS_PROXY_TEMPLATE            Overwrite the default proxy template in Geo-API calls.  Only needed for debugging.
 CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
 CVMFS_QUOTA_LIMIT               Soft-limit of the cache in Megabyte.
