@@ -151,6 +151,8 @@ CVMFS_AVG_CHUNK_SIZE                | Desired Average size of a file chunk in by
                                     | (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_CATALOG_ALT_PATHS             | Enable/disable generation of catalog bootstrapping shortcuts during publishing.
                                     | (Useful when backend directory `/data` is not publicly accessible)
+CVMFS_CHECK_ALL_MIN_DAYS            | Minimum number of days between checking each repository with ``cvmfs_server check -a``
+                                    | Default value: 30
 CVMFS_COMPRESSION_ALGORITHM         | Compression algorithm to be used during publishing
                                     | (currently either 'default' or 'none')
 CVMFS_CREATOR_VERSION               | The CernVM-FS version that was used to create this repository
