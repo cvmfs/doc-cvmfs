@@ -271,6 +271,7 @@ configuration file ``config.toml`` using the ``--config`` option. A basic config
 file with the default values would look like:
 
 ::
+
     # tell containerd the repository and the mountpoint
     repository = "unpacked.cern.ch"
     absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
@@ -283,8 +284,8 @@ file with the default values would look like:
     # tell containerd how to communicate with this snapshotter
     [proxy_plugins]
     [proxy_plugins.cvmfs-snapshotter]
-        type = "snapshot"
-        address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
+    type = "snapshot"
+    address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 
 
 Note that if only the repository is specified under the key value ``repository``, the mountpoint
