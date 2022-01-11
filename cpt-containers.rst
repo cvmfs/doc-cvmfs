@@ -271,6 +271,7 @@ configuration file ``config.toml`` using the ``--config`` option. A basic config
 file with the default values would look like:
 
 ::
+
     # tell containerd the repository and the mountpoint
     repository = "unpacked.cern.ch"
     absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
