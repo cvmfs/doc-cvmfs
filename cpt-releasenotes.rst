@@ -1,7 +1,7 @@
-Release Notes for CernVM-FS 2.9.1
+Release Notes for CernVM-FS 2.9.2
 =================================
 
-CernVM-FS 2.9.1 is a patch release. It includes fixes for clients and servers.
+CernVM-FS 2.9.2 is a patch release. It includes fixes for clients and servers.
 
 As with previous releases, upgrading clients should be seamless just by
 installing the new package from the repository. As usual, we recommend to update
@@ -12,6 +12,8 @@ mode.
 For Stratum 1 servers, there should be no running snapshots during the upgrade.
 For publisher and gateway nodes, all transactions must be closed and no active
 leases must be present before upgrading.
+
+The CernVM-FS 2.9.1 packages contained an issue which prevented the rebuilding of source RPMs. CernVM-FS 2.9.2 addressed this and was released in place of 2.9.1, containing no other changes.
 
 Bug Fixes and Improvements
 --------------------------
