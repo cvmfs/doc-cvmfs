@@ -1,3 +1,48 @@
+Release Notes for CernVM-FS 2.9.2
+=================================
+
+CernVM-FS 2.9.2 is a patch release. It includes fixes for clients and servers.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+The CernVM-FS 2.9.1 packages contained an issue which prevented the rebuilding of source RPMs. CernVM-FS 2.9.2 addressed this and was released in place of 2.9.1, containing no other changes.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * [client] Improve error reporting in watchdog process
+    ([#2859](https://github.com/cvmfs/cvmfs/pull/2859))
+  * [server] Fix potential use-after-free error in swissknife check
+    ([#2860](https://github.com/cvmfs/cvmfs/pull/2860))
+  * [server] Fix conflict in commandline arguments of cvmfs_ducc
+    ([#2853](https://github.com/cvmfs/cvmfs/issues/2853))
+  * [server] Running cvmfs_server check -a and gc -a is now mutually exclusive
+    ([CVM-2043](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2043))
+  * [server] Enable external monitoring of geodb updates, add the
+    CVMFS_GEO_AUTO_UPDATE option
+    ([CVM-1857](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-1857))
+  * [server[ Ignore trailing path after repo name in `cvmfs_server abort`
+    ([CVM-2055](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2055))
+  * [client] New option to list magic xattrs on root node only
+    ([CVM-2058](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2058))
+  * [server] Fix integrity check for external chunked files
+    ([CVM-2050](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2050))
+  * [server] Fix for GeoAPI and Python3
+    ([CVM-2052](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2052))
+  * [server] Fix initialization of upstream type in cvmfs_server ingest
+    ([#2816](https://github.com/cvmfs/cvmfs/pull/2816))
+  * [server] Fix bug where trailing slash in base dir crashes tarball ingest
+    ([CVM-2044](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2044))
+
+
 Release Notes for CernVM-FS 2.9.0
 =================================
 
