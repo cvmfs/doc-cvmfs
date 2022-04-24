@@ -232,3 +232,9 @@ Once the issue has been identified, ensure that the changes are taken by restart
 
 If the problem is that a repository can be mounted and unmounted but
 later cannot be remounted, see :ref:`sct_remounting_namespaces_containers`.
+
+In order to exclude a corrupted local cache as a source of problems, run
+
+::
+
+    cvmfs_config wipecache
