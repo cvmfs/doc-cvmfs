@@ -653,7 +653,13 @@ getxattr
 ~~~~~~~~
 
 CernVM-FS uses synthetic extended attributes to display additional repository
-information. There are the following supported magic attributes:
+information. In general they can be displayed with a command like
+
+::
+
+    attr -g <attributename> /cvmfs/<repository>
+
+There are the following supported magic attributes:
 
 **catalog\_counters**
     Like ``repo_counters`` but only for the nested catalog that hosts the given path.
@@ -700,6 +706,9 @@ information. There are the following supported magic attributes:
 **lhash**
     Shows the cryptographic hash of a regular file as stored in the
     local cache, if available.
+
+**logbuffer**
+    Shows system log messages for the repository.
 
 **maxfd**
     Shows the maximum number of file descriptors available to file
