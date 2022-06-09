@@ -1,3 +1,29 @@
+Release Notes for CernVM-FS 2.9.3
+=================================
+
+CernVM-FS 2.9.3 is a patch release, containing two important bug fixes: a fix for
+a deadlock affecting the garbage collector, and an improvement of the link between
+the watchdog process and the fuse module.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend to update
+only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS
+mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active
+leases must be present before upgrading.
+
+Bug Fixes and Improvements
+--------------------------
+
+  * [client] Improve robustness of link between watchdog and fuse module (#2971)
+    ([#2971](https://github.com/cvmfs/cvmfs/pull/2971))
+  * [server] Fix releasing of GC lock (#2982)
+    ([#2982](https://github.com/cvmfs/cvmfs/pull/2982))
+
+
 Release Notes for CernVM-FS 2.9.2
 =================================
 
