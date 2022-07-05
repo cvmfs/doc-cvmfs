@@ -15,6 +15,8 @@ For Stratum 1 servers, there should be no running snapshots during the upgrade.
 For publisher and gateway nodes, all transactions must be closed and no active
 leases must be present before upgrading.
 
+This version introduces experimental support for Ubuntu 22.04 and CentOS Stream 9. Packages are available for both the x86_64 and aarch64 architectures. Due to a compatibility bug with the version of OpenSSL offered by the system, the cvmfs-server package is not currently working properly on CentOS Stream 9.
+
 Bug Fixes and Improvements
 --------------------------
 
