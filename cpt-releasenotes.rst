@@ -1,7 +1,7 @@
-Release Notes for CernVM-FS 2.9.3
+Release Notes for CernVM-FS 2.9.4
 =================================
 
-CernVM-FS 2.9.3 is a patch release, containing two important bug fixes: a fix for
+CernVM-FS 2.9.4 is a patch release, containing two important bug fixes: a fix for
 a deadlock affecting the garbage collector, and an improvement of the link between
 the watchdog process and the fuse module.
 
