@@ -195,6 +195,28 @@ On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc
     make
     sudo make install
 
+
+Building with local libraries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For development purposes it might be useful to use locally installed libraries instead of using default system libraries.
+This can be done by defining variables during the ``cmake`` configuration step. 
+The correct naming of the variables can be found in ``cmake/Modules``.
+For example, in case of Fuse3 following variables must be set: ``FUSE3_INCLUDE_DIR`` and ``FUSE3_LIBRARY``.
+
+Furthermore, ``CMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON`` must be set, otherwise will ``sudo make install`` strip all linked libraries that point to none-system libraries.
+
+Example code for building CernVM-FS with locally built Fuse3 and including the CernVM-FS unittests and gateway:
+::
+
+    cmake -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON \
+          -D BUILD_UNITTESTS=ON -D BUILD_GATEWAY=ON \
+          -D FUSE3_INCLUDE_DIR=/usr/local/include/ \
+          -D FUSE3_LIBRARY=/usr/local/lib/x86_64-linux-gnu/libfuse3.so.3.10.5 \
+          ../	
+    make
+    sudo make install
+
+
 Troubleshooting
 ---------------
 
