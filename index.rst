@@ -49,6 +49,7 @@ Contents
    cpt-repository-gateway
    cpt-notification-system
    cpt-containers
+   part-devs
    part-advanced
    part-appendix
 
