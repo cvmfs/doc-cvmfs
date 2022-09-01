@@ -1173,7 +1173,7 @@ The ``cvmfs_talk`` command provides a way to control a currently running
 CernVM-FS process and to extract information about the status of the
 corresponding mount point. Most of the commands are for special purposes
 only or covered by more convenient commands, such as
-``cvmfs_config showconfig`` or ``cvmfs_config stat``. Three commands might
+``cvmfs_config showconfig`` or ``cvmfs_config stat``. Four commands might
 be of particular interest though.
 
 ::
@@ -1197,6 +1197,13 @@ the client experiences cache thrashing.
 
 prints the internal status information and performance counters. It can
 be helpful for performance engineering.
+
+::
+
+    cvmfs_talk -i <repo> remount
+
+starts the catalog update routine.
+When using ``remount sync`` the system waits for the new file system snapshot to be served (if there is a new one).
 
 Other
 ~~~~~
