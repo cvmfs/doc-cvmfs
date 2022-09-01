@@ -46,12 +46,14 @@ Useful git commands
 ~~~~~~~~~~~~~~~~~~~
 
 - Graphical representation of ``git log``. Helpful to see weird divergents in git commits.
+
 ::
 
     git log --graph --oneline --abbrev-commit --decorate --relative-date --all
     git log --graph --oneline --abbrev-commit --decorate --relative-date <branch1> <branch2>
 
 - In case of messy git commit history, consider making a new branch basend on up-to-date ``devel`` and cherry pick the specific commits from the broken branch
+
 ::
 
     git log  #to get commit hash for the specific commits

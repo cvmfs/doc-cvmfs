@@ -65,6 +65,7 @@ Example: Locally build Fuse3 to have version 3.10
         - Include ``/usr/local/include/```
 
 2) Build ``cvmfs`` using ``fuse3``
+
     - ``fuse3`` is automatically selected during build process if the proper flags are set
     ::
 

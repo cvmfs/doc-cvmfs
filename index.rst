@@ -65,6 +65,7 @@ Authors of this documentation:
    * Brian Bockelman
    * Daniel-Florin Dosaru
    * Dave Dykstra
+   * Laura Promberger
    * Nikola Hardi
    * Nick Hazekamp
    * René Meusel
