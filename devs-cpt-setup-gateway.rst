@@ -15,20 +15,22 @@ Setting up a CernVM-FS gateway consists of 3 steps
 
 
 Example: Create gateway for repository ``test.gw.repo``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(Note: every command is done in ``sudo``)
 
 1. **Create repository**
 
 ::
 
     # General setup
-    sudo cvmfs_config setup
-    sudo cvmfs_config chksetup
+    cvmfs_config setup
+    cvmfs_config chksetup
 
     # No autofs
-    sudo systemctl stop autofs
+    systemctl stop autofs
 
     # Setup Repo
-    sudo cvmfs_server mkfs test.gw.repo
+    cvmfs_server mkfs test.gw.repo
 
 2. **Create Gateway key**
 
@@ -78,17 +80,19 @@ The publisher is set up like a normal ``cvmfs_server`` but with 2 changes
 
 
 Example: Setting up publisher to access previously created gateway repository ``test.gw.repo``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(Note: every command is done in ``sudo``)
 
 1. **General setup**
 
 ::
 
     # General setup
-    sudo cvmfs_config setup
-    sudo cvmfs_config chksetup
+    cvmfs_config setup
+    cvmfs_config chksetup
 
     # No autofs
-    sudo systemctl stop autofs
+    systemctl stop autofs
 
 2. **Copy keys from gateway**
 
