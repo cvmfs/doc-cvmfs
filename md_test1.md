@@ -89,9 +89,29 @@ In markdown
 
 {ref}`Use label from rst part of docs without underscore _ <apxsct_serverparameters>`.
 
+## Images
+
+Images can be included with `![Alternative title of the image](_static/concept-generic.svg)`.
+
+![Alternative title of the image](_static/concept-generic.svg)
+
+If they need special options (e.g. size) use
+```html
+<img src="_static/concept-generic.svg"
+     alt="Alternative title of the image"
+     style="float: left; width: 50%;" />
+
+```
+
+<img src="_static/concept-generic.svg"
+     alt="Alternative title of te image"
+     style="float: left; width: 50%;" />
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 ## Other Markdown Stuff
+- `*Cursive*` *Cursive*
+- `**Bold**` **Bold**
 - `<u>something</u>` underline <u>something</u>
 - To comment stuff out within the md file use html comment `< !-- remove the space before the ! for comment section -->`
-
 
