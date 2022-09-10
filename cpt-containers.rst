@@ -27,8 +27,8 @@ This is supported by all the common containers runtimes, including:
 
 1. Docker
 2. Podman
-4. Apptainer
-5. Kubernetes
+3. Apptainer
+4. Kubernetes
 
 Examples
 ~~~~~~~~
@@ -119,7 +119,7 @@ With the whole filesystem root directory in /cvmfs, ``apptainer`` can directly s
 
 ::
 
-    singularity exec /cvmfs/unpacked.cern.ch/registry.hub.docker.com/library/centos\:centos7 /bin/bash
+    apptainer exec /cvmfs/unpacked.cern.ch/registry.hub.docker.com/library/centos\:centos7 /bin/bash
 
 The layers can be used, e.g., with containerd and the CernVM-FS snapshotter.
 In addition, the container tools create the *chains* of an image.
@@ -246,6 +246,7 @@ The default values can be overwritten in the ``config.toml`` file using the ``--
 A template ``config.toml`` file looks like this:
 
 ::
+
     # Source of image layers
     repository = "unpacked.cern.ch"
     absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
@@ -266,8 +267,8 @@ Note that if only the repository is specified under the key value ``repository``
 (under the key value ``absolute-mountpoint``) is by default constructed as ``/cvmfs/<repo_name>``.
 
 
-``podman`` integration
-----------------------
+``podman`` integration (pre-production)
+---------------------------------------
 
 In order to use images from unpacked.cern.ch with podman,
 the podman client needs to point to an *image store* that references the images on /cvmfs.
@@ -275,8 +276,7 @@ The image store is a directory is a directory with a a certain file structure
 that provides an index of images and layers.
 The CernVM-FS container tools by default create a podman image store for published images.
 
-In order to set the image store, edit ``/etc/containers/storage.conf`` or
-``${HOME}/.config/containers/storage.conf`` like in this example:
+In order to set the image store, edit ``/etc/containers/storage.conf`` or ``${HOME}/.config/containers/storage.conf`` like in this example:
 
 ::
 
