@@ -228,14 +228,11 @@ The containerd snapshotter is available from http://ecsft.cern.ch/dist/cvmfs/sna
 Packages will be made available in future.
 
 The binary accepts the following command line options:
--  ``--address``: address for the snapshotter's GRPC server.
-The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
--  ``--config``: path to the configuration file.
-Creating a configuration file is useful to customize the default values.
--  ``--log-level``: logging level [trace, debug, info, warn, error, fatal, panic].
-The default value is ``info``.
--  ``--root``: path to the root directory for this snapshotter.
-The default one is ``/var/lib/containerd-cvmfs-grpc``.
+
+- ``--address``: address for the snapshotter's GRPC server. The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
+- ``--config``: path to the configuration file. Creating a configuration file is useful to customize the default values.
+- ``--log-level``: logging level [trace, debug, info, warn, error, fatal, panic]. The default value is ``info``.
+- ``--root``: path to the root directory for this snapshotter. The default one is ``/var/lib/containerd-cvmfs-grpc``.
 
 By default, the repository used to search for the layers is ``unpacked.cern.ch``.
 The default values can be overwritten in the ``config.toml`` file using the ``--config`` option.
