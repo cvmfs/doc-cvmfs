@@ -224,7 +224,7 @@ The snapshotter communicates with ``containerd`` via gRPC over a UNIX domain soc
 The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
 This socket is created automatically by the snapshotter if it does not exist.
 
-The containerd snapshotter is available from http://ecsft.cern.ch/dist/cvmfs/snapshotter/
+The containerd snapshotter is available from http://ecsft.cern.ch/dist/cvmfs/snapshotter/.
 Packages will be made available in future.
 
 The binary accepts the following command line options:
