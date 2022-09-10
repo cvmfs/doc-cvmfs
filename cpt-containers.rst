@@ -207,7 +207,7 @@ As soon as a new or modified container image is detected it starts the conversio
 
 
 ``containerd`` snapshotter plugin (pre-production)
---------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 CernVM-FS integration with ``containerd`` is achieved by the cvmfs snapshotter plugin,
 a specialized component responsible for assembling all the layers of container
@@ -216,8 +216,8 @@ The snapshotter takes as input the list of required layers and outputs a directo
 containing the final filesystem. It is also responsible to clean-up the output
 directory when containers using it are stopped.
 
-Configuration
-~~~~~~~~~~~~~
+How to use the CernVM-FS Snapshotter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The CernVM-FS snapshotter runs alongside the containerd service.
 The snapshotter communicates with ``containerd`` via gRPC over a UNIX domain socket.
@@ -226,10 +226,6 @@ This socket is created automatically by the snapshotter if it does not exist.
 
 The containerd snapshotter is available from http://ecsft.cern.ch/dist/cvmfs/snapshotter/
 Packages will be made available in future.
-
-
-How to use the CernVM-FS Snapshotter
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The binary accepts the following command line options:
 -  ``--address``: address for the snapshotter's GRPC server.
@@ -268,7 +264,7 @@ Note that if only the repository is specified under the key value ``repository``
 
 
 ``podman`` integration (pre-production)
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to use images from unpacked.cern.ch with podman,
 the podman client needs to point to an *image store* that references the images on /cvmfs.
