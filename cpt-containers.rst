@@ -27,8 +27,7 @@ This is supported by all the common containers runtimes, including:
 
 1. Docker
 2. Podman
-3. runc
-4. Singularity
+4. Apptainer
 5. Kubernetes
 
 Examples
@@ -66,11 +65,11 @@ Podman has the same interface as docker, but it requires the ``ro`` options when
     drwxr-xr-x 22     0     0 4096 Apr 20 11:34 ..
     drwxr-xr-x 17 65534 65534 4096 Nov 27  2012 alice.cern.ch
 
-A similar approach is possible with Singularity, but the syntax is a little different.
+A similar approach is possible with apptainer, but the syntax is a little different.
 
 ::
 
-    $ singularity exec --bind /cvmfs docker://library/ubuntu ls -l /cvmfs/lhcb.cern.ch
+    $ apptainer exec --bind /cvmfs docker://library/ubuntu ls -l /cvmfs/lhcb.cern.ch
     total 2
     drwxrwxr-x.  3 cvmfs cvmfs  3 Jan  6  2011 etc
     lrwxrwxrwx.  1 cvmfs cvmfs 16 Aug  6  2011 group_login.csh -> lib/etc/LHCb.csh
@@ -78,13 +77,13 @@ A similar approach is possible with Singularity, but the syntax is a little diff
     drwxrwxr-x. 20 cvmfs cvmfs  3 Apr 24 12:39 lib
 
 
-Also in singularity it is possible to use the syntax
+Also in apptainer it is possible to use the syntax
 ``host_directory:container_directory`` and it is possible to mount multiple
 paths at the same time separating the ``--bind`` arguments with a comma.
 
 ::
 
-    $ singularity exec --bind /cvmfs/alice.cern.ch:/cvmfs/alice.cern.ch,/cvmfs/lhcb.cern.ch \
+    $ apptainer exec --bind /cvmfs/alice.cern.ch:/cvmfs/alice.cern.ch,/cvmfs/lhcb.cern.ch \
 	docker://library/ubuntu ls -l /cvmfs/
     total 5
     drwxr-xr-x 17      125      130 4096 Nov 27  2012 alice.cern.ch/
@@ -92,8 +91,10 @@ paths at the same time separating the ``--bind`` arguments with a comma.
 
 
 For Kubernetes, the approach is more heterogeneous and it depends on the cluster settings.
+A recommended approach is creating a DaemonSet so that on every node one pod exposes /cvmfs to other pods.
+This pod may use the cvmfs service container.
 
-For Kubernetes, a `CSI-plugin <https://clouddocs.web.cern.ch/containers/tutorials/cvmfs.html#kubernetes>`_
+Alternatively, a `CSI-plugin <https://clouddocs.web.cern.ch/containers/tutorials/cvmfs.html#kubernetes>`_
 makes it simple to mount a repository inside a Kubernetes managed container.
 The plugin is distributed and available to the CERN Kubernetes managed clusters.
 
@@ -101,31 +102,29 @@ The plugin is distributed and available to the CERN Kubernetes managed clusters.
 Distributing container images on CernVM-FS
 ------------------------------------------
 
-Image distribution on CernVM-FS works with _unpacked_ layers or image root
+Image distribution on CernVM-FS works with *unpacked* layers or image root
 file systems.  Any CernVM-FS repository can store container images.
 
 A number of images are already provided in ``/cvmfs/unpacked.cern.ch``, a
 repository managed at CERN to host container images for various purposes and
-groups. The repository is managed using
-`the DUCC utility <https://github.com/cvmfs/cvmfs/tree/devel/ducc>`_.
+groups. The repository is managed using the CernVM-FS container tools to
+publish images from registries on CernVM-FS.
 
-Every container image is typically stored in two forms on CernVM-FS
+Every container image is stored in two forms on CernVM-FS
 
 1. All the unpacked layers of the image
 2. The whole unpacked root filesystem of the image
 
-Storing the layers of an image in CernVM-FS allows using (after creation) the
-``docker thin images`` described in :ref:`cpt_graphdriver`, very small docker
-containers that compose the image's filesystem from the layers stored in
-CernVM-FS. The docker thin image can be created using the DUCC utility.
-
-If the whole filesystem of an image is stored in the repository it is
-possible to run the image using ``singularity``:
+With the whole filesystem root directory in /cvmfs, ``apptainer`` can directly start a container.
 
 ::
 
     singularity exec /cvmfs/unpacked.cern.ch/registry.hub.docker.com/library/centos\:centos7 /bin/bash
 
+The layers can be used, e.g., with containerd and the CernVM-FS snapshotter.
+In addition, the container tools create the *chains* of an image.
+Chains are partial root filesystem directores where layers are applied one after another.
+This is used internally to incrementally publish image updates if only a subset of layers changed.
 
 Using unpacked.cern.ch
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -137,7 +136,7 @@ of cvmfs deduplication of files that are common between different images.
 The repository is publicly available.
 
 To add your image to ``unpacked.cern.ch`` you can add the image name to any one
-of the following two files.
+of the following two files, the so-called *wishlists*.
 
 1. https://gitlab.cern.ch/unpacked/sync/-/blob/master/recipe.yaml
 2. https://github.com/cvmfs/images-unpacked.cern.ch/blob/master/recipe.yaml
@@ -151,14 +150,13 @@ publishes the image to /cvmfs/unpacked.cern.ch. Depending on the size of the
 image, ingesting an image in unpacked.cern.ch takes ~15 minutes.
 
 The images are continuously checked for updates. If you push another version of
-the image with the same tag, DUCC updates the image on CVMFS, again with ~15
-minutes of delay.
+the image with the same tag, the updated propagates to CernVM-FS usually within
+~15 minutes of delay.
 
-DUCC syntax for images
-^^^^^^^^^^^^^^^^^^^^^^
+Image wishlist syntax
+^^^^^^^^^^^^^^^^^^^^^
 
-The image in DUCC must be specified following a simple format. The following
-examples are valid image specifications:
+The image must be specified like the following examples:
 
 ::
 
@@ -166,13 +164,12 @@ examples are valid image specifications:
     https://registry.hub.docker.com/cmssw/cc8:latest
     https://gitlab-registry.cern.ch/clange/jetmetanalysis:latest
 
-The first two refer to images in the classical docker hub, the standard
+The first two refer to images in Docker Hub, the standard
 ``centos`` using the latest tag and the ``cms`` version of centos8, again using
-the latest tag. The third image refers to a docker image hosted on CERN GitLab
+the latest tag. The third image refers to an image hosted on CERN GitLab
 that contains the code for an analysis by a CERN user.
 
-It is possible to use the ``*`` wildcard which acts like the ``*`` glob in the
-terminal shell to specify multiple tags.
+It is possible to use the ``*`` wildcard to specify multiple tags.
 
 For instance:
 
@@ -189,13 +186,7 @@ is a valid image specification, and triggers conversion of all the
     atlas/analysisbase:21.2.100-20191127
     atlas/analysisbase:21.2.15-20180118
 
-But **not**:
-
-::
-
-    atlas/analysisbase:21.3.10
-
-Since it is 21. **3** .10 and not 21.2
+But **not** ``atlas/analysisbase:21.3.10``.
 
 The ``*`` wildcard can also be used to specify all the tags of an image, like
 in this example:
@@ -204,83 +195,67 @@ in this example:
 
     https://registry.hub.docker.com/pyhf/pyhf:*
 
-All the tags of the image ``pyhf/pyhf`` that are published in docker hub
+All the tags of the image ``pyhf/pyhf`` that are published on Docker Hub
 will be published in unpacked.cern.ch.
 
 
 Updated images and new tags
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-DUCC polls the docker registries continuously. As soon as a new or modified
-container image is detected it starts the conversion process.
+The unpacked.cern.ch service polls the upstream registries continuously.
+As soon as a new or modified container image is detected it starts the conversion process.
 
 
-Work in progress
-----------------
+``containerd`` snapshotter plugin (pre-production)
+--------------------------------------------------
 
-There are several lines of development that we are pursuing to improve
-the CernVM-FS container integration.
-
-``containerd`` remote-snapshotter plugin
-----------------------------------------
-
-CernVM-FS integration with ``containerd`` is achieved by the snapshotter plugin,
+CernVM-FS integration with ``containerd`` is achieved by the cvmfs snapshotter plugin,
 a specialized component responsible for assembling all the layers of container
 images into a stacked filesystem that ``containerd`` can use.
 The snapshotter takes as input the list of required layers and outputs a directory
 containing the final filesystem. It is also responsible to clean-up the output
 directory when containers using it are stopped.
 
-We focus on the layers provided by CernVM-FS, but with minor changes it is possible to mount layers from any
-filesystem, like NFS. In CernVM-FS, the available layers are stored at ``/cvmfs/<repo_name>/.layers``.
-If the desired layers are not in the local filesystem, ``containerd`` simply follows the
-standard path downloading them from the standard docker registry.
-
 Configuration
 ~~~~~~~~~~~~~
 
-The CernVM-FS remote snapshotter communicates with ``containerd`` via gRPC over a UNIX domain socket.
+The CernVM-FS snapshotter runs alongside the containerd service.
+The snapshotter communicates with ``containerd`` via gRPC over a UNIX domain socket.
 The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
-This socket is created automatically by the snapshotter when building the binary, if it does not exist.
+This socket is created automatically by the snapshotter if it does not exist.
 
-To build the binary, use the following commands:
+The containerd snapshotter is available from http://ecsft.cern.ch/dist/cvmfs/snapshotter/
+Packages will be made available in future.
 
-::
-
-    cd <source directory>
-    make
-
-A new ``/out`` folder is created with the binary ``cvmfs-snapshotter``.
 
 How to use the CernVM-FS Snapshotter
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The binary accepts different command line options:
+The binary accepts the following command line options:
 -  ``--address``: address for the snapshotter's GRPC server.
 The default one is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``
 -  ``--config``: path to the configuration file.
 Creating a configuration file is useful to customize the default values.
 -  ``--log-level``: logging level [trace, debug, info, warn, error, fatal, panic].
-The default values is ``info``.
+The default value is ``info``.
 -  ``--root``: path to the root directory for this snapshotter.
 The default one is ``/var/lib/containerd-cvmfs-grpc``.
 
 By default, the repository used to search for the layers is ``unpacked.cern.ch``.
-The default values can be overrided by running the binary indicating the path to a
-configuration file ``config.toml`` using the ``--config`` option. A basic configuration
-file with the default values would look like:
+The default values can be overwritten in the ``config.toml`` file using the ``--config`` option.
+A template ``config.toml`` file looks like this:
 
 ::
-    # tell containerd the repository and the mountpoint
+    # Source of image layers
     repository = "unpacked.cern.ch"
     absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
 
-    # tell containerd to use this particular snapshotter
+    # Ask containerd to use this particular snapshotter
     [plugins."io.containerd.grpc.v1.cri".containerd]
     snapshotter = "cvmfs-snapshotter"
     disable_snapshot_annotations = false
 
-    # tell containerd how to communicate with this snapshotter
+    # Set the communication endpoint between containerd and the snapshotter
     [proxy_plugins]
     [proxy_plugins.cvmfs-snapshotter]
         type = "snapshot"
@@ -294,17 +269,31 @@ Note that if only the repository is specified under the key value ``repository``
 ``podman`` integration
 ----------------------
 
-Similarly to the ``containerd`` integration, this development will allow running
-a standard docker image using podman fetching the layers, unpacked, from a
-CernVM-FS repository, falling back to downloading the files from the
-registry if necessary.
+In order to use images from unpacked.cern.ch with podman,
+the podman client needs to point to an *image store* that references the images on /cvmfs.
+The image store is a directory is a directory with a a certain file structure
+that provides an index of images and layers.
+The CernVM-FS container tools by default create a podman image store for published images.
+
+In order to set the image store, edit ``/etc/containers/storage.conf`` or
+``${HOME}/.config/containers/storage.conf`` like in this example:
+
+::
+
+    [storage]
+    driver = "overlay"
+
+    [storage.options]
+    additionalimagestores = [ "/cvmfs/unpacked.cern.ch/podmanStore" ]
+    # mount_program = "/usr/bin/fuse-overlayfs"
+
+    [storage.options.overlay]
+    mount_program = "/usr/bin/fuse-overlayfs"
 
 
-DUCC registry interface
------------------------
+The configuration can be checked with the ``podman images`` command.
 
-This development will allow for pushing the image to a special registry and
-for finding the image in the CernVM-FS repository as soon as the push
-finishes. While this will result in slower push operations since the
-layers need to be ingested into CernVM-FS, it will guarantee full distribution
-of the image as soon as the push completes.
+**Note:** the image store in the unpacked.cern.ch repository currently provides access only to test images.
+This is due to poor performance in the image conversion when the image store is updated.
+This will be fixed in a future version.
+
