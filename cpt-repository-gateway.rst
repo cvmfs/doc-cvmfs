@@ -231,11 +231,16 @@ Advanced repository configuration
 =================================
 
 It's possible to register multiple API keys with each repository, and each key
-can be restricted to a specific subpath of the repository: ::
+can be restricted to a specific subpath of the repository.
+When there are multiple keys for the same repository, and they are defined as files, naturally they can not
+all have the same filename, so at least some of them will be in a location not automatically imported by the gateway.
+For this reason, all the key file names need to be explicitly enumerated. Keys can also be declared inline.
+The ``"version": 2`` property needs to be specified for this configuration
+format to be accepted: ::
 
   {
     "version": 2,
-    "repos" : [
+    "repos": [
       {
         "domain": "test.cern.ch",
         "keys": [
@@ -249,13 +254,7 @@ can be restricted to a specific subpath of the repository: ::
           }
         ]
       }
-    ]
-  }
-
-Keys can be either be loaded from a file, or declared inline: ::
-
-  {
-    "version": 2,
+    ],
     "keys": [
       {
         "type": "file",
@@ -268,9 +267,6 @@ Keys can be either be loaded from a file, or declared inline: ::
       }
     ]
   }
-
-The ``"version": 2`` property needs to be specified for this configuration
-format to be accepted.
 
 It should be noted that when keys are loaded from a file, an ``id`` field does not need
 to be specified in the configuration file. The public id of the loaded key is
