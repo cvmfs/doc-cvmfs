@@ -48,7 +48,7 @@ To install the CVMFS package run
 
 ::
 
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.9.4/cvmfs-2.9.4-1.fc34.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-2.10.0-1.fc34.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
 Docker Container
@@ -65,7 +65,7 @@ or with
 
 ::
 
-    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.9.4/cvmfs-service-2.9.4-1.x86_64.docker.tar.gz | docker load
+    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-service-2.10.0-1.x86_64.docker.tar.gz | docker load
 
 Run the container as a system service with
 
@@ -98,7 +98,7 @@ Download the CernVM-FS client package in the terminal in order to avoid signatur
 
 ::
 
-    curl -o ~/Downloads/cvmfs-2.9.4.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.9.4/cvmfs-2.9.4.pkg
+    curl -o ~/Downloads/cvmfs-2.10.0.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-2.10.0.pkg
 
 Install the CernVM-FS package by opening the .pkg file and reboot.
 Future releases will provide a signed and notarized package.
@@ -199,7 +199,7 @@ On Intel architectures, it needs a gcc :math:`\geq 4.2` compiler, on ARMv7 a gcc
 Building with local libraries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 For development purposes it might be useful to use locally installed libraries instead of using default system libraries.
-This can be done by defining variables during the ``cmake`` configuration step. 
+This can be done by defining variables during the ``cmake`` configuration step.
 The correct naming of the variables can be found in ``cmake/Modules``.
 For example, in case of Fuse3 following variables must be set: ``FUSE3_INCLUDE_DIR`` and ``FUSE3_LIBRARY``.
 
@@ -212,7 +212,7 @@ Example code for building CernVM-FS with locally built Fuse3 and including the C
           -D BUILD_UNITTESTS=ON -D BUILD_GATEWAY=ON \
           -D FUSE3_INCLUDE_DIR=/usr/local/include/ \
           -D FUSE3_LIBRARY=/usr/local/lib/x86_64-linux-gnu/libfuse3.so.3.10.5 \
-          ../	
+          ../
     make
     sudo make install
 
