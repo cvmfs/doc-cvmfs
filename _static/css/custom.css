@@ -1,7 +1,7 @@
 /* modified from https://github.com/readthedocs/sphinx_rtd_theme/issues/295#issuecomment-560895037 */
 
 .wy-nav-content {
-    max-width: 1000px !important;
+    max-width: 900px !important;
 }
 
 /* and fix wrap bug per https://rackerlabs.github.io/docs-rackspace/tools/rtd-tables.html */
