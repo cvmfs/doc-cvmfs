@@ -440,14 +440,18 @@ system-wide settings. Instead of a single proxy, CernVM-FS uses a *chain
 of load-balanced proxy groups*. The CernVM-FS proxies are set by the
 ``CVMFS_HTTP_PROXY`` parameter.
 
-Proxy groups are used for load-balancing among several proxies of equal priority.
-Starting with the first group, one proxy within a group is selected at random.
-If it fails, CernVM-FS automatically switches to another proxy from the current
-group. If all proxies in a group have failed, CernVM-FS switches to
-the next proxy group. After probing the last proxy group in the chain,
-the first is probed again. To avoid endless loops, for each file
-download the number of switches is limited by the total number of
-proxies.
+Proxy groups are used for load-balancing among several proxies of equal
+priority.  Starting with the first group, one proxy within a group is selected
+at random.  By default, this randomly selected proxy will used for all requests.
+If :ref:`proxy sharding <sct_proxy_sharding>` is enabled, then the proxy is
+instead selected on a per-request basis to distribute the requests across all
+proxies within the current group.
+
+If a proxy fails, CernVM-FS automatically switches to another proxy from the
+current group.  If all proxies in a group have failed, CernVM-FS switches to the
+next proxy group.  After probing the last proxy group in the chain, the first is
+probed again. To avoid endless loops, for each file download the number of
+switches is limited by the total number of proxies.
 
 Proxies within the same group are separated by a pipe character ``|``, while
 groups are separated from each other by a semicolon character ``;`` [#]_.
@@ -568,13 +572,13 @@ configuration. It is by default turned on on macOS and turned off on Linux.
 Network Path Selection
 ~~~~~~~~~~~~~~~~~~~~~~
 
-This section summarized the CernVM-FS mechanics to select a network path from
+This section summarizes the CernVM-FS mechanics to select a network path from
 the client through an HTTP forward proxy to an HTTP endpoint. At any given point
-in time, there is only one combination of web proxy and web host that all new
-requests are going to utilize. In this section, it is this combination of proxy
-and host that is called "network path". The network path is chosen from the
-collection of web proxies and hosts in the CernVM-FS configuration according to
-the following rules.
+in time, there is only one combination of web proxy and web host that a new
+request will utilize. In this section, it is this combination of proxy and host
+that is called "network path". The network path is chosen from the collection of
+web proxies and hosts in the CernVM-FS configuration according to the following
+rules.
 
 Host Selection
 ^^^^^^^^^^^^^^
@@ -590,6 +594,24 @@ hosts, load-balance groups will be probed one after another. Within a
 load-balance group, a proxy is chosen at random. DNS proxy names that resolve to
 multiple IP addresses are automatically transformed into a proxy load-balance
 group, whose maximum size can be limited by ``CVMFS_MAX_IPADDR_PER_PROXY``.
+
+.. _sct_proxy_sharding:
+
+Proxy Sharding
+^^^^^^^^^^^^^^
+
+In the default (non-sharded) configuration, each CernVM-FS client will
+independently choose a single proxy to be used for all requests.  For sites with
+many clients that are likely to access the same content, this can result in
+unnecessary duplication of cached content across multiple proxies.
+
+If proxy sharding is enabled via the ``CVMFS_PROXY_SHARD`` parameter, all
+proxies within a load-balancing group are used concurrently.  Each proxy handles
+a subset of the requests.  Proxies are selected using consistent hashing so that
+multiple clients will independently select the same proxy for a given request,
+to maximise cache efficiency.  If any proxy fails, CernVM-FS automatically
+removes it from the load-balancing group and distributes its requests evenly
+across the remaining proxies.
 
 Failover Rules
 ^^^^^^^^^^^^^^
@@ -1151,7 +1173,7 @@ The ``cvmfs_talk`` command provides a way to control a currently running
 CernVM-FS process and to extract information about the status of the
 corresponding mount point. Most of the commands are for special purposes
 only or covered by more convenient commands, such as
-``cvmfs_config showconfig`` or ``cvmfs_config stat``. Three commands might
+``cvmfs_config showconfig`` or ``cvmfs_config stat``. Four commands might
 be of particular interest though.
 
 ::
@@ -1175,6 +1197,13 @@ the client experiences cache thrashing.
 
 prints the internal status information and performance counters. It can
 be helpful for performance engineering.
+
+::
+
+    cvmfs_talk -i <repo> remount
+
+starts the catalog update routine.
+When using ``remount sync`` the system waits for the new file system snapshot to be served (if there is a new one).
 
 Other
 ~~~~~

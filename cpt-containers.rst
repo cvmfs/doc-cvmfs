@@ -240,20 +240,22 @@ A template ``config.toml`` file looks like this:
 
 ::
 
+    version = 2
+
     # Source of image layers
     repository = "unpacked.cern.ch"
     absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
 
     # Ask containerd to use this particular snapshotter
     [plugins."io.containerd.grpc.v1.cri".containerd]
-    snapshotter = "cvmfs-snapshotter"
-    disable_snapshot_annotations = false
+        snapshotter = "cvmfs-snapshotter"
+        disable_snapshot_annotations = false
 
     # Set the communication endpoint between containerd and the snapshotter
     [proxy_plugins]
-    [proxy_plugins.cvmfs-snapshotter]
-        type = "snapshot"
-        address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
+        [proxy_plugins.cvmfs]
+            type = "snapshot"
+            address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 
 
 Note that if only the repository is specified under the key value ``repository``, the mountpoint

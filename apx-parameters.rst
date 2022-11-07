@@ -62,10 +62,10 @@ CVMFS_INSTRUMENT_FUSE           | When set to *true* gather performance statisti
                                 | The results are displayed with `cvmfs_talk internal affairs`.
 CVMFS_NFS_INTERLEAVED_INODES    In NFS mode, use only inodes of the form :math:`an+b`, specified as "b%a".
 CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to proxies.  Can be either 4 or 6.
-CVMFS_KCACHE_TIMEOUT            Timeout for path names and file attributes in the kernel file system buffers.
+CVMFS_KCACHE_TIMEOUT            Timeout in seconds for path names and file attributes in the kernel file system buffers.
 CVMFS_KEYS_DIR                  | Directory containing \*.pub files used as repository signing keys.
                                 | If set, this parameter has precedence over ``CVMFS_PUBLIC_KEY``.
-CVMFS_LOW_SPEED_LIMIT           Minimum transfer rate a server or proxy must provide.
+CVMFS_LOW_SPEED_LIMIT           Minimum transfer rate in bytes/second a server or proxy must provide.
 CVMFS_MAX_EXTERNAL_SERVERS      | Limit the number of (geo sorted) stratum 1 servers for external data
                                 | that are effectively used.
 CVMFS_MAX_IPADDR_PER_PROXY      | Limit the number of IP addresses a proxy names resolves into.
@@ -85,6 +85,8 @@ CVMFS_OOM_SCORE_ADJ             | Set the Linux kernel's out-of-memory killer pr
                                 | for the CernVM-FS client [-1000 - 1000].
 CVMFS_PROXY_RESET_AFTER         | Delay in seconds after which CernVM-FS will retry the primary proxy group
                                 | in case of a fail-over to another group.
+CVMFS_PROXY_SHARD               | If set to *yes*, shard requests across all proxies within the current
+                                | load-balancing group using consistent hashing.
 CVMFS_PROXY_TEMPLATE            Overwrite the default proxy template in Geo-API calls.  Only needed for debugging.
 CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
 CVMFS_QUOTA_LIMIT               Soft-limit of the cache in Megabyte.
@@ -169,7 +171,6 @@ CVMFS_FILE_MBYTE_LIMIT              | Maximum number of megabytes for a publishe
 CVMFS_FORCE_REMOUNT_WARNING         | Enable/disable warning through ``wall`` and grace period before forcefully
                                     | remounting a CernVM-FS repository on the release managere machine.
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
-CVMFS_GENERATE_LEGACY_BULK_CHUNKS   | Deprecated, set to *true* to enable generation of whole-file objects for large files.
 CVMFS_GC_DELETION_LOG               | Log file path to track all garbage collected objects during sweeping
                                     | for bookkeeping or debugging
 CVMFS_GEO_DB_FILE                   Path to externally updated location of geolite2 city database, or 'None' for no database.
@@ -177,9 +178,7 @@ CVMFS_GEO_LICENSE_KEY               A license key for downloading the geolite2 c
 CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.
 CVMFS_HASH_ALGORITHM                | Define which secure hash algorithm should be used by CernVM-FS for CAS objects
                                     | (supported are: *sha1*, *rmd160* and *shake128*)
-CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files during publish without aborting.
-CVMFS_IGNORE_XDIR_HARDLINKS         | Deprecated, defaults to *true*
-                                    | hardlinks are found. Instead automatically break the hardlinks across directories.
+CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files (pipes, sockets, block device and character device files) during publish without aborting.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)
 CVMFS_MAXIMAL_CONCURRENT_WRITES     Maximal number of concurrently processed files during publishing.
@@ -232,6 +231,20 @@ X509_CERT_BUNDLE                    Bundle file with CA certificates for HTTPS c
 X509_CERT_DIR                       | Directory file with CA certificates for HTTPS connections,
                                     | defaults to /etc/grid-security/certificates (see :ref:`sct_data`)
 =================================== ====================================================================================
+
+Deprecated parameters
+^^^^^^^^^^^^^^^^^^^^^
+
+Will be removed in future versions.
+
+=================================== ====================================================================================
+**Parameter**                       **Meaning**
+=================================== ====================================================================================
+CVMFS_GENERATE_LEGACY_BULK_CHUNKS   | Deprecated, set to *true* to enable generation of whole-file objects for large files.
+CVMFS_IGNORE_XDIR_HARDLINKS         | Deprecated, defaults to *true*
+                                    | hardlinks are found. Instead automatically break the hardlinks across directories.
+=================================== ====================================================================================
+
 
 Format of CVMFS_UPSTREAM_STORAGE
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

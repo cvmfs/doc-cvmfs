@@ -67,6 +67,6 @@ Authors of this documentation:
    * Nikola Hardi
    * Nick Hazekamp
    * René Meusel
-   * Radu Popescu
    * Simone Mosciatti
-
+   * Radu Popescu
+   * Laura Promberger
