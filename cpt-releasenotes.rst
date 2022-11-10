@@ -20,6 +20,8 @@ As with previous releases, upgrading should be seamless just by installing the n
 
 For Stratum 0 servers, all transactions must be closed before upgrading. For Stratum 1 servers, there should be no running snapshots during the upgrade. After the software upgrade, publisher nodes require doing cvmfs_server migrate for each repository.
 
+.. note:: For gateway deployments, the gateway needs to be updated before or in lockstep with the publishers. Due to a (`backwards compatibility bug <https://github.com/cvmfs/cvmfs/issues/3097>`_) in the 2.10 gateway, remote publishers with a version <2.10 unfortunately cannot publish to a 2.10 gateway.
+
 .. note:: The machine-readable output of ``cvmfs_server tag -x -l`` and ``cvmfs_server tag -x -i`` changed following the removal of the (unused) concept of "channels" from the CernVM-FS repository meta-data. In the output of these two commands, the second-last "channel" column has been removed.
 
 .. note:: This release introduces a new base package, cvmfs-libs, that is now required by the cvmfs-server package. In future releases, more packages will depend on cvmfs-libs.
