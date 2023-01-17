@@ -1218,6 +1218,8 @@ For the `Nagios monitoring system <http://www.nagios.org>`_ [Schubert08]_, a
 checker plugin is available `on our website
 <http://cernvm.cern.ch/portal/filesystem/downloads>`_.
 
+.. _sct_debug_logs:
+
 Debug Logs
 ----------
 
