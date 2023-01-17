@@ -220,43 +220,43 @@ Example code for building CernVM-FS with locally built Fuse3 and including the C
 Troubleshooting
 ---------------
 
-In order to check for common misconfigurations in the base setup, run
+- In order to check for common misconfigurations in the base setup, run
 
 ::
 
     cvmfs_config chksetup
 
-CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each others settings (default configuration, domain specific configuration, local setup, ...).
-To show the effective configuration for *repository*.cern.ch, run
+- CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each others settings (default configuration, domain specific configuration, local setup, ...). To show the effective configuration for *repository*.cern.ch, run
 
 ::
 
     cvmfs_config showconfig repository.cern.ch
 
-In order to exclude autofs/automounter as a source of problems, you can try to mount *repository*.cern.ch manually with the following
+- In order to exclude autofs/automounter as a source of problems, you can try to mount *repository*.cern.ch manually with the following
 
 ::
 
     mkdir -p /mnt/cvmfs
     mount -t cvmfs repository.cern.ch /mnt/cvmfs
 
-In order to exclude SELinux as a source of problems, you can try mounting after SELinux has been disabled by
+- In order to exclude SELinux as a source of problems, you can try mounting after SELinux has been disabled by
 
 ::
 
     /usr/sbin/setenforce 0
 
-Once the issue has been identified, ensure that the changes are taken by restarting autofs
+- Once the issue has been identified, ensure that the changes are taken by restarting autofs
 
 ::
 
     systemctl restart autofs
 
-If the problem is that a repository can be mounted and unmounted but
-later cannot be remounted, see :ref:`sct_remounting_namespaces_containers`.
+- If the problem is that a repository can be mounted and unmounted but later cannot be remounted, see :ref:`sct_remounting_namespaces_containers`.
 
-In order to exclude a corrupted local cache as a source of problems, run
+- In order to exclude a corrupted local cache as a source of problems, run
 
 ::
 
     cvmfs_config wipecache
+
+- Finally running with debug logs enabled can provide additional information for bug reports. This can be done by specifying a log file path in the client settings, e.g: ``CVMFS_DEBUGLOG=/tmp/cvmfs.log``. See  :ref:`sct_debug_logs` for more details.
