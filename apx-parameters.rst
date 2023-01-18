@@ -46,6 +46,7 @@ CVMFS_EXTERNAL_FALLBACK_PROXY   | List of HTTP proxies similar to ``CVMFS_EXTERN
                                 | The fallback proxies are added to the end of the normal proxies,
                                 | and disable DIRECT connections.
 CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
+CVMFS_EXTERNAL_MAX_SERVERS      | Caps the list of external hosts to the given number (after geo-sorting them)
 CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
 CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
 CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks.
