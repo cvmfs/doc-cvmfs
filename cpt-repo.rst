@@ -356,6 +356,39 @@ repository life time.  Existing content will remain untouched, new content will
 be processed with the new settings.
 
 
+External Files
+^^^^^^^^^^^^^^
+
+Files in a CernVM-FS repository can be marked as *external files*. Externals
+files are not expected to be served from the HTTP server(s) that provide the
+file catalogs but from an independent set of HTTP server(s). The idea is for
+CernVM-FS to be able to provide a directory of files that is already present
+on an HTTP service. External files are often :ref:`grafted
+<sct_grafting>`.
+
+While regular files use their content hash as basis for the HTTP URL, external
+files are expected to be available under their file system name. For instance,
+a file ``/foo/bar`` with content hash ``0x1234`` would be addressed as
+
+::
+
+   $HTTP_SERVER_URL/12/34      # as regular file
+   $HTTP_EXTERNAL_URL/foo/bar  # as external file
+
+Note that the content hash of external files is still verified on download. Also
+note that CernVM-FS by itself does not know or store the location of external
+files but it must be explicitly set through the client configuration. On the
+clients, the ``CVMFS_EXTERNAL_URL``, ``CVMFS_EXTERNAL_HTTP_PROXY`` and the other
+"external" parameters are used to configure the external HTTP servers
+(see :ref:`appendix <apxsct_clientparameters>`).
+
+Files are marked as external data if the ``CVMFS_EXTERNAL_DATA`` server
+setting is enabled or if the ``cvmfs_server publish -X`` option is used.
+Conversely, if ``CVMFS_EXTERNAL_DATA`` is set and the
+``cvmfs_server publish -N`` option is used, this particular publish operation
+will treat its files exceptionally as non-external files.
+
+
 Confidential Repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
