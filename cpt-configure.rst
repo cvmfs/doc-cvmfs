@@ -927,6 +927,11 @@ that is exported via NFS, the safety margin for the NFS maps needs be
 taken into account. It also might be necessary to monitor the actual
 space consumption.
 
+.. note::
+    The NFS share should be mounted with the mount option ``nordirplus``.
+    Without this option, traversals of directories with large number of files
+    can slow down significantly.
+
 Tuning
 ~~~~~~
 
