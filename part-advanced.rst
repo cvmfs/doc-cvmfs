@@ -6,6 +6,7 @@ Advanced Topics
    :maxdepth: 2
 
    cpt-plugins
+   cpt-telemetry
    cpt-tracer
    cpt-enter
    cpt-hpc
