@@ -1200,8 +1200,9 @@ the client experiences cache thrashing.
 
       cvmfs_talk internal affairs
 
-prints the internal status information and performance counters. It can
-be helpful for performance engineering.
+prints the internal status information and performance counters.
+It can be helpful for performance engineering.
+They can also be exported in regular intervals (see :ref:`cpt_telemetry`).
 
 ::
 

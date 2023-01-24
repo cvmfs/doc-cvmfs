@@ -62,6 +62,11 @@ CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
 CVMFS_INSTRUMENT_FUSE           | When set to *true* gather performance statistics about the FUSE callbacks.
                                 | The results are displayed with `cvmfs_talk internal affairs`.
 CVMFS_NFS_INTERLEAVED_INODES    In NFS mode, use only inodes of the form :math:`an+b`, specified as "b%a".
+CVMFS_INFLUX_EXTRA_FIELDS       Static fields always attached to the (absolute) output of the InfluxDB Telemetry Aggregator
+CVMFS_INFLUX_EXTRA_TAGS         Static tags always attached to the (absolute + delta) output of the InfluxDB Telemetry Aggregator
+CVMFS_INFLUX_HOST               Host name or IP address of the receiver of the InfluxDB Telemetry Aggregator
+CVMFS_INFLUX_METRIC_NAME        Name of the measurement of the InfluxDB Telemetry Aggregator
+CVMFS_INFLUX_PORT               Port of the host (receiver) of the InfluxDB Telemetry Aggregator
 CVMFS_IPFAMILY_PREFER           Which IP protocol to prefer when connecting to proxies.  Can be either 4 or 6.
 CVMFS_KCACHE_TIMEOUT            Timeout in seconds for path names and file attributes in the kernel file system buffers.
 CVMFS_KEYS_DIR                  | Directory containing \*.pub files used as repository signing keys.
@@ -113,6 +118,8 @@ CVMFS_SYSLOG_LEVEL              | If set to 1 or 2, sets the syslog level for Ce
                                 | LOG_DEBUG or LOG_INFO respectively.
 CVMFS_SYSTEMD_NOKILL            | If set to *yes*, modify the command line to ``@vmfs2 ...`` in order to
                                 | act as a systemd lowlevel storage manager.
+CVMFS_TELEMETRY_RATE            Rate in seconds for Telemetry Aggregator to send the telemetry. Minimum send rate >= 5 sec.
+CVMFS_TELEMETRY_SEND            ``ON`` to activate Telemetry Aggregator.
 CVMFS_TIMEOUT                   Timeout in seconds for HTTP requests with a proxy server.
 CVMFS_TIMEOUT_DIRECT            Timeout in seconds for HTTP requests without a proxy server.
 CVMFS_TRACEFILE                 If set, enables the tracer and trace file system calls to the given file.
