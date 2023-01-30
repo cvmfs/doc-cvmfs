@@ -831,6 +831,12 @@ repository and are not allowed to contain spaces or spacial characters.
 Besides the actual tag's name they can also contain a free descriptive
 text and store a creation timestamp.
 
+To mount a specific named snapshot as a client use
+
+::
+
+    CVMFS_REPOSITORY_TAG=$tagname
+
 Named snapshots are best to use for larger modifications to the
 repository, for instance when a new major software release is installed.
 Named snapshots provide the ability to easily undo modifications and to
