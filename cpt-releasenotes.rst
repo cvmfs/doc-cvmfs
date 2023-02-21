@@ -3,8 +3,8 @@ Release Notes for CernVM-FS 2.10.1
 
 CernVM-FS 2.10.1 is a patch release, containing several minor bug fixes and improvements.
 As with previous releases, upgrading clients should be seamless just by
-installing the new package from the repository. As usual, we recommend to updateonly a few worker nodes first and gradually ramp up once the new version proves
-to work correctly. Please take special care when upgrading a cvmfs client in NFSmode.
+installing the new package from the repository. As usual, we recommend to update only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS mode.
 
 For Stratum 1 servers, there should be no running snapshots during the upgrade.
 For publisher and gateway nodes, all transactions must be closed and no active
@@ -20,14 +20,13 @@ Bug Fixes and Improvements
   * [server] Succeeding cvmfs_server check should clear status in .cvmfs_status.json (`#3147 <https://github.com/cvmfs/cvmfs/issues/3147>`_)
   * [server] Reflog always recreated when running ``cvmfs_server check -r -i FQRN`` (`#3123 <https://github.com/cvmfs/cvmfs/issues/3123>`_)
   * [server] Unable to recover from publish failure (`#3088 <https://github.com/cvmfs/cvmfs/issues/3088>`_)
-  * [server] snapshot data file has doubled data (`#2991 <https://github.com/cvmfs/cvmfs/issues/2991>`_)
+  * [server] Snapshot data file has doubled data (`#2991 <https://github.com/cvmfs/cvmfs/issues/2991>`_)
   * [gw/server]  Allow aborting a transaction when session token is missing (`#3159 <https://github.com/cvmfs/cvmfs/issues/3159>`_)
   * [client] attr -g logbuffer can overflow (`#2979 <https://github.com/cvmfs/cvmfs/issues/2979>`_)
   * [client] Misleading "Transfer fuse connection to new mount...success" message (`#2956 <https://github.com/cvmfs/cvmfs/issues/2956>`_)
   * [client] Error when creating sqlite-backed NFS maps (`#3150 <https://github.com/cvmfs/cvmfs/issues/3150>`_)
   * [client] ``cvmfs_config fuser`` runs too long on host with afs (`#3090 <https://github.com/cvmfs/cvmfs/issues/3090>`_)
   * [container] Container conversion does not recognize OCI manifest lists (`#3164 <https://github.com/cvmfs/cvmfs/issues/3164>`_)
-  * [build system] cvmfs-2.9.3 el8 compilation failure (`#2985 <https://github.com/cvmfs/cvmfs/issues/2985>`_)
   * [build system] Fix patching of leveldb external with busybox (`#3112 <https://github.com/cvmfs/cvmfs/issues/3112>`_)
   * [build system] Wrong permission in EL9 ARM package (`#3106 <https://github.com/cvmfs/cvmfs/issues/3106>`_)
   * [geo] Allow for missing location info in geo record (`#3190 <https://github.com/cvmfs/cvmfs/issues/3190>`_)
