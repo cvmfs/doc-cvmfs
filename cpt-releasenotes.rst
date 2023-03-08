@@ -20,10 +20,8 @@ This version introduces experimental support for Ubuntu 22.04 and CentOS Stream 
 Bug Fixes and Improvements
 --------------------------
 
-  * [client] Improve robustness of link between watchdog and fuse module (#2971)
-    ([#2971](https://github.com/cvmfs/cvmfs/pull/2971))
-  * [server] Fix releasing of GC lock (#2982)
-    ([#2982](https://github.com/cvmfs/cvmfs/pull/2982))
+  * [client] Improve robustness of link between watchdog and fuse module (`#2971 <https://github.com/cvmfs/cvmfs/pull/2971>`_)
+  * [server] Fix releasing of GC lock (`#2982 <https://github.com/cvmfs/cvmfs/pull/2982>`_)
 
 
 Release Notes for CernVM-FS 2.9.2
@@ -47,28 +45,28 @@ Bug Fixes and Improvements
 --------------------------
 
   * [client] Improve error reporting in watchdog process
-    ([#2859](https://github.com/cvmfs/cvmfs/pull/2859))
-  * [server] Fix potential use-after-free error in swissknife check
-    ([#2860](https://github.com/cvmfs/cvmfs/pull/2860))
-  * [server] Fix conflict in commandline arguments of cvmfs_ducc
-    ([#2853](https://github.com/cvmfs/cvmfs/issues/2853))
-  * [server] Running cvmfs_server check -a and gc -a is now mutually exclusive
-    ([CVM-2043](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2043))
-  * [server] Enable external monitoring of geodb updates, add the
+    (`#2859 <https://github.com/cvmfs/cvmfs/pull/2859>`_)
+  * [server]  Fix potential use-after-free error in swissknife check
+    (`#2860 <https://github.com/cvmfs/cvmfs/pull/2860>`_)
+  * [server]  Fix conflict in commandline arguments of cvmfs_ducc
+    (`#2853 <https://github.com/cvmfs/cvmfs/issues/2853>`_)
+  * [server]  Running cvmfs_server check -a and gc -a is now mutually exclusive
+    (`CVM-2043 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2043>`_)
+  * [server]  Enable external monitoring of geodb updates, add the
     CVMFS_GEO_AUTO_UPDATE option
-    ([CVM-1857](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-1857))
-  * [server[ Ignore trailing path after repo name in `cvmfs_server abort`
-    ([CVM-2055](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2055))
+    (`CVM-1857 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-1857>`_)
+  * [server] Ignore trailing path after repo name in ``cvmfs_server abort``
+    (`CVM-2055 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2055>`_)
   * [client] New option to list magic xattrs on root node only
-    ([CVM-2058](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2058))
-  * [server] Fix integrity check for external chunked files
-    ([CVM-2050](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2050))
-  * [server] Fix for GeoAPI and Python3
-    ([CVM-2052](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2052))
-  * [server] Fix initialization of upstream type in cvmfs_server ingest
-    ([#2816](https://github.com/cvmfs/cvmfs/pull/2816))
-  * [server] Fix bug where trailing slash in base dir crashes tarball ingest
-    ([CVM-2044](https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2044))
+    (`CVM-2058 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2058>`_)
+  * [server]  Fix integrity check for external chunked files
+    (`CVM-2050 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2050>`_)
+  * [server]  Fix for GeoAPI and Python3
+    (`CVM-2052 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2052>`_)
+  * [server]  Fix initialization of upstream type in cvmfs_server ingest
+    (`#2816 <https://github.com/cvmfs/cvmfs/pull/2816>`_)
+  * [server]  Fix bug where trailing slash in base dir crashes tarball ingest
+    (`CVM-2044 <https://sft.its.cern.ch/jira/projects/CVM/issues/CVM-2044>`_)
 
 
 Release Notes for CernVM-FS 2.9.0
