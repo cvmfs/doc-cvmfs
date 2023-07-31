@@ -3,7 +3,8 @@
 Ephemeral Writable Container
 ============================
 
-**Note:** this feature is still considered experimental.
+.. note::
+    This feature is still considered experimental.
 
 The CernVM-FS ephemeral writable container can provide a short-lived shell with writable access to a regular, read-only CernVM-FS repository.
 A writable CernVM-FS mountpoint is normally a functionality that only publisher nodes provide.
@@ -41,5 +42,5 @@ If only the logs should be preserved, use the ``--keep-logs`` parameter instead.
 If necessary, the container can be opened as fake root user using the ``root`` option.
 
 Note that by default a dedicated CernVM-FS cache directory is created for the lifetime of the ephemeral container.
-It can be desireable to use a shared cache directory across several invocations of the ``cvmfs_server enter`` command.
+It can be desirable to use a shared cache directory across several invocations of the ``cvmfs_server enter`` command.
 To do so, use the ``--cvmfs-config <config file>`` parameter and set ``CVMFS_CACHE_BASE=/common/path`` in the passed configuration file.

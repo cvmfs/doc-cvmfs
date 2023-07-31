@@ -14,12 +14,12 @@ The CernVM-FS software is available in form of several packages:
     cern.ch, egi.eu, and opensciencegrid.org domains.
 
 **cvmfs-config-none**
-    Empty package to satisfy the cvmfs-config requirement of the cvmfs
+    Empty package to satisfy the ``cvmfs-config`` requirement of the cvmfs
     package without actually installing any configuration.
 
 **cvmfs**
     Contains the Fuse module and additional client tools. It has
-    dependencies to at least one of the cvmfs-config-\ :math:`\cdots`
+    dependencies to at least one of the ``cvmfs-config-...``
     packages.
 
 **cvmfs-fuse3**
@@ -50,12 +50,12 @@ The CernVM-FS software is available in form of several packages:
     on a publisher node.
 
 **cvmfs-notify**
-    Websockets frontend for used for repository update notifications. Supposed
+    WebSockets frontend for used for repository update notifications. Supposed
     to be co-located with a RabbitMQ service.
 
 **kernel-...-.aufs21**
-    Scientific Linux 6 kernel with aufs. Required for SL6 based
-    Stratum 0 servers.
+    Scientific Linux 6 kernel with ``aufs``. Required for SL6 based
+    Stratum 0 servers. (Note: no active support for ``aufs`` anymore)
 
 **cvmfs-shrinkwrap**
     Stand-alone utility to export file system trees into containers for HPC

@@ -58,7 +58,7 @@ The subscription command has two optional flags:
   will output the message but will not exit.
 * ``-m NUM`` specifies of minimum repository revision number to react to. For
   messages with a revision number smaller than or equal to ``NUM``, no output
-  is printed and the command will not exit (when the ``-c`` flag is not given).
+  is printed, and the command will not exit (when the ``-c`` flag is not given).
 
 CernVM-FS client configuration
 ------------------------------
