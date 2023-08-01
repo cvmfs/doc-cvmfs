@@ -790,6 +790,15 @@ cryptographic hash of the file at hand. The extended attributes are used
 by the ``cvmfs_config stat`` command in order to show a current overview
 of health and performance numbers.
 
+Access to extended attributes can be restricted in the client config to
+``root`` and users with a specific (main) ``gid`` listed by
+``CVMFS_XATTR_PRIVILEGED_GIDS``. Extended attributes to which 
+this should apply are listed in ``CVMFS_XATTR_PROTECTED_XATTRS``.
+Note that those attributes must be listed in their full name, e.g. ``user.fqrn``,
+``user.rawlink`` or ``xfsroot.rawlink``. Most of the extended attributes
+will have the prefix ``user.``. If uncertain, they can be looked up in the source
+code of ``cvmfs/magic_xattr.cc``.
+
 Repository Publishing
 ---------------------
 
