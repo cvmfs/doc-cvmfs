@@ -232,6 +232,8 @@ CVMFS_USER                          The user name that owns and manipulates the 
 CVMFS_VIRTUAL_DIR                   | Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory
                                     | containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
+CVMFS_STATFS_CACHE_TIMEOUT          | Caching time of  ``statfs()`` in seconds (no caching by default).
+                                    | Calling ``statfs()`` in high frequency can be expensive.
 CVMFS_STATISTICS_DB                 | SQLite file path to store the statistics. Default is
                                     | ``/var/spool/cvmfs/<REPO_NAME>/stats.db`` .
 CVMFS_PRINT_STATISTICS              Set to *true* to enable statistics printing to the standard output.
