@@ -1211,8 +1211,9 @@ They can also be exported in regular intervals (see :ref:`cpt_telemetry`).
 starts the catalog update routine.
 When using ``remount sync`` the system waits for the new file system snapshot to be served (if there is a new one).
 
-Other
-~~~~~
+
+File System Information
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Information about the current cache usage can be gathered using the
 ``df`` utility. For repositories created with the CernVM-FS 2.1
@@ -1220,9 +1221,45 @@ toolchain, information about the overall number of file system entries
 in the repository as well as the number of entries covered by currently
 loaded meta-data can be gathered by ``df -i``.
 
-For the `Nagios monitoring system <http://www.nagios.org>`_ [Schubert08]_, a
-checker plugin is available `on our website
-<http://cernvm.cern.ch/portal/filesystem/downloads>`_.
+
+Monitoring
+----------
+
+CernVM-FS offers multiple options to remotely monitor client status and behavior.
+
+Since the early days, CernVM-FS supports the `Nagios monitoring system <http://www.nagios.org>`_ [Schubert08]_.
+A checker plugin is available `on our website <https://cernvm.cern.ch/fs/#download>`_.
+
+Since CernVM-FS 2.11 there are two more options: 1) :ref:`Telemetry Aggregator <cpt_telemetry>` that allows the remote
+monitoring of all counters of ``cvmfs_talk internal affairs``, and 2) sending an extended CURL HTTP header for
+each download request. For this, ``CVMFS_HTTP_TRACING`` must be set. It will then include ``uid``, ``gid``, and
+``pid`` with each download request. 
+
+.. note::
+    Depending on which CernVM-FS component sends the CURL request, ``uid``, ``gid`` or ``pid`` might not be set.
+    Based on the platform, their default value ``-1`` might change to a large number if the base type is ``unsigned``.
+
+Furthermore, ``CVMFS_HTTP_TRACING_HEADERS`` can be set. This parameter allows for user-defined, static key-value pairs
+to be added to the header, e.g. to identify the client that send the request. As key, only alphanumeric sequences are
+accepted and white space around the key is ignored. Invalid keys are ignored. An example is given below
+
+.. code-block:: bash
+
+    # client config
+    CVMFS_HTTP_TRACING=on #(default off)
+    # illegal headers are: CVMFS-X-h2:ff and X-CVMFS-h3:12_ad
+    CVMFS_HTTP_TRACING_HEADERS='h1:test|CVMFS-X-h2:ff|X-CVMFS-h3:12_ad |  h4  : 12fs_?'
+    
+    # debug output
+    (download) CURL Header for URL: /data/81/7c882d4a2e9dd7f9c5c2bfb4e04ff316e436dfC is:
+    Connection: Keep-Alive
+    Pragma:
+    User-Agent: cvmfs Fuse 2.11.0
+    X-CVMFS-h1: test
+    X-CVMFS-h4: 12fs_?
+    X-CVMFS-PID: 561710
+    X-CVMFS-GID: 0
+    X-CVMFS-UID: 0
 
 .. _sct_debug_logs:
 
