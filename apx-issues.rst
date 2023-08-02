@@ -2,7 +2,7 @@ Known Issues
 ============
 
 Having a Very Large Number as File Descriptor Limit
-----------------------------------------------
+---------------------------------------------------
 
 Before CernVM-FS 2.11, having the file descriptor limit set to a very large number
 will result in a very slow ``cvmfs`` performance in certain situations.
