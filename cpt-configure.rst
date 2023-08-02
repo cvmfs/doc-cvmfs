@@ -1036,12 +1036,22 @@ files used for :ref:`bulk changes of ownership on release manager machines <sct_
 Hotpatching and Reloading
 -------------------------
 
-By hotpatching a running CernVM-FS instance, most of the code can be
-reloaded without unmounting the file system. The current active code is
-unloaded and the code from the currently installed binaries is loaded.
+Hotpatching a running CernVM-FS instance allows reloading most of the code 
+without unmounting the file system. The current active code is
+unloaded and the code from the currently (newly) installed binaries is loaded.
 Hotpatching is logged to syslog. Since CernVM-FS is re-initialized
 during hotpatching and configuration parameters are re-read, hotpatching
 can be also seen as a "reload".
+
+.. note::
+    During ``reload`` not all client config parameters can be changed,
+    some need a remount to take effect. 
+
+Since CernVM-FS 2.11, reloading the client considers the status of ``CVMFS_DEBUGLOG``.
+Independent of if the client runs in debug mode or not before the reload, after the reload
+the debug mode is only selected if ``CVMFS_DEBUGLOG`` is set.
+For earlier versions before CernVM-FS 2.11, the client mode was static and ``reload``
+was not able to switch from or to debug mode.
 
 Hotpatching has to be done for all repositories concurrently by
 
