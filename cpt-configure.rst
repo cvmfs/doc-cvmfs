@@ -951,6 +951,35 @@ The performance will benefit from large RAM on the NFS server
 (:math:`\geq` 16GB) and CernVM-FS caches hosted on an SSD
 hard drive.
 
+Kernel Cache Tuning
+"""""""""""""""""""
+
+Using efficiently the kernel cache can increase the overall performance.
+Requests that would normally be answered by ``cvmfs``, can - if cached -
+be directly answered by the kernel which shortens the overall request time.
+There are multiple client config parameters that influence the kernel cache behavior.
+
+=============================== ========================================================================================
+**Parameter**                   **Meaning**
+=============================== ========================================================================================
+CVMFS_KCACHE_TIMEOUT            Timeout in seconds for path names and file attributes in the kernel file system buffers.
+CVMFS_CACHE_SYMLINKS            If set to *yes*, enables symlink caching in the kernel.
+CVMFS_STATFS_CACHE_TIMEOUT      | Caching time of  ``statfs()`` in seconds (no caching by default).
+                                | Calling ``statfs()`` in high frequency can be expensive.
+
+Caching of symlink in the kernel means that the mangled name is stored, so that
+there is no need to resolve it again when it is requested for another time.
+Activating this option makes only sense if symlinks are heavily accessed.
+First performance measurement showed a slightly slower performance on the very first
+access (*cold cache*) but a better performance for multiple accesses (*warm* and *hot cache*).
+
+.. note::
+    Symlink caching works best with ``kernel >= 6.2rc1`` and ``libfuse >= 3.16``.
+    It already works from version ``libfuse 3.10.0`` on but has restriction,
+    e.g. *mounts on top of mounts* will be destroyed if they are a symlink.
+
+    
+
 .. _sct_nfs_interleaved:
 
 Export of /cvmfs with Cray DVS
