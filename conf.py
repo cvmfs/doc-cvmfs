@@ -32,8 +32,14 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinxcontrib.mermaid',
-    'myst_parser'
+    'myst_parser',
+    'sphinx_design', # pip install sphinx-design
+    'sphinx_needs' #pip install sphinx-needs
+    #pip install sphinxcontrib-plantuml
 ]
+
+# https://myst-parser.readthedocs.io/en/v0.17.1/syntax/optional.html#syntax-admonitions
+myst_enable_extensions = [ "colon_fence" ]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

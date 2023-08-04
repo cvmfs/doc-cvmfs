@@ -89,6 +89,136 @@ In markdown
 
 {ref}`Use label from rst part of docs without underscore _ <apxsct_serverparameters>`.
 
+
+## Admonition
+See [official doc](https://myst-parser.readthedocs.io/en/latest/syntax/admonitions.html)
+
+Use
+```
+:::{note}
+  Some note
+:::
+```
+to create a note.
+
+:::{note}
+  Some note
+:::
+
+For custom title
+```
+:::{admonition} My custom title
+  :class: note
+
+  My custom note
+:::
+```
+
+:::{admonition} My custom title
+  :class: note
+
+  My custom note
+:::
+
+### Other supported admonitions
+- attention
+- caution
+- danger
+- error
+- hint
+- important
+- note
+- seealso
+- tip
+
+:::{attention}
+  Some attention
+:::
+
+:::{caution}
+  Some caution
+:::
+
+:::{danger}
+  Some danger
+:::
+
+:::{error}
+  Some error
+:::
+
+:::{important}
+  Some important
+:::
+
+:::{tip}
+  Some tip
+:::
+
+:::{note}
+  Some note
+:::
+
+:::{seealso}
+  Some seealso
+:::
+
+{deprecated}`1.5 `
+Use {func}`spam` instead.
+
+Further reads are [Get started with MyST in Sphinx](https://myst-parser.readthedocs.io/en/v0.17.1/sphinx/intro.html)
+and [MyST - Directives](https://myst-parser.readthedocs.io/en/v0.17.1/syntax/syntax.html#syntax-directives)
+
+# Sphinx Design
+
+Add `sphinx_design` to `extensions` in `conf.py` and install it for python with `pip install sphinx-design`.
+
+[Official doc](https://sphinx-design.readthedocs.io/en/furo-theme/)
+
+This allows to do stuff like e.g. this
+
+## Tabs
+
+```
+::::{tab-set}
+
+:::{tab-item} Label1
+Content 1
+:::
+
+:::{tab-item} Label2
+Content 2
+:::
+
+::::
+```
+
+::::{tab-set}
+
+:::{tab-item} Label1
+Content 1
+:::
+
+:::{tab-item} Label2
+Content 2
+:::
+
+::::
+
+## Dropdowns
+
+```
+:::{dropdown} Dropdown title
+:animate: fade-in-slide-down
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis arcu vitae odio gravida congue. Donec porttitor ac risus et condimentum. Phasellus bibendum ac risus a sollicitudin. Proin pulvinar risus ac mauris aliquet fermentum et varius nisi. Etiam sit amet metus ac ipsum placerat congue semper non diam. Nunc luctus tincidunt ipsum id eleifend. Ut sed faucibus ipsum. Aliquam maximus dictum posuere. Nunc vitae libero nec enim tempus euismod. Aliquam sed lectus ac nisl sollicitudin ultricies id at neque. Aliquam fringilla odio vitae lorem ornare, sit amet scelerisque orci fringilla. Nam sed arcu dignissim, ultrices quam sit amet, commodo ipsum. Etiam quis nunc at ligula tincidunt eleifend.
+:::
+```
+
+:::{dropdown} Dropdown title
+:animate: fade-in-slide-down
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis arcu vitae odio gravida congue. Donec porttitor ac risus et condimentum. Phasellus bibendum ac risus a sollicitudin. Proin pulvinar risus ac mauris aliquet fermentum et varius nisi. Etiam sit amet metus ac ipsum placerat congue semper non diam. Nunc luctus tincidunt ipsum id eleifend. Ut sed faucibus ipsum. Aliquam maximus dictum posuere. Nunc vitae libero nec enim tempus euismod. Aliquam sed lectus ac nisl sollicitudin ultricies id at neque. Aliquam fringilla odio vitae lorem ornare, sit amet scelerisque orci fringilla. Nam sed arcu dignissim, ultrices quam sit amet, commodo ipsum. Etiam quis nunc at ligula tincidunt eleifend.
+:::
+
 ## Images
 
 Images can be included with `![Alternative title of the image](_static/concept-generic.svg)`.
