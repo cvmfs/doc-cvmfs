@@ -32,16 +32,19 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinxcontrib.mermaid',
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'myst_parser'
 ]
+
+myst_enable_extensions = ["colon_fence"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+# source_suffix = '.rst'
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
