@@ -48,6 +48,9 @@ creates
 |CVMFS_HTTP_PROXY|Proxy setting for repos|
 |CVMFS_QUOTA_LIMIT|Quota in MB of local cvmfs cache|
 
+### Searchable tables
+...are to find in {ref}`searchable_table`
+
 ## Labels
 
 ### Reference to a file
@@ -85,7 +88,7 @@ In markdown
 
 {ref}`md_test2_label`.
 
-{ref}`If using text-based labels you need to provide test <md_test2_label2>`.
+{ref}`If using text-based labels you need to provide text <md_test2_label2>`.
 
 {ref}`Use label from rst part of docs without underscore _ <apxsct_serverparameters>`.
 

@@ -14,47 +14,52 @@ Client parameters
 
 Parameters recognized in configuration files under /etc/cvmfs:
 
-.. raw:: html
-    <script>
-    function fff() {
-    // Declare variables
-    var input, filter, table, tr, td, i, txtValue, show;
-    input = document.getElementById("gggg");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("xxx");
-    tr = table.getElementsByTagName("tr");
-    // Loop through all table rows, and hide those who don't match the search query
-    for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[0];
-        show = "none";
-        if (td) {
-        for (j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
-            column = tr[i].getElementsByTagName("td")[j];
-            txtValue = column.textContent || column.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            show = "";
-            }
-        }
-        tr[i].style.display = show;
-        }
-    }
-    }
-    </script>
+.. note::
+    Javascript functions must be declared in ``_static/js`` and the file must be added to the ``conf.py`` with ``html_js_files = ['js/search.js',]``
 
-    <!-- <input type="text" id="gggg" onkeyup="myFunction()" placeholder="Search for names.."> -->
+Declaration of search bar
+::
+
+    .. raw:: html
+        <p>
+        <div class="wrapper">
+        <form action="">
+            <input class="description" type="text" id="searchme" onkeyup="searchtable('searchme', 'tableclientparams')" placeholder="Search..." title="Type in anything">
+            <button type="button" class="btn" onclick="document.getElementById('searchme').value = null; searchtable('searchme', 'tableclientparams');"><span>&times;</span></button>
+        </form>
+        </div>	
+        </p>
+
+.. raw:: html
 
     <p>
     <div class="wrapper">
     <form action="">
-        <input class="description" type="text" id="gggg" onkeyup="fff()" placeholder="Search..." title="Type in anything">
-        <button type="button" class="btn" onclick="document.getElementById('gggg').value = null; fff();"><span>&times;</span></button>
+        <input class="description" type="text" id="searchme" onkeyup="searchtable('searchme', 'tableclientparams')" placeholder="Search..." title="Type in anything">
+        <button type="button" class="btn" onclick="document.getElementById('searchme').value = null; searchtable('searchme', 'tableclientparams');"><span>&times;</span></button>
     </form>
     </div>	
     </p>
 
 
-.. table:: yyy
-    :name: xxx
+Declaration of table
+::
+
+    .. table:: Client Parameter
+    :name: tableclientparams
+
+    =============================== ========================================================================================
+    **Parameter**                   **Meaning**
+    =============================== ========================================================================================
+    CVMFS_ALIEN_CACHE               If set, use an alien cache at the given location
+
+
+.. note::
+    ``:name:`` of table must be lowercase, and only letters a-z
+
+
+.. table:: Client Parameter
+    :name: tableclientparams
 
     =============================== ========================================================================================
     **Parameter**                   **Meaning**

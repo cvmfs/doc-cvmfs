@@ -10,6 +10,7 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 (md_test2_label2)=
 My text-only label 
 
+(searchable_table)=
 ## Search a table
 
 Modified example from [W3Schools](https://www.w3schools.com/howto/howto_js_filter_table.asp) combined with sphinx,
@@ -67,4 +68,9 @@ function myFunction() {
 :::{note}
   The name in table `:name: myTable` will be transformed into lower-case and can be accessed in
   js with `document.getElementById("mytable");`
+:::
+
+
+:::{note}
+  For rest implementation of a searchable table have a look at `apx_parameters`
 :::
