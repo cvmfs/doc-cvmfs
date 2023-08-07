@@ -161,7 +161,7 @@ Server parameters
     <p>
     <div class="wrapper">
     <form action="" onSubmit="return false;">
-        <input class="description" type="text" id="filtersrvparams" onkeyup="filtertable('filtersrvparams', 'tblsrvparams')" placeholder="Search..." title="Type in anything">
+        <input class="description" type="text" id="filtersrvparams" onkeyup="filtertable('filtersrvparams', 'tblsrvparams')" placeholder="Search server parameters..." title="Type in anything">
         <button type="button" class="btn" onclick="document.getElementById('filtersrvparams').value = null; filtertable('filtersrvparams', 'tblsrvparams');"><span>&times;</span></button>
     </form>
     </div>
