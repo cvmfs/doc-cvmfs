@@ -475,6 +475,10 @@ backend storage on S3.
                                                 HEAD request. Enabled by default.
 ``CVMFS_S3_USE_HTTPS``                          Allow to use S3 implementation over HTTPS
                                                 and not over HTTP
+``CVMFS_S3_X_AMZ_ACL``                          | Canned access control lists (ACLs). Allowed is one value of
+                                                | ``"public-read"`` (default), ``"public-write"``, ``"authenticated-read"``,
+                                                | ``"aws-exec-read"``, ``"bucket-owner-read"``, ``"bucket-owner-full-control"``,
+                                                | or ``""`` (for explanation see `Amazon ACL Overview <https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl>`_)
 =============================================== ===========================================
 
 
