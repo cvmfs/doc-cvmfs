@@ -166,7 +166,6 @@ For custom title
   Some seealso
 :::
 
-{deprecated}`1.5 `
 Use {func}`spam` instead.
 
 Further reads are [Get started with MyST in Sphinx](https://myst-parser.readthedocs.io/en/v0.17.1/sphinx/intro.html)

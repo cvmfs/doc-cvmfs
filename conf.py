@@ -34,8 +34,7 @@ extensions = [
     'sphinxcontrib.mermaid',
     'myst_parser',
     'sphinx_design', # pip install sphinx-design
-    'sphinx_needs' #pip install sphinx-needs
-    #pip install sphinxcontrib-plantuml
+    #maybe needed: pip install sphinxcontrib-plantuml
 ]
 
 # https://myst-parser.readthedocs.io/en/v0.17.1/syntax/optional.html#syntax-admonitions
