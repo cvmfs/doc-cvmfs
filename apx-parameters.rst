@@ -124,13 +124,15 @@ CVMFS_TIMEOUT                   Timeout in seconds for HTTP requests with a prox
 CVMFS_TIMEOUT_DIRECT            Timeout in seconds for HTTP requests without a proxy server.
 CVMFS_TRACEFILE                 If set, enables the tracer and trace file system calls to the given file.
 CVMFS_USE_GEOAPI                Request order of Stratum 1 servers and fallback proxies via Geo-API.
+CVMFS_USE_SSL_SYSTEM_CA         | When connecting to an HTTPS endpoints,
+                                | it will load the certificates provided by the system.
 CVMFS_USER                      Sets the ``gid`` and ``uid`` mount options. Don't touch or overwrite.
 CVMFS_USYSLOG                   | All messages that normally are logged to syslog are re-directed to the given file.
                                 | This file can grow up to 500kB and there is one step of log rotation.
                                 | Required for $\mu$CernVM.
+CVMFS_XATTR_PRIVILEGED_GIDS     Comma-separated list of (main) group IDs that are allowed to access the extended attributes listed by ``CVMFS_XATTR_PROTECTED_XATTRS``.
+CVMFS_XATTR_PROTECTED_XATTRS    Comma-separated list of extended attributes (full name, e.g. ``user.fqrn``) that are only accessible by ``root`` and the group IDs listed by ``CVMFS_XATTR_PRIVILEGED_GIDS``.
 CVMFS_WORKSPACE                 Set the local directory for storing special files (defaults to the cache directory).
-CVMFS_USE_SSL_SYSTEM_CA         | When connecting to an HTTPS endpoints,
-                                | it will load the certificates provided by the system.
 =============================== ========================================================================================
 
 
