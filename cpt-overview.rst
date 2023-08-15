@@ -15,10 +15,10 @@ well as a server-side toolkit to create such distributable CernVM-FS
 repositories.
 
 .. figure:: _static/concept-generic.svg
-   :alt: General overview over CernVM-File System's Architecture
+   :alt: General overview over CernVM File System's Architecture
 
    A CernVM-FS client provides a virtual file system that loads data
-   only on access. In this example, all releases of a sofware package
+   only on access. In this example, all releases of a software package
    (such as an HEP experiment framework) are hosted as a
    CernVM-FS repository on a web server.
 
@@ -30,13 +30,13 @@ Fuse [Suzaki06]_ and content-delivery networks [Freedman03]_
 [Nygren10]_ [Tolia03]_. Its current implementation provides the
 following key features:
 
--  Use of the the `Fuse kernel module <http://fuse.sourceforge.net>`_
+-  Use of the `Fuse kernel module <http://fuse.sourceforge.net>`_
    that comes with in-kernel caching of file attributes
 
 -  Cache quota management
 
 -  Use of a content addressable storage format resulting in immutable
-   files and automatic file de-duplication
+   files and automatic file deduplication
 
 -  Possibility to split a directory hierarchy into sub catalogs at
    user-defined levels
@@ -65,7 +65,7 @@ following key features:
 
 -  Automatic load-balancing of proxy servers
 
--  Support for WPAD/PAC auto-configuration of proxy servers
+-  Support for WPAD/PAC autoconfiguration of proxy servers
 
 -  Efficient replication of repositories
 
@@ -77,7 +77,7 @@ CernVM-FS is particularly crafted for fast and scalable software
 distribution. Running and compiling software is a use case general
 purpose distributed file systems are not optimized for. In contrast to
 virtual machine images or Docker images, software installed in
-CernVM-FS does not need to be further packaged. Instead it is
+CernVM-FS does not need to be further packaged. Instead, it is
 distributed and versioned file-by-file. In order to create and update a
 CernVM-FS repository, a distinguished machine, the so-called *Release
 Manager Machine*, is used. On such a release manager machine, a

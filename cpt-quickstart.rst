@@ -8,18 +8,18 @@ There is experimental support for Power and RISC-V architectures.
 
 Overview
 --------
-The CernVM-FS repositories are located under /cvmfs.
+The CernVM-FS repositories are located under ``/cvmfs``.
 Each repository is identified by a *fully qualified repository name*.
-On Linux, mounting and un-mounting of the CernVM-FS is usually controlled by autofs and automount.
-That means that starting from the base directory /cvmfs different repositories are mounted automatically just by accessing them.
+On Linux, mounting and unmounting of the CernVM-FS is usually controlled by ``autofs`` and automount.
+That means that starting from the base directory ``/cvmfs`` different repositories are mounted automatically just by accessing them.
 A repository will be automatically unmounted after some automount-defined idle time.
-On macOS, mounting and un-mounting of the CernVM-FS is done by the user with ``sudo mount -t cvmfs /cvmfs/...`` commands.
+On macOS, mounting and unmounting of the CernVM-FS is done by the user with ``sudo mount -t cvmfs /cvmfs/...`` commands.
 
 
 Getting the Software
 --------------------
 The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
-However it is recommended to use the available package repositories that are also provided for the supported operating systems.
+However, it is recommended to use the available package repositories that are also provided for the supported operating systems.
 
 Scientific Linux/CentOS
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,7 +54,7 @@ To install the CVMFS package run
 Docker Container
 ~~~~~~~~~~~~~~~~
 
-The CernVM-FS service container can expose the /cvmfs directory tree to the host.
+The CernVM-FS service container can expose the ``/cvmfs`` directory tree to the host.
 Import the container with
 
 ::
@@ -79,8 +79,10 @@ Run the container as a system service with
       --volume /cvmfs:/cvmfs:shared \
       cvmfs/service:2.8.0-1
 
-Use ``docker stop`` to unmount the /cvmfs tree.
-Note that if you run multiple nodes (a cluster), you should use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
+Use ``docker stop`` to unmount the ``/cvmfs`` tree.
+
+.. note::
+    If you run multiple nodes (a cluster), use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
 
 Mac OS X
 ~~~~~~~~
@@ -107,7 +109,7 @@ Future releases will provide a signed and notarized package.
 Windows / WSL2
 ~~~~~~~~~~~~~~
 
-Follow the `Windows instructions <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_ to install the Windows Subsytem for Linux (WSL2).
+Follow the `Windows instructions <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_ to install the Windows Subsystem for Linux (WSL2).
 Install any of the Linux distributions and follow the instructions for the distribution in this guide.
 Whenever you open the Linux distribution, run
 
@@ -125,9 +127,9 @@ Configure AutoFS
 ~~~~~~~~~~~~~~~~
 
 For the basic setup, run ``cvmfs_config setup``.
-This ensures that the file /etc/auto.master.d/cvmfs.autofs exists containing ``/cvmfs /etc/auto.cvmfs`` and that the autofs service is running. Reload the autofs service in order to apply an updated configuration.
+This ensures that the file ``/etc/auto.master.d/cvmfs.autofs`` exists containing ``/cvmfs /etc/auto.cvmfs`` and that the ``autofs`` service is running. Reload the ``autofs`` service in order to apply an updated configuration.
 
-NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /etc/auto.master and restart the autofs service.
+NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file ``/etc/auto.master`` and restart the ``autofs`` service.
 
 ::
 
@@ -138,7 +140,7 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file /e
 Mac OS X
 ~~~~~~~~
 
-Due to the lack of autofs on macOS, mount the individual repositories manually like
+Due to the lack of ``autofs`` on macOS, mount the individual repositories manually like
 
 ::
 
@@ -164,14 +166,14 @@ For an individual workstation or laptop, set
 
     CVMFS_CLIENT_PROFILE=single
 
-If you setup a cluster of cvmfs nodes, specify the HTTP proxy servers on your site with
+If you set up a cluster of cvmfs nodes, specify the HTTP proxy servers on your site with
 
 ::
 
     CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
 
 If you're unsure about the proxy names, set ``CVMFS_HTTP_PROXY=DIRECT``.
-This should *only* be done for a small number of clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the client.
+This should *only* be done for very few clients (< 5), because large numbers can put a heavy load on the Stratum 1 servers and result, amongst others, in poorer performance for the clients.
 For the syntax of more complex HTTP proxy settings, see :ref:`sct_network`.
 If there are no HTTP proxies yet at your site, see :ref:`cpt_squid` for instructions on how to set them up.
 
@@ -179,7 +181,7 @@ Verify the file system
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Check if CernVM-FS mounts the specified repositories by ``cvmfs_config probe``.
-If the probe fails, try to restart autofs with ``sudo systemctl restart autofs``.
+If the probe fails, try to restart ``autofs`` with ``sudo systemctl restart autofs``.
 
 Building from source
 --------------------
@@ -205,7 +207,7 @@ For example, in case of Fuse3 following variables must be set: ``FUSE3_INCLUDE_D
 
 Furthermore, ``CMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON`` must be set, otherwise will ``sudo make install`` strip all linked libraries that point to none-system libraries.
 
-Example code for building CernVM-FS with locally built Fuse3 and including the CernVM-FS unittests and gateway:
+Example code for building CernVM-FS with locally built Fuse3 and including the CernVM-FS unit tests and gateway:
 ::
 
     cmake -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON \
@@ -226,7 +228,7 @@ Troubleshooting
 
     cvmfs_config chksetup
 
-- CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each others settings (default configuration, domain specific configuration, local setup, ...). To show the effective configuration for *repository*.cern.ch, run
+- CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each other's settings (default configuration, domain specific configuration, local setup, ...). To show the effective configuration for *repository*.cern.ch, run
 
 ::
 
@@ -245,7 +247,7 @@ Troubleshooting
 
     /usr/sbin/setenforce 0
 
-- Once the issue has been identified, ensure that the changes are taken by restarting autofs
+- Once the issue has been identified, ensure that the changes are taken by restarting ``autofs``
 
 ::
 
@@ -259,4 +261,4 @@ Troubleshooting
 
     cvmfs_config wipecache
 
-- Finally running with debug logs enabled can provide additional information for bug reports. This can be done by specifying a log file path in the client settings, e.g: ``CVMFS_DEBUGLOG=/tmp/cvmfs.log``. See  :ref:`sct_debug_logs` for more details.
+- Finally running with debug logs enabled can provide additional information for bug reports. This can be done by specifying a log file path in the client settings, e.g: ``CVMFS_DEBUGLOG=/tmp/cvmfs.log``. See :ref:`sct_debug_logs` for more details.

@@ -60,7 +60,7 @@ CVMFS_HTTP_PROXY                | Chain of HTTP proxy groups used by CernVM-FS. 
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
 CVMFS_INSTRUMENT_FUSE           | When set to *true* gather performance statistics about the FUSE callbacks.
-                                | The results are displayed with `cvmfs_talk internal affairs`.
+                                | The results are displayed with ``cvmfs_talk internal affairs``.
 CVMFS_NFS_INTERLEAVED_INODES    In NFS mode, use only inodes of the form :math:`an+b`, specified as "b%a".
 CVMFS_INFLUX_EXTRA_FIELDS       Static fields always attached to the (absolute) output of the InfluxDB Telemetry Aggregator
 CVMFS_INFLUX_EXTRA_TAGS         Static tags always attached to the (absolute + delta) output of the InfluxDB Telemetry Aggregator
@@ -79,7 +79,7 @@ CVMFS_MAX_IPADDR_PER_PROXY      | Limit the number of IP addresses a proxy names
 CVMFS_MAX_RETRIES               Maximum number of retries for a given proxy/host combination.
 CVMFS_MAX_SERVERS               Limit the number of (geo sorted) stratum 1 servers that are effectively used.
 CVMFS_MAX_TTL                   Maximum file catalog TTL in minutes.  Can overwrite the TTL stored in the catalog.
-CVMFS_MEMCACHE_SIZE             Size of the CernVM-FS meta-data memory cache in Megabyte.
+CVMFS_MEMCACHE_SIZE             Size of the CernVM-FS metadata memory cache in Megabyte.
 CVMFS_MOUNT_RW                  | Mount CernVM-FS as a read/write file system.  Write operations will fail
                                 | but this option can workaround faulty ``open()`` flags.
 CVMFS_NFILES                    Maximum number of open file descriptors that can be used by the CernVM-FS process.
@@ -222,7 +222,7 @@ CVMFS_UNION_DIR                     | Mount point of the union file system for c
                                     | Here, changes to the repository are performed
                                     | (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 | Defines the union file system to be used for the repository.
-                                    | (currently `aufs` and `overlayfs` are fully supported)
+                                    | (only ``overlayfs`` is fully supported, ``aufs`` has no active support anymore)
 CVMFS_UPLOAD_STATS_DB               | Publish repository statistics data file to the Stratum 0 /stats location
 CVMFS_UPLOAD_STATS_PLOTS            | Publish repository statistics plots and webpage to the Stratum 0 /stats location (requires ROOT)
 CVMFS_UPSTREAM_STORAGE              | Upstream spooler description defining the basic upstream storage type

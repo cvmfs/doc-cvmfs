@@ -150,7 +150,7 @@ Example procedure
 * The publisher is ``publisher.cern.ch``.
 * The new repository's fully qualified name is ``test.cern.ch``.
 * The repository's public key (RSA) is ``test.cern.ch.pub``.
-* The repository's public key (encoded as a X.509 certificate) is ``test.cern.ch.crt``.
+* The repository's public key (encoded as an X.509 certificate) is ``test.cern.ch.crt``.
 * The gateway API key is ``test.cern.ch.gw``.
 * The gateway application is running on port 4929 at the URL
   ``http://gateway.cern.ch:4929/api/v1``.
@@ -269,7 +269,7 @@ format to be accepted: ::
   }
 
 It should be noted that when keys are loaded from a file, an ``id`` field does not need
-to be specified in the configuration file. The public id of the loaded key is
+to be specified in the configuration file. The public ID of the loaded key is
 the one specified in the key file itself.
 
 Legacy repository configuration syntax
@@ -320,7 +320,7 @@ old directories are still present, they can be deleted: ::
 API reference
 =============
 
-This sections describes the HTTP API exposed by the gateway application.
+This section describes the HTTP API exposed by the gateway application.
 
 Repositories
 ************
@@ -868,7 +868,7 @@ Publication workflow
     Pub ->> GW: POST /api/v1/leases/<TOKEN>
     GW ->> Receiver: Commit
 
-    Note right of Receiver: Reconciliate local and remote changes
+    Note right of Receiver: Reconcile local and remote changes
     Note right of Receiver: Create new catalogs up to the repository root
 
     Receiver ->> S0: Upload catalogs
