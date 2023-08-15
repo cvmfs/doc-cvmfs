@@ -31,6 +31,7 @@ CVMFS_CATALOG_WATERMARK         | Try to release pinned catalogs when their numb
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
 CVMFS_CLAIM_OWNERSHIP           If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
+CVMFS_CPU_AFFINITY              Comma-separated list to set CPU affinity for all ``cvmfs`` components. 
 CVMFS_DEBUGLOG                  If set, run CernVM-FS in debug mode and write a verbose log the the specified file.
 CVMFS_DEFAULT_DOMAIN            | The default domain will be automatically appended to repository names
                                 | when given without a domain.
