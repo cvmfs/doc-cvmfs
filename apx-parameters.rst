@@ -29,6 +29,7 @@ CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to down
 CVMFS_CATALOG_WATERMARK         | Try to release pinned catalogs when their number surpasses the given watermark.
                                 | Defaults to 1/4 CVMFS_NFILES; explicitly set by shrinkwrap.
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
+CVMFS_CACHE_SYMLINKS            If set to *yes*, enables symlink caching in the kernel. 
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
 CVMFS_CLAIM_OWNERSHIP           If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
 CVMFS_CPU_AFFINITY              Comma-separated list to set CPU affinity for all ``cvmfs`` components. 
