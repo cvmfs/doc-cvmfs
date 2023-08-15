@@ -188,6 +188,8 @@ CVMFS_GEO_LICENSE_KEY               A license key for downloading the geolite2 c
 CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.
 CVMFS_HASH_ALGORITHM                | Define which secure hash algorithm should be used by CernVM-FS for CAS objects
                                     | (supported are: *sha1*, *rmd160* and *shake128*)
+CVMFS_HTTP_TRACING                  Activates that a tracing header is attached to each CURL request. Consists of ``uid``, ``pid``, and ``gid``. Default is ``off``.
+CVMFS_HTTP_TRACING_HEADERS          Adds additional static, user-defined tracing headers. Format: ``key1:val1|key2:val2|key3:val3``. Needs ``CVMFS_HTTP_TRACING`` to be set to ``on``.
 CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files (pipes, sockets, block device and character device files) during publish without aborting.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)
