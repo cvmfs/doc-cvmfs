@@ -10,7 +10,7 @@ contain a curated subset of the repository.
 
 The CernVM-FS shrinkwrap utility uses ``libcvmfs`` to export repositories
 to a POSIX file tree. This file tree can then be packaged and exported in
-several different ways, such as SquashFS, Docker layers, or TAR file.
+several ways, such as SquashFS, Docker layers, or TAR file.
 The ``cvmfs_shrinkwrap`` utility supports multithreaded copying to increase
 throughput and a file specification to create a subset of a repository.
 
@@ -29,8 +29,8 @@ CernVM-FS Shrinkwrap Layout
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The structure used in the Shrinkwrap output mirrors that used internally
-by CernVM-FS. The visible files are hardlinked to a hidden data directory.
-By default ``cvmfs_shrinkwrap`` builds in a base directory (``/tmp/cvmfs``)
+by CernVM-FS. The visible files are hard linked to a hidden data directory.
+By default, ``cvmfs_shrinkwrap`` builds in a base directory (``/tmp/cvmfs``)
 where a directory exists for each repository and a ``.data`` directory
 containing the content-addressed files for deduplication.
 
@@ -66,7 +66,7 @@ systems limit the number of hard links to 64k.
 Specification File
 ~~~~~~~~~~~~~~~~~~
 
-The specification file allows for both positive entries and exlusion statements.
+The specification file allows for both positive entries and exclusion statements.
 Inclusion can be specified directly for each file, can use wildcards for
 directories trees, and an anchor to limit to only the specified directory.
 Directly specify file : ::
@@ -103,8 +103,14 @@ a file named ``sft.cern.ch.spec``. ::
      /lcg/releases/lcgenv/*
 
 Write the ``libcvmfs`` configuration file that will be used for ``cvmfs_shrinkwrap``.
-``cvmfs_shrinkwrap`` puts a heavy load on servers, so please do not configure it to read from production Stratum 1s.
-CERN provides a separate server at http://cvmfs-stratum-zero-hpc.cern.ch and OSG provides one at http://cvmfs-s1goc.opensciencegrid.org:8001.
+
+.. warning::
+   ``cvmfs_shrinkwrap`` puts heavy load on servers. **DO NOT** configure it to read
+   from production Stratum 1s!
+
+   To use ``cvmfs_shrinkwrap`` at CERN please use ``http://cvmfs-stratum-zero-hpc.cern.ch``,
+   and for OSG please use ``http://cvmfs-s1goc.opensciencegrid.org:8001``.
+
 Here is an example that uses the CERN server, written to ``sft.cern.ch.config``. ::
 
     CVMFS_REPOSITORIES=sft.cern.ch
@@ -117,14 +123,15 @@ Here is an example that uses the CERN server, written to ``sft.cern.ch.config``.
     CVMFS_SHARED_CACHE=no # Important as libcvmfs does not support shared caches
     CVMFS_USER=cvmfs
 
-Note: Keys will need to be provided. The location in this configuration is the default used for CVMFS with FUSE.
+.. note::
+   Keys will need to be provided. The location in this configuration is the default used for CVMFS with FUSE.
 
 Using the cvmfs repository ``sft.cern.ch`` : ::
 
     sudo cvmfs_shrinkwrap -r sft.cern.ch -f sft.cern.ch.config -t sft.cern.ch.spec --dest-base /tmp/cvmfs -j 16
 
-Creating an image in userspace
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Creating an image in user space
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Start by using the above setup.
 
@@ -161,7 +168,7 @@ can be used and moved around.
 Exporting image
 ~~~~~~~~~~~~~~~
 
-Having a fully loaded repository, including the hardlinked data, the image can
+Having a fully loaded repository, including the hard linked data, the image can
 be exported to a number of different formats and packages. Some examples of this
 could be ZIP, tarballs, or squashfs. The recommendation is to use squashfs as
 it provides a great amount of portability and is supported for directly mounting
@@ -176,7 +183,7 @@ If tools for creating squashfs are not already available try : ::
    yum install squashfs-tools
 
 
-After this has been install a squashfs image can be created using the above image : ::
+After this has been installed a squashfs image can be created using the above image : ::
 
    mksquashfs /tmp/cvmfs root-sft-image.sqsh
 
@@ -200,8 +207,8 @@ Important note on use
 ~~~~~~~~~~~~~~~~~~~~~
 
 Shrinkwrap images mirror the data organization of CVMFS. As such it is important
-that the data and the filesystem tree be co-located in the filesystem/mountpoint.
-If the data is separated from the filesystem tree you are likely to encounter an
+that the data and the file system tree be co-located in the file system/mountpoint.
+If the data is separated from the file system tree you are likely to encounter an
 error.
 
 

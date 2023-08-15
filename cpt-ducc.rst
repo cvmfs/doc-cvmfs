@@ -55,9 +55,9 @@ To uniquely identify an image, we need to provide:
 2. image repository
 3. image tag or image digest (or both)
 
-We use a slash (`/`) to separate the `registry` from the `repository`, a
-colon (`:`) to separate the `repository` from the `tag` and the at (`@`) to
-separate the `digest` from the tag or from the `repository`.  The syntax is
+We use a slash (``/``) to separate the `registry` from the `repository`, a
+colon (``:``) to separate the `repository` from the `tag` and the at (``@``) to
+separate the `digest` from the tag or from the `repository`. The syntax is
 
 ::
 
@@ -78,7 +78,7 @@ start.
 Image Wish List
 =================
 
-The user specifices the set of images supposed to be published on CernVM-FS
+The user specifies the set of images supposed to be published on CernVM-FS
 in the form of a wish list. The wish list consists of triplets of input image,
 the output thin image and the cvmfs destination repository for the unpacked
 data.
@@ -87,7 +87,7 @@ data.
 
     wish => (input_image, output_thin_image, cvmfs_repository)
 
-The input image in your wish should unambigously specify an image as decribed
+The input image in your wish should unambiguously specify an image as described
 above.
 
 
@@ -109,7 +109,7 @@ four images is show below.
         - 'https://registry.hub.docker.com/library/fedora:latest'
         - 'https://registry.hub.docker.com/library/debian:stable'
 
-**version**: wish list version; at the moment only `1` is supported.
+**version**: wish list version; at the moment only ``1`` is supported.
 
 **user**: the account that will push the thin images into the docker registry.
 The password must be stored in the ``DOCKER2CVMFS_DOCKER_REGISTRY_PASS``
@@ -121,18 +121,18 @@ flat root file systems.
 **output_format**: how to name the thin images. It accepts a few variables that
 refer to the input image.
 
-* $(scheme), the image url protocol, most likely `http` or `https`
+* ``$(scheme)``, the image url protocol, most likely ``http`` or ``https``
 
-* $(registry), the Docker registry of the input image, in the case of the
-  example it would be `registry.hub.docker.com`
+* ``$(registry)``, the Docker registry of the input image, in the case of the
+  example it would be ``registry.hub.docker.com``
 
-* $(repository), the image repository of the input image, like
-  `library/ubuntu` or `atlas/athena`
+* ``$(repository)``, the image repository of the input image, like
+  ``library/ubuntu`` or ``atlas/athena``
 
-* $(tag), the tag of the image, which could be `latest`, `stable` or
-  `v0.1.4`
+* ``$(tag)``, the tag of the image, which could be ``latest``, ``stable`` or
+  ``v0.1.4``
 
-* $(image), combines $(repository) and $(tag)
+* ``$(image)``, combines ``$(repository)`` and ``$(tag)``
 
 **input**: list of docker images to convert
 
@@ -147,14 +147,14 @@ DUCC supports the following commands.
 convert
 *******
 
-The `convert` command provides the core functionality of DUCC:
+The ``convert`` command provides the core functionality of DUCC:
 
 ::
 
     cvmfs_ducc convert wishlist.yaml
 
 
-where `wishlist.yaml` is the path of a wish list file.
+where ``wishlist.yaml`` is the path of a wish list file.
 
 This command will try to ingest all the specified images into CernVM-FS.
 
@@ -164,13 +164,13 @@ creating the flat root file system necessary to work with Singularity and
 writing DUCC specific metadata in the CernVM-FS repository next to the unpacked
 image data.
 
-The layers are stored in the `.layer` subdirectory in the CernVM-FS repository,
-while the flat root file systems are stored in the `.flat` subdirectory.
+The layers are stored in the ``.layer`` subdirectory in the CernVM-FS repository,
+while the flat root file systems are stored in the ``.flat`` subdirectory.
 
 loop
 ****
 
-The `loop` command continously executes the `convert` command. On each
+The ``loop`` command continuously executes the ``convert`` command. On each
 iteration, the wish list file is read again in order to pick up changes.
 
 ::
@@ -180,7 +180,7 @@ iteration, the wish list file is read again in order to pick up changes.
 convert-single-image
 ********************
 
-The `convert-single-image` command is useful when only a single image need to
+The ``convert-single-image`` command is useful when only a single image need to
 be converted and pushed into a CernVM-FS repository.
 
 ::
@@ -190,16 +190,16 @@ be converted and pushed into a CernVM-FS repository.
 The command takes two arguments as input, the image to convert and the CernVM-FS
 repository where to store it.
 
-The `image-to-convert` argument follow the same syntax of the wishlist, for
-instance it could be something like `https://registry.hub.docker.com/library/fedora:latest`.
+The ``image-to-convert`` argument follow the same syntax of the wishlist, for
+instance it could be something like ``https://registry.hub.docker.com/library/fedora:latest``.
 
 
 Incremental Conversion
 ======================
 
-The `convert` command will extract image contents into CernVM-FS only where
+The ``convert`` command will extract image contents into CernVM-FS only where
 necessary. In general, some parts of the wish list will be already converted
-while others will need to be converted ex-novo.
+while others will need to be converted from scratch.
 
 An image that has been already unpacked in CernVM-FS will be skipped. For
 unconverted images, only the missing layers will be unpacked.
@@ -220,7 +220,7 @@ Notification
 ============
 
 DUCC provides a basic notification system to alert external services of
-updates in the filesystem.
+updates in the file system.
 
 The notifications are appended to a simple text file as JSON objects.
 
@@ -228,22 +228,22 @@ Human operator or software can follow the file and react on notification of
 interest.
 
 The notification file, eventually can grow large. The suggestion is to treat it
-as a standard log file with tools like `logrotate`.
+as a standard log file with tools like ``logrotate``.
 
 Multiple DUCC processes can write on the same notification file at the same
 time, multiple consumer can read from it.
 
 The notification are activated if and only if the user ask for them providing
 a file where to write them.
-To provide a notification file the flag `-n/--notification-file` is available.
+To provide a notification file the flag ``-n/--notification-file`` is available.
 
 Multiprocess
 ============
 
 DUCC is able to run multiprocess against the same CernVM-FS repository.
 
-Before to interact with the CernVM-FS repository, DUCC takes a filesystem
-level lock against `/tmp/DUCC.lock`.
+Before to interact with the CernVM-FS repository, DUCC takes a file system
+level lock against ``/tmp/DUCC.lock``.
 
 This allows to run multiple instances of DUCC at the same time, one instance
 could listen to a web socket, while one could be doing wishlist conversion.

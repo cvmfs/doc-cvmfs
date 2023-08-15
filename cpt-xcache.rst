@@ -8,12 +8,13 @@ This page describes how to set up an experimental HTTP reverse proxy
 layer for CernVM-FS based on `Xcache
 <http://xrootd.org/doc/dev47/pss_config.htm>`_.
 
-NOTE: This is not a replacement for a general site forward proxy.
-Forwarding needs to be defined separately in the Xcache configuration
-for each destination Stratum 1, and the client CVMFS_SERVER_URL
-configuration has to point to a separate forwarder URL for each
-server.  This document is for the convenience of people who want to
-experiment with this configuration.
+.. note::
+   This is not a replacement for a general site forward proxy.
+   Forwarding needs to be defined separately in the Xcache configuration
+   for each destination Stratum 1, and the client ``CVMFS_SERVER_URL``
+   configuration has to point to a separate forwarder URL for each
+   server. This document is for the convenience of people who want to
+   experiment with this configuration.
 
 Requirements
 ============
@@ -46,12 +47,12 @@ layer between a CernVM-FS repository and client machines:
 |
 
 **Machine A** contains a CernVM-FS repository, served by default over
-HTTP. An Xcache instance is running on a second machine. By default
+HTTP. An Xcache instance is running on a second machine. By default,
 Xcache can only ingest files from another XRootD instance - we start
 an instance of XRootD on the same machine as the CernVM-FS repository,
 configured to export the repository using the XRootD protocol. The
 following configuration can be used for this instance of XRootD,
-replacing ``<CVMFS_REPOSITORY_NAME>`` with the actually name of the
+replacing ``<CVMFS_REPOSITORY_NAME>`` with the actual name of the
 repository: ::
 
    oss.localroot /srv

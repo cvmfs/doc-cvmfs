@@ -32,6 +32,7 @@ CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
 CVMFS_CACHE_SYMLINKS            If set to *yes*, enables symlink caching in the kernel. 
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
 CVMFS_CLAIM_OWNERSHIP           If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
+CVMFS_CPU_AFFINITY              Comma-separated list to set CPU affinity for all ``cvmfs`` components. 
 CVMFS_DEBUGLOG                  If set, run CernVM-FS in debug mode and write a verbose log the the specified file.
 CVMFS_DEFAULT_DOMAIN            | The default domain will be automatically appended to repository names
                                 | when given without a domain.
@@ -61,7 +62,7 @@ CVMFS_HTTP_PROXY                | Chain of HTTP proxy groups used by CernVM-FS. 
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
 CVMFS_INSTRUMENT_FUSE           | When set to *true* gather performance statistics about the FUSE callbacks.
-                                | The results are displayed with `cvmfs_talk internal affairs`.
+                                | The results are displayed with ``cvmfs_talk internal affairs``.
 CVMFS_NFS_INTERLEAVED_INODES    In NFS mode, use only inodes of the form :math:`an+b`, specified as "b%a".
 CVMFS_INFLUX_EXTRA_FIELDS       Static fields always attached to the (absolute) output of the InfluxDB Telemetry Aggregator
 CVMFS_INFLUX_EXTRA_TAGS         Static tags always attached to the (absolute + delta) output of the InfluxDB Telemetry Aggregator
@@ -80,7 +81,7 @@ CVMFS_MAX_IPADDR_PER_PROXY      | Limit the number of IP addresses a proxy names
 CVMFS_MAX_RETRIES               Maximum number of retries for a given proxy/host combination.
 CVMFS_MAX_SERVERS               Limit the number of (geo sorted) stratum 1 servers that are effectively used.
 CVMFS_MAX_TTL                   Maximum file catalog TTL in minutes.  Can overwrite the TTL stored in the catalog.
-CVMFS_MEMCACHE_SIZE             Size of the CernVM-FS meta-data memory cache in Megabyte.
+CVMFS_MEMCACHE_SIZE             Size of the CernVM-FS metadata memory cache in Megabyte.
 CVMFS_MOUNT_RW                  | Mount CernVM-FS as a read/write file system.  Write operations will fail
                                 | but this option can workaround faulty ``open()`` flags.
 CVMFS_NFILES                    Maximum number of open file descriptors that can be used by the CernVM-FS process.
@@ -125,13 +126,15 @@ CVMFS_TIMEOUT                   Timeout in seconds for HTTP requests with a prox
 CVMFS_TIMEOUT_DIRECT            Timeout in seconds for HTTP requests without a proxy server.
 CVMFS_TRACEFILE                 If set, enables the tracer and trace file system calls to the given file.
 CVMFS_USE_GEOAPI                Request order of Stratum 1 servers and fallback proxies via Geo-API.
+CVMFS_USE_SSL_SYSTEM_CA         | When connecting to an HTTPS endpoints,
+                                | it will load the certificates provided by the system.
 CVMFS_USER                      Sets the ``gid`` and ``uid`` mount options. Don't touch or overwrite.
 CVMFS_USYSLOG                   | All messages that normally are logged to syslog are re-directed to the given file.
                                 | This file can grow up to 500kB and there is one step of log rotation.
                                 | Required for $\mu$CernVM.
+CVMFS_XATTR_PRIVILEGED_GIDS     Comma-separated list of (main) group IDs that are allowed to access the extended attributes listed by ``CVMFS_XATTR_PROTECTED_XATTRS``.
+CVMFS_XATTR_PROTECTED_XATTRS    Comma-separated list of extended attributes (full name, e.g. ``user.fqrn``) that are only accessible by ``root`` and the group IDs listed by ``CVMFS_XATTR_PRIVILEGED_GIDS``.
 CVMFS_WORKSPACE                 Set the local directory for storing special files (defaults to the cache directory).
-CVMFS_USE_SSL_SYSTEM_CA         | When connecting to an HTTPS endpoints,
-                                | it will load the certificates provided by the system.
 =============================== ========================================================================================
 
 
@@ -187,6 +190,8 @@ CVMFS_GEO_LICENSE_KEY               A license key for downloading the geolite2 c
 CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.
 CVMFS_HASH_ALGORITHM                | Define which secure hash algorithm should be used by CernVM-FS for CAS objects
                                     | (supported are: *sha1*, *rmd160* and *shake128*)
+CVMFS_HTTP_TRACING                  Activates that a tracing header is attached to each CURL request. Consists of ``uid``, ``pid``, and ``gid``. Default is ``off``.
+CVMFS_HTTP_TRACING_HEADERS          Adds additional static, user-defined tracing headers. Format: ``key1:val1|key2:val2|key3:val3``. Needs ``CVMFS_HTTP_TRACING`` to be set to ``on``.
 CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files (pipes, sockets, block device and character device files) during publish without aborting.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)
@@ -223,7 +228,7 @@ CVMFS_UNION_DIR                     | Mount point of the union file system for c
                                     | Here, changes to the repository are performed
                                     | (see :ref:`sct_repocreation_update`).
 CVMFS_UNION_FS_TYPE                 | Defines the union file system to be used for the repository.
-                                    | (currently `aufs` and `overlayfs` are fully supported)
+                                    | (only ``overlayfs`` is fully supported, ``aufs`` has no active support anymore)
 CVMFS_UPLOAD_STATS_DB               | Publish repository statistics data file to the Stratum 0 /stats location
 CVMFS_UPLOAD_STATS_PLOTS            | Publish repository statistics plots and webpage to the Stratum 0 /stats location (requires ROOT)
 CVMFS_UPSTREAM_STORAGE              | Upstream spooler description defining the basic upstream storage type
@@ -233,6 +238,8 @@ CVMFS_USER                          The user name that owns and manipulates the 
 CVMFS_VIRTUAL_DIR                   | Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory
                                     | containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
+CVMFS_STATFS_CACHE_TIMEOUT          | Caching time of  ``statfs()`` in seconds (no caching by default).
+                                    | Calling ``statfs()`` in high frequency can be expensive.
 CVMFS_STATISTICS_DB                 | SQLite file path to store the statistics. Default is
                                     | ``/var/spool/cvmfs/<REPO_NAME>/stats.db`` .
 CVMFS_PRINT_STATISTICS              Set to *true* to enable statistics printing to the standard output.
