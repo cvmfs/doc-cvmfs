@@ -558,7 +558,7 @@ The overall number of requests with a given proxy/host combination is
 ``$CVMFS_MAX_RETRIES``\ +1. ``CVMFS_BACKOFF_INIT`` sets the maximum
 initial backoff (time) in seconds. The actual initial backoff is picked with
 milliseconds precision randomly in the interval
-:math:`[1, \text{\$CVMFS_BACKOFF_INIT}\cdot 1000]`. With every retry,
+:math:`[1, \text{\$CVMFS\_BACKOFF\_INIT}\cdot 1000]`. With every retry,
 the backoff is then doubled.
 
 DNS Nameserver Changes
