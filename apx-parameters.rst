@@ -29,6 +29,7 @@ CVMFS_BACKOFF_MAX               Maximum backoff in seconds when retrying to down
 CVMFS_CATALOG_WATERMARK         | Try to release pinned catalogs when their number surpasses the given watermark.
                                 | Defaults to 1/4 CVMFS_NFILES; explicitly set by shrinkwrap.
 CVMFS_CACHE_BASE                Location (directory) of the CernVM-FS cache.
+CVMFS_CACHE_REFCOUNT            If set to *yes*, deduplicate open file descriptors by refcounting.
 CVMFS_CACHE_SYMLINKS            If set to *yes*, enables symlink caching in the kernel. 
 CVMFS_CHECK_PERMISSIONS         If set to *no*, disable checking of file ownership and permissions (open all files).
 CVMFS_CLAIM_OWNERSHIP           If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
@@ -112,6 +113,7 @@ CVMFS_SEND_INFO_HEADER          If set to *yes*, include the cvmfs path of downl
 CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used as a publisher's repository base line.
 CVMFS_SERVER_URL                Semicolon-separated chain of Stratum~1 servers.
 CVMFS_SHARED_CACHE              If set to *no*, makes a repository use an exclusive cache.
+CVMFS_STREAMING_CACHE           If set to *yes*, use a download manager to download regular files on read.
 CVMFS_STRICT_MOUNT              If set to *yes*, mount only repositories that are listed in ``CVMFS_REPOSITORIES``.
 CVMFS_SUID                      If set to *yes*, enable suid magic on the mounted repository. Requires mounting as root.
 CVMFS_SYSLOG_FACILITY           | If set to a number between 0 and 7, uses the corresponding
@@ -135,6 +137,7 @@ CVMFS_USYSLOG                   | All messages that normally are logged to syslo
 CVMFS_XATTR_PRIVILEGED_GIDS     Comma-separated list of (main) group IDs that are allowed to access the extended attributes listed by ``CVMFS_XATTR_PROTECTED_XATTRS``.
 CVMFS_XATTR_PROTECTED_XATTRS    Comma-separated list of extended attributes (full name, e.g. ``user.fqrn``) that are only accessible by ``root`` and the group IDs listed by ``CVMFS_XATTR_PRIVILEGED_GIDS``.
 CVMFS_WORKSPACE                 Set the local directory for storing special files (defaults to the cache directory).
+CVMFS_WORLD_READABLE            Override posix read permissions to make files in repository globally readable
 =============================== ========================================================================================
 
 

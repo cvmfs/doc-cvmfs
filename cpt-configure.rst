@@ -811,6 +811,28 @@ command ``sudo cvmfs_talk cache instance`` can be used to show the currently
 used cache manager instance.
 
 
+Refcounted Cache Mode
+^^^^^^^^^^^^^^^^^^^^^
+
+The default posix cache manager has a "refcounted" mode, which uses additional
+maps to count references to open file descriptors. Multiple processes reading
+the same cached files will then no longer create new duplicated file descriptors
+for the same opened file, which can be useful for highly parallelized workloads.
+This functionality comes with a small memory overhead, which should however not
+exceed a few MBs.
+
+The refcount mode can be turned on by setting
+
+::
+
+    CVMFS_CACHE_REFCOUNT=yes
+
+and reloading the cvmfs configuration. To switch it off, the repositories have
+to be remounted. Switching it off and doing ``cvmfs_config reload`` will not fail,
+but silently ignore the option until the next remount in order to properly
+work with already open file descriptors.
+
+
 Tiered Cache
 ^^^^^^^^^^^^
 
@@ -829,7 +851,20 @@ lower instances.  The parameter
 ``CVMFS_CACHE_$tieredInstanceName_LOWER_READONLY=[yes|no]`` controls whether the
 lower layer can be populated by the client or not.
 
+Streaming Cache Manager
+^^^^^^^^^^^^^^^^^^^^^^^
 
+This mode uses a download manager and a backing cache manager to deliver data.
+Pinned files and catalogs use the backing cache manager. Regular data blocks
+are downloaded on read, the required data window copied to the user. In order
+to use the streaming cache manager, set:
+
+::
+
+    CVMFS_STREAMING_CACHE=yes
+
+Note: The streaming cache manager is not ideal when doing multiple small reads
+of a large chunk, as each read will trigger a re-download of the entire chunk.
 
 External Cache Plugin
 ^^^^^^^^^^^^^^^^^^^^^
