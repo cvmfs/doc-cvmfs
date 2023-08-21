@@ -23,8 +23,8 @@ two servers are A and B, set
 Squid is very powerful and has lots of configuration and tuning
 options. For CernVM-FS we require only the very basic static content
 caching. If you already have a
-`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`_
-installed you can use it as well for CernVM-FS.
+`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`__
+[Dykstra10]_ installed you can use it as well for CernVM-FS.
 
 One option that is particularly important when there are a lot of worker
 nodes and jobs that start close together is the `collapsed_forwarding`
