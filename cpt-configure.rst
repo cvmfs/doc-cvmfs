@@ -4,8 +4,12 @@ Client Configuration
 Structure of /etc/cvmfs
 -----------------------
 
+
+Test
+
 The local configuration of CernVM-FS is controlled by several files in
-``/etc/cvmfs`` listed in the table below. For every .conf file
+``/etc/cvmfs`` listed in the table below.
+For every .conf file
 except for the files in ``/etc/cvmfs/default.d`` you can create a
 corresponding ``.local`` file having the same prefix in order to customize
 the configuration. The ``.local`` file will be sourced after the
