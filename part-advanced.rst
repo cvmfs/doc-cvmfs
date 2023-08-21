@@ -16,3 +16,4 @@ Advanced Topics
    cpt-large-scale
    cpt-shrinkwrap
    cpt-details
+   cpt-source-build

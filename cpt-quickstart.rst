@@ -183,6 +183,8 @@ Verify the file system
 Check if CernVM-FS mounts the specified repositories by ``cvmfs_config probe``.
 If the probe fails, try to restart ``autofs`` with ``sudo systemctl restart autofs``.
 
+.. _sct_building_from_source:
+
 Building from source
 --------------------
 
