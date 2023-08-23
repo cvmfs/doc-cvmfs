@@ -1,4 +1,4 @@
-name: build
+name: sphinx-build-pdf
 
 on: [push, pull_request]
 
@@ -18,5 +18,5 @@ jobs:
         pip install -r requirements.txt
     - name: Sphinx build - pdf
       run: |
-        sudo apt-get install -y latexmk texlive-full
+        sudo apt-get update && sudo apt-get -y --no-install-recommends  latexmk texlive-full
         make latexpdf

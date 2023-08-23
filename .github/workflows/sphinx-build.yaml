@@ -1,4 +1,4 @@
-name: build
+name: sphinx-build-html
 
 on: [push, pull_request]
 
