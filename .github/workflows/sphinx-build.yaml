@@ -21,7 +21,7 @@ jobs:
         make html
     - name: Sphinx build - pdf
       run: |
-        apt install -y latexmk texlive-latex-extra
+        sudo apt-get install -y latexmk texlive-latex-extra
         make latexpdf
     - name: Sphinx build - epub
       run: |
