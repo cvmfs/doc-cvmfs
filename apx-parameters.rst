@@ -59,6 +59,8 @@ CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernV
 CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``.
 CVMFS_HTTP_PROXY                | Chain of HTTP proxy groups used by CernVM-FS. Necessary.
                                 | Set to ``DIRECT`` if you don't use proxies.
+CVMFS_HTTP_TRACING              Activates that a tracing header is attached to each CURL request. Consists of ``uid``, ``pid``, and ``gid``. Default is ``off``.
+CVMFS_HTTP_TRACING_HEADERS      Adds additional static, user-defined tracing headers. Format: ``key1:val1|key2:val2|key3:val3``. Needs ``CVMFS_HTTP_TRACING`` to be set to ``on``.
 CVMFS_IGNORE_SIGNATURE          When set to *yes*, don't verify CernVM-FS file catalog signatures.
 CVMFS_INITIAL_GENERATION        Initial inode generation.  Used for testing.
 CVMFS_INSTRUMENT_FUSE           | When set to *true* gather performance statistics about the FUSE callbacks.
@@ -112,6 +114,8 @@ CVMFS_SEND_INFO_HEADER          If set to *yes*, include the cvmfs path of downl
 CVMFS_SERVER_CACHE_MODE         Enable special cache semantics for a client used as a publisher's repository base line.
 CVMFS_SERVER_URL                Semicolon-separated chain of Stratum~1 servers.
 CVMFS_SHARED_CACHE              If set to *no*, makes a repository use an exclusive cache.
+CVMFS_STATFS_CACHE_TIMEOUT      | Caching time of  ``statfs()`` in seconds (no caching by default).
+                                | Calling ``statfs()`` in high frequency can be expensive.
 CVMFS_STRICT_MOUNT              If set to *yes*, mount only repositories that are listed in ``CVMFS_REPOSITORIES``.
 CVMFS_SUID                      If set to *yes*, enable suid magic on the mounted repository. Requires mounting as root.
 CVMFS_SYSLOG_FACILITY           | If set to a number between 0 and 7, uses the corresponding
@@ -190,8 +194,6 @@ CVMFS_GEO_LICENSE_KEY               A license key for downloading the geolite2 c
 CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.
 CVMFS_HASH_ALGORITHM                | Define which secure hash algorithm should be used by CernVM-FS for CAS objects
                                     | (supported are: *sha1*, *rmd160* and *shake128*)
-CVMFS_HTTP_TRACING                  Activates that a tracing header is attached to each CURL request. Consists of ``uid``, ``pid``, and ``gid``. Default is ``off``.
-CVMFS_HTTP_TRACING_HEADERS          Adds additional static, user-defined tracing headers. Format: ``key1:val1|key2:val2|key3:val3``. Needs ``CVMFS_HTTP_TRACING`` to be set to ``on``.
 CVMFS_IGNORE_SPECIAL_FILES          Set to *true* to skip special files (pipes, sockets, block device and character device files) during publish without aborting.
 CVMFS_INCLUDE_XATTRS                Set to *true* to process extended attributes
 CVMFS_MAX_CHUNK_SIZE                Maximal size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)
@@ -238,8 +240,6 @@ CVMFS_USER                          The user name that owns and manipulates the 
 CVMFS_VIRTUAL_DIR                   | Set to *true* to enable the hidden, virtual ``.cvmfs/snapshots`` directory
                                     | containing entry points to all named tags.
 CVMFS_VOMS_AUTHZ                    Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
-CVMFS_STATFS_CACHE_TIMEOUT          | Caching time of  ``statfs()`` in seconds (no caching by default).
-                                    | Calling ``statfs()`` in high frequency can be expensive.
 CVMFS_STATISTICS_DB                 | SQLite file path to store the statistics. Default is
                                     | ``/var/spool/cvmfs/<REPO_NAME>/stats.db`` .
 CVMFS_PRINT_STATISTICS              Set to *true* to enable statistics printing to the standard output.
