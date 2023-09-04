@@ -59,7 +59,7 @@ Import the container with
 
 ::
 
-    docker pull cvmfs/service
+    docker pull registry.cern.ch/cvmfs/service:latest
 
 or with
 
