@@ -12,9 +12,9 @@ All data stored in CernVM-FS have to be converted into a
 CernVM-FS *repository* during the process of publishing. The
 CernVM-FS repository is a form of content-addressable storage.
 Conversion includes creating the file catalog(s), compressing new and
-updated files and calculating content hashes. Storing the data in a
+updated files, and calculating content hashes. Storing the data in a
 content-addressable format results in automatic file de-duplication. It
-furthermore simplifies data verification and it allows for file system
+furthermore simplifies data verification, and it allows for file system
 snapshots.
 
 In order to provide a writable CernVM-FS repository, CernVM-FS uses a union
@@ -32,30 +32,23 @@ System Requirements
 
 -  union file system in the kernel
 
-   - AUFS
-
    - OverlayFS (as of kernel version 4.2.x or RHEL7.3)
 
 -  Officially supported platforms
 
-   -  CentOS/SL >= 7.3, provided that /var/spool/cvmfs is served by an ext4
+   -  CentOS/SL >= 7.3, provided that ``/var/spool/cvmfs`` is served by an ext4
       file system.
 
    -  Fedora 25 and above (with kernel :math:`\ge` 4.2.x)
 
-   -  Ubuntu 14.04 64 bit and above
-
-       - Ubuntu < 15.10: with installed AUFS kernel module
-         (cf. `linux-image-extra` package)
-
-       - Ubuntu 15.10 and later (using upstream OverlayFS)
+   -  Ubuntu 15.10 and above (using upstream OverlayFS)
 
 Installation
 ~~~~~~~~~~~~
 
 #. Install ``cvmfs`` and ``cvmfs-server`` packages
 
-#. Ensure enough disk space in ``/var/spool/cvmfs`` (>50GiB)
+#. Ensure enough disk space in ``/var/spool/cvmfs`` (>50 GiB)
 
 #. For local storage: Ensure enough disk space in ``/srv/cvmfs``
 
@@ -86,7 +79,7 @@ Backup Policy
 
    -  For local storage: ``/srv/cvmfs``
 
-   -  Stratum 1s can serve as last-ressort backup of repository content
+   -  Stratum 1s can serve as last resort backup of repository content
 
 .. _sct_publish_revision:
 
@@ -120,8 +113,8 @@ editing of files where changes are stored on a RAM disk.
 
 If a file in the CernVM-FS repository gets changed, the union file system
 first copies it to the writable volume and applies any changes to this copy
-(copy-on-write semantics). Also newly created files or directories will be
-stored in the writable volume. Additionally the union file system creates
+(copy-on-write semantics). Also, newly created files or directories will be
+stored in the writable volume. Additionally, the union file system creates
 special hidden files (called *white-outs*) to keep track of file
 deletions in the CernVM-FS repository.
 
@@ -138,15 +131,16 @@ Requirements for a new Repository
 ---------------------------------
 
 In order to create a repository, the server and client part of
-CernVM-FS must be installed on the release manager machine. Furthermore
+CernVM-FS must be installed on the release manager machine. Furthermore,
 you will need a kernel containing a union file system implementation as
-well as a running ``Apache2`` web server. Currently we support EL >= 7.3,
+well as a running ``Apache2`` web server. Currently, we support EL >= 7.3,
 Ubuntu 14.04+ and Fedora 25+ distributions.
 
-CernVM-FS supports both OverlayFS and aufs as a union file system.
+CernVM-FS supports OverlayFS as a union file system.
+Earlier versions also supported ``aufs``, but no active support is given anymore.
 At least a 4.2.x kernel is needed to use CernVM-FS with OverlayFS. (Red Hat)
-Enterprise Linux >= 7.3 works, too, provided that /var/spool/cvmfs is served by
-an ext3 or ext4 file system. Furthermore note that OverlayFS cannot fully comply
+Enterprise Linux >= 7.3 works, too, provided that ``/var/spool/cvmfs`` is served by
+an ext3 or ext4 file system. Furthermore, note that OverlayFS cannot fully comply
 with POSIX semantics, in particular hard links must be broken into individual
 files. That is usually not a problem but should be kept in mind when installing
 certain software distributions into a CernVM-FS repository.
@@ -156,10 +150,10 @@ certain software distributions into a CernVM-FS repository.
 Notable CernVM-FS Server Locations and Files
 --------------------------------------------
 
-There are a number of possible customisations in the CernVM-FS server
+There are a number of possible customizations in the CernVM-FS server
 installation. The following table provides an overview of important
-configuration files and intrinsical paths together with some
-customisation hints. For an exhaustive description of the
+configuration files and intrinsic paths together with some
+customization hints. For an exhaustive description of the
 CernVM-FS server infrastructure please consult
 Appendix ":ref:`apx_serverinfra`".
 
@@ -196,7 +190,7 @@ Appendix ":ref:`apx_serverinfra`".
                                          :ref:`this table <tab_configfiles>`. Do
                                          not symlink this directory.
 
-  ``/etc/cvmfs/cvmfs_server_hooks.sh``   **Customisable server behaviour**
+  ``/etc/cvmfs/cvmfs_server_hooks.sh``   **Customizable server behavior**
                                          See ":ref:`sct_serverhooks`" for
                                          further details
 
@@ -229,26 +223,26 @@ A new repository is created by ``cvmfs_server mkfs``:
 
 The utility will ask for a user that should act as the owner of the
 repository and afterwards create all the infrastructure for the new
-CernVM-FS repository. Additionally it will create a reasonable default
+CernVM-FS repository. Additionally, it will create a reasonable default
 configuration and generate a new release manager certificate and
 by default a new master key and corresponding public key (see more
 about that in the next section).
 
 The ``cvmfs_server`` utility will use ``/srv/cvmfs`` as storage location
 by default. In case a separate hard disk should be used, a partition can
-be mounted on /srv/cvmfs or /srv/cvmfs can be symlinked to another
+be mounted on ``/srv/cvmfs`` or ``/srv/cvmfs`` can be symlinked to another
 location (see :ref:`sct_serveranatomy`). Besides local storage it is
-possible to use an :ref:`S3 compatible storage service <sct_s3storagesetup>`
+possible to use a :ref:`S3 compatible storage service <sct_s3storagesetup>`
 as data backend.
 
 Once created, the repository is mounted under ``/cvmfs/my.repo.name``
 containing only a single file called ``new_repository``. The next steps
 describe how to change the repository content.
 
-The repository name resembles a DNS scheme but it does not need to
+The repository name resembles a DNS scheme, but it does not need to
 reflect any real server name. It is supposed to be a globally unique name that
 indicates where/who the publishing of content takes place. A repository name
-must only contain alphanumeric characters plus ``-``, ``_``, and ``.`` and it
+must only contain alphanumeric characters plus ``-``, ``_``, or ``.``, and it
 is limited to a length of 60 characters.
 
 .. _sct_master_keys:
@@ -258,11 +252,11 @@ Master keys
 
 Each cvmfs repository uses two sets of keys, one for the individual
 repository and another called the "masterkey" which signs the
-repository key.  The pub key that corresponds to the masterkey is
+repository key. The pub key that corresponds to the masterkey is
 what needs to be distributed to clients to verify the authenticity of
-the repository.  It is usually most convenient to share the masterkey
+the repository. It is usually most convenient to share the masterkey
 between all repositories in a domain so new repositories can be added
-without updating the client configurations.  If the clients are
+without updating the client configurations. If the clients are
 maintained by multiple organizations it can be very difficult to
 quickly update the distributed pub key, so in that case it is
 important to keep the masterkey especially safe from being stolen.
@@ -282,8 +276,8 @@ Signatures are only good for 30 days by default, so
 ``cvmfs_server`` also supports the ability to store the masterkey in a
 separate inexpensive smartcard, so that even if the computer hosting
 the repositories is compromised, the masterkey cannot be stolen.
-Smartcards allow writing keys into them and signing files but they
-never allow reading the keys back.  Currently the supported hardware
+Smartcards allow writing keys into them and signing files, but they
+never allow reading the keys back. Currently, the supported hardware
 are the Yubikey 4 or Nano USB devices.
 
 If one of those devices is plugged in to a release manager machine,
@@ -296,21 +290,21 @@ this is how to use it:
 
 #. Make a backup copy of ``/etc/cvmfs/keys/my.repo.name.masterkey`` on
     at least one USB flash drive because the next step will
-    irretrievably delete the file.  Keep the flash drive offline in
+    irretrievably delete the file. Keep the flash drive offline in
     a safe place in case something happens to the smartcard.
 
 #. Convert the repository to use the smartcard with
-   ``cvmfs_server masterkeycard -c my.repo.name``.  This will delete
-   the masterkey file.  This command can also be applied to other
+   ``cvmfs_server masterkeycard -c my.repo.name``. This will delete
+   the masterkey file. This command can also be applied to other
    repositories on the same machine; their pub file will be updated
-   with what is stored in the card and they will be resigned.
+   with what is stored in the card, and they will be resigned.
 
 From then on, every newly created repository on the same machine
 will automatically use the shared masterkey stored on the smartcard.
 
 When using a masterkeycard, the default signature expiration reduces
-from 30 days to 7 days.  ``cvmfs_server resign`` needs to be run to
-renew the signature.  It is recommended to run that daily from cron.
+from 30 days to 7 days. ``cvmfs_server resign`` needs to be run to
+renew the signature. It is recommended to run that daily from cron.
 
 
 Repositories for Volatile Files
@@ -335,7 +329,7 @@ Files in the CernVM-FS repository data store are compressed and named
 according to their compressed content hash. The default settings use DEFLATE
 (zlib) for compression and SHA-1 for hashing.
 
-CernVM-FS can optionally skip compression of files.  This can be beneficial,
+CernVM-FS can optionally skip compression of files. This can be beneficial,
 for instance, if the repository is known to contain already compressed content,
 such as JPG images or compressed ROOT files. In order to disable compression,
 set ``CVMFS_COMPRESSION_ALGORITHM=none`` in the
@@ -343,16 +337,15 @@ set ``CVMFS_COMPRESSION_ALGORITHM=none`` in the
 2.2 is required in order to read uncompressed files.
 
 Instead of SHA-1, CernVM-FS can use RIPEMD-160 or SHAKE-128 (a variant of SHA-3
-with 160 output bits) as hash algorithm. In general, we advise not to change the
-default.  In future versions, the default might change from SHA-1 to SHAKE-128.
-In order to enforce the use of a specific hash algorithm, set
+with 160 output bits) as hash algorithm. In general, we do not advise to change the
+default. However, if required, a specific hash algorithm can be enforced by setting
 ``CVMFS_HASH_ALGORITHM=sha1``, ``CVMFS_HASH_ALGORITHM=rmd160``, or
 ``CVMFS_HASH_ALGORITHM=shake128`` in the ``server.conf`` file. Client version
->= 2.1.18 is required for accessing repositories that use RIPEMD-160.  Client
+>= 2.1.18 is required for accessing repositories that use RIPEMD-160. Client
 version >= 2.2 is required for accessing repositories that use SHAKE-128.
 
 Both compression and hash algorithm can be changed at any point during the
-repository life time.  Existing content will remain untouched, new content will
+repository lifetime. Existing content will remain untouched, new content will
 be processed with the new settings.
 
 
@@ -375,17 +368,20 @@ a file ``/foo/bar`` with content hash ``0x1234`` would be addressed as
    $HTTP_SERVER_URL/12/34      # as regular file
    $HTTP_EXTERNAL_URL/foo/bar  # as external file
 
-Note that the content hash of external files is still verified on download. Also
-note that CernVM-FS by itself does not know or store the location of external
-files but it must be explicitly set through the client configuration. On the
-clients, the ``CVMFS_EXTERNAL_URL``, ``CVMFS_EXTERNAL_HTTP_PROXY`` and the other
-"external" parameters are used to configure the external HTTP servers
-(see :ref:`appendix <apxsct_clientparameters>`).
+.. note::
+    The content hash of external files is still verified on download.
+
+.. note::
+    CernVM-FS by itself does not know or store the location of external files.
+    Instead, the location must be explicitly set through the client configuration.
+    On the clients, the ``CVMFS_EXTERNAL_URL``, ``CVMFS_EXTERNAL_HTTP_PROXY`` and the other
+    "external" parameters are used to configure the external HTTP servers
+    (see :ref:`appendix <apxsct_clientparameters>`).
 
 Files are marked as external data if the ``CVMFS_EXTERNAL_DATA`` server
 setting is enabled or if the ``cvmfs_server publish -X`` option is used.
 Conversely, if ``CVMFS_EXTERNAL_DATA`` is set and the
-``cvmfs_server publish -N`` option is used, this particular publish operation
+``cvmfs_server publish -N`` option is used, this particular publish-operation
 will treat its files exceptionally as non-external files.
 
 
@@ -393,23 +389,28 @@ Confidential Repositories
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Repositories can be created with the ``-V`` options or republished with the
-``-F`` option with a ``membership requirement``.  Clients that mount
+``-F`` option with a ``membership requirement``. Clients that mount
 repositories with a membership requirement will grant or deny access to the
-repository based on the decision made by an authorization helper.  See
+repository based on the decision made by an authorization helper. See
 Section :ref:`sct_authz` for details on authorization helpers.
 
 For instance, a repository can be configured to grant access to a repository
-only to those users that have a X.509 certificate with a certain DN.  Note that
-the corresponding client-side X.509 authorization helper is not part of
-CernVM-FS but is provided as a third-party plugin by the Open Science Grid.
+only to those users that have an X.509 certificate with a certain DN.
+
+.. note::
+    The corresponding client-side X.509 authorization helper is not part of
+    CernVM-FS but is provided as a third-party plugin by the Open Science Grid.
 
 A membership requirement makes most sense if the repository is served by an
-HTTPS server that requires client-side authentication.  Note that such
-repositories cannot be replicated to Stratum 1 servers.  Such repositories also
-cannot benefit from site proxies.  Instead, such repositories are either part
-of a (non CernVM-FS) HTTPS content distribution network or they might be
-installed for a small number of users that, for example, require access to
+HTTPS server that requires client-side authentication. Due to the access control,
+such repositories cannot be replicated to Stratum 1 servers, nor benefit from site proxies.
+They tend to be either part of a (non CernVM-FS) HTTPS content distribution network,
+or they might be installed for very few users that, for example, require access to
 licensed software.
+
+.. warning::
+    Confidential repositories cannot be replicated to Stratum 1 servers.
+    They also cannot benefit from site proxies.
 
 .. _sct_s3storagesetup:
 
@@ -429,7 +430,8 @@ The bucket needs to be public for reading and require authorization for writing:
       s3cmd mb s3://<BUCKET NAME>
       s3cmd --acl-public setacl s3://<BUCKET NAME>
 
-Note: if you use the Minio client, the ``download`` bucket policy won't work as a bucket policy.
+.. note::
+    If you use the Minio client, the ``download`` bucket policy won't work as a bucket policy.
 
 Once the bucket is available, the S3 storage settings are given as parameters to
 ``cvmfs_server mkfs`` or ``cvmfs_server add-replica``:
@@ -439,8 +441,8 @@ Once the bucket is available, the S3 storage settings are given as parameters to
       cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
         -w http://mybucket.s3.amazonaws.com my.repo.name
 
-The file "mys3.conf" contains the S3 settings (see :ref: `table below
-<tab_s3confparameters>`). The "-w" option is used define the S3 server URL,
+The file ``mys3.conf`` contains the S3 settings (see :ref: `table below
+<tab_s3confparameters>`). The ``-w`` option is used define the S3 server URL,
 e.g. http://localhost:3128, which is used for accessing the repository's
 backend storage on S3.
 
@@ -475,6 +477,10 @@ backend storage on S3.
                                                 HEAD request. Enabled by default.
 ``CVMFS_S3_USE_HTTPS``                          Allow to use S3 implementation over HTTPS
                                                 and not over HTTP
+``CVMFS_S3_X_AMZ_ACL``                          | Canned access control lists (ACLs). Allowed is one value of
+                                                | ``"public-read"`` (default), ``"public-write"``, ``"authenticated-read"``,
+                                                | ``"aws-exec-read"``, ``"bucket-owner-read"``, ``"bucket-owner-full-control"``,
+                                                | or ``""`` (for explanation see `Amazon ACL Overview <https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl>`_)
 =============================================== ===========================================
 
 
@@ -483,7 +489,7 @@ backend storage on S3.
 Repository Update
 ~~~~~~~~~~~~~~~~~
 
-Typically a repository publisher does the following steps in order to
+Typically, a repository publisher does the following steps in order to
 create a new revision of a repository:
 
 #. Run ``cvmfs_server transaction`` to switch to a copy-on-write enabled
@@ -507,7 +513,7 @@ In order to see the current set of staged changes, use the ``cvmfs_server diff -
 CernVM-FS supports having more than one repository on a single server
 machine. In case of a multi-repository host, the target repository of a
 command needs to be given as a parameter when running the
-``cvmfs_server`` utility.  Most
+``cvmfs_server`` utility. Most
 ``cvmfs_server`` commands allow for wildcards to do manipulations on
 more than one repository at once, ``cvmfs_server migrate *.cern.ch``
 would migrate all present repositories ending with ``.cern.ch``.
@@ -534,17 +540,18 @@ like
     cvmfs_info http://cvmfs-stratum-zero.cern.ch/cvmfs/cernvm-prod.cern.ch
 
 The ``cvmfs_info`` utility can be downloaded as a stand-alone Perl script
-from the linked github repository.
+from the linked GitHub repository.
 
-The ``cvmfs_info`` utility relies on the repository meta-data as described in
-Chapter :ref:`sct_metainfo`.  It shows timestamp and revision number of the
+The ``cvmfs_info`` utility relies on the repository metadata as described in
+Chapter :ref:`sct_metainfo`. It shows timestamp and revision number of the
 repository on the stratum 0 master server and all replicas, as well as the
-remaining life time of the repository whitelist and the catalog time-to-live.
+remaining lifetime of the repository whitelist and the catalog time-to-live.
 
-**Note:** The ``cvmfs_info`` utility queries stratum servers without passing
-through web proxies.  It is not meant to be used on a large-scale by all
-clients.  On clients, the extended attribute ``revision`` can be used to check
-for the currently active repository state, like
+.. note::
+    The ``cvmfs_info`` utility queries stratum servers without passing
+    through web proxies. It is not meant to be used on a large-scale by all
+    clients. On clients, the extended attribute ``revision`` can be used to check
+    for the currently active repository state, like
 
 ::
 
@@ -566,8 +573,10 @@ tarball at a given subdirectory:
 
 The optional ``--catalog`` switch of the ``ingest`` command is used to
 automatically create a nested file catalog at the base directory where the
-tarball is extracted (see :ref:`sct_nestedcatalogs`). Note that currently the
-:ref:`.cvmfsdirtab file <sct_dirtab>` does not apply to the ingest command.
+tarball is extracted (see :ref:`sct_nestedcatalogs`).
+
+.. warning::
+    Currently, the :ref:`.cvmfsdirtab file <sct_dirtab>` does not apply to the ``ingest`` command.
 
 The ``ingest`` command can also be used for the reverse operation of recursively
 removing a directory tree:
@@ -586,11 +595,11 @@ Grafting Files
 ~~~~~~~~~~~~~~
 
 When a repository is updated, new files are checksummed and copied / uploaded
-to a directory exported to the web.  There are situations where this is not
+to a directory exported to the web. There are situations where this is not
 optimal - particularly, when :doc:`"large-scale" repositories <cpt-large-scale>`
-are used, it may not be pragmatic to copy every file to a single host.  In these
+are used, it may not be pragmatic to copy every file to a single host. In these
 cases, it is possible to "graft" files by creating a special file containing the
-necessary publication data.  When a graft is encountered, the file is published
+necessary publication data. When a graft is encountered, the file is published
 as if it was present on the repository machine: the repository admin is responsible
 for making sure the file's data is distributed accordingly.
 
@@ -626,7 +635,7 @@ The ``graft`` command takes the following options:
   ``-a``      hash algorithm (default: ``SHA-1``) (optional)
 ============= ==================================================
 
-This command outputs both the ``.cvmfsgraft`` file and and zero-length "real" file if
+This command outputs both the ``.cvmfsgraft`` file and zero-length "real" file if
 ``-o`` is used; otherwise, it prints the contents of the ``.cvmfsgraft`` file to ``stdout``.
 A typical invocation would look like this::
 
@@ -645,9 +654,12 @@ Open a template transaction with the ``-T`` option like
 The command clones the existing directory /foo to /bar before the transaction becomes available to writing.
 This can be useful to publish a new directory tree that is almost identical to an existing one,
 for instance to publish a patch release.
-Cloning the existing directory tree is a fast, meta-data only operation.
-Note that template transactions should be used with care -- excessive use can quickly explode the repository size
-with negative consequences such as much increased garbage collection times.
+Cloning the existing directory tree is a fast, metadata only operation.
+
+.. warning::
+    Template transactions must be used with care.
+    Excessive use can quickly explode the repository size with negative consequences,
+    e.g. greatly increased garbage collection times.
 
 
 Variant Symlinks
@@ -660,7 +672,7 @@ default set of CAs at ``/cvmfs/oasis.opensciencegrid.org/mis/certificates``
 but would like to give the sysadmin the ability to override this with their
 own set of CA certificates.
 
-To setup a variant symlink in your repository, create a symlink as follows
+To set up a variant symlink in your repository, create a symlink as follows
 inside a repository transaction:
 
 ::
@@ -678,7 +690,7 @@ you can instead do:
 
 Here, the symlink will evaluate to ``/cvmfs/oasis.opensciencegrid.org/mis/certificates-real``
 by default unless the sysadmin sets ``OSG_CERTIFICATES`` in a configuration file (such as
-``/etc/cvmfs/config.d/oasis.opensciencegrid.org.local``.
+``/etc/cvmfs/config.d/oasis.opensciencegrid.org.local``).
 
 Repository Import
 ~~~~~~~~~~~~~~~~~
@@ -692,13 +704,13 @@ useful to bootstrap a release manager machine for a given file storage.
 creating a fresh (and empty) storage.
 
 During the import it might be necessary to resign the repository's whitelist.
-Usually because the whitelist's expiry date has exceeded. This operations
-requires the corresponding masterkey to be available in `/etc/cvmfs/keys`
+Usually because the whitelist's expiry date has exceeded. This operation
+requires the corresponding masterkey to be available in ``/etc/cvmfs/keys``
 or in a masterkeycard.
 Resigning is enabled by adding ``-r`` to ``cvmfs_server import``.
 
 An import can either use a provided repository keychain placed into
-`/etc/cvmfs/keys` or generate a fresh repository key and certificate for the
+``/etc/cvmfs/keys`` or generate a fresh repository key and certificate for the
 imported repository. The latter case requires an update of the repository's
 whitelist to incorporate the newly generated repository key. To generate a fresh
 repository key add ``-t -r`` to ``cvmfs_server import``.
@@ -773,16 +785,16 @@ Maintaining a CernVM-FS Repository
 ----------------------------------
 
 CernVM-FS is a versioning, snapshot-based file system. Similar to
-versioning systems, changes to /cvmfs/...are temporary until they are
+versioning systems, changes to ``/cvmfs/...`` are temporary until they are
 committed (``cvmfs_server publish``) or discarded
 (``cvmfs_server abort``). That allows you to test and verify changes,
 for instance to test a newly installed release before publishing it to
 clients. Whenever changes are published (committed), a new file system
 snapshot of the current state is created. These file system snapshots
 can be tagged with a name, which makes them *named snapshots*. A named
-snapshot is meant to stay in the file system. One can rollback to named
-snapshots and it is possible, on the client side, to mount any of the
-named snapshots in lieu of the newest available snapshot.
+snapshot is meant to stay in the file system. One can roll back the repository
+to a specific named snapshots. Furthermore, on the client side, any
+named snapshots can be mounted instead of the newest available snapshot.
 
 Two named snapshots are managed automatically by CernVM-FS, ``trunk``
 and ``trunk-previous``. This allows for easy unpublishing of a mistake,
@@ -814,7 +826,7 @@ lot of time::
 
 Optionally ``cvmfs_server check`` can also verify the data integrity
 (command line flag ``-i``) of each data object in the repository. This
-is a time consuming process and we recommend it only for diagnostic
+is a time-consuming process, and we recommend it only for diagnostic
 purposes.
 
 .. _sct_namedsnapshots:
@@ -822,7 +834,7 @@ purposes.
 Named Snapshots
 ~~~~~~~~~~~~~~~
 
-Named snapshots or *tags* are an easy way to organise checkpoints in the
+Named snapshots or *tags* are an easy way to organize checkpoints in the
 file system history. CernVM-FS clients can explicitly mount a repository
 at a specific named snapshot to expose the file system content published
 with this tag. It also allows for rollbacks to previously created and
@@ -851,12 +863,12 @@ By default, new repositories will automatically create a generic tag if
 no explicit tag is given during publish. The automatic tagging can be
 turned off using the ``-g`` option during repository creation or by setting
 ``CVMFS_AUTO_TAG=false`` in the
-/etc/cvmfs/repositories.d/$repository/server.conf file.
+``/etc/cvmfs/repositories.d/$repository/server.conf`` file.
 
-The life time of automatic tags can be restriced by the
+The lifetime of automatic tags can be restricted by the
 ``CVMFS_AUTO_TAG_TIMESPAN`` parameter or by the ``-G`` option to
-``cvmfs_server mkfs``.  The parameter takes a string that the ``date`` utility
-can parse, for instance ``"4 weeks ago"``.  On every publish, automatically
+``cvmfs_server mkfs``. The parameter takes a string that the ``date`` utility
+can parse, for instance ``"4 weeks ago"``. On every publish, automatically
 generated tags older than the defined threshold are removed.
 
 Creating a Named Snapshot
@@ -881,8 +893,8 @@ command. Without any command line parameters, it will print all
 currently available named snapshots. Snapshots can be inspected
 (``-i <tag name>``), removed (``-r <tag name>``) or created
 (``-a <tag name> -m <tag description> -h <catalog root hash>``).
-Furthermore machine readable modes for both listing (``-l -x``) as well
-as inspection (``-i <tag name> -x``) is available.
+Furthermore, machine-readable modes for both listing (``-l -x``) and
+inspection (``-i <tag name> -x``) are available.
 
 Rollbacks
 ^^^^^^^^^
@@ -906,8 +918,9 @@ Unless named snapshots are provided by the ``-s`` and ``-d`` flags, the command
 shows the difference from the last snapshot ("trunk-previous") to the current
 one ("trunk").
 
-Note that the command ``cvmfs_server diff`` shows the changes of the currently
-active transaction.
+.. note::
+    The command ``cvmfs_server diff`` shows the changes of the currently
+    active transaction.
 
 
 .. _sct_instantsnapshotaccess:
@@ -929,7 +942,7 @@ contains the contents of the repository in the state referenced by the snapshot.
 
 To prevent accidental recursion, the top-level directory ``.cvmfs`` is hidden by
 CernVM-FS clients >= 2.4 even for operations that show dot-files like ``ls -a``.
-Clients before version 2.4 will show the ``.cvmfs`` directory but they cannot
+Clients before version 2.4 will show the ``.cvmfs`` directory, but they cannot
 recurse into the named snapshot directories.
 
 
@@ -964,18 +977,19 @@ named snapshot "data-v201708-fix01" in the branch "fixes_data-v201708".
 When publishing a checked out state, it is mandatory to specify a tag name.
 Later, it might be necessary to publish another set of fixes in the same branch.
 To do so, the command ``cvmfs_server checkout -b fixes_data-v201708``
-checks out the latest named snapshot from the given branch.  The command
+checks out the latest named snapshot from the given branch. The command
 ``cvmfs_server checkout`` jumps back to the trunk of the repository.
 
 The command ``cvmfs_server tag -b`` displays the tree of branches and their
-respective initial revisions.  The ``-x`` switch triggers displaying of the tree
+respective initial revisions. The ``-x`` switch triggers displaying of the tree
 in a machines-readable format.
 
 Branching makes most sense for repositories that use the instant snapshot
 access (see Section :ref:`sct_branching`).
 
-Please note that while CernVM-FS supports branching, it does not support
-merging of repository snapshots.
+.. warning::
+    While CernVM-FS supports branching, it does not support merging of
+    repository snapshots.
 
 
 
@@ -984,12 +998,12 @@ merging of repository snapshots.
 Managing Nested Catalogs
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-CernVM-FS stores meta-data (path names, file sizes, ...) in file catalogs.
+CernVM-FS stores metadata (path names, file sizes, ...) in file catalogs.
 When a client accesses a repository, it has to download the file catalog
-first and then it downloads the files as they are opened. A single file
-catalog for an entire repository can quickly become large and
-impractical. Also, clients typically do not need all of the repository's
-meta-data at the same time. For instance, clients using software release
+first, and then it downloads on-demand the files as they are opened. A single
+file catalog for an entire repository can quickly become large and
+impractical. Also, clients typically do not need all the repository's
+metadata at the same time. For instance, clients using software release
 1.0 do not need to know about the contents of software release 2.0.
 
 With nested catalogs, CernVM-FS has a mechanism to partition the
@@ -1058,7 +1072,7 @@ included in other catalogs.
 It could also make sense to have a nested catalog under
 grid-certificates, if the certificates are updated much more frequently
 than the other directories. It would not make sense to create a nested
-catalog under /cvmfs/experiment.cern.ch/software/i686/common, because
+catalog under ``/cvmfs/experiment.cern.ch/software/i686/common``, because
 this directory needs to be accessed anyway whenever its parent directory
 is needed. As a rule of thumb, a single file catalog should contain more
 than 1000 files and directories but not contain more than
@@ -1113,9 +1127,10 @@ This will create nested catalogs at
     /cvmfs/experiment.cern.ch/software/x86_64/1.0
     /cvmfs/experiment.cern.ch/grid-certificates
 
-Note that unlike the regular lines that add catalogs, asterisks in the
-exclamation point exclusion lines can span the slashes separating
-directory levels.
+.. note::
+    Unlike the regular lines that add catalogs, asterisks in the
+    exclamation point exclusion lines can span the slashes separating
+    directory levels.
 
 Automatic Management of Nested Catalogs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1130,8 +1145,8 @@ threshold, or removed if their weight is less than a minimum threshold.
 Automatically generated catalogs contain a ``.cvmfsautocatalog`` file
 (along with the ``.cvmfscatalog`` file) in its root directory.
 User-defined catalogs (containing only a ``.cvmfscatalog`` file) always
-remain untouched. Hence one can mix both manual and automatically
-managed directory sub-trees.
+remain untouched. Hence, one can mix both manual and automatically
+managed directory subtrees.
 
 The following conditions are applied when processing a nested catalog:
 
@@ -1163,7 +1178,7 @@ stated :ref:`here <sct_nestedrecommendations>` the recommended
 maximal file entry count of a single catalog should not exceed
 :math:`\approx`\ 200000. One can use the switch ``list-catalogs -e`` to
 inspect the current nested catalog entry counts in the repository.
-Furthermore ``list-catalogs -s`` will print the file sizes of the
+Furthermore, ``list-catalogs -s`` will print the file sizes of the
 catalogs in bytes.
 
 Repository Mount Point Management
@@ -1181,10 +1196,10 @@ manager machine anymore. Usually the mount point handling happens
 automatically and transparently to the user when invoking arbitrary
 ``cvmfs_server`` commands.
 
-Nevertheless ``cvmfs_server mount <repo name>`` allows users to explicitly
+Nevertheless, ``cvmfs_server mount <repo name>`` allows users to explicitly
 trigger this repair operation anytime for individual repositories. Mounting
 all hosted repositories is possible with the ``-a`` parameter but requires
-root privileges.  If you want to have all hosted repositories mounted after
+root privileges. If you want to have all hosted repositories mounted after
 reboot then put ``cvmfs_server mount -a`` in a boot script, for example in
 ``/etc/rc.local``.
 
@@ -1200,7 +1215,7 @@ Syncing files into a repository with cvmfs_rsync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A common method of publishing into CernVM-FS is to first install all the
-files into a convenient shared filesystem, mount the shared filesystem
+files into a convenient shared file system, mount the shared file system
 on the publishing machine, and then sync the files into the repository
 during a transaction. The most common tool to do the syncing is
 ``rsync``, but ``rsync`` by itself doesn't have a convenient mechanism
@@ -1244,9 +1259,11 @@ In order to run a file catalog migration use ``cvmfs_server migrate``
 for each of the outdated repositories. This will essentially create a
 new repository revision that contains the exact same file structure as
 the current revision. However, all file catalogs will be recreated from
-scratch using the updated internal structure. Note that historic file
-catalogs of all previous repository revisions stay untouched and are not
-migrated.
+scratch using the updated internal structure.
+
+.. note::
+    Historic file catalogs of all previous repository revisions stay untouched
+    and are not migrated!
 
 After ``cvmfs_server migrate`` has successfully updated all file
 catalogs repository maintenance can continue as usual.
@@ -1269,7 +1286,7 @@ a tool to quickly do such adaption on :ref:`CernVM-FS catalog level
   cvmfs_server catalog-chown -u <uid map> -g <gid map> <repo name>
 
 Both the UID and GID map contain a list of rules to apply to each file
-meta data record in the CernVM-FS catalogs. This is an example of such
+metadata record in the CernVM-FS catalogs. This is an example of such
 a rules list::
 
   # map root UID/GID to 1001
@@ -1282,10 +1299,11 @@ a rules list::
   # map everything else to 1004
   * 1004
 
-Note that running ``cvmfs_server catalog-chown`` produces a new repository
-revision containing :ref:`CernVM-FS catalogs <sct_filecatalog>` with updated
-UIDs and GIDs according to the provided rules. Thus, previous revisions of
-the CernVM-FS repository will *not* be affected by this update.
+.. note::
+    Running ``cvmfs_server catalog-chown`` produces a new repository
+    revision containing :ref:`CernVM-FS catalogs <sct_filecatalog>` with updated
+    UIDs and GIDs according to the provided rules. Thus, previous revisions of
+    the CernVM-FS repository will *not* be affected by this update.
 
 .. _sct_repo_stats:
 
@@ -1359,14 +1377,14 @@ Repository Garbage Collection
 Since CernVM-FS is a versioning file system it is following an
 insert-only policy regarding its backend storage. When files are deleted
 from a CernVM-FS repository, they are not automatically deleted from the
-underlying storage. Therefore legacy revisions stay intact and usable
+underlying storage. Therefore, legacy revisions stay intact and usable
 forever (cf. :ref:`sct_namedsnapshots`) at the expense of an
 ever-growing storage volume both on the Stratum 0 and the Stratum 1s.
 
 For this reason, applications that frequently install files into a
 repository and delete older ones - for example the output from nightly
 software builds - might quickly fill up the repository's backend
-storage. Furthermore these applications might actually never make use of
+storage. Furthermore, these applications might actually never make use of
 the aforementioned long-term revision preservation rendering most of the
 stored objects "garbage".
 
@@ -1384,10 +1402,10 @@ The garbage collector of CernVM-FS is using a mark-and-sweep algorithm
 to detect unused files in the internal catalog graph. Revisions that are
 referenced by named snapshots (cf. :ref:`sct_namedsnapshots`) or that
 are recent enough are preserved while all other revisions are condemned
-to be removed. By default this time-based threshold is *three days* but
-can be changed using the configuration variable
+to be removed. The default value of this time-based threshold is *three days*
+but can be changed using the configuration variable
 ``CVMFS_AUTO_GC_TIMESPAN`` both on Stratum 0 and Stratum 1. The value of
-this variable is expected to be parseable by the ``date`` command, for
+this variable is expected to be parsable by the ``date`` command, for
 example ``3 days ago`` or ``1 week ago``.
 
 Enabling Garbage Collection
@@ -1409,11 +1427,11 @@ Enabling Garbage Collection on an Existing Repository (Stratum 0)
 Existing repositories can be reconfigured to be garbage collectable by
 adding
 ``CVMFS_GARBAGE_COLLECTION=true`` and ``CVMFS_AUTO_GC=true`` to the
-``server.conf`` of the repository. Furthermore it is recommended to
+``server.conf`` of the repository. Furthermore, it is recommended to
 switch off automatic tagging by setting ``CVMFS_AUTO_TAG=false`` for a
 garbage collectable repository. The garbage collection will be enabled
 with the next published transaction and will run every once in a while after a
-publish operation.  Alternatively, ``CVMFS_AUTO_GC=false`` may be set and
+publish operation. Alternatively, ``CVMFS_AUTO_GC=false`` may be set and
 ``cvmfs_server gc`` run from cron at a time when no publish
 operations will be happening; garbage collection and publish
 operations cannot happen at the same time.
@@ -1423,8 +1441,8 @@ Enabling Garbage Collection on an Existing Replication (Stratum 1)
 
 In order to use automatic garbage collection on a stratum 1 replica,
 set ``CVMFS_AUTO_GC=true`` in the ``server.conf`` file of the stratum
-1 installation.  This will run the garbage collection every once in a while
-after a snapshot.  It will only work if the upstream stratum 0 repository has
+1 installation. This will run the garbage collection every once in a while
+after a snapshot. It will only work if the upstream stratum 0 repository has
 garbage collection enabled.
 
 Alternatively, all garbage collectable repositories can be automatically
@@ -1435,17 +1453,17 @@ Frequency of the Automatic Garbage Collection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If ``CVMFS_AUTO_GC=true`` is set, the parameter ``CVMFS_AUTO_GC_LAPSE`` controls
-how frequently automatic garbage collection is executed.  By default,
-``CVMFS_AUTO_GC_LAPSE`` is set to ``1 day ago``.  If, on publish or snapshot,
-the last manual or automatic garbage collection is farther in the past then the
-given threshold, garbage collection will run.  Otherwise it is skipped.
+how frequently automatic garbage collection is executed. By default,
+``CVMFS_AUTO_GC_LAPSE`` is set to ``1 day ago``. If, on publish or snapshot,
+the last manual or automatic garbage collection is farther in the past than the
+given threshold, garbage collection will run. Otherwise, it is skipped.
 
 
 Limitations on Repository Content
 ---------------------------------
 
-Because CernVM-FS provides what appears to be a POSIX filesystem to
-clients, it is easy to think that it is a general purpose filesystem and
+Because CernVM-FS provides what appears to be a POSIX file system to
+clients, it is easy to think that it is a general purpose file system and
 that it will work well with all kinds of files. That is not the case,
 however, because CernVM-FS is optimized for particular types of files
 and usage. This section contains guidelines for limitations on the
@@ -1455,7 +1473,7 @@ Data files
 ~~~~~~~~~~
 
 First and foremost, CernVM-FS is designed to distribute executable code
-that is shared between a large number of jobs that run together at grid
+that is shared between thousands of jobs that run together at grid
 sites, clouds, or clusters. Worker node cache sizes and web proxy
 bandwidth are generally engineered to accommodate that application. The
 total amount read per job is expected to be roughly limited by the
@@ -1469,7 +1487,7 @@ work fine. In addition, if there are files that are larger but read
 slowly throughout long jobs, as opposed to all at once at the beginning,
 that can also work well if the same files are read by many jobs. That is
 because web proxies have to be engineered for handling bursts at the
-beginning of jobs and so they tend to be lightly loaded a majority of
+beginning of jobs, and so they tend to be lightly loaded a majority of
 the time.
 
 As a general rule of thumb, calculate the maximum rate at
@@ -1484,7 +1502,7 @@ disks if the data causes their cache hit ratios to be reduced.
 
 If you need to publish files with much larger working set sizes than
 a typical software environment, refer to :doc:`large-scale repositories <cpt-large-scale>`
-and :doc:`alien caches <cpt-configure.html#alien-cache>`. Using an alien
+and :ref:`alien cache <alien cache>`. Using an alien
 cache is a good way to distribute large data sets when multiple users on the cluster
 are accessing the same data files.
 
@@ -1506,12 +1524,13 @@ Tarballs, zip files, and other archive files
 If the contents of a tarball, zip file, or some other type of archive
 file is desired to be distributed by CernVM-FS, it is usually better to
 first unpack it into its separate pieces first. This is because it
-allows better sharing of content between multiple releases of the file;
-some pieces inside the archive file might change and other pieces might
-not in the next release, and pieces that don't change will be stored as
-the same file in the repository. CernVM-FS will compress the content of
-the individual pieces, so even if there's no sharing between releases it
-shouldn't take much more space.
+allows better sharing of content between multiple releases of the file.
+In most cases, a new release will not change all files within an archive.
+Files that have not changed between releases will just be stored as a single
+file in the CernVM-FS repository with the different releases referencing it.
+As such, only the *delta* between releases is saved. Furthermore, CernVM-FS
+will compress the content of the individual pieces, so even if there is no
+sharing between releases it should not take much more space.
 
 File permissions
 ~~~~~~~~~~~~~~~~
@@ -1520,7 +1539,7 @@ Care should be taken to make all the files in a repository readable by
 "other". This is because permissions on files in the original repository
 are generally the same as those seen by end clients, except the files
 are owned by the "cvmfs" user and group. The write permissions are
-ignored by the client since it is a read-only filesystem. However,
+ignored by the client since it is a read-only file system. However,
 unless the client has set
 
 ::
@@ -1534,17 +1553,17 @@ files in CernVM-FS if they won't be able to be read by anyone.
 
 .. _sct_limit_hardlink:
 
-Hardlinks
-~~~~~~~~~
+Hard Links
+~~~~~~~~~~
 
-CernVM-FS breaks hardlinks on publishing into multiple, independent regular files.
+CernVM-FS breaks hard links on publishing into multiple, independent regular files.
 
 
 Configuration Recommendation by Use Case
 ----------------------------------------
 
 The default configuration of a fresh CernVM-FS repository are tuned for
-production software repositories and maximum compatibility and safety.  For
+production software repositories and maximum compatibility and safety. For
 other typical use cases, the configuration should be adapted.
 
 General Recommendations
@@ -1563,7 +1582,7 @@ and uses the more future-proof SHA-3 derived content hash algorithm.
 Multi-Tenant Repositories
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For repositories that are edited by several, possibly unexperienced users, we
+For repositories that are edited by several, possibly inexperienced users, we
 suggest the following configuration settings::
 
     CVMFS_AUTOCATALOGS=true
@@ -1580,7 +1599,7 @@ Repositories for Software "Nightly Builds"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Repositories containing the result of "nightly builds" are usually subject to a
-lot of churn and accumulate unreferenced objects quickly.  We recommend to
+lot of churn and accumulate unreferenced objects quickly. We recommend to
 set ::
 
     CVMFS_AUTO_TAG=false
@@ -1588,8 +1607,8 @@ set ::
     CVMFS_AUTO_GC=true
 
 in order to activate garbage collection and to turn off CernVM-FS' versioning
-(provided that the content on such repositories is ephemeral).  Instead of
-autmatic garbage collection, one can also install a regular cron job running
+(provided that the content on such repositories is ephemeral). Instead of
+automatic garbage collection, one can also install a regular cron job running
 ``cvmfs_server gc -af``, or the nightly build script should be updated to invoke
 ``cvmfs_server gc <repo name>``.
 
@@ -1612,7 +1631,7 @@ Repositories for Container Images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Repositories containing Linux container image contents (that is: container root
-file systems) should use overlayfs as a union file system and have the following
+file systems) should use OverlayFS as a union file system and have the following
 configuration::
 
     CVMFS_INCLUDE_XATTRS=true

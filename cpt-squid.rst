@@ -23,19 +23,19 @@ two servers are A and B, set
 Squid is very powerful and has lots of configuration and tuning
 options. For CernVM-FS we require only the very basic static content
 caching. If you already have a
-`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`_
-installed you can use it as well for CernVM-FS.
+`Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid>`__
+[Dykstra10]_ installed you can use it as well for CernVM-FS.
 
 One option that is particularly important when there are a lot of worker
 nodes and jobs that start close together is the `collapsed_forwarding`
-option.  This combines multiple simultaneous requests for the same
-object into a single request to a Stratum 1 server.  This did not work
+option. This combines multiple simultaneous requests for the same
+object into a single request to a Stratum 1 server. This did not work
 properly on squid versions prior to 3.5.28, which includes the default
-squid on EL7.  This also works properly in Frontier Squid.
+squid on EL7. This also works properly in Frontier Squid.
 
 In any case, cache sizes and access control needs to be configured in
 order to use the Squid server with CernVM-FS. In order to do so, browse
-through your /etc/squid/squid.conf and make sure the following lines
+through your ``/etc/squid/squid.conf`` and make sure the following lines
 appear accordingly:
 
 ::
@@ -50,8 +50,8 @@ appear accordingly:
       cache_dir ufs /var/spool/squid 50000 16 256
 
 Furthermore, Squid needs to allow access to all Stratum 1 servers. This
-is controlled through Squid ACLs.  Most sites allow all of their IP
-addresses to connect to any destination address.  By default squid
+is controlled through Squid ACLs. Most sites allow all of their IP
+addresses to connect to any destination address. By default, squid
 allows that for the standard private IP addresses, but if you're not
 using a private network then add your public address ranges, with
 something like this:

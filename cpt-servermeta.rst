@@ -8,7 +8,7 @@ meta information as JSON data. Release manager machines keep a list of hosted
 Stratum0 and Stratum1 repositories and user-defined administrative meta
 information.
 
-Furthermore each repository contains user-maintained signed meta-information
+Furthermore, each repository contains user-maintained signed meta-information
 that gets replicated to Stratum1 servers automatically.
 
 .. _sct_globalmetainfo:
@@ -22,18 +22,19 @@ automatically generated and can be accessed here::
 
   http://<server base URL>/cvmfs/info/v1/repositories.json
 
-Furthermore there might be user-defined information like the administrator's
+Furthermore, there might be user-defined information like the administrator's
 name, contact information and an arbitrary user-defined JSON portion here::
 
   http://<server base URL>/cvmfs/info/v1/meta.json
 
-Using the  ``cvmfs_server`` utility, an administrator can edit the user-defined
-portion of the data with a text editor (cf. ``$EDITOR``)s::
+Using the ``cvmfs_server`` utility, an administrator can edit the user-defined
+portion of the data with a text editor (cf. ``$EDITOR``)::
 
   cvmfs_server update-info
 
-Note that the ``cvmfs_server`` package requires the ``jq`` utility, which validates
-CVMFS JSON data.
+.. note::
+  The ``cvmfs_server`` package requires the ``jq`` utility, which validates
+  CVMFS JSON data.
 
 Below are :ref:`examples <sct_jsonexamples>` of both the repository list and
 user-defined JSON files.
@@ -41,11 +42,11 @@ user-defined JSON files.
 Repository Specific Meta Information
 ------------------------------------
 
-Each repository contains a JSON object with repository-specific meta data. The
+Each repository contains a JSON object with repository-specific metadata. The
 information is maintained by the repository's owner on the Stratum0 release
 manager machine. It contains the maintainer's contact information, a description
 of the repository's content, the recommended Stratum 0 URL and a list of
-recommended Stratum 1 replica URLs. Furthermore it provides a custom JSON region
+recommended Stratum 1 replica URLs. Furthermore, it provides a custom JSON region
 for arbitrary information.
 
 Note that this JSON file is stored inside CernVM-FS's backend data structure and

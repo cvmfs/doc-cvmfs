@@ -5,12 +5,12 @@ Container Images and CernVM-FS
 
 CernVM-FS interacts with container technologies in two main ways:
 
-1. CernVM-FS application repositories (e.g. /cvmfs/atlas.cern.ch) can be mounted into a stock container (e.g. CentOS 8)
-2. The container root filesystem (e.g. the root file system "/" of CentOS 8) itself can be served directly from CernVM-FS
+1. CernVM-FS application repositories (e.g. ``/cvmfs/atlas.cern.ch``) can be mounted into a stock container (e.g. CentOS 8)
+2. The container root file system (e.g. the root file system ``/`` of CentOS 8) itself can be served directly from CernVM-FS
 
 Both ways have a similar goal, that is to give users access to a reproducible,
 ready-to-use environment while retaining the advantages of CernVM-FS regarding
-data distribution, content de-duplication, software preservation and ease of
+data distribution, content deduplication, software preservation and ease of
 operations.
 
 Mounting ``/cvmfs`` inside a container
@@ -78,7 +78,7 @@ A similar approach is possible with apptainer, but the syntax is a little differ
 
 
 Also in apptainer it is possible to use the syntax
-``host_directory:container_directory`` and it is possible to mount multiple
+``host_directory:container_directory``, and it is possible to mount multiple
 paths at the same time separating the ``--bind`` arguments with a comma.
 
 ::
@@ -90,8 +90,8 @@ paths at the same time separating the ``--bind`` arguments with a comma.
     drwxrwxr-x  4      125      130    6 Nov 16  2010 lhcb.cern.ch/
 
 
-For Kubernetes, the approach is more heterogeneous and it depends on the cluster settings.
-A recommended approach is creating a DaemonSet so that on every node one pod exposes /cvmfs to other pods.
+For Kubernetes, the approach is more heterogeneous, and it depends on the cluster settings.
+A recommended approach is creating a DaemonSet so that on every node one pod exposes ``/cvmfs`` to other pods.
 This pod may use the cvmfs service container.
 
 Alternatively, a `CSI-plugin <https://clouddocs.web.cern.ch/containers/tutorials/cvmfs.html#kubernetes>`_
@@ -103,7 +103,7 @@ Distributing container images on CernVM-FS
 ------------------------------------------
 
 Image distribution on CernVM-FS works with *unpacked* layers or image root
-file systems.  Any CernVM-FS repository can store container images.
+file systems. Any CernVM-FS repository can store container images.
 
 A number of images are already provided in ``/cvmfs/unpacked.cern.ch``, a
 repository managed at CERN to host container images for various purposes and
@@ -113,9 +113,9 @@ publish images from registries on CernVM-FS.
 Every container image is stored in two forms on CernVM-FS
 
 1. All the unpacked layers of the image
-2. The whole unpacked root filesystem of the image
+2. The whole unpacked root file system of the image
 
-With the whole filesystem root directory in /cvmfs, ``apptainer`` can directly start a container.
+With the whole file system root directory in ``/cvmfs``, ``apptainer`` can directly start a container.
 
 ::
 
@@ -123,7 +123,7 @@ With the whole filesystem root directory in /cvmfs, ``apptainer`` can directly s
 
 The layers can be used, e.g., with containerd and the CernVM-FS snapshotter.
 In addition, the container tools create the *chains* of an image.
-Chains are partial root filesystem directores where layers are applied one after another.
+Chains are partial root file system directories where layers are applied one after another.
 This is used internally to incrementally publish image updates if only a subset of layers changed.
 
 Using unpacked.cern.ch
@@ -131,7 +131,7 @@ Using unpacked.cern.ch
 
 The ``unpacked.cern.ch`` repository provides a centrally managed container
 image hub without burdening users with managing their CernVM-FS repositories
-or conversion of images.  It also enables saving storage space because
+or conversion of images. It also enables saving storage space because
 of cvmfs deduplication of files that are common between different images.
 The repository is publicly available.
 
@@ -142,7 +142,7 @@ of the following two files, the so-called *wishlists*.
 2. https://github.com/cvmfs/images-unpacked.cern.ch/blob/master/recipe.yaml
 
 The first file is accessible from CERN infrastructure, while the second is on
-Github open to everybody.
+GitHub open to everybody.
 
 A simple pull request against one of those files is sufficient, the image is
 vetted, and the pull request merged. Soon after the pull request is merged DUCC
@@ -211,9 +211,9 @@ As soon as a new or modified container image is detected it starts the conversio
 
 CernVM-FS integration with ``containerd`` is achieved by the cvmfs snapshotter plugin,
 a specialized component responsible for assembling all the layers of container
-images into a stacked filesystem that ``containerd`` can use.
+images into a stacked file system that ``containerd`` can use.
 The snapshotter takes as input the list of required layers and outputs a directory
-containing the final filesystem. It is also responsible to clean-up the output
+containing the final file system. It is also responsible to clean up the output
 directory when containers using it are stopped.
 
 How to use the CernVM-FS Snapshotter
@@ -225,7 +225,7 @@ The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
 This socket is created automatically by the snapshotter if it does not exist.
 
 The containerd snapshotter is available from http://ecsft.cern.ch/dist/cvmfs/snapshotter/.
-Packages will be made available in future.
+Packages will be made available in the future.
 
 The binary accepts the following command line options:
 
@@ -265,9 +265,9 @@ Note that if only the repository is specified under the key value ``repository``
 ``podman`` integration (pre-production)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to use images from unpacked.cern.ch with podman,
-the podman client needs to point to an *image store* that references the images on /cvmfs.
-The image store is a directory is a directory with a a certain file structure
+In order to use images from ``unpacked.cern.ch`` with podman,
+the podman client needs to point to an *image store* that references the images on ``/cvmfs``.
+The image store is a directory is a directory with a certain file structure
 that provides an index of images and layers.
 The CernVM-FS container tools by default create a podman image store for published images.
 
@@ -288,7 +288,8 @@ In order to set the image store, edit ``/etc/containers/storage.conf`` or ``${HO
 
 The configuration can be checked with the ``podman images`` command.
 
-**Note:** the image store in the unpacked.cern.ch repository currently provides access only to test images.
-This is due to poor performance in the image conversion when the image store is updated.
-This will be fixed in a future version.
+.. note::
+    The image store in the ``unpacked.cern.ch`` repository currently provides access only to test images.
+    This is due to poor performance in the image conversion when the image store is updated.
+    This will be fixed in a future version.
 

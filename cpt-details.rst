@@ -21,7 +21,7 @@ File Catalog
 ------------
 
 A CernVM-FS repository is defined by its *file catalog*. The file
-catalog is an `SQLite database <https://www.sqlite.org>`_ [Allen10]_
+catalog is a `SQLite database <https://www.sqlite.org>`_ [Allen10]_
 having a single table that lists files and directories together with
 its metadata. The table layout is shown in the table below:
 
@@ -45,24 +45,24 @@ gid                     Integer
 xattr                   BLOB
 ====================== ================
 
-In order to save space we do not store absolute paths. Instead we
+In order to save space we do not store absolute paths. Instead, we
 store MD5 [Rivest92]_, [Turner11]_ hash values of the absolute path
 names. Symbolic links are kept in the catalog. Symbolic links may
 contain environment variables in the form ``$(VAR_NAME)`` or
 ``$(VAR_NAME:-/default/path)`` that will be dynamically resolved by
-CernVM-FS on access. Hardlinks are emulated by CernVM-FS. The hardlink
-count is stored in the lower 32 bits of the hardlinks field, and a *hardlink
-group* is stored in the higher 32 bits. If the hardlink group is
-greater than zero, all files with the same hardlink group will get the
-same inode issued by the CernVM-FS Fuse client. The emulated hardlinks
+CernVM-FS on access. Hard links are emulated by CernVM-FS. The hard link
+count is stored in the lower 32 bits of the hard links field, and a *hard link
+group* is stored in the higher 32 bits. If the hard link group is
+greater than zero, all files with the same hard link group will get the
+same inode issued by the CernVM-FS Fuse client. The emulated hard links
 work within the same directory, only. The cryptographic content hash
 refers to the zlib-compressed [Deutsch96]_ version of the file. Flags
-indicate the type of an directory entry (see table :ref:`below
+indicate the type of directory entry (see table :ref:`below
 <tab_dirent_flags>`).
 
-Extended attributes are either NULL or stored as a BLOB of key-value pairs.  It
+Extended attributes are either NULL or stored as a BLOB of key-value pairs. It
 starts with 8 bytes for the data structure's version (currently 1) followed by
-8 bytes for the number of extended attributes.  This is followed by the list of
+8 bytes for the number of extended attributes. This is followed by the list of
 pairs, which start with two 8 byte values for the length of the key/value
 followed by the concatenated strings of the key and the value.
 
@@ -80,7 +80,7 @@ followed by the concatenated strings of the key and the value.
 ============ ====================================
 
 As of bit 8, the flags store the cryptographic content hash
-algorithm used to process the given file.  Bit 11 is 1 if the file is
+algorithm used to process the given file. Bit 11 is 1 if the file is
 stored uncompressed.
 
 A file catalog contains a *time to live* (TTL), stored in seconds. The
@@ -89,7 +89,7 @@ when expired. Checking for a new catalog version takes place with the
 first file system operation on a CernVM-FS volume after the TTL has
 expired. The default TTL is 4 minutes. If a new catalog is available,
 CernVM-FS delays the loading for the period of the CernVM-FS kernel
-cache life time (default: 1 minute). During this drain-out period, the
+cache lifetime (default: 1 minute). During this drain-out period, the
 kernel caching is turned off. The first file system operation on a
 CernVM-FS volume after that additional delay will apply a new file
 catalog and kernel caching is turned back on.
@@ -148,13 +148,13 @@ A CernVM-FS file catalog maintains several counters about its contents
 and the contents of all of its nested catalogs. The idea is that the
 catalogs know how many entries there are in their sub catalogs even
 without opening them. This way, one can immediately tell how many
-entries, for instance, the entire ATLAS repository has. Some of the
+entries, for instance, the entire ATLAS repository has. Some
 numbers are shown using the number of inodes in ``statvfs``. So
 ``df -i`` shows the overall number of entries in the repository and (as
 number of used inodes) the number of entries of currently loaded
 catalogs. Nested catalogs create an additional entry (the transition
 directory is stored in both the parent and the child catalog). File
-hardlinks are still individual entries (inodes) in the cvmfs catalogs.
+hard links are still individual entries (inodes) in the cvmfs catalogs.
 The following counters are maintained for both a catalog itself and for
 the subtree this catalog is root of:
 
@@ -184,7 +184,7 @@ serves as entry point into the repository's catalog structure. The
 repository manifest is the first file accessed by the CernVM-FS client
 at mount time and therefore must be accessible via HTTP on the
 repository root URL. It is always called **.cvmfspublished** and
-contains fundamental repository meta data like the root catalog's
+contains fundamental repository metadata like the root catalog's
 cryptographic hash and the repository revision number as a key-value
 list.
 
@@ -194,7 +194,7 @@ Internal Manifest Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Below is an example of a typical manifest file. Each line starts with a
-capital letter specifying the meta data field, followed by the actual data
+capital letter specifying the metadata field, followed by the actual data
 string. The list of meta information is ended by a separator line (``--``)
 followed by signature information further described :ref:`here
 <sct_cvmfspublished_signature>`.
@@ -215,14 +215,14 @@ followed by signature information further described :ref:`here
 
 Please refer to
 table below for detailed information about each of the
-meta data fields.
+metadata fields.
 
 .. |br| raw:: html
 
    <br />
 
 +-----------+-------------------------------------------------------------+
-| **Field** | **Meta Data Description**                                   |
+| **Field** | **Metadata Description**                                    |
 +-----------+-------------------------------------------------------------+
 | ``C``     | Cryptographic hash of the repository's current root catalog |
 +-----------+-------------------------------------------------------------+
@@ -284,7 +284,7 @@ of the repository.
 The top level hash used for the repository signature can be found in the
 repository manifest right below the separator line (``--`` /
 :ref:`see above <sct_manifeststructure>`).
-It is the cryptographic hash of the manifest's meta data lines excluding
+It is the cryptographic hash of the manifest's metadata lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
 
@@ -308,7 +308,7 @@ Blacklisting
 ^^^^^^^^^^^^
 
 In addition to validating the white-list, CernVM-FS checks certificate
-fingerprints against the local black-list /etc/cvmfs/blacklist and the
+fingerprints against the local black-list ``/etc/cvmfs/blacklist`` and the
 blacklist in an optional :ref:`"Config Repository" <sct_config_repository>`.
 The blacklisted fingerprints have to be in the same format as the
 fingerprints on the white-list. The black-list has precedence over the
@@ -318,10 +318,10 @@ Blacklisted fingerprints prevent clients from loading future
 repository publications by a corresponding compromised repository key,
 but they do not prevent mounting a repository revision that had
 previously been mounted on a client, because the catalog for that
-revision is already in the cache.  However, the same blacklist files
+revision is already in the cache. However, the same blacklist files
 also support another format that actively blocks revisions associated
 with a compromised repository key from being mounted and even forces
-them to be unmounted if they are mounted.  The format for that is a
+them to be unmounted if they are mounted. The format for that is a
 less-than sign followed by the repository name followed by a blank and
 a repository revision number:
 
@@ -330,7 +330,7 @@ a repository revision number:
         <repository.name NNN
 
 This will prevent all revisions of a repository called repository.name
-less than the number NNN from being mounted or staying mounted.  An
+less than the number NNN from being mounted or staying mounted. An
 effective protection against a compromised repository key will use
 both this format to prevent mounts and the fingerprint format to
 prevent accepting future untrustworthy publications signed by the
@@ -344,7 +344,7 @@ the performance and usability of CernVM-FS. If possible, CernVM-FS tries
 to benefit from the HTTP/1.1 features keep-alive and cache-control.
 Internally, CernVM-FS uses the `libcurl library <http://curl.haxx.se/libcurl>`_.
 
-The HTTP behaviour affects a system with cold caches only. As soon as
+The HTTP behavior affects a system with cold caches only. As soon as
 all necessary files are cached, there is only network traffic when a
 catalog TTL expires. The CernVM-FS download manager runs as a separate
 thread that handles download requests asynchronously in parallel.
@@ -370,7 +370,7 @@ high latency networks we suffer from the bare number of requests: Each
 request-response cycle has a penalty of at least the network round trip
 time. Using plain HTTP/1.0, this results in at least
 :math:`3\cdot\text{round trip time}` additional running time per file
-download for TCP handshake, HTTP GET, and TCP connection finalisation.
+download for TCP handshake, HTTP GET, and TCP connection finalization.
 By including the ``Connection: Keep-Alive`` header into HTTP requests,
 we advise the HTTP server end to keep the underlying TCP connection
 opened. This way, overhead ideally drops to just round trip time for a
@@ -392,9 +392,9 @@ Cache Control
 ~~~~~~~~~~~~~
 
 In a limited way, CernVM-FS advises intermediate web caches how to
-handle its requests. Therefore it uses the ``Pragma: no-cache`` and the
+handle its requests. Therefore, it uses the ``Pragma: no-cache`` and the
 ``Cache-Control: no-cache`` headers in certain cases. These cache
-control headers apply to both, forward proxies as well as reverse
+control headers apply to both, forward proxies and reverse
 proxies. This is not a guarantee that intermediate proxies fetch a fresh
 original copy (though they should).
 
@@ -454,12 +454,12 @@ environment variable is set, CernVM-FS does not try to resolve IPv6
 records.
 
 The timeout for name resolving is hard-coded to 2 attempts with a
-timeout of 3 seconds each. This is independent from the
+timeout of 3 seconds each. This is independent of the
 ``CVMFS_TIMEOUT`` and ``CVMFS_TIMEOUT_DIRECT`` settings. The effective
 timeout can be a bit longer than 6 seconds because of a backoff.
 
 The name server used by CernVM-FS is looked up only once on start. If
-the name server changes during the life time of a CernVM-FS mount point,
+the name server changes during the lifetime of a CernVM-FS mount point,
 this change needs to be manually advertised to CernVM-FS using
 ``cvmfs_talk nameserver set``.
 
@@ -487,13 +487,13 @@ Pinned                            Integer
 File type (chunk or file catalog) Integer
 ================================= =========================
 
-CernVM-FS does not strictly enforce the cache limit. Instead
+CernVM-FS does not strictly enforce the cache limit. Instead,
 CernVM-FS works with two customizable soft limits, the *cache quota* and
 the *cache threshold*. When exceeding the cache quota, files are deleted
 until the overall cache size is less than or equal to the cache
 threshold. The cache threshold is currently hard-wired to half of the
 cache quota. The cache quota is for data files as well as file catalogs.
-Currently loaded catalogs are pinned in the cache, they will not be
+Currently, loaded catalogs are pinned in the cache, they will not be
 deleted until unmount or until a new repository revision is applied. On
 unmount, pinned file catalogs are updated with the highest sequence
 number. As a pre-caution against a cache that is blocked by pinned
@@ -529,7 +529,7 @@ automatically quits.
 
 The CernVM-FS cache supports two classes of files with respect to the
 cache replacement strategy: *normal* files and *volatile* files. The
-sequence numbers of volatile files have bit 63 set. Hence they are
+sequence numbers of volatile files have bit 63 set. Hence, they are
 interpreted as negative numbers and have precedence over normal files
 when it comes to cache cleanup. On automatic rebuild the volatile
 property of entries in the cache database is lost.
@@ -549,14 +549,14 @@ CernVM-FS memory consumption (currently :math:`\approx` 45 MB extra)
 and ensures consistency between remounts of CernVM-FS. The performance
 penalty for doing so is small. CernVM-FS uses `Google's leveldb
 <https://github.com/google/leveldb>`_, a fast, local key value store.
-Reads and writes are only performed when meta-data are looked up in
+Reads and writes are only performed when metadata are looked up in
 SQLite, in which case the SQLite query supposedly dominates the
 running time.
 
 A drawback of the NFS maps is that there is no easy way to account for
 them by the cache quota. They sum up to some 150-200 Bytes per path name
-that has been accessed. A recursive ``find`` on /cvmfs/atlas.cern.ch
-with 50 million entries, for instance, would add up 8GB in the cache
+that has been accessed. A recursive ``find`` on ``/cvmfs/atlas.cern.ch``
+with 50 million entries, for instance, would add up 8 GB in the cache
 directory. This is mitigated by the fact that the NFS mode will be only
 used on few servers that can be given large enough spare space on hard
 disk.
@@ -564,15 +564,15 @@ disk.
 Loader
 ------
 
-The CernVM-FS Fuse module comprises a minimal *loader* loader process
+The CernVM-FS Fuse module comprises a minimal *loader* process
 (the ``cvmfs2`` binary) and a shared library containing the actual
 Fuse module (``libcvmfs_fuse.so``, ``libcvmfs_fuse3.so``). This structure makes
 it possible to reload CernVM-FS code and parameters without unmounting the file
-system. Loader and library don't share any symbols except for two global structs
-``cvmfs_exports`` and ``loader_exports`` used to call each others
+system. Loader and library do not share any symbols except for two global structs
+``cvmfs_exports`` and ``loader_exports`` that are used to call each other's
 functions. The loader process opens the Fuse channel and implements stub
 Fuse callbacks that redirect all calls to the CernVM-FS shared library.
-Hotpatch is implemented as unloading and reloading of the shared
+Hotpatching is implemented as unloading and reloading of the shared
 library, while the loader temporarily queues all file system calls
 in-between. Among file system calls, the Fuse module has to keep very
 little state. The kernel caches are drained out before reloading. Open
@@ -604,7 +604,7 @@ getattr and lookup
 
 Requests for file attributes are entirely served from the mounted
 catalogs, there is no network traffic involved. This function is called
-as pre-requisite to other file system operations and therefore the most
+as prerequisite to other file system operations and therefore the most
 frequently called Fuse callback. In order to minimize relatively
 expensive SQLite queries, CernVM-FS uses a hash table to store negative
 and positive query results. The default size for this memory cache is
@@ -653,7 +653,7 @@ getxattr
 ~~~~~~~~
 
 CernVM-FS uses synthetic extended attributes to display additional repository
-information. In general they can be displayed with a command like
+information. In general, they can be displayed with a command like
 
 ::
 
@@ -671,14 +671,14 @@ There are the following supported magic attributes:
     Hashes and sizes of the chunks of a regular (large) file.
 
 **compression**
-    Compression algorithm, for regular files only.  Either "zlib" or "none".
+    Compression algorithm, for regular files only. Either "zlib" or "none".
 
 **expires**
-    Shows the remaining life time of the mounted root file catalog in
+    Shows the remaining lifetime of the mounted root file catalog in
     minutes.
 
 **external\_file**
-    Indicates if a regular file is an external file or not.  Either 0 or 1.
+    Indicates if a regular file is an external file or not. Either 0 or 1.
 
 **external\_host**
     Like ``host`` but for the host settings to fetch external files.
@@ -727,13 +727,13 @@ There are the following supported magic attributes:
     Shows the overall number of downloaded files since mounting.
 
 **nioerr**
-    Shows the total number of I/O errors encoutered since mounting.
+    Shows the total number of I/O errors encountered since mounting.
 
 **nopen**
     Shows the overall number of ``open()`` calls since mounting.
 
 **pid**
-    Shows the process id of the CernVM-FS Fuse process.
+    Shows the process ID of the CernVM-FS Fuse process.
 
 **proxy**
     Shows the currently active HTTP proxy.
@@ -790,13 +790,22 @@ cryptographic hash of the file at hand. The extended attributes are used
 by the ``cvmfs_config stat`` command in order to show a current overview
 of health and performance numbers.
 
+Access to extended attributes can be restricted in the client config to
+``root`` and users with a specific (main) ``gid`` listed by
+``CVMFS_XATTR_PRIVILEGED_GIDS``. Extended attributes to which 
+this should apply are listed in ``CVMFS_XATTR_PROTECTED_XATTRS``.
+Note that those attributes must be listed in their full name, e.g. ``user.fqrn``,
+``user.rawlink`` or ``xfsroot.rawlink``. Most of the extended attributes
+will have the prefix ``user.``. If uncertain, they can be looked up in the source
+code of ``cvmfs/magic_xattr.cc``.
+
 Repository Publishing
 ---------------------
 
-Repositories are not immutable, every now and then they get updated.
+Repositories are not immutable, periodically they get updated.
 This might be installation of a new release or a patch for an existing
 release. But, of course, each time only a small portion of the
-repository is touched, say out of . In order not to re-process an entire
+repository is touched. To prevent re-processing the entire
 repository on every update, we create a read-write file system interface
 to a CernVM-FS repository where all changes are written into a distinct
 scratch area.
@@ -818,8 +827,8 @@ first fully functional implementation has been presented by Wright et
 al. [Wright04]_. By now, union file systems are well established for
 "Live CD" builders, which use a RAM disk overlay on top of the read-only
 system partition in order to provide the illusion of a fully
-read-writable system. CernVM-FS supports both aufs and OverlayFS
-union file systems.
+read-writable system. CernVM-FS supports only the OverlayFS union file systems.
+It used to support ``aufs``, but no active support is provided for it anymore.
 
 Union file systems can be used to track changes on CernVM-FS repositories
 (Figure :ref:`below <fig_overlay>`). In this case, the read-only file system

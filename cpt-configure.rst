@@ -6,13 +6,13 @@ Structure of /etc/cvmfs
 
 The local configuration of CernVM-FS is controlled by several files in
 ``/etc/cvmfs`` listed in the table below. For every .conf file
-except for the files in /etc/cvmfs/default.d you can create a
-corresponding .local file having the same prefix in order to customize
-the configuration. The .local file will be sourced after the
-corresponding .conf file.
+except for the files in ``/etc/cvmfs/default.d`` you can create a
+corresponding ``.local`` file having the same prefix in order to customize
+the configuration. The ``.local`` file will be sourced after the
+corresponding ``.conf`` file.
 
 In a typical installation, a handful of parameters need to be set in
-/etc/cvmfs/default.local. Most likely, this is the list of repositories
+``/etc/cvmfs/default.local``. Most likely, this is the list of repositories
 (``CVMFS_REPOSITORIES``), HTTP proxies (see :ref:`network settings <sct_network>`),
 and perhaps the cache directory and the cache quota (see
 :ref:`cache settings <sct_cache>`). In a few cases, one might change a parameter
@@ -20,7 +20,7 @@ for a specific domain or a specific repository, or provide an exclusive cache fo
 a specific repository. For a list of all
 parameters, see Appendix ":ref:`apxsct_clientparameters`".
 
-The .conf and .local configuration files are key-value pairs in the form
+The ``.conf`` and ``.local`` configuration files are key-value pairs in the form
 ``PARAMETER=value``. They are sourced by /bin/sh. Hence, a limited set
 of shell commands can be used inside these files including comments,
 ``if`` clauses, parameter evaluation, and shell math (``$((...))``).
@@ -58,14 +58,14 @@ The Config Repository
 In addition to the local system configuration, a client can configure a
 dedicated config repository. A config repository is a standard
 mountable CernVM-FS repository that resembles the directory structure of
-/etc/cvmfs. It can be used to centrally maintain the public keys and
+``/etc/cvmfs``. It can be used to centrally maintain the public keys and
 configuration of repositories that should not be distributed with rather
 static packages, and also to centrally
 :ref:`blacklist <sct_blacklisting>` compromised repository keys.
 Configuration from the config repository is overwritten
 by the local configuration in case of conflicts; see the comments in
-/etc/cvmfs/default.conf for the precise ordering of processing
-the config files.  The config repository
+``/etc/cvmfs/default.conf`` for the precise ordering of processing
+the config files. The config repository
 is set by the ``CVMFS_CONFIG_REPOSITORY`` parameter. The default
 configuration rpm cvmfs-config-default sets this parameter to
 cvmfs-config.cern.ch.
@@ -74,17 +74,17 @@ The ``CVMFS_CONFIG_REPO_REQUIRED`` parameter can be used to force availability
 of the config repository in order for other repositories to get mounted.
 
 The config repository is a very convenient method for updating the
-configuration on a lot of CernVM-FS clients at once.  This also means
+configuration on a lot of CernVM-FS clients at once. This also means
 that it is very easy to break configurations on a lot of clients at
-once.  Also note that only one config repository may be used per client,
-and this is a technical limitation that is not expected to change.  For
+once. Also note that only one config repository may be used per client,
+and this is a technical limitation that is not expected to change. For
 these reasons, it makes the most sense to reserve the use of this
 feature for large groups of sites that share a common infrastructure
-with trusted people that maintain the configuration repository.  In
+with trusted people that maintain the configuration repository. In
 order to facilitate sharing of configurations between the
 infrastructures, a
 `github repository <https://github.com/cvmfs-contrib/config-repo>`_
-has been set up.  Infrastructure maintainers are invited to collaborate
+has been set up. Infrastructure maintainers are invited to collaborate
 there.
 
 Some large sites that prefer to maintain control over their own client
@@ -93,9 +93,9 @@ processes to compare it to a repository from a larger infrastructure.
 They then quickly update their own config repository with whatever
 changes have been made to the infrastructure's config repository.
 
-Exchanges of configurations between limited numbers of sites that are
-also depending separately on a configuration repository is encouraged to
-be done by making rpm and/or dpkg packages and distributing them through 
+Exchanges of configurations between limited numbers of sites that
+also use their own separate configuration repository are encouraged to
+be done by making rpm and/or dpkg packages and distributing them through
 `cvmfs-contrib package repositories <https://cvmfs-contrib.github.io>`_.
 Keeping configurations up to date through packages is less convenient
 than the configuration repository but better than manually maintaining
@@ -104,12 +104,12 @@ configuration files.
 Mounting
 --------
 
-Mounting of CernVM-FS repositories is typically handled by autofs. Just
-by accessing a repository directory under /cvmfs (/cvmfs/atlas.cern.ch),
-autofs will take care of mounting. autofs will also automatically
+Mounting of CernVM-FS repositories is typically handled by ``autofs``. Just
+by accessing a repository directory under ``/cvmfs`` (``/cvmfs/atlas.cern.ch``),
+``autofs`` will take care of mounting. ``autofs`` will also automatically
 unmount a repository if it is not used for a while.
 
-Instead of using autofs, CernVM-FS repositories can be mounted manually
+Instead of using ``autofs``, CernVM-FS repositories can be mounted manually
 with the system's ``mount`` command. In order to do so, use the
 ``cvmfs`` file system type, like
 
@@ -124,18 +124,18 @@ Likewise, CernVM-FS repositories can be mounted through entries in
 
       atlas.cern.ch /mnt/test cvmfs defaults,_netdev,nodev 0 0
 
-Every mount point corresponds to a CernVM-FS process. Using autofs or
+Every mount point corresponds to a CernVM-FS process. Using ``autofs`` or
 the system's mount command, every repository can only be mounted once.
-Otherwise multiple CernVM-FS processes would collide in the same cache
+Otherwise, multiple CernVM-FS processes would collide in the same cache
 location. If a repository is needed under several paths, use a *bind
 mount* or use a :ref:`private file system mount point <sct_privatemount>`.
 
 If a configuration repository is required to mount other repositories,
-it will need to be mounted first.  Since /etc/fstab mounts are done in
+it will need to be mounted first. Since ``/etc/fstab mounts`` are done in
 parallel at boot time, the order in /etc/fstab is not sufficient to make
-sure that happens.  On systemd-based systems this can be done by adding
+sure that happens. On systemd-based systems this can be done by adding
 the option ``x-systemd.requires-mounts-for=<configrepo>`` on all the
-other mounts.  For example:
+other mounts. For example:
 
 ::
 
@@ -151,7 +151,7 @@ In contrast to the system's ``mount`` command which requires root
 privileges, CernVM-FS can also be mounted like other Fuse file systems
 by normal users. In this case, CernVM-FS uses parameters from one or
 several user-provided config files instead of using the files under
-/etc/cvmfs. CernVM-FS private mount points do not appear as ``cvmfs2``
+``/etc/cvmfs``. CernVM-FS private mount points do not appear as ``cvmfs2``
 file systems but as ``fuse`` file systems. The ``cvmfs_config`` and
 ``cvmfs_talk`` commands ignore privately mounted CernVM-FS repositories.
 On an interactive machine, private mount points are for instance
@@ -164,7 +164,7 @@ In order to mount CernVM-FS privately, use the ``cvmfs2`` command like
 
       cvmfs2 -o config=myparams.conf atlas.cern.ch /home/user/myatlas
 
-A minimal sample myparams.conf file could look like this:
+A minimal sample ``myparams.conf`` file could look like this:
 
 ::
 
@@ -181,8 +181,8 @@ cache directory. Use ``fusermount -u`` in order to unmount a privately
 mounted CernVM-FS repository.
 
 The private mount points can also be used to use the CernVM-FS Fuse
-module in case it has not been installed under /usr and /etc. If the
-public keys are not installed under /etc/cvmfs/keys, the directory of
+module in case it has not been installed under ``/usr`` and ``/etc``. If the
+public keys are not installed under ``/etc/cvmfs/keys``, the directory of
 the keys needs to be specified in the config file by
 ``CVMFS_KEYS_DIR=<directory>``. If the libcvmfs\_fuse.so resp.
 libcvmfs\_fuse3.so library is not installed in one of the standard search paths,
@@ -190,7 +190,7 @@ the ``CVMFS_LIBRARY_PATH`` variable has to be set accordingly for the ``cvmfs2``
 command.
 
 The easiest way to make use of CernVM-FS private mount points is with
-the ``cvmfsexec`` package.  Read about that in the Security
+the ``cvmfsexec`` package. Read about that in the Security
 :ref:`sct_running_client_as_normal_user` section.
 
 .. _sct_premount:
@@ -201,7 +201,7 @@ Pre-mounting
 In usual deployments, the ``fusermount`` utility from the system fuse package
 takes care of mounting a repository before handing of control to the CernVM-FS
 client. The ``fusermount`` utility is a suid binary because on older kernels
-and outside user name spaces, mounting is a privileged operation.
+and outside user namespaces, mounting is a privileged operation.
 
 As of libfuse3, the task of mounting /dev/fuse can be performed by any utility.
 This functionality has been added, for instance, to
@@ -215,12 +215,12 @@ available in the
 
 In order to use the pre-mount functionality in Singularity, create a
 container that has the ``cvmfs`` package and configuration installed in
-it, and also the corresponding ``cvmfs-fuse3`` package.  Bind-mount scratch
+it, and also the corresponding ``cvmfs-fuse3`` package. Bind-mount scratch
 space at ``/var/run/cvmfs`` and cache space at ``/var/lib/cvmfs``.
 For each desired repository, add a ``--fusemount`` option with
 ``container:cvmfs2`` followed by the repository name and mountpoint,
-separated by whitespace.  First mount the configuration repository if
-required.  For example:
+separated by whitespace. First mount the configuration repository if
+required. For example:
 
 ::
 
@@ -232,7 +232,7 @@ required.  For example:
 
 
 The ``singcvmfs`` command in the ``cvmfsexec`` package makes use of
-fuse pre-mounting.  Read more about that package in the Security
+fuse pre-mounting. Read more about that package in the Security
 :ref:`sct_running_client_as_normal_user` section.
 
 .. _sct_remounting_namespaces_containers:
@@ -256,8 +256,8 @@ The repository can then be unmounted, but it cannot be remounted
 until the ``sleep`` process dies.
 
 When this happens, ``cvmfs_config fuser <repo>`` can be used to identify
-all the processes using ``<repo>``. 
-The system administrator can then contact the owners of the procesess to
+all the processes using ``<repo>``.
+The system administrator can then contact the owners of the processes to
 ask to change the application behavior to avoid this situation (for
 example by using Singularity ``-p``), and the processes can be killed to
 enable the repository to be remounted.
@@ -282,14 +282,14 @@ It provides a convenient interface to handle CernVM-FS volume definitions.
 Bind mount from the host
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-On Docker >= 1.10, the autofs managed area /cvmfs can be directly mounted into
+On Docker >= 1.10, the ``autofs`` managed area ``/cvmfs`` can be directly mounted into
 the container as a shared mount point like
 
 ::
 
     docker run -it -v /cvmfs:/cvmfs:shared centos /bin/bash
 
-In order to bind mount an individual repository from the host, turn off autofs
+In order to bind mount an individual repository from the host, turn off ``autofs``
 on the host and mount the repository manually, like:
 
 ::
@@ -320,18 +320,18 @@ started in privileged mode, like
         docker run --privileged -i -t centos /bin/bash
 
 In such a container, CernVM-FS can be installed and used the usual way
-provided that autofs is turned off.
+provided that ``autofs`` is turned off.
 
 Parrot Connector to CernVM-FS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In case Fuse cannot be be installed, the `parrot toolkit
+In case Fuse cannot be installed, the `parrot toolkit
 <http://ccl.cse.nd.edu/software/parrot>`_ provides a means to "mount"
 CernVM-FS on Linux in pure user space.
-Parrot sandboxes an application in a similar way gdb sandboxes an
-application. But instead of debugging the application,
+Parrot sandboxes are an application similar to gdb sandboxes.
+But instead of debugging the application,
 parrot transparently rewrites file system calls and can effectively
-provide /cvmfs to an application. We recommend to use the `latest
+provide ``/cvmfs`` to an application. We recommend using the `latest
 precompiled parrot <http://ccl.cse.nd.edu/software/downloadfiles.php>`_, which
 has CernVM-FS support built-in.
 
@@ -345,7 +345,7 @@ parrot, use
     export HTTP_PROXY='<SITE HTTP PROXY>'  # or 'DIRECT;' if not on a cluster or grid site
     parrot_run <PARROT_OPTIONS> <CMD> <OPTIONS>
 
-Repositories that are not available by default from the builtin
+Repositories that are not available by default from the built-in
 ``<default-repositories>`` list can be explicitly added to
 ``PARROT_CVMFS_REPO``. The repository name, a stratum 1 URL, and the
 public key of the repository need to be provided. For instance, in order
@@ -364,7 +364,7 @@ given that the repository public keys are in the provided paths.
 
 By default, parrot uses a shared CernVM-FS cache for all parrot
 instances of the same user stored under a temporary directory that is
-derived from the user id. In order to place the CernVM-FS cache into a
+derived from the user ID. In order to place the CernVM-FS cache into a
 different directory, use
 
 ::
@@ -387,11 +387,11 @@ CernVM-FS Stratum 1 service, whereas the replication source server is
 the CernVM-FS Stratum 0 server. In every cluster of client machines,
 there should be two or more web proxy servers that CernVM-FS can use
 (see :ref:`cpt_squid`). These site-local web proxies reduce the
-network latency for the CernVM-FS clients and they reduce the load for
-the Stratum 1 service. CernVM-FS supports WPAD/PAC proxy auto
-configuration [Gauthier99]_, choosing a random proxy for load-balancing, and
-automatic fail-over to other hosts and proxies in case of network
-errors. Roaming clients can connect directly to the Stratum 1 service.
+network latency for the CernVM-FS clients, and they reduce the load for
+the Stratum 1 service. CernVM-FS supports WPAD/PAC proxy auto-configuration [Gauthier99]_,
+choosing a random proxy for load-balancing, and automatic fail-over to
+other hosts and proxies in case of network errors. Roaming clients can
+connect directly to the Stratum 1 service.
 
 IP Protocol Version
 ~~~~~~~~~~~~~~~~~~~
@@ -411,7 +411,7 @@ semicolon-separated list of known replica servers (enclose in quotes).
 The so defined URLs are organized as a ring buffer. Whenever download of
 files fails from a server, CernVM-FS automatically switches to the next
 mirror server. For repositories under the cern.ch domain, the Stratum 1
-servers are specified in /etc/cvmfs/domain.d/cern.ch.conf.
+servers are specified in ``/etc/cvmfs/domain.d/cern.ch.conf``.
 
 It is recommended to adjust the order of Stratum 1 servers so that the closest
 servers are used with priority. This can be done automatically by :ref:`using
@@ -422,12 +422,12 @@ automatically sorted according to round trip time by ``cvmfs_talk host probe``
 trip time measurement.
 
 The special sequence ``@fqrn@`` in the ``CVMFS_SERVER_URL`` string is
-replaced by fully qualified repository name (atlas.cern.cn, cms.cern.ch,
+replaced by fully qualified repository name (atlas.cern.ch, cms.cern.ch,
 ...). That allows to use the same parameter for many repositories hosted
 under the same domain. For instance,
-http://cvmfs-stratum-one.cern.ch/cvmfs/@fqrn@ can resolve to
-http://cvmfs-stratum-one.cern.ch/cvmfs/atlas.cern.ch,
-http://cvmfs-stratum-one.cern.ch/cvmfs/cms.cern.ch, and so on depending
+``http://cvmfs-stratum-one.cern.ch/cvmfs/@fqrn@`` can resolve to
+``http://cvmfs-stratum-one.cern.ch/cvmfs/atlas.cern.ch``,
+``http://cvmfs-stratum-one.cern.ch/cvmfs/cms.cern.ch``, and so on depending
 on the repository that is being mounted. The same works for the sequence
 ``@org@`` which is replaced by the unqualified repository name (atlas,
 cms, ...).
@@ -435,21 +435,21 @@ cms, ...).
 Proxy Lists
 ~~~~~~~~~~~
 
-CernVM-FS uses a dedicated HTTP proxy configuration, independent from
+CernVM-FS uses a dedicated HTTP proxy configuration, independent of
 system-wide settings. Instead of a single proxy, CernVM-FS uses a *chain
 of load-balanced proxy groups*. The CernVM-FS proxies are set by the
 ``CVMFS_HTTP_PROXY`` parameter.
 
 Proxy groups are used for load-balancing among several proxies of equal
-priority.  Starting with the first group, one proxy within a group is selected
-at random.  By default, this randomly selected proxy will used for all requests.
+priority. Starting with the first group, one proxy within a group is selected
+at random. By default, this randomly selected proxy will be used for all requests.
 If :ref:`proxy sharding <sct_proxy_sharding>` is enabled, then the proxy is
 instead selected on a per-request basis to distribute the requests across all
 proxies within the current group.
 
 If a proxy fails, CernVM-FS automatically switches to another proxy from the
-current group.  If all proxies in a group have failed, CernVM-FS switches to the
-next proxy group.  After probing the last proxy group in the chain, the first is
+current group. If all proxies in a group have failed, CernVM-FS switches to the
+next proxy group. After probing the last proxy group in the chain, the first is
 probed again. To avoid endless loops, for each file download the number of
 switches is limited by the total number of proxies.
 
@@ -460,7 +460,7 @@ In the case of proxies that use a DNS *round-robin* entry, wherein a single host
 resolves to multiple IP addresses, CVMFS automatically internally transforms the name
 into a load-balanced group, so you should use the host name and a semicolon.
 In order to limit the number of individual proxy servers used in
-a round-robin DNS entry, set ``CVMFS_MAX_IPADDR_PER_PROXY``.  This can also limit
+a round-robin DNS entry, set ``CVMFS_MAX_IPADDR_PER_PROXY``. This can also limit
 the perceived "hang duration" while CernVM-FS performs fail-overs.
 
 The ``DIRECT`` keyword for a hostname avoids using a proxy altogether. Note that
@@ -474,7 +474,7 @@ and potentially other proxy groups listed after that for backup. In order to
 prevent CernVM-FS from permanently using the backup proxies after a
 fail-over, CernVM-FS will automatically retry the first proxy group in the list
 after some time. The delay for re-trying is set in seconds by ``CVMFS_PROXY_RESET_AFTER``.
-This reset behaviour can be disabled by setting this parameter to 0.
+This reset behavior can be disabled by setting this parameter to 0.
 
 Proxy List Examples
 ^^^^^^^^^^^^^^^^^^^
@@ -503,8 +503,8 @@ according to the proxy server specification loaded from a PAC file. PAC
 files can be on a file system or accessible via HTTP. CernVM-FS looks
 for PAC files in the order given by the semicolon separated URLs in the
 ``CVMFS_PAC_URLS`` environment variable. This variable defaults to
-http://wpad/wpad.dat. The ``auto`` keyword used as a URL in
-``CVMFS_PAC_URLS`` is resolved to http://wpad/wpad.dat, too, in order to
+``http://wpad/wpad.dat``. The ``auto`` keyword used as a URL in
+``CVMFS_PAC_URLS`` is resolved to ``http://wpad/wpad.dat``, too, in order to
 be compatible with Frontier [Blumenfeld08]_.
 
 Fallback Proxy List
@@ -516,7 +516,7 @@ of both lists is the same. The fallback proxy list is appended to the
 regular proxy list, and if the fallback proxy list is set, any DIRECT is
 removed from both lists. The automatic proxy configuration of the
 previous section only sets the regular proxy list, not the fallback
-proxy list. Also the fallback proxy list can be automatically reordered;
+proxy list. Also, the fallback proxy list can be automatically reordered;
 see the next section.
 
 .. _sct_geoapi:
@@ -526,7 +526,7 @@ Ordering of Servers according to Geographic Proximity
 
 CernVM-FS Stratum 1 servers provide a RESTful service for geographic
 ordering. Clients can request
-`http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy\_address>/<server\_list>`
+``http://<HOST>/cvmfs/<FQRN>/api/v1.0/geo/<proxy_address>/<server_list>``.
 The proxy address can be replaced by a UUID if no proxies are used, and
 the CernVM-FS client does that if there are no regular proxies. The
 server list is comma-separated. The result is an ordered list of indexes
@@ -549,14 +549,14 @@ can be adjusted with the ``CVMFS_LOW_SPEED_LIMIT`` parameter. A very
 slow download is treated like a broken connection.
 
 On timeout errors and on connection failures (but not on name resolving
-failures), CernVM-FS will retry the path using an exponential backoff.
+failures), CernVM-FS will retry the path using an exponential backoff algorithm.
 This introduces a jitter in case there are many concurrent requests by a
 cluster of nodes, allowing a proxy server or web server to serve all the
 nodes consecutively. ``CVMFS_MAX_RETRIES`` sets the number of retries on
 a given path before CernVM-FS tries to switch to another proxy or host.
 The overall number of requests with a given proxy/host combination is
 ``$CVMFS_MAX_RETRIES``\ +1. ``CVMFS_BACKOFF_INIT`` sets the maximum
-initial backoff in seconds. The actual initial backoff is picked with
+initial backoff (time) in seconds. The actual initial backoff is picked with
 milliseconds precision randomly in the interval
 :math:`[1, \text{\$CVMFS\_BACKOFF\_INIT}\cdot 1000]`. With every retry,
 the backoff is then doubled.
@@ -564,9 +564,9 @@ the backoff is then doubled.
 DNS Nameserver Changes
 ~~~~~~~~~~~~~~~~~~~~~~
 
-CernVM-FS can watch /etc/resolv.conf and automatically follow changes to the
+CernVM-FS can watch ``/etc/resolv.conf`` and automatically follow changes to the
 DNS servers. This behavior is controlled by the ``CVMFS_DNS_ROAMING`` client
-configuration. It is by default turned on on macOS and turned off on Linux.
+configuration. It is by default turned on macOS and turned off on Linux.
 
 
 Network Path Selection
@@ -601,15 +601,15 @@ Proxy Sharding
 ^^^^^^^^^^^^^^
 
 In the default (non-sharded) configuration, each CernVM-FS client will
-independently choose a single proxy to be used for all requests.  For sites with
+independently choose a single proxy to be used for all requests. For sites with
 many clients that are likely to access the same content, this can result in
 unnecessary duplication of cached content across multiple proxies.
 
 If proxy sharding is enabled via the ``CVMFS_PROXY_SHARD`` parameter, all
-proxies within a load-balancing group are used concurrently.  Each proxy handles
-a subset of the requests.  Proxies are selected using consistent hashing so that
+proxies within a load-balancing group are used concurrently. Each proxy handles
+a subset of the requests. Proxies are selected using consistent hashing so that
 multiple clients will independently select the same proxy for a given request,
-to maximise cache efficiency.  If any proxy fails, CernVM-FS automatically
+to maximize cache efficiency. If any proxy fails, CernVM-FS automatically
 removes it from the load-balancing group and distributes its requests evenly
 across the remaining proxies.
 
@@ -628,9 +628,9 @@ the host or by the proxy.
 * Explicit proxy errors (indicated via the `X-Squid-Error` or `Proxy-Status`
   headers) will always be classified as proxy failure.
 
-If CernVM-FS detects a host failure, it will fail-over to the next host in the
+If CernVM-FS detects a host failure, it will fail over to the next host in the
 list while keeping the proxy server untouched. If it detects a proxy failure, it
-will fail-over to to another proxy while keeping the host untouched. CernVM-FS
+will fail over to another proxy while keeping the host untouched. CernVM-FS
 will try all proxies of the current load-balance group in random order before
 trying proxies from the next load-balance group.
 
@@ -665,7 +665,7 @@ a working network path.
 Retry and Backoff
 ^^^^^^^^^^^^^^^^^
 
-On connection and timeout errors, CernVM-FS retries a fixed, limitied number of
+On connection and timeout errors, CernVM-FS retries a fixed, limited number of
 times on the same network path before performing a fail-over. Retrying involves
 an exponential backoff with a minimum and maximum waiting time.
 
@@ -688,8 +688,8 @@ Default Values
 * Maximum waiting time on a retry: 10 seconds (adjustable by CVMFS_BACKOFF_MAX)
 * Minimum/Maximum DNS name cache: 1 minute / 1 day
 
-**Note:** a continuous transfer rate below 1kB/s is treated like a network
-timeout.
+.. note::
+    A continuous transfer rate below 1 kB/s is treated like a network timeout.
 
 .. _sct_cache:
 
@@ -699,7 +699,7 @@ Cache Settings
 Downloaded files will be stored in a local cache directory. The
 CernVM-FS cache has a soft quota; as a safety margin, the partition
 hosting the cache should provide more space than the soft quota limit;
-we recommend to leave at least 20% + 1GB.
+we recommend to leave at least 20% + 1 GB.
 
 Once the quota limit is reached, CernVM-FS will automatically remove
 files from the cache according to the least recently used policy.
@@ -718,7 +718,7 @@ location of the cache directory can be set by ``CVMFS_CACHE_BASE``.
 On SELinux enabled systems, the cache directory and its content need to
 be labeled as ``cvmfs_cache_t``. During the installation of
 CernVM-FS RPMs, this label is set for the default cache directory
-/var/lib/cvmfs. For other directories, the label needs to be set
+``/var/lib/cvmfs``. For other directories, the label needs to be set
 manually by ``chcon -Rv --type=cvmfs_cache_t $CVMFS_CACHE_BASE``.
 
 Each repository can either have an exclusive cache or join the
@@ -729,6 +729,8 @@ directory should be at least the maximum of the recommended limits of
 its participating repositories. In order to have a repository not join
 the shared cache but use an exclusive cache, set
 ``CVMFS_SHARED_CACHE=no``.
+
+.. _alien cache:
 
 Alien Cache
 ~~~~~~~~~~~
@@ -744,7 +746,7 @@ The alien cache directory is set by the ``CVMFS_ALIEN_CACHE`` option. It
 can be located anywhere including cluster and network file systems. If
 configured, all data chunks are stored there. CernVM-FS ensures atomic
 access to the cache directory. It is safe to have the alien directory
-shared by multiple CernVM-FS processes and it is safe to unlink files
+shared by multiple CernVM-FS processes, and it is safe to unlink files
 from the alien cache directory anytime. The contents of files, however,
 must not be touched by third-party programs.
 
@@ -783,7 +785,7 @@ instances replace the local cache directory. Since the local cache directory is
 also used to store transient special files, ``CVMFS_WORKSPACE=$local_path``
 must be used when advanced cache configuration is used.
 
-A concrete cache manager instance has a user-defined name and it is specified
+A concrete cache manager instance has a user-defined name, and it is specified
 like
 
 ::
@@ -791,7 +793,7 @@ like
     CVMFS_CACHE_PRIMARY=myInstanceName
     CVMFS_CACHE_myInstanceName_TYPE=posix
 
-Multiple instances can thus be safely defined with different names but only one
+Multiple instances can thus be safely defined with different names, but only one
 is selected when the client boots. The following table lists the valid cache
 manager instance types.
 
@@ -804,19 +806,41 @@ external    Uses an external cache plugin process (see Section :ref:`cpt_plugins
 =========== ======================================================================
 
 The instance name "default" is blocked because the regular cache configuration
-syntax is automatically mapped to ``CVMFS_CACHE_default_...`` parameters.  The
+syntax is automatically mapped to ``CVMFS_CACHE_default_...`` parameters. The
 command ``sudo cvmfs_talk cache instance`` can be used to show the currently
 used cache manager instance.
+
+
+Refcounted Cache Mode
+^^^^^^^^^^^^^^^^^^^^^
+
+The default posix cache manager has a "refcounted" mode, which uses additional
+maps to count references to open file descriptors. Multiple processes reading
+the same cached files will then no longer create new duplicated file descriptors
+for the same opened file, which can be useful for highly parallelized workloads.
+This functionality comes with a small memory overhead, which should however not
+exceed a few MBs.
+
+The refcount mode can be turned on by setting
+
+::
+
+    CVMFS_CACHE_REFCOUNT=yes
+
+and reloading the cvmfs configuration. To switch it off, the repositories have
+to be remounted. Switching it off and doing ``cvmfs_config reload`` will not fail,
+but silently ignore the option until the next remount in order to properly
+work with already open file descriptors.
 
 
 Tiered Cache
 ^^^^^^^^^^^^
 
 The tiered cache manager combines two other cache manager instances as an upper
-layer and a lower layer into a single functional cache manager.  Usually, a
+layer and a lower layer into a single functional cache manager. Usually, a
 small and fast upper layer (SSD, memory) is combined with a larger and slower
 lower layer (HDD, network drive). The upper layer needs to be large enough to
-serve all currently open files.  On an upper layer cache miss, CernVM-FS tries
+serve all currently open files. On an upper layer cache miss, CernVM-FS tries
 to copy the missing object from the lower into the upper layer. On a lower layer
 cache miss, CernVM-FS download and stores objects either in both layers or in
 the upper layer only, depending on the configuration.
@@ -827,7 +851,20 @@ lower instances.  The parameter
 ``CVMFS_CACHE_$tieredInstanceName_LOWER_READONLY=[yes|no]`` controls whether the
 lower layer can be populated by the client or not.
 
+Streaming Cache Manager
+^^^^^^^^^^^^^^^^^^^^^^^
 
+This mode uses a download manager and a backing cache manager to deliver data.
+Pinned files and catalogs use the backing cache manager. Regular data blocks
+are downloaded on read, the required data window copied to the user. In order
+to use the streaming cache manager, set:
+
+::
+
+    CVMFS_STREAMING_CACHE=yes
+
+Note: The streaming cache manager is not ideal when doing multiple small reads
+of a large chunk, as each read will trigger a re-download of the entire chunk.
 
 External Cache Plugin
 ^^^^^^^^^^^^^^^^^^^^^
@@ -903,7 +940,7 @@ NFS Server Mode
 
 In case there is no local hard disk space available on a cluster of
 worker nodes, a single CernVM-FS client can be exported via
-nfs [Callaghan95]_ [Shepler03]_ to these worker nodes.This mode of deployment
+nfs [Callaghan95]_ [Shepler03]_ to these worker nodes. This mode of deployment
 will inevitably introduce a performance bottleneck and a single point of
 failure and should be only used if necessary.
 
@@ -914,15 +951,15 @@ support, set ``CVMFS_NFS_SOURCE=yes``. On the client side, all available nfs
 implementations should work.
 
 In the NFS mode, upon mount an additional directory
-nfs\_maps.$repository\_name appears in the CernVM-FS cache directory.
+``nfs_maps.$repository_name`` appears in the CernVM-FS cache directory.
 These *NFS maps* use leveldb to store the virtual inode CernVM-FS issues
 for any accessed path. The virtual inode may be requested by NFS clients
 anytime later. As the NFS server has no control over the lifetime of
 client caches, entries in the NFS maps cannot be removed.
 
 Typically, every entry in the NFS maps requires some 150-200 Bytes. A
-recursive ``find`` on /cvmfs/atlas.cern.ch with 50 million entries, for
-instance, would add up 8GB in the cache directory. For a CernVM-FS instance
+recursive ``find`` on ``/cvmfs/atlas.cern.ch`` with 50 million entries, for
+instance, would add up 8 GB in the cache directory. For a CernVM-FS instance
 that is exported via NFS, the safety margin for the NFS maps needs be
 taken into account. It also might be necessary to monitor the actual
 space consumption.
@@ -937,7 +974,7 @@ Tuning
 
 The default settings in CernVM-FS are tailored to the normal, non-NFS
 use case. For decent performance in the NFS deployment, the amount of
-memory given to the meta-data cache should be increased. By default,
+memory given to the metadata cache should be increased. By default,
 this is 16M. It can be increased, for instance, to 256M by setting
 ``CVMFS_MEMCACHE_SIZE`` to 256. Furthermore, the maximum number of
 download retries should be increased to at least 2.
@@ -945,33 +982,33 @@ download retries should be increased to at least 2.
 The number of NFS daemons should be increased as well. A value of 128
 NFS daemons has shown perform well. In Scientific Linux, the number of
 NFS daemons is set by the ``RPCNFSDCOUNT`` parameter in
-/etc/sysconfig/nfs.
+``/etc/sysconfig/nfs``.
 
 The performance will benefit from large RAM on the NFS server
-(:math:`\geq` 16GB) and CernVM-FS caches hosted on an SSD
+(:math:`\geq` 16 GB) and CernVM-FS caches hosted on an SSD
 hard drive.
 
 .. _sct_nfs_interleaved:
 
-Export of /cvmfs with Cray DVS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Export of ``/cvmfs`` with Cray DVS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On Cray DVS and possibly other systems that export /cvmfs as a whole instead of
+On Cray DVS and possibly other systems that export ``/cvmfs`` as a whole instead of
 individual repositories as separate volumes, an additional effort is needed to
 ensure that inodes are distinct from each other across multiple repositories.
 The ``CVMFS_NFS_INTERLEAVED_INODES`` parameter can be used to configure
 repositories to only issue inodes of a particular residue class. To ensure
 pairwise distinct inodes across repositories, each repository should be
-configured with a different residue class.  For instance, in order to avoid
+configured with a different residue class. For instance, in order to avoid
 inode clashes between the atlas.cern.ch and the cms.cern.ch repositories,
-there can be a configuration file /etc/cvmfs/config.d/atlas.cern.ch.local
+there can be a configuration file ``/etc/cvmfs/config.d/atlas.cern.ch.local``
 with
 
 ::
 
     CVMFS_NFS_INTERLEAVED_INODES=0%2 # issue inodes 0, 2, 4, ...
 
-and a configuration file /etc/cvmfs/config.d/cms.cern.ch.local with
+and a configuration file ``/etc/cvmfs/config.d/cms.cern.ch.local`` with
 
 ::
 
@@ -990,7 +1027,7 @@ As an alternative to the existing, `leveldb
 maps can optionally be managed out of the CernVM-FS cache directory by
 SQLite. This allows the NFS maps to be placed on shared storage and
 accessed by multiple CernVM-FS NFS export nodes simultaneously for
-clustering and active high-availablity setups. In order to enable shared
+clustering and active high-availability setups. In order to enable shared
 NFS maps, set ``CVMFS_NFS_SHARED`` to the path that should be used to
 host the SQLite database. If the path is on shared storage, the shared
 storage has to support POSIX file locks. The drawback of the
@@ -1021,27 +1058,37 @@ File Ownership
 --------------
 
 By default, cvmfs presents all files and directories as belonging to the
-mounting user, which for system mounts under /cvmfs is the user ``cvmfs``.
+mounting user, which for system mounts under ``/cvmfs`` is the user ``cvmfs``.
 Alternatively, CernVM-FS can present the uid and gid of file owners as they
 have been at the time of publication by setting ``CVMFS_CLAIM_OWNERSHIP=no``.
 
 If the real uid and gid values are shown, stable uid and gid values across nodes
-are recommended; otherwise the owners shown on clients can be confusing.  The
-client can also dynamically remap uid and gid values.  To do so, the parameters
+are recommended; otherwise the owners shown on clients can be confusing. The
+client can also dynamically remap uid and gid values. To do so, the parameters
 ``CVMFS_UID_MAP`` and ``CVMFS_GID_MAP`` should provide the path to text files
-that specify the mapping.  The format of the map files is identical to the map
+that specify the mapping. The format of the map files is identical to the map
 files used for :ref:`bulk changes of ownership on release manager machines <sct_repo_ownership>`.
 
 
 Hotpatching and Reloading
 -------------------------
 
-By hotpatching a running CernVM-FS instance, most of the code can be
-reloaded without unmounting the file system. The current active code is
-unloaded and the code from the currently installed binaries is loaded.
+Hotpatching a running CernVM-FS instance allows reloading most of the code 
+without unmounting the file system. The current active code is
+unloaded and the code from the currently (newly) installed binaries is loaded.
 Hotpatching is logged to syslog. Since CernVM-FS is re-initialized
 during hotpatching and configuration parameters are re-read, hotpatching
 can be also seen as a "reload".
+
+.. note::
+    During ``reload`` not all client config parameters can be changed,
+    some need a remount to take effect. 
+
+Since CernVM-FS 2.11, reloading the client considers the status of ``CVMFS_DEBUGLOG``.
+Independent of if the client runs in debug mode or not before the reload, after the reload
+the debug mode is only selected if ``CVMFS_DEBUGLOG`` is set.
+For earlier versions before CernVM-FS 2.11, the client mode was static and ``reload``
+was not able to switch from or to debug mode.
 
 Hotpatching has to be done for all repositories concurrently by
 
@@ -1109,7 +1156,7 @@ repositories.
 cvmfs\_config
 ~~~~~~~~~~~~~
 
-The ``cvmfs_config`` utility provides commands in order to setup the
+The ``cvmfs_config`` utility provides commands in order to set up the
 system for use with CernVM-FS.
 
 **setup**
@@ -1119,11 +1166,11 @@ system for use with CernVM-FS.
 
 **chksetup**
     The ``chksetup`` command inspects the system and the
-    CernVM-FS configuration in /etc/cvmfs for common problems.
+    CernVM-FS configuration in ``/etc/cvmfs`` for common problems.
 
 **showconfig**
     The ``showconfig`` command prints the CernVM-FS parameters for all
-    repositories or for the specific repository given as argument.  With the
+    repositories or for the specific repository given as argument. With the
     `-s` option, only non-empty parameters are shown.
 
 **stat**
@@ -1132,11 +1179,11 @@ system for use with CernVM-FS.
 
 **status**
     The ``status`` command shows all currently mounted repositories and
-    the process id (PID) of the CernVM-FS processes managing a mount
+    the process ID (PID) of the CernVM-FS processes managing a mount
     point.
 
 **probe**
-    The ``probe`` command tries to access /cvmfs/$repository for all
+    The ``probe`` command tries to access ``/cvmfs/$repository`` for all
     repositories specified in ``CVMFS_REPOSITORIES`` or the ones specified as
     a space separated list on the command line, respectively.
 
@@ -1162,9 +1209,9 @@ system for use with CernVM-FS.
 
 **killall**
     The ``killall`` command immediately unmounts all repositories under
-    /cvmfs and terminates the associated processes.  It is meant to escape from
-    a hung state without the need to reboot a machine.  However, all processes
-    that use CernVM-FS at the time will be terminated, too.  The need to use
+    ``/cvmfs`` and terminates the associated processes. It is meant to escape from
+    a hung state without the need to reboot a machine. However, all processes
+    that use CernVM-FS at the time will be terminated, too. The need to use
     this command very likely points to a network problem or a bug in cvmfs.
 
 **bugreport**
@@ -1185,14 +1232,14 @@ be of particular interest though.
 
       cvmfs_talk cleanup 0
 
-will, without interruption of service, immediately cleanup the cache
+will, without interruption of service, immediately clean up the cache
 from all files that are not currently pinned in the cache.
 
 ::
 
       cvmfs_talk cleanup rate 120
 
-shows the number of cache cleanups in the last two hours (120 minutes).  If
+shows the number of cache cleanups in the last two hours (120 minutes). If
 this value is larger than one or two, the cache size is probably two small and
 the client experiences cache thrashing.
 
@@ -1200,8 +1247,9 @@ the client experiences cache thrashing.
 
       cvmfs_talk internal affairs
 
-prints the internal status information and performance counters. It can
-be helpful for performance engineering.
+prints the internal status information and performance counters.
+It can be helpful for performance engineering.
+They can also be exported in regular intervals (see :ref:`cpt_telemetry`).
 
 ::
 
@@ -1210,18 +1258,85 @@ be helpful for performance engineering.
 starts the catalog update routine.
 When using ``remount sync`` the system waits for the new file system snapshot to be served (if there is a new one).
 
-Other
-~~~~~
+Kernel Cache Tuning
+~~~~~~~~~~~~~~~~~~~
+
+Using efficiently the kernel cache can increase the overall performance.
+Requests that would normally be answered by ``cvmfs``, can - if cached -
+be directly answered by the kernel which shortens the overall request time.
+There are multiple client config parameters that influence the kernel cache behavior.
+
+=============================== ========================================================================================
+**Parameter**                   **Meaning**
+=============================== ========================================================================================
+CVMFS_KCACHE_TIMEOUT            Timeout in seconds for path names and file attributes in the kernel file system buffers.
+CVMFS_CACHE_SYMLINKS            If set to *yes*, enables symlink caching in the kernel.
+CVMFS_STATFS_CACHE_TIMEOUT      | Caching time of  ``statfs()`` in seconds (no caching by default).
+                                | Calling ``statfs()`` in high frequency can be expensive.
+=============================== ========================================================================================
+
+Caching of symlink in the kernel means that the mangled name is stored, so that
+there is no need to resolve it again when it is requested for another time.
+Activating this option makes only sense if symlinks are heavily accessed.
+First performance measurement showed a slightly slower performance on the very first
+access (*cold cache*) but a better performance for multiple accesses (*warm* and *hot cache*).
+
+.. warning::
+    Symlink caching works best with ``kernel >= 6.2rc1`` and ``libfuse >= 3.16``.
+    It already works from version ``libfuse 3.10.0`` on but has restriction,
+    e.g. *mounts on top of mounts* will be destroyed if they are a symlink.
+
+
+File System Information
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Information about the current cache usage can be gathered using the
 ``df`` utility. For repositories created with the CernVM-FS 2.1
 toolchain, information about the overall number of file system entries
 in the repository as well as the number of entries covered by currently
-loaded meta-data can be gathered by ``df -i``.
+loaded metadata can be gathered by ``df -i``.
 
-For the `Nagios monitoring system <http://www.nagios.org>`_ [Schubert08]_, a
-checker plugin is available `on our website
-<http://cernvm.cern.ch/portal/filesystem/downloads>`_.
+
+Monitoring
+----------
+
+CernVM-FS offers multiple options to remotely monitor client status and behavior.
+
+Since the early days, CernVM-FS supports the `Nagios monitoring system <http://www.nagios.org>`_ [Schubert08]_.
+A checker plugin is available `on our website <https://cernvm.cern.ch/fs/#download>`_.
+
+Since CernVM-FS 2.11 there are two more options: 1) :ref:`Telemetry Aggregator <cpt_telemetry>` that allows the remote
+monitoring of all counters of ``cvmfs_talk internal affairs``, and 2) sending an extended CURL HTTP header for
+each download request. For this, ``CVMFS_HTTP_TRACING`` must be set. It will then include ``uid``, ``gid``, and
+``pid`` with each download request. 
+
+.. note::
+    Depending on which CernVM-FS component sends the CURL request, ``uid``, ``gid`` or ``pid`` might not be set.
+    Based on the platform, their default value ``-1`` might change to a large number if the base type is ``unsigned``.
+
+Furthermore, ``CVMFS_HTTP_TRACING_HEADERS`` can be set. This parameter allows for user-defined, static key-value pairs
+to be added to the header, e.g. to identify the client that send the request. As key, only alphanumeric sequences are
+accepted and white space around the key is ignored. Invalid keys are ignored. An example is given below
+
+.. code-block:: bash
+
+    # client config
+    CVMFS_HTTP_TRACING=on #(default off)
+    # illegal headers are: CVMFS-X-h2:ff and X-CVMFS-h3:12_ad
+    CVMFS_HTTP_TRACING_HEADERS='h1:test|CVMFS-X-h2:ff|X-CVMFS-h3:12_ad |  h4  : 12fs_?'
+    
+    # debug output
+    (download) CURL Header for URL: /data/81/7c882d4a2e9dd7f9c5c2bfb4e04ff316e436dfC is:
+    Connection: Keep-Alive
+    Pragma:
+    User-Agent: cvmfs Fuse 2.11.0
+    X-CVMFS-h1: test
+    X-CVMFS-h4: 12fs_?
+    X-CVMFS-PID: 561710
+    X-CVMFS-GID: 0
+    X-CVMFS-UID: 0
+
+.. _sct_debug_logs:
 
 .. _sct_debug_logs:
 

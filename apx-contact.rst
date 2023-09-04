@@ -4,7 +4,7 @@ Contact Information
 For support requests and bug reports, please submit a GitHub issue in our
 `issue tracker <https://github.com/cvmfs/cvmfs/issues>`_.
 
-Together with bug reports, please attach a "bugreport tarball", which is created
+Together with bug reports, please attach a "bug report tarball", which is created
 with ``sudo cvmfs_config bugreport``.
 
 Discourse Forum

@@ -12,14 +12,14 @@ the CernVM-FS graph driver can remove the bottleneck of distributing (large)
 container images to (many) nodes.
 
 The CernVM-FS graph driver can run any normal image from a Docker registry.
-Additionally, it can run so called *Thin Images*. A thin image is like a
+Additionally, it can run so-called *Thin Images*. A thin image is like a
 symbolic link for container images. It is a regular, very small image in the
 registry. It contains a single file, the *thin image descriptor*, that specifies
 where in a CernVM-FS repository the actual image contents can be found. The
 ``docker2cvmfs`` utility can be used to convert a regular image to a thin image.
 
 .. figure:: _static/thin_image.svg
-   :alt: Comparision between regular container images and thin images
+   :alt: Comparison between regular container images and thin images
    :figwidth: 750
    :align: center
 
@@ -28,15 +28,15 @@ Requirements
 ------------
 
 The graph driver plugin requires Docker version > 17 and a host kernel with
-either aufs or overlay2 support, which includes RHEL >= 7.3. Please note that
+overlay2 support, which includes RHEL >= 7.3. Please note that
 on RHEL 7, Docker's data root should reside either on an ext file system or on
 an xfs file system that is formatted with the ``ftype=1`` mount option.
 
 The Docker graph driver plugin receives its CernVM-FS configuration by default
-from the Docker host's /etc/cvmfs directory. The easiest way to populate
-/etc/cvmfs is to install the ``cvmfs-config-default`` package (or any other
-``cvmfs-config-...`` package) on the Docker host.  Alternatively, a directory
-structure resembling the /etc/cvmfs hierarchy can by manually created and linked
+from the Docker host's ``/etc/cvmfs`` directory. The easiest way to populate
+``/etc/cvmfs`` is to install the ``cvmfs-config-default`` package (or any other
+``cvmfs-config-...`` package) on the Docker host. Alternatively, a directory
+structure resembling the ``/etc/cvmfs`` hierarchy can be manually created and linked
 to the graph driver plugin.
 
 
@@ -76,13 +76,13 @@ The following steps install and activate the CernVM-FS graph driver plugin.
         docker run -it --rm cvmfs/thin_ubuntu /bin/bash
 
 In order to get debugging output, add ``"debug": true`` to the
-/etc/docker/daemon.json file.
+``/etc/docker/daemon.json`` file.
 
 
 Location of the Plugin Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, the plugin tries to bind mount the host's /etc/cvmfs directory
+By default, the plugin tries to bind mount the host's ``/etc/cvmfs`` directory
 as a source of configuration. Other locations can be linked to the container
 by running ::
 
@@ -95,14 +95,15 @@ Installation from a Plugin Tarball
 
 Instead of installing the plugin from the Docker registry, it can be installed
 directly from a tarball. To do so, `download <https://ecsft.cern.ch/dist/cvmfs/docker-graphdriver>`_
-and untar a graph driver plugin tarball.  Run ::
+and untar a graph driver plugin tarball. Run ::
 
     docker plugin create my-graphdriver cvmfs-graphdriver-plugin-$VERSION
     docker plugin enable my-graphdriver
 
-**Note**: currently, the graph driver name (``my-graphdriver``) must not contain
-a colon (``:``) nor a comma (``,``).  This issue will be fixed in a later
-version.
+.. Note::
+  Currently, the graph driver name (``my-graphdriver``) must not contain
+  a colon (``:``) nor a comma (``,``). This issue will be fixed in a later
+  version.
 
 
 Conversion of Images
@@ -114,10 +115,10 @@ through a small utility ``docker2cvmfs``.
 At the moment it is possible to directly download the executable:
 `docker2cvmfs v0.3 <https://ecsft.cern.ch/dist/cvmfs/docker2cvmfs/0.3/docker2cvmfs>`_
 
-``docker2cvmfs`` provides different commands to manipulate docker images but
-the simplest way is to use the ``make-thin`` sub-command.
+``docker2cvmfs`` provides different commands to manipulate docker images, though
+the simplest way is to use the ``make-thin`` subcommand.
 
-This sub-command expects to find on the host machine a recent version of
+This subcommand expects to find on the host machine a recent version of
 ``cvmfs_server`` that supports the ``ingest`` command.
 
 Invoking the help of the subcommand ``docker2cvmfs make-thin --help`` explains
@@ -138,7 +139,7 @@ the several layers (``example.cern.ch``).
 The utility downloads every layer that composes the image, stores them into the
 repository, creates the new thin image and imports that into docker.
 
-By default the layers are stored into the ``layers/`` subdirectory of the
+By default, the layers are stored into the ``layers/`` subdirectory of the
 repository; this can be modified using the ``--subdirectory`` parameters.
 
 The images are downloaded, by default, from the official docker hub registry,

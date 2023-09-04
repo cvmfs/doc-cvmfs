@@ -59,9 +59,9 @@ The following events are known:
 
   4            Lookup path
 
-  5            Get file system meta-data (e.g. df call)
+  5            Get file system metadata (e.g. df call)
 
-  6            Get file/directory meta-data
+  6            Get file/directory metadata
 
   7            List extended attributes of a file/directory
 

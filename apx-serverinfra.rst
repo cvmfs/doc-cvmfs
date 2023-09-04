@@ -18,7 +18,7 @@ Prerequisites
 A CernVM-FS server installation depends on the following environment
 setup and tools to be in place:
 
--  Appropriate kernel version.  You must have ONE of the following:
+-  Appropriate kernel version. You must have ONE of the following:
 
    -   kernel 4.2.x or later.
    -   RHEL7.3 kernel (for OverlayFS)
@@ -34,7 +34,7 @@ Local Backend Storage Infrastructure
 ------------------------------------
 
 CernVM-FS stores the entire repository content (file content and
-meta-data catalogs) into a content addressable storage (CAS). This
+metadata catalogs) into a content addressable storage (CAS). This
 storage can either be a file system at ``/srv/cvmfs`` or an S3
 compatible object storage system (see ":ref:`sct_s3storagesetup`" for
 details). In the former case the contents of ``/srv/cvmfs`` are as
@@ -148,7 +148,7 @@ Repository Configuration Directory
 
 The authoritative configuration of a CernVM-FS repository is located in
 ``/etc/cvmfs/repositories.d`` and should only be writable by the
-administrator. Furthermore the repository's keychain is located in
+administrator. Furthermore, the repository's keychain is located in
 ``/etc/cvmfs/keys`` and follows the naming convention ``<fqrn>.crt`` for
 the certificate, ``<fqrn>.key`` for the repository's private key and
 ``<fqrn>.pub`` for the public key. All of those files can be symlinked
@@ -199,14 +199,14 @@ chosen backend storage type. For an S3 hosted backend storage, the
 CernVM-FS client can usually be directly pointed to the S3 bucket used
 for storage (see ":ref:`sct_s3storagesetup`" for details). In case of a
 local file system backend any web server can be used for this purpose.
-By default CernVM-FS assumes Apache and uses that automatically.
+By default, CernVM-FS assumes Apache and uses that automatically.
 
 Internally the CernVM-FS server uses a SUID binary (i.e.
 ``cvmfs_suid_helper``) to manipulate its mount points. This is necessary
 since transactional CernVM-FS commands must be accessible to the
 repository owner that is usually different from root. Both the mount
 directives for ``/var/spool/cvmfs/<fqrn>/rdonly`` and ``/cvmfs/<fqrn>``
-must be placed into ``/etc/fstab`` for this reason. By default
+must be placed into ``/etc/fstab`` for this reason. By default,
 CernVM-FS uses the following entries for these mount points:
 
 ::
