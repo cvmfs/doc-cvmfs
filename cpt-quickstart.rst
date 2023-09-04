@@ -65,7 +65,7 @@ or with
 
 ::
 
-    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-service-2.11.0-1.x86_64.docker.tar.gz | docker load
+    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-service-2.11.0-1.x86_64.docker.tar.gz | docker load
 
 Run the container as a system service with
 
