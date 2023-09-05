@@ -228,11 +228,7 @@ Troubleshooting
 
     cvmfs_config chksetup
 
-<<<<<<< HEAD
-- CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each others settings (default configuration, domain specific configuration, local setup, ...). To show the effective configuration for *repository*.cern.ch, run
-=======
 - CernVM-FS gathers its configuration parameter from various configuration files that can overwrite each other's settings (default configuration, domain specific configuration, local setup, ...). To show the effective configuration for *repository*.cern.ch, run
->>>>>>> upstream/2.11
 
 ::
 
