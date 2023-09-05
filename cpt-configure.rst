@@ -1073,7 +1073,7 @@ files used for :ref:`bulk changes of ownership on release manager machines <sct_
 Hotpatching and Reloading
 -------------------------
 
-Hotpatching a running CernVM-FS instance allows reloading most of the code 
+Hotpatching a running CernVM-FS instance allows reloading most of the code
 without unmounting the file system. The current active code is
 unloaded and the code from the currently (newly) installed binaries is loaded.
 Hotpatching is logged to syslog. Since CernVM-FS is re-initialized
@@ -1082,7 +1082,7 @@ can be also seen as a "reload".
 
 .. note::
     During ``reload`` not all client config parameters can be changed,
-    some need a remount to take effect. 
+    some need a remount to take effect.
 
 Since CernVM-FS 2.11, reloading the client considers the status of ``CVMFS_DEBUGLOG``.
 Independent of if the client runs in debug mode or not before the reload, after the reload
@@ -1308,7 +1308,7 @@ A checker plugin is available `on our website <https://cernvm.cern.ch/fs/#downlo
 Since CernVM-FS 2.11 there are two more options: 1) :ref:`Telemetry Aggregator <cpt_telemetry>` that allows the remote
 monitoring of all counters of ``cvmfs_talk internal affairs``, and 2) sending an extended CURL HTTP header for
 each download request. For this, ``CVMFS_HTTP_TRACING`` must be set. It will then include ``uid``, ``gid``, and
-``pid`` with each download request. 
+``pid`` with each download request.
 
 .. note::
     Depending on which CernVM-FS component sends the CURL request, ``uid``, ``gid`` or ``pid`` might not be set.
@@ -1324,7 +1324,7 @@ accepted and white space around the key is ignored. Invalid keys are ignored. An
     CVMFS_HTTP_TRACING=on #(default off)
     # illegal headers are: CVMFS-X-h2:ff and X-CVMFS-h3:12_ad
     CVMFS_HTTP_TRACING_HEADERS='h1:test|CVMFS-X-h2:ff|X-CVMFS-h3:12_ad |  h4  : 12fs_?'
-    
+
     # debug output
     (download) CURL Header for URL: /data/81/7c882d4a2e9dd7f9c5c2bfb4e04ff316e436dfC is:
     Connection: Keep-Alive
@@ -1335,8 +1335,6 @@ accepted and white space around the key is ignored. Invalid keys are ignored. An
     X-CVMFS-PID: 561710
     X-CVMFS-GID: 0
     X-CVMFS-UID: 0
-
-.. _sct_debug_logs:
 
 .. _sct_debug_logs:
 

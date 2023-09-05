@@ -1,4 +1,5 @@
 Release Notes for CernVM-FS 2.11.0
+==================================
 
 CernVM-FS 2.11.0 is a sizeable feature release, containing a number of new features, bug fixes and performance improvements, some of which have been presented at `CHEP 2023 <https://indico.jlab.org/event/459/contributions/11483/attachments/9475/13736/presentation.pdf>`_.
 
