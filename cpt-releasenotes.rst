@@ -6,7 +6,7 @@ Highlights are:
 
 * Support for symlink kernel caching through CVMFS_CACHE_SYMLINKS (requires libfuse >= 3.16 and kernel >= 6.2-rc1)
 
-* A new reference-counted cache manager mode that reduces the number of open file descriptors with CVMFS_CACHE_REFCOUNT, and a streaming cache mode with CVMFS_CACHE_STREAMING
+* A new reference-counted cache manager mode that reduces the number of open file descriptors with CVMFS_CACHE_REFCOUNT, and a streaming cache mode with CVMFS_STREAMING_CACHE
 
 * A bugfix for an issue that would slow down client startup when the limit for open file descriptors gets very high.
 
