@@ -11,7 +11,7 @@ Highlights are:
 
 * A bugfix for an issue that would slow down client startup when the limit for open file descriptors gets very high.
 
-* A new telemetry option to send client performance counters to influx
+* A new telemetry option to send client performance counters to influx; refer to the new `telemetry documentation <https://cvmfs.readthedocs.io/en/stable/cpt-telemetry.html>`_ for more details.
 
 
 As with previous releases, upgrading clients should be seamless just by
