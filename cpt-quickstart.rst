@@ -48,7 +48,7 @@ To install the CVMFS package run
 
 ::
 
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-2.10.0-1.fc34.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0-1.fc37.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
 Docker Container
@@ -59,13 +59,13 @@ Import the container with
 
 ::
 
-    docker pull cvmfs/service
+    docker pull registry.cern.ch/cvmfs/service:latest
 
 or with
 
 ::
 
-    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-service-2.10.0-1.x86_64.docker.tar.gz | docker load
+    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-service-2.11.0-1.x86_64.docker.tar.gz | docker load
 
 Run the container as a system service with
 
@@ -100,7 +100,7 @@ Download the CernVM-FS client package in the terminal in order to avoid signatur
 
 ::
 
-    curl -o ~/Downloads/cvmfs-2.10.0.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.10.0/cvmfs-2.10.0.pkg
+    curl -o ~/Downloads/cvmfs-2.11.0.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0.pkg
 
 Install the CernVM-FS package by opening the .pkg file and reboot.
 Future releases will provide a signed and notarized package.

@@ -811,6 +811,28 @@ command ``sudo cvmfs_talk cache instance`` can be used to show the currently
 used cache manager instance.
 
 
+Refcounted Cache Mode
+^^^^^^^^^^^^^^^^^^^^^
+
+The default posix cache manager has a "refcounted" mode, which uses additional
+maps to count references to open file descriptors. Multiple processes reading
+the same cached files will then no longer create new duplicated file descriptors
+for the same opened file, which can be useful for highly parallelized workloads.
+This functionality comes with a small memory overhead, which should however not
+exceed a few MBs.
+
+The refcount mode can be turned on by setting
+
+::
+
+    CVMFS_CACHE_REFCOUNT=yes
+
+and reloading the cvmfs configuration. To switch it off, the repositories have
+to be remounted. Switching it off and doing ``cvmfs_config reload`` will not fail,
+but silently ignore the option until the next remount in order to properly
+work with already open file descriptors.
+
+
 Tiered Cache
 ^^^^^^^^^^^^
 
@@ -829,7 +851,20 @@ lower instances.  The parameter
 ``CVMFS_CACHE_$tieredInstanceName_LOWER_READONLY=[yes|no]`` controls whether the
 lower layer can be populated by the client or not.
 
+Streaming Cache Manager
+^^^^^^^^^^^^^^^^^^^^^^^
 
+This mode uses a download manager and a backing cache manager to deliver data.
+Pinned files and catalogs use the backing cache manager. Regular data blocks
+are downloaded on read, the required data window copied to the user. In order
+to use the streaming cache manager, set:
+
+::
+
+    CVMFS_STREAMING_CACHE=yes
+
+Note: The streaming cache manager is not ideal when doing multiple small reads
+of a large chunk, as each read will trigger a re-download of the entire chunk.
 
 External Cache Plugin
 ^^^^^^^^^^^^^^^^^^^^^
@@ -1038,7 +1073,7 @@ files used for :ref:`bulk changes of ownership on release manager machines <sct_
 Hotpatching and Reloading
 -------------------------
 
-Hotpatching a running CernVM-FS instance allows reloading most of the code 
+Hotpatching a running CernVM-FS instance allows reloading most of the code
 without unmounting the file system. The current active code is
 unloaded and the code from the currently (newly) installed binaries is loaded.
 Hotpatching is logged to syslog. Since CernVM-FS is re-initialized
@@ -1047,7 +1082,7 @@ can be also seen as a "reload".
 
 .. note::
     During ``reload`` not all client config parameters can be changed,
-    some need a remount to take effect. 
+    some need a remount to take effect.
 
 Since CernVM-FS 2.11, reloading the client considers the status of ``CVMFS_DEBUGLOG``.
 Independent of if the client runs in debug mode or not before the reload, after the reload
@@ -1273,7 +1308,7 @@ A checker plugin is available `on our website <https://cernvm.cern.ch/fs/#downlo
 Since CernVM-FS 2.11 there are two more options: 1) :ref:`Telemetry Aggregator <cpt_telemetry>` that allows the remote
 monitoring of all counters of ``cvmfs_talk internal affairs``, and 2) sending an extended CURL HTTP header for
 each download request. For this, ``CVMFS_HTTP_TRACING`` must be set. It will then include ``uid``, ``gid``, and
-``pid`` with each download request. 
+``pid`` with each download request.
 
 .. note::
     Depending on which CernVM-FS component sends the CURL request, ``uid``, ``gid`` or ``pid`` might not be set.
@@ -1289,7 +1324,7 @@ accepted and white space around the key is ignored. Invalid keys are ignored. An
     CVMFS_HTTP_TRACING=on #(default off)
     # illegal headers are: CVMFS-X-h2:ff and X-CVMFS-h3:12_ad
     CVMFS_HTTP_TRACING_HEADERS='h1:test|CVMFS-X-h2:ff|X-CVMFS-h3:12_ad |  h4  : 12fs_?'
-    
+
     # debug output
     (download) CURL Header for URL: /data/81/7c882d4a2e9dd7f9c5c2bfb4e04ff316e436dfC is:
     Connection: Keep-Alive
