@@ -48,7 +48,7 @@ To install the CVMFS package run
 
 ::
 
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0-1.fc37.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0-1.fc34.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
 Docker Container
