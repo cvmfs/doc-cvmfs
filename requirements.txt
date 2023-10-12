@@ -1,4 +1,14 @@
 docutils==0.16
 Sphinx>=4.2.0
 sphinxcontrib-mermaid
+pillow
+mock
+alabaster
+commonmark
+recommonmark
 sphinx-rtd-theme
+readthedocs-sphinx-ext
+jinja2
+# for conversion of svgs to use in latex
+cairosvg
+sphinxcontrib-svg2pdfconverter
