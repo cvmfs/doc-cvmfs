@@ -1,3 +1,24 @@
+Release Notes for CernVM-FS 2.11.2
+==================================
+
+CernVM-FS 2.11.2 is a patch release, containing three important bug fixes.
+As with previous releases, upgrading clients should be seamless just by installing the new package from the repository.
+As usual, we recommend updating only a few worker nodes first and gradually ramping up once the new version proves to work correctly.
+Please take special care when upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active leases must be present before upgrading.
+
+Bug fixes
+---------
+
+  * [client] Fix mount helper race condition causing spurious directories (`#3430 <https://github.com/cvmfs/cvmfs/issues/3430>`_)
+  * [client] Fix corrupted paths for concurrent external file requests (`#3418 <https://github.com/cvmfs/cvmfs/issues/3418>`_)
+  * [client] Suppress CVMFS_NFILES check for refcounted cache manager (`#3426 <https://github.com/cvmfs/cvmfs/issues/3426>`_)
+  * [deb] Let cvmfs-fuse3 depend on cvmfs of same version (`#3421 <https://github.com/cvmfs/cvmfs/issues/3421>`_)
+  * [rpm] Match subpackage release in addition to version (`#3422 <https://github.com/cvmfs/cvmfs/issues/3422>`_)
+
+
 Release Notes for CernVM-FS 2.11.1
 ==================================
 
