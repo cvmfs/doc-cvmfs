@@ -21,7 +21,9 @@ a specific repository. For a list of all
 parameters, see Appendix ":ref:`apxsct_clientparameters`".
 
 The ``.conf`` and ``.local`` configuration files are key-value pairs in the form
-``PARAMETER=value``. They are sourced by /bin/sh. Hence, a limited set
+``PARAMETER=value``. For boolean parameters, ``yes``/``no``, ``on``/``off``, ``true``/``false`` or ``1``/``0`` can be used as truth values. These are case-insensitive, so ``TRUE``, ``On``, and ``yes`` are equivalent.
+
+The configuration files are sourced by /bin/sh. Hence, a limited set
 of shell commands can be used inside these files including comments,
 ``if`` clauses, parameter evaluation, and shell math (``$((...))``).
 Special characters have to be quoted. For instance, instead of
