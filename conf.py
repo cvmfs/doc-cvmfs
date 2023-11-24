@@ -32,7 +32,9 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinxcontrib.mermaid',
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'sphinxcontrib.cairosvgconverter',
+    'sphinx_design',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

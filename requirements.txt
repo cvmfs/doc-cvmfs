@@ -9,6 +9,8 @@ recommonmark
 sphinx-rtd-theme
 readthedocs-sphinx-ext
 jinja2
+sphinx_design
+
 # for conversion of svgs to use in latex
 cairosvg
 sphinxcontrib-svg2pdfconverter
