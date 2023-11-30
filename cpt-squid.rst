@@ -3,7 +3,7 @@
 Setting up a Local Squid Proxy
 ==============================
 
-For clusters of nodes with CernVM-FS clients, we strongly recommend 
+For clusters of nodes with CernVM-FS clients, we strongly recommend
 setting up two or more `Squid forward proxy <http://www.squid-
 cache.org>`_ servers as well. The forward proxies will reduce the
 latency for the local worker nodes, which is critical for cold cache
@@ -60,10 +60,18 @@ something like this:
 
       acl localnet src A.B.C.D/NN
 
-If you instead want to limit the destinations to major cvmfs Stratum 1s,
-it is better to use the list built in to 
+If you instead want to limit the destinations to major WLCG cvmfs Stratum 1s,
+it is best to use the list built in to
 `Frontier Squid <https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid#Restricting_the_destination>`_
 because the list is sometimes updated with new releases.
+
+For manually limiting the destinations, use a configuration like
+
+::
+
+      acl cvmfs dst <a stratum 1 host name>
+      acl cvmfs dst <another stratum 1 host name>
+      http_access allow cvmfs
 
 The Squid configuration can be verified by ``squid -k parse``. Before
 the first service start, the cache space on the hard disk needs to be
