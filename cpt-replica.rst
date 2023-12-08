@@ -56,8 +56,7 @@ We suggest the following key parameters:
 **Storage**
     RAID-protected storage. The ``cvmfs_server`` utility should have low
     latency to the storage because it runs lots of system calls (``stat()``)
-    against it. For the local storage backends ext3/4 file systems are
-    preferred (rather than XFS).
+    against it.
 
 **Web server**
     A standard Apache server. Directory listing is not required. In
