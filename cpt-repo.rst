@@ -441,8 +441,8 @@ Once the bucket is available, the S3 storage settings are given as parameters to
       cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
         -w http://mybucket.s3.amazonaws.com my.repo.name
 
-The file ``mys3.conf`` contains the S3 settings (see :ref: `table below
-<tab_s3confparameters>`). The ``-w`` option is used define the S3 server URL,
+The file ``mys3.conf`` contains the S3 settings (see :ref:`table below <tab_s3confparameters>`).
+The ``-w`` option is used define the S3 server URL,
 e.g. http://localhost:3128, which is used for accessing the repository's
 backend storage on S3.
 
