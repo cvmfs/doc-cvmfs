@@ -661,48 +661,54 @@ information. In general, they can be displayed with a command like
 
 There are the following supported magic attributes:
 
-======================= =======================================================================
-**Parameter**           **Meaning**
-======================= =======================================================================
-``catalog_counters``    Like ``repo_counters`` but only for the nested catalog that hosts the given path.
-``chunks``              Number of chunks of a regular file.
-``chunk_list``          Hashes and sizes of the chunks of a regular (large) file.
-``compression``         Compression algorithm, for regular files only. Either "zlib" or "none".
-``expires``             Shows the remaining lifetime of the mounted root file catalog in minutes.
-``external_file``       Indicates if a regular file is an external file or not. Either 0 or 1.
-``external_host``       Like ``host`` but for the host settings to fetch external files.
-``external_timeout``    Like ``timeout`` but for the host settings to fetch external files.
-``fqrn``                Shows the fully qualified repository name of the mounted repository.
-``hash``                Shows the cryptographic hash of a regular file as listed in the file catalog.
-``host``                Shows the currently active HTTP server.
-``host_list``           Shows the ordered list of HTTP servers.
-``inode_max``           Shows the highest possible inode with the current set of loaded catalogs.
-``lhash``               Shows the cryptographic hash of a regular file as stored in the local cache, if available.
-``logbuffer``           Shows system log messages for the repository.
-``maxfd``               Shows the maximum number of file descriptors available to file system clients.
-``ncleanup24``          Shows the number of cache cleanups in the last 24 hours.
-``nclg``                Shows the number of currently loaded nested catalogs.
-``ndiropen``            Shows the overall number of opened directories.
-``ndownload``           Shows the overall number of downloaded files since mounting.
-``nioerr``              Shows the total number of I/O errors encountered since mounting.
-``nopen``               Shows the overall number of ``open()`` calls since mounting.
-``pid``                 Shows the process ID of the CernVM-FS Fuse process.
-``proxy``               Shows the currently active HTTP proxy.
-``pubkeys``             The loaded public RSA keys used for repository whitelist verification.
-``rawlink``             Shows unresolved variant symbolic links; only accessible from the root attribute namespace (use `attr -Rg rawlink`).
-``repo_counters``       Shows the aggregate counters of the repository contents (number of files etc.)
-``repo_metainfo``       Shows the :ref:`repository meta info <sct_metainfo>` file, if available
-``revision``            Shows the file catalog revision of the mounted root catalog, an auto-increment counter increased on every repository publish.
-``root_hash``           Shows the cryptographic hash of the root file catalog.
-``rx``                  Shows the overall amount of downloaded kilobytes.
-``speed``               Shows the average download speed.
-``tag``                 The configured repository tag.
-``timeout``             Shows the timeout for proxied connections in seconds.
-``timeout_direct``      Shows the timeout for direct connections in seconds.
-``uptime``              Shows the time passed since mounting in minutes.
-``usedfd``              Shows the number of file descriptors currently issued to file system clients.
-``version``             Shows the version of the loaded CernVM-FS binary.
-======================= =======================================================================
+======================== =======================================================================
+**Parameter**            **Meaning**
+======================== =======================================================================
+``catalog_counters``     Like ``repo_counters`` but only for the nested catalog that hosts the given path.
+``chunks``               Number of chunks of a regular file.
+``chunk_list``           Hashes and sizes of the chunks of a regular (large) file.
+``compression``          Compression algorithm, for regular files only. Either "zlib" or "none".
+``direct_io``            Indicates if the current entry is using direct IO. Either 0 or 1.
+``expires``              Shows the remaining lifetime of the mounted root file catalog in minutes.
+``external_file``        Indicates if a regular file is an external file or not. Either 0 or 1.
+``external_host``        Like ``host`` but for the host settings to fetch external files.
+``external_timeout``     Like ``timeout`` but for the host settings to fetch external files.
+``fqrn``                 Shows the fully qualified repository name of the mounted repository.
+``hash``                 Shows the cryptographic hash of a regular file as listed in the file catalog.
+``hitrate``              Shows overall cache hitrate since mounting the repository.
+``host``                 Shows the currently active HTTP server.
+``host_list``            Shows the ordered list of HTTP servers.
+``inode_max``            Shows the highest possible inode with the current set of loaded catalogs.
+``lhash``                Shows the cryptographic hash of a regular file as stored in the local cache, if available.
+``logbuffer``            Shows system log messages for the repository.
+``maxfd``                Shows the maximum number of file descriptors available to file system clients.
+``ncleanup24``           Shows the number of cache cleanups in the last 24 hours.
+``nclg``                 Shows the number of currently loaded nested catalogs.
+``ndiropen``             Shows the overall number of opened directories.
+``ndownload``            Shows the overall number of downloaded files since mounting.
+``nioerr``               Shows the total number of I/O errors encountered since mounting.
+``nopen``                Shows the overall number of ``open()`` calls since mounting.
+``pid``                  Shows the process ID of the CernVM-FS Fuse process.
+``proxy``                Shows the currently active HTTP proxy.
+``proxy_list``           Shows all registered proxies for this repository. Also contains fallback proxies. If none are used it shows ``DIRECT``.
+``proxy_list_external``  Shows all registered proxies used for accessing external data. If none are used it shows ``DIRECT``.
+``pubkeys``              The loaded public RSA keys used for repository whitelist verification.
+``rawlink``              Shows unresolved variant symbolic links; only accessible from the root attribute namespace (use `attr -Rg rawlink`).
+``repo_counters``        Shows the aggregate counters of the repository contents (number of files etc.)
+``repo_metainfo``        Shows the :ref:`repository meta info <sct_metainfo>` file, if available
+``revision``             Shows the file catalog revision of the mounted root catalog, an auto-increment counter increased on every repository publish.
+``root_hash``            Shows the cryptographic hash of the root file catalog.
+``rx``                   Shows the overall amount of downloaded kilobytes.
+``speed``                Shows the average download speed.
+``tag``                  The configured repository tag.
+``timeout``              Shows the timeout for proxied connections in seconds.
+``timestamp_last_ioerr`` Shows the timestamp when the last IO error occured.
+``timeout_direct``       Shows the timeout for direct connections in seconds.
+``uptime``               Shows the time passed since mounting in minutes.
+``useddirp``             Shows the number of currently open directories.
+``usedfd``               Shows the number of file descriptors currently issued to file system clients.
+``version``              Shows the version of the loaded CernVM-FS binary.
+======================== =======================================================================
 
 Extended attributes can be queried using the ``attr`` command. For
 instance, ``attr -g hash /cvmfs/atlas.cern.ch/ChangeLog`` returns the
