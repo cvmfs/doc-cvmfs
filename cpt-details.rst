@@ -728,8 +728,8 @@ machine and errors are returned as signals. The human-readable output includes a
 descriptive header, including how many pages are available and instructions how to access
 them. Errors are returned as plaintext with possible instructions how to resolve the issue.
 
-Furthermore, ``<attr>~?`` and ``<attr>@?`` allow retrieving information about the attribute.
-At the moment, this consist only to get the number of pages the attribute has.
+Furthermore, ``<attr>~?`` and ``<attr>@?`` allow retrieving additional information about the attribute.
+At the moment, this consist only of the number of pages the attribute has.
 
 Different pages of the attribute can be accessed with ``<attr>~<page num>`` and ``<attr>@<page num>``
 Pages start at 0.
@@ -739,10 +739,10 @@ The commands also work with single page attributes (page number is 0).
 ======================= =======================================================================
 **Parameter**           **Meaning**
 ======================= =======================================================================
-``<attr>@?``            Human-readable information about the attribute
-``<attr>~?``            Machine-readable (CSV format) information about the attribute
-``<attr>@<page num>``   Output of the attribute with descritive header. Page numbers starting from 0. Errors are returned as plaintext.
-``<attr>~<page num>``   Output of the attribute. Page numbers starting from 0. Errors are returned as signals.
+``<attr>@?``            Human-readable information about the attribute.
+``<attr>~?``            Machine-readable (CSV format) information about the attribute.
+``<attr>@<page num>``   Output of the attribute with a descriptive header. Page numbers are starting from 0. Errors are returned as plaintext.
+``<attr>~<page num>``   Output of the attribute. Page numbers are starting from 0. Errors are returned as signals.
 ======================= =======================================================================
 
 
@@ -751,7 +751,7 @@ Restricting Access to Extended Attributes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Access to extended attributes can be restricted in the client config to
-``root`` and users with a specific (main) ``gid`` listed by
+``root`` (``gid=0``) and users with a specific (main) ``gid`` listed by
 ``CVMFS_XATTR_PRIVILEGED_GIDS``. Extended attributes to which 
 this should apply are listed in ``CVMFS_XATTR_PROTECTED_XATTRS``.
 Note that those attributes must be listed in their full name, e.g. ``user.fqrn``,
@@ -759,7 +759,7 @@ Note that those attributes must be listed in their full name, e.g. ``user.fqrn``
 will have the prefix ``user.``. If uncertain, they can be looked up in the source
 code of ``cvmfs/magic_xattr.cc``.
 
-Example that only users with ``gid=788`` (and ``root``) can access the repository name
+Example: Only users with ``gid=788`` (and ``root``) can access the repository name
 
 ::
 
