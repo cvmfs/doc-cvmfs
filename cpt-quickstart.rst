@@ -21,103 +21,121 @@ Getting the Software
 The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
 However, it is recommended to use the available package repositories that are also provided for the supported operating systems.
 
-Scientific Linux/CentOS
-~~~~~~~~~~~~~~~~~~~~~~~
-To add the CVMFS repository and install CVMFS run
-
-::
-
-    sudo yum install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
-    sudo yum install -y cvmfs
-
-Debian/Ubuntu
-~~~~~~~~~~~~~
-To add the CVMFS repository and install CVMFS run
-
-::
-
-    wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
-    sudo dpkg -i cvmfs-release-latest_all.deb
-    rm -f cvmfs-release-latest_all.deb
-    sudo apt-get update
-    sudo apt-get install cvmfs
-
-Fedora
-~~~~~~
-To install the CVMFS package run
-
-::
-
-    sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-2.11.2-1.fc38.x86_64.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-libs-2.11.2-1.fc38.x86_64.rpm
-
-
-Docker Container
+Linux
 ~~~~~~~~~~~~~~~~
 
-The CernVM-FS service container can expose the ``/cvmfs`` directory tree to the host.
-Import the container with
-
-::
-
-    docker pull registry.cern.ch/cvmfs/service:latest
-
-or with
-
-::
-
-    curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-service-2.11.2-1.x86_64.docker.tar.gz | docker load
-
-Run the container as a system service with
-
-::
-
-    docker run -d --rm \
-      -e CVMFS_CLIENT_PROFILE=single \
-      -e CVMFS_REPOSITORIES=sft.cern.ch,... \
-      --cap-add SYS_ADMIN \
-      --device /dev/fuse \
-      --volume /cvmfs:/cvmfs:shared \
-      cvmfs/service:2.11.2-1
-
-Use ``docker stop`` to unmount the ``/cvmfs`` tree.
-
-.. note::
-    If you run multiple nodes (a cluster), use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
-
-Mac OS X
-~~~~~~~~
-
-On Mac OS X, CernVM-FS is based on `macFUSE <http://osxfuse.github.io>`_.
-Note that as of macOS 11 Big Sur, `kernel extensions need to be enabled <https://support.apple.com/guide/mac-help/change-startup-disk-security-settings-a-mac-mchl768f7291/mac>`_
-to install macFUSE.
-Verify that fuse is available with
-
-::
-
-    kextstat | grep -i fuse
-
-Download the CernVM-FS client package in the terminal in order to avoid signature warnings
-
-::
-
-    curl -o ~/Downloads/cvmfs-2.11.2.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.1/cvmfs-2.11.2.pkg
-
-Install the CernVM-FS package by opening the .pkg file and reboot.
-Future releases will provide a signed and notarized package.
+To add the CVMFS repository (available for Debian and RHEL flavors) and install CVMFS, run:
 
 
-Windows / WSL2
-~~~~~~~~~~~~~~
+.. tab-set::
 
-Follow the `Windows instructions <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_ to install the Windows Subsystem for Linux (WSL2).
-Install any of the Linux distributions and follow the instructions for the distribution in this guide.
-Whenever you open the Linux distribution, run
+   .. tab-item:: Scientific Linux / RHEL / Alma
 
-::
+      .. code-block:: console
 
-    sudo cvmfs_config wsl2_start
+         sudo yum install https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest.noarch.rpm
+         sudo yum install -y cvmfs
 
-to start the CernVM-FS service.
+   .. tab-item:: Debian/Ubuntu
+
+      .. code-block:: console
+
+         wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb
+         sudo dpkg -i cvmfs-release-latest_all.deb
+         rm -f cvmfs-release-latest_all.deb
+         sudo apt-get update
+         sudo apt-get install cvmfs
+
+
+   .. tab-item:: Fedora
+
+      .. code-block:: console
+
+         sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0-1.fc34.x86_64.rpm \
+                          https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm \
+                          http://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-libs-2.11.0-1.fc34.x86_64.rpm
+
+
+Other Platforms
+~~~~~~~~~~~~~~~~
+
+.. tab-set::
+
+   .. tab-item:: Service Container
+
+      The CernVM-FS service container can expose the ``/cvmfs`` directory tree to the host.
+      Import the container with
+
+      .. code-block:: console
+
+          docker pull registry.cern.ch/cvmfs/service:latest
+
+      or with
+
+      .. code-block:: console
+
+          curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-service-2.11.2-1.x86_64.docker.tar.gz | docker load
+
+      Run the container as a system service with
+
+      .. code-block:: console
+
+          docker run -d --rm \
+            -e CVMFS_CLIENT_PROFILE=single \
+            -e CVMFS_REPOSITORIES=sft.cern.ch,... \
+            --cap-add SYS_ADMIN \
+            --device /dev/fuse \
+            --volume /cvmfs:/cvmfs:shared \
+            cvmfs/service:2.11.2-1
+
+      Use ``docker stop`` to unmount the ``/cvmfs`` tree.
+
+      .. note::
+          If you run multiple nodes (a cluster), use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
+
+
+   .. tab-item:: Mac OS X
+
+      On Mac OS X, CernVM-FS is based on `macFUSE <http://osxfuse.github.io>`_.
+      Note that as of macOS 11 Big Sur, `kernel extensions need to be enabled <https://support.apple.com/guide/mac-help/change-startup-disk-security-settings-a-mac-mchl768f7291/mac>`_
+      to install macFUSE.
+      Verify that fuse is available with
+
+      .. code-block:: console
+
+          kextstat | grep -i fuse
+
+      Download the CernVM-FS client package in the terminal in order to avoid signature warnings
+
+      .. code-block:: console
+
+          curl -o ~/Downloads/cvmfs-2.11.2.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-2.11.2.pkg
+
+      Install the CernVM-FS package by opening the .pkg file and reboot.
+      Future releases will provide a signed and notarized package.
+
+      A native package for Apple Silicon M1/M2 ... processors is available as well, use the following command instead: 
+
+      .. code-block:: console
+
+          curl -o ~/Downloads/cvmfs-2.11.2-applesilicon.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-2.11.2-applesilicon.pkg
+
+      Future releases will provide a package with universal binaries.
+
+
+   .. tab-item:: Windows / WSL2
+
+      Follow the `Windows instructions <https://docs.microsoft.com/en-us/windows/wsl/install-win10>`_ to install the Windows Subsystem for Linux (WSL2).
+      Install any of the Linux distributions and follow the instructions for the distribution in this guide.
+      Whenever you open the Linux distribution, run
+
+      .. code-block:: console
+
+          sudo cvmfs_config wsl2_start
+
+      to start the CernVM-FS service.
+
+
 
 
 Setting up the Software
