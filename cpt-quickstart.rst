@@ -109,10 +109,18 @@ Other Platforms
 
       .. code-block:: console
 
-          curl -o ~/Downloads/cvmfs-2.11.0.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0.pkg
+          curl -o ~/Downloads/cvmfs-2.11.2.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-2.11.2.pkg
 
       Install the CernVM-FS package by opening the .pkg file and reboot.
       Future releases will provide a signed and notarized package.
+
+      A native package for Apple Silicon M1/M2 ... processors is available as well, use the following command instead: 
+
+      .. code-block:: console
+
+          curl -o ~/Downloads/cvmfs-2.11.2-applesilicon.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs-2.11.2-applesilicon.pkg
+
+      Future releases will provide a package with universal binaries.
 
 
    .. tab-item:: Windows / WSL2
