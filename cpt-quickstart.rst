@@ -51,9 +51,8 @@ To add the CVMFS repository (available for Debian and RHEL flavors) and install 
 
       .. code-block:: console
 
-         sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-2.11.0-1.fc34.x86_64.rpm \
-                          https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm \
-                          http://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.0/cvmfs-libs-2.11.0-1.fc34.x86_64.rpm
+         sudo dnf install http://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.2/cvmfs{,-libs}-2.11.2-1.fc38.x86_64.rpm \
+                          https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
 
 
 Other Platforms
