@@ -149,24 +149,46 @@ other mounts. For example:
 Private Mount Points
 ~~~~~~~~~~~~~~~~~~~~
 
+Like other Fuse file systems, CernVM-FS can be mounted privately by a user.
+For this, the command ``cmvfs2`` is used.
 In contrast to the system's ``mount`` command which requires root
-privileges, CernVM-FS can also be mounted like other Fuse file systems
-by normal users. In this case, CernVM-FS uses parameters from one or
-several user-provided config files instead of using the files under
-``/etc/cvmfs``. CernVM-FS private mount points do not appear as ``cvmfs2``
-file systems but as ``fuse`` file systems. The ``cvmfs_config`` and
-``cvmfs_talk`` commands ignore privately mounted CernVM-FS repositories.
-On an interactive machine, private mount points are for instance
-unaffected by an administrator unmounting all system's CernVM-FS mount
-points by ``cvmfs_config umount``.
+privileges, the ``cvmfs2`` command can be called by any unprivileged user.
+As a result of being unprivileged, CernVM-FS must use parameters from one or
+several user-provided config files instead of using the config files under
+``/etc/cvmfs``.
 
-In order to mount CernVM-FS privately, use the ``cvmfs2`` command like
+CernVM-FS private mount points do not appear as ``cvmfs2`` file systems but
+as ``fuse`` file systems. Additionally, they are for unaffected by an administrator
+unmounting all system's CernVM-FS mount points by ``cvmfs_config umount``.
+
+.. note::
+
+    The ``cvmfs_config`` and ``cvmfs_talk`` commands ignore privately mounted
+    CernVM-FS repositories. This includes ``cvmfs_config umount``.
+
+In order to **mount** CernVM-FS privately, use the ``cvmfs2`` command like
+
+::
+
+      cvmfs2 -o config=<myconfigfile> <repo> <mountpoint path>
+
+
+In order to **unmount** a privately mounted CernVM-FS repository, use
+
+::
+
+    fusermount -u <mountpoint path>
+
+In case of problems, try adding a ``-z`` to perform a lazy unmount.
+
+
+For example, to mount repo ``atlas.cern.ch`` to location ``/home/user/myatlas`` use
 
 ::
 
       cvmfs2 -o config=myparams.conf atlas.cern.ch /home/user/myatlas
 
-A minimal sample ``myparams.conf`` file could look like this:
+with the minimal config file ``myparams.conf``
 
 ::
 
@@ -179,21 +201,23 @@ A minimal sample ``myparams.conf`` file could look like this:
       CVMFS_HTTP_PROXY=DIRECT
 
 Make sure to use absolute path names for the mount point and for the
-cache directory. Use ``fusermount -u`` in order to unmount a privately
-mounted CernVM-FS repository.
+cache directory. The paths can be pointing to anywhere where the unprivileged user has
+read/write access. All rules of the normal :ref:`sct_cache` apply also here.
 
 The private mount points can also be used to use the CernVM-FS Fuse
 module in case it has not been installed under ``/usr`` and ``/etc``. If the
 public keys are not installed under ``/etc/cvmfs/keys``, the directory of
 the keys needs to be specified in the config file by
-``CVMFS_KEYS_DIR=<directory>``. If the libcvmfs\_fuse.so resp.
-libcvmfs\_fuse3.so library is not installed in one of the standard search paths,
+``CVMFS_KEYS_DIR=<directory>``. If the ``libcvmfs\_fuse.so`` resp.
+``libcvmfs\_fuse3.so`` library is not installed in one of the standard search paths,
 the ``CVMFS_LIBRARY_PATH`` variable has to be set accordingly for the ``cvmfs2``
 command.
 
-The easiest way to make use of CernVM-FS private mount points is with
-the ``cvmfsexec`` package. Read about that in the Security
-:ref:`sct_running_client_as_normal_user` section.
+.. tip::
+
+    The easiest way to make use of CernVM-FS private mount points is with
+    the ``cvmfsexec`` package. Read about that in the Security
+    :ref:`sct_running_client_as_normal_user` section.
 
 .. _sct_premount:
 
@@ -698,8 +722,8 @@ Default Values
 Cache Settings
 --------------
 
-Downloaded files will be stored in a local cache directory. The
-CernVM-FS cache has a soft quota; as a safety margin, the partition
+Downloaded files will be stored in a local cache directory (default: ``/var/lib/cvmfs``).
+The CernVM-FS cache has a soft quota; as a safety margin, the partition
 hosting the cache should provide more space than the soft quota limit;
 we recommend to leave at least 20% + 1 GB.
 
@@ -717,6 +741,26 @@ Furthermore, the cache directory is used to create (transient) sockets
 and pipes, which is usually only supported by a local file system. The
 location of the cache directory can be set by ``CVMFS_CACHE_BASE``.
 
+In case of setting ``CVMFS_CACHE_BASE``, please consider the following
+
+* ``CVMFS_QUOTA_LIMIT`` is a soft quota limit and does not pre-reserve space
+* Using ``/tmp`` might not be consistent between reboots
+* Using ``/dev/shm`` is locating the cache on the actual RAM
+* If you use Slurm, ``/tmp`` and ``/dev/shm`` are private (per job).
+  It therefore cannot only be used if privately mounted inside the job.
+
+As the cache quota is only checked against the CernVM-FS cached objects but not against
+the available space on the specific partition, problems can occur if other, non-cvmfs
+processes fill it up. Is this likely, it is recommended putting the cache on its own isolated
+partition.
+
+.. tip::
+
+    If space problems can be expected, it is recommended to have the cvmfs cache on an own
+    isolated partition.
+
+
+
 On SELinux enabled systems, the cache directory and its content need to
 be labeled as ``cvmfs_cache_t``. During the installation of
 CernVM-FS RPMs, this label is set for the default cache directory
@@ -731,6 +775,15 @@ directory should be at least the maximum of the recommended limits of
 its participating repositories. In order to have a repository not join
 the shared cache but use an exclusive cache, set
 ``CVMFS_SHARED_CACHE=no``.
+
+
+
+    .. /dev/shm can be used but uses the actual RAM
+    .. let cache use their own isolated partition to prevent out of space problems (cvmfs quota is blind what others do on the partition)
+
+.. and: private mountpoint section should link to cache section
+
+.. Maybe add a note that a lot of sites that use Slurm will have a private (per job) /tmp and /dev/shm so you cannot use that as cache
 
 .. _alien cache:
 
