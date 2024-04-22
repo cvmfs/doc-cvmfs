@@ -210,12 +210,14 @@ and promise to update the database to the latest version within 30 days
 of when they issue a new version. The signup process will end with
 giving you a License Key. The ``cvmfs_server`` ``add-replica`` and
 ``snapshot`` commands will take care of automatically updating the
-database if you put a line like the following in
-``/etc/cvmfs/server.local``, replacing ``<license key>`` with the key
-you get from the signup process:
+database if you put lines like the following in
+``/etc/cvmfs/server.local``, replacing ``<account id>`` with the
+Maxmind account number and 
+``<license key>`` with the key you get from the signup process:
 
 ::
 
+      CVMFS_GEO_ACCOUNT_ID=<account id>
       CVMFS_GEO_LICENSE_KEY=<license key>
 
 To keep the key secret, set the mode of ``/etc/cvmfs/server.local`` to 600.

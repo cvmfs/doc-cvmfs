@@ -188,6 +188,7 @@ CVMFS_FORCE_REMOUNT_WARNING         | Enable/disable warning through ``wall`` an
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
 CVMFS_GC_DELETION_LOG               | Log file path to track all garbage collected objects during sweeping
                                     | for bookkeeping or debugging
+CVMFS_GEO_ACCOUNT_ID                Account id for downloading the geolite2 city database from maxmind.
 CVMFS_GEO_DB_FILE                   Path to externally updated location of geolite2 city database, or 'None' for no database.
 CVMFS_GEO_LICENSE_KEY               A license key for downloading the geolite2 city database from maxmind.
 CVMFS_GID_MAP                       Path of a file for the mapping of file owner group ids.

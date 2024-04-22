@@ -12,7 +12,7 @@ For publisher and gateway nodes, all transactions must be closed and no active l
 Bug fixes
 ---------
 
-  * [server] Update method of downloading the MaxMind GeoIP (`#3566 <https://github.com/cvmfs/cvmfs/issues/3566>`_)
+  * [server] Update method of downloading the MaxMind GeoIP, including requiring new configuration parameter CVMFS_GEO_ACCOUNT_ID (`#3566 <https://github.com/cvmfs/cvmfs/issues/3566>`_)
 
 
 Release Notes for CernVM-FS 2.11.2
