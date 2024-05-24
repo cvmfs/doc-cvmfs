@@ -140,10 +140,10 @@ Other Platforms
 Setting up the Software
 -----------------------
 
-Configure AutoFS
-~~~~~~~~~~~~~~~~
+Configure AutoFS on Linux
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For the basic setup, run ``cvmfs_config setup``.
+For the basic setup, run ``sudo cvmfs_config setup``.
 This ensures that the file ``/etc/auto.master.d/cvmfs.autofs`` exists containing ``/cvmfs /etc/auto.cvmfs`` and that the ``autofs`` service is running. Reload the ``autofs`` service in order to apply an updated configuration.
 
 NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file ``/etc/auto.master`` and restart the ``autofs`` service.
@@ -154,8 +154,8 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file ``
     systemctl restart autofs
 
 
-Mac OS X
-~~~~~~~~
+Configure AutoFS on Mac OS X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Due to the lack of ``autofs`` on macOS, mount the individual repositories manually like
 
@@ -171,13 +171,13 @@ Create default.local
 ~~~~~~~~~~~~~~~~~~~~
 
 Create ``/etc/cvmfs/default.local`` and open the file for editing.
-Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set
+For the purposes of convenience when running CVMFS commands, you may wish to optionally list repositories you are interested in by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set
 
 ::
 
     CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
 
-For an individual workstation or laptop, set
+For the simplest configuration for an individual workstation or laptop, it is sufficient to just set
 
 ::
 
