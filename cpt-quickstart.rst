@@ -143,7 +143,7 @@ Setting up the Software
 Configure AutoFS on Linux
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For the basic setup, run ``sudo cvmfs_config setup``.
+For the basic setup, run ``sudo cvmfs_config setup`` (can be verified with ``sudo cvmfs_config chksetup``)
 This ensures that the file ``/etc/auto.master.d/cvmfs.autofs`` exists containing ``/cvmfs /etc/auto.cvmfs`` and that the ``autofs`` service is running. Reload the ``autofs`` service in order to apply an updated configuration.
 
 NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file ``/etc/auto.master`` and restart the ``autofs`` service.
@@ -171,7 +171,8 @@ Create default.local
 ~~~~~~~~~~~~~~~~~~~~
 
 Create ``/etc/cvmfs/default.local`` and open the file for editing.
-For the purposes of convenience when running CVMFS commands, you may wish to optionally list repositories you are interested in by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set
+For the purposes of convenience when running CVMFS client utility commands (e.g. ``cvmfs_talk``, ``cvmfs_config``), you may wish to optionally list repositories you are interested in by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. This will then run those commands on all listed repositories.
+For ATLAS, for instance, set
 
 ::
 
