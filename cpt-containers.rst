@@ -219,7 +219,7 @@ directory when containers using it are stopped.
 How to use the CernVM-FS Snapshotter
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The CernVM-FS snapshotter runs alongside the containerd service.
+The CernVM-FS snapshotter runs alongside the containerd service (compatible with v1.4.0 < containerd < v2.0) .
 The snapshotter communicates with ``containerd`` via gRPC over a UNIX domain socket.
 The default socket is ``/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock``.
 This socket is created automatically by the snapshotter if it does not exist.
@@ -239,28 +239,58 @@ The default values can be overwritten in the ``config.toml`` file using the ``--
 A template ``config.toml`` file looks like this:
 
 ::
+    # /etc/containerd/config.toml
 
+    # important: explicitly use version 2 config format - 
+    # the plugin configuration does not work in v1!
     version = 2
 
-    # Source of image layers
-    repository = "unpacked.cern.ch"
-    absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
 
     # Ask containerd to use this particular snapshotter
     [plugins."io.containerd.grpc.v1.cri".containerd]
         snapshotter = "cvmfs-snapshotter"
+        # important: the cvmfs snapshotter needs annotations to work.
         disable_snapshot_annotations = false
 
     # Set the communication endpoint between containerd and the snapshotter
     [proxy_plugins]
-        [proxy_plugins.cvmfs]
+        [proxy_plugins.cvmfs-snapshotter]
             type = "snapshot"
             address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 
 
+::
+    # /etc/containerd-cvmfs-grpc/config.toml
+
+    
+    # Source of image layers
+    repository = "unpacked.cern.ch"
+    absolute-mountpoint = "/cvmfs/unpacked.cern.ch"
+
 Note that if only the repository is specified under the key value ``repository``, the mountpoint
 (under the key value ``absolute-mountpoint``) is by default constructed as ``/cvmfs/<repo_name>``.
 
+Running with nerdctl
+^^^^^^^^^^^^^^^^^^^^
+
+The snapshotter can be tested and used with nerdctl (> 1.7.0). Start both containerd and cvmfs-snapshotter:
+
+::
+
+     systemctl start containerd cvmfs-snapshotter
+
+and then run or pull images:
+
+::
+
+    nerdctl pull --snapshotter cvmfs-snapshotter clelange/cms-higgs-4l-full:latest
+    nerdctl run -it --rm --snapshotter cvmfs-snapshotter clelange/cms-higgs-4l-full:latest
+
+
+Pulling this 9GB (4.3GB compressed) image usually takes about two minutes, with the cvmfs-snapshotter, this should be reduces to a few seconds (however cvmfs will need to download files when accessed later).
+
+
+See also the  `cvmfs documentation page in nerdctl. <https://github.com/containerd/nerdctl/blob/main/docs/cvmfs.md>`_.
 
 ``podman`` integration (pre-production)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
