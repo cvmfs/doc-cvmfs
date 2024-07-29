@@ -1,3 +1,26 @@
+
+Release Notes for CernVM-FS 2.11.4
+==================================
+
+CernVM-FS 2.11.4 is a patch release, containing one important fix for the streaming cache manager, and one improvement to
+the resilience of cvmfs when cache managers crashes due to lack of disk space.
+As with previous releases, upgrading clients should be seamless just by installing the new package from the repository.
+As usual, we recommend updating only a few worker nodes first and gradually ramping up once the new version proves to work correctly.
+Please take special care when upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active leases must be present before upgrading.
+
+Bug fixes
+---------
+
+  * [client] Fix streaming cache mgr with secure repos (`#3631 <https://github.com/cvmfs/cvmfs/issues/3631>`_)
+  * [client] Fix handling of network errors in streaming cache mgr (`#3630 <https://github.com/cvmfs/cvmfs/issues/3630>`_)
+  * [client] Add timeout to ReadHalfPipe (`#3614 <https://github.com/cvmfs/cvmfs/issues/3614>`_)
+
+
+
+
 Release Notes for CernVM-FS 2.11.3
 ==================================
 
