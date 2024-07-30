@@ -51,8 +51,9 @@ To add the CVMFS repository (available for Debian and RHEL flavors) and install 
 
       .. code-block:: console
 
-         sudo dnf install http://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.3/cvmfs{,-libs}-2.11.3-1.fc38.x86_64.rpm \
-                          https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm
+         sudo dnf install https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.4/cvmfs-2.11.4-1.fc38.x86_64.rpm \
+                          https://ecsft.cern.ch/dist/cvmfs/cvmfs-config/cvmfs-config-default-latest.noarch.rpm \
+                          http://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.4/cvmfs-libs-2.11.4-1.fc38.x86_64.rpm
 
 
 Other Platforms
@@ -73,7 +74,7 @@ Other Platforms
 
       .. code-block:: console
 
-          curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.3/cvmfs-service-2.11.3-1.x86_64.docker.tar.gz | docker load
+          curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.4/cvmfs-service-2.11.4-1.x86_64.docker.tar.gz | docker load
 
       Run the container as a system service with
 
@@ -85,7 +86,7 @@ Other Platforms
             --cap-add SYS_ADMIN \
             --device /dev/fuse \
             --volume /cvmfs:/cvmfs:shared \
-            cvmfs/service:2.11.3-1
+            cvmfs/service:2.11.4-1
 
       Use ``docker stop`` to unmount the ``/cvmfs`` tree.
 
@@ -108,7 +109,7 @@ Other Platforms
 
       .. code-block:: console
 
-          curl -o ~/Downloads/cvmfs-2.11.3.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.3/cvmfs-2.11.3.pkg
+          curl -o ~/Downloads/cvmfs-2.11.4.pkg https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.11.4/cvmfs-2.11.4.pkg
 
       Install the CernVM-FS package by opening the .pkg file and reboot.
       Future releases will provide a signed and notarized package.
@@ -140,10 +141,10 @@ Other Platforms
 Setting up the Software
 -----------------------
 
-Configure AutoFS on Linux
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Configure AutoFS
+~~~~~~~~~~~~~~~~
 
-For the basic setup, run ``sudo cvmfs_config setup`` (can be verified with ``sudo cvmfs_config chksetup``)
+For the basic setup, run ``cvmfs_config setup``.
 This ensures that the file ``/etc/auto.master.d/cvmfs.autofs`` exists containing ``/cvmfs /etc/auto.cvmfs`` and that the ``autofs`` service is running. Reload the ``autofs`` service in order to apply an updated configuration.
 
 NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file ``/etc/auto.master`` and restart the ``autofs`` service.
@@ -154,8 +155,8 @@ NB: For OpenSUSE uncomment the line ``#+dir:/etc/auto.master.d/`` in the file ``
     systemctl restart autofs
 
 
-Configure AutoFS on Mac OS X
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Mac OS X
+~~~~~~~~
 
 Due to the lack of ``autofs`` on macOS, mount the individual repositories manually like
 
@@ -171,14 +172,13 @@ Create default.local
 ~~~~~~~~~~~~~~~~~~~~
 
 Create ``/etc/cvmfs/default.local`` and open the file for editing.
-For the purposes of convenience when running CVMFS client utility commands (e.g. ``cvmfs_talk``, ``cvmfs_config``), you may wish to optionally list repositories you are interested in by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. This will then run those commands on all listed repositories.
-For ATLAS, for instance, set
+Select the desired repositories by setting ``CVMFS_REPOSITORIES=repo1,repo2,...``. For ATLAS, for instance, set
 
 ::
 
     CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
 
-For the simplest configuration for an individual workstation or laptop, it is sufficient to just set
+For an individual workstation or laptop, set
 
 ::
 
