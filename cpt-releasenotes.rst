@@ -16,7 +16,7 @@ Bug fixes
 
   * [client] Fix streaming cache mgr with secure repos (`#3631 <https://github.com/cvmfs/cvmfs/issues/3631>`_)
   * [client] Fix handling of network errors in streaming cache mgr (`#3630 <https://github.com/cvmfs/cvmfs/issues/3630>`_)
-  * [client] Add timeout to ReadHalfPipe (`#3614 <https://github.com/cvmfs/cvmfs/issues/3614>`_)
+  * [client] Fix rare stuck condition after cache manager crashes (`#3614 <https://github.com/cvmfs/cvmfs/issues/3614>`_)
 
 
 
