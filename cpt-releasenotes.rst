@@ -1,4 +1,20 @@
 
+Release Notes for CernVM-FS 2.11.5
+==================================
+
+CernVM-FS 2.11.5 is a patch release, containing one important fix for a bug introduced in 2.11.4 - this bug could lead to repositories blocking on a pipe read if the read was slow, making the repository seem completely unresponsive.
+As with previous releases, upgrading clients should be seamless just by installing the new package from the repository.
+As usual, we recommend updating only a few worker nodes first and gradually ramping up once the new version proves to work correctly.
+Please take special care when upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed and no active leases must be present before upgrading.
+
+Bug fixes
+---------
+
+* [client] Fix blocking behavior in repositories when pipe  reads take longer than a timeout  (#3653)
+
 Release Notes for CernVM-FS 2.11.4
 ==================================
 
