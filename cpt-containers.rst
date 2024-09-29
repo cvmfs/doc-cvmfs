@@ -238,7 +238,8 @@ By default, the repository used to search for the layers is ``unpacked.cern.ch``
 The default values can be overwritten in the ``config.toml`` file using the ``--config`` option.
 A template ``config.toml`` file looks like this:
 
-::
+.. code-block:: toml
+
     # /etc/containerd/config.toml
 
     # important: explicitly use version 2 config format - 
@@ -259,7 +260,8 @@ A template ``config.toml`` file looks like this:
             address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
 
 
-::
+.. code-block:: toml
+
     # /etc/containerd-cvmfs-grpc/config.toml
 
     
