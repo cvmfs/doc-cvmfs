@@ -294,6 +294,45 @@ Pulling this 9GB (4.3GB compressed) image usually takes about two minutes, with 
 
 See also the  `cvmfs documentation page in nerdctl. <https://github.com/containerd/nerdctl/blob/main/docs/cvmfs.md>`_.
 
+Running with k3s
+^^^^^^^^^^^^^^^^
+To configure k3s, edit ``/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl`` with the following content:
+
+.. code-block:: toml
+
+    version = 2
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      snapshotter = "cvmfs-snapshotter"
+      disable_snapshot_annotations = false
+    [proxy_plugins]
+      [proxy_plugins.cvmfs-snapshotter]
+        type = "snapshot"
+        address = "/run/containerd-cvmfs-grpc/containerd-cvmfs-grpc.sock"
+    [plugins."io.containerd.grpc.v1.cri".cni]
+      bin_dir = "/var/lib/rancher/k3s/data/current/bin"
+      conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d"
+
+After configuration, restart k3s with ``systemctl restart k3s``.
+
+To test, apply this sample pod configuration:
+
+.. code-block:: yaml
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: python-http-server
+    spec:
+      containers:
+      - name: python-server
+        image: python:3.9
+        imagePullPolicy: Always
+        command: ["python", "-m", "http.server", "8000"]
+        ports:
+        - containerPort: 8000
+
+Verify the setup using ``kubectl describe`` to check pod details. Note the startup time is about 2-3 seconds, compared to 13 seconds with the default snapshotter. For further verification, check the cvmfs-snapshotter logs using ``journalctl -u cvmfs-snapshotter``.
+
 ``podman`` integration (pre-production)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
