@@ -92,6 +92,9 @@ Other Platforms
 
       .. note::
           If you run multiple nodes (a cluster), use ``-e CVMFS_HTTP_PROXY`` to set a proper site proxy as described further down.
+          
+          The configuration variables ``CVMFS_HTTP_PROXY, CVMFS_CLIENT_PROFILE, CVMFS_REPOSITORIES, CVMFS_QUOTA_LIMIT`` can be set as environment variables.
+          Further configuration must be done by bind mounting ``/etc/cvmfs/`` from the host. 
 
 
    .. tab-item:: Mac OS X
