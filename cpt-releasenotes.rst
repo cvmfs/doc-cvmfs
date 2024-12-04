@@ -62,7 +62,7 @@ Improvements and changes
 
   * [client] Better logging for host/proxies (`#3617 <https://github.com/cvmfs/cvmfs/issues/3617>`_)
   * [client] FUSE-T support for macOS (`#3587 <https://github.com/cvmfs/cvmfs/issues/3587>`_)
-  * [server] Add metalink support (`#3683 <https://github.com/cvmfs/cvmfs/issues/3683>`_)
+  * [client] Add metalink support (`#3683 <https://github.com/cvmfs/cvmfs/issues/3683>`_)
   * Add support for high-precision timestamps (`#3513 <https://github.com/cvmfs/cvmfs/issues/3513>`_)
   * [client] Turn CVMFS_CACHE_REFCOUNT on by default (`#3684 <https://github.com/cvmfs/cvmfs/issues/3684>`_)
   * [client] Add memory buffer to streaming cache manager (`#3632 <https://github.com/cvmfs/cvmfs/issues/3632>`_)
