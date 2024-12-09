@@ -15,4 +15,5 @@ Advanced Topics
    cpt-xcache
    cpt-large-scale
    cpt-shrinkwrap
+   cpt-notification-system
    cpt-details
