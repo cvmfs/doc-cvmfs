@@ -294,6 +294,50 @@ Pulling this 9GB (4.3GB compressed) image usually takes about two minutes, with 
 
 See also the  `cvmfs documentation page in nerdctl. <https://github.com/containerd/nerdctl/blob/main/docs/cvmfs.md>`_.
 
+Running with docker
+^^^^^^^^^^^^^^^^^^^
+
+.. note::
+    The containerd image store is an experimental feature of Docker Engine.
+
+The snapshotter can be tested and used with docker (> 24.0). 
+
+1. Write the following configuration to `/etc/docker/daemon.json`
+
+.. code-block:: json
+
+    {
+        "storage-driver": "cvmfs-snapshotter", 
+        "features": {
+            "containerd-snapshotter": true
+        }
+    }
+
+
+2. Restart the deamon 
+
+::
+
+    systemctl restart docker
+
+3. Verify if you're using the containerd storage driver:
+
+:: 
+
+    $ docker info -f '{{ .DriverStatus }}'
+    [[driver-type io.containerd.snapshotter.v1]]
+    $ docker info -f '{{ .Driver }}'
+    cvmfs-snapshotter
+
+4. Then run or pull images:
+
+::
+
+    docker pull clelange/cms-higgs-4l-full:latest
+    docker run -it --rm clelange/cms-higgs-4l-full:latest
+
+Pulling this image should be done in few seconds with the snapshotter. See also the  `containerd image store manual page in docker. <https://docs.docker.com/engine/storage/containerd/>`_.
+
 Running with k3s
 ^^^^^^^^^^^^^^^^
 To configure k3s, edit ``/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl`` with the following content:
