@@ -218,6 +218,8 @@ CVMFS_REPOSITORY_TTL                | The frequency in seconds of client lookups
                                     | Defaults to 4 minutes.
 CVMFS_ROOT_KCATALOG_LIMIT           | Maximum thousands of files allowed in root catalogs, default 200
                                     | (see also *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*
+CVMFS_SERVER_USE_CATALOG_CACHE      | Allows backend to locally cache catalogs during publishing process.
+                                    | Catalogs are cached in ``/var/spool/cvmfs/<repo>/cache.server`` and **need manual garbage collection**.
 CVMFS_SNAPSHOT_GROUP                | Group name for subset of repositories used with ``cvmfs_server snapshot -a -g``.
                                     | Added with ``cvmfs_server add-replica -g``.
 CVMFS_SPOOL_DIR                     | Location of the upstream spooler scratch directories;
