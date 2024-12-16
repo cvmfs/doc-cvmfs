@@ -18,7 +18,7 @@ On macOS, mounting and unmounting of the CernVM-FS is done by the user with ``su
 
 Getting the Software
 --------------------
-The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/portal/filesystem/downloads>`_.
+The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/fs/#download>`_.
 However, it is recommended to use the available package repositories that are also provided for the supported operating systems.
 
 Linux
