@@ -50,6 +50,7 @@ CVMFS_EXTERNAL_FALLBACK_PROXY   | List of HTTP proxies similar to ``CVMFS_EXTERN
                                 | and disable DIRECT connections.
 CVMFS_EXTERNAL_HTTP_PROXY       Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
 CVMFS_EXTERNAL_MAX_SERVERS      | Caps the list of external hosts to the given number (after geo-sorting them)
+CVMFS_EXTERNAL_METALINK         Semi-colon-separated chain of RFC6249-compliant servers to locate webservers serving external data.
 CVMFS_EXTERNAL_TIMEOUT          Timeout in seconds for HTTP requests to an external-data server with a proxy server
 CVMFS_EXTERNAL_TIMEOUT_DIRECT   Timeout in seconds for HTTP requests to an external-data server without a proxy server
 CVMFS_EXTERNAL_URL              Semicolon-separated chain of webservers serving external data chunks.
@@ -57,7 +58,7 @@ CVMFS_FALLBACK_PROXY            | List of HTTP proxies similar to ``CVMFS_HTTP_P
                                 | added to the end of the normal proxies, and disable DIRECT connections.
 CVMFS_FOLLOW_REDIRECTS          When set to *yes*, follow up to 4 HTTP redirects in requests.
 CVMFS_HIDE_MAGIC_XATTRS         If set to *yes* the client will not expose CernVM-FS specific extended attributes
-CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``.
+CVMFS_HOST_RESET_AFTER          See ``CVMFS_PROXY_RESET_AFTER``, for server URLs.
 CVMFS_HTTP_PROXY                | Chain of HTTP proxy groups used by CernVM-FS. Necessary.
                                 | Set to ``DIRECT`` if you don't use proxies.
 CVMFS_HTTP_TRACING              Activates that a tracing header is attached to each CURL request. Consists of ``uid``, ``pid``, and ``gid``. Default is ``off``.
@@ -85,6 +86,8 @@ CVMFS_MAX_RETRIES               Maximum number of retries for a given proxy/host
 CVMFS_MAX_SERVERS               Limit the number of (geo sorted) stratum 1 servers that are effectively used.
 CVMFS_MAX_TTL                   Maximum file catalog TTL in minutes.  Can overwrite the TTL stored in the catalog.
 CVMFS_MEMCACHE_SIZE             Size of the CernVM-FS metadata memory cache in Megabyte.
+CVMFS_METALINK_URL              Semi-colon-separated chain of RFC6249-compliant servers to locate Stratum-1 servers.
+CVMFS_METALINK_RESET_AFTER      See ``CVMFS_PROXY_RESET_AFTER``, for metalink servers.
 CVMFS_MOUNT_RW                  | Mount CernVM-FS as a read/write file system.  Write operations will fail
                                 | but this option can workaround faulty ``open()`` flags.
 CVMFS_NFILES                    Maximum number of open file descriptors that can be used by the CernVM-FS process.
