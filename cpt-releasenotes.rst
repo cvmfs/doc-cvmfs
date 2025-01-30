@@ -1,4 +1,15 @@
 
+Release Notes for CernVM-FS 2.12.5
+==================================
+
+CernVM-FS 2.12.5 is a small patch release that fixes a packaging issue on platforms without systemd, as well as a spurious warning from cvmfs_check.
+
+Bug fixes
+---------
+
+  * [client] Revert CVMFS_PATCH_LEVEL to 0 for check_cvmfs.sh (#3750)
+  * [rpm] fix package install on wsl2 and other non-systemd platforms (#3749)
+  
 Release Notes for CernVM-FS 2.12.4
 ==================================
 
