@@ -1,4 +1,14 @@
 
+Release Notes for CernVM-FS 2.12.7
+==================================
+
+CernVM-FS 2.12.7 is a small patch release that fixes an important problem in the ``cvmfs_server transaction`` command when used with the ``-t`` timeout option. This can be used to wait for a lease when multiple publishers are connected to a gateway and publishing at the same time. Due to a bug (present since at least 2.10), it could happen that the transaction being waited on is reverted by the following one. This patch release fixes this bug.
+
+Bug fixes
+---------
+
+  * [server] Fix for cvmfs_server transaction -t, update repository state after waiting for lease (`#3771 <https://github.com/cvmfs/cvmfs/issues/3771>`_)
+
 Release Notes for CernVM-FS 2.12.6 + 2.12.5
 ==================================
 
@@ -7,8 +17,8 @@ CernVM-FS 2.12.6 is a small patch release that fixes a packaging issue on platfo
 Bug fixes
 ---------
 
-  * [client] Revert CVMFS_PATCH_LEVEL to 0 for check_cvmfs.sh (#3750)
-  * [rpm] fix package install on wsl2 and other non-systemd platforms (#3749)
+  * [client] Revert CVMFS_PATCH_LEVEL to 0 for check_cvmfs.sh (`#3750 <https://github.com/cvmfs/cvmfs/issues/3750>`_)
+  * [rpm] fix package install on wsl2 and other non-systemd platforms (`#3749 <https://github.com/cvmfs/cvmfs/issues/3749>`_)
   
 Release Notes for CernVM-FS 2.12.4
 ==================================
