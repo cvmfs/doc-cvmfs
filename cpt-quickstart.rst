@@ -166,11 +166,12 @@ Mac OS X
 Due to the lack of ``autofs`` on macOS, mount the individual repositories manually like
 
 ::
-
+    sudo cvmfs_config setup
     sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
     sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
 
 For optimal configuration settings, mount the config repository before any other repositories.
+Note that the actual mountpoints are located under /Users/Shared/cvmfs - /cvmfs is a "firmlink" that points there, and is created by cvmfs_config.
 
 
 Create default.local
