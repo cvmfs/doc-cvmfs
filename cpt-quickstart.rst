@@ -51,7 +51,7 @@ To add the CVMFS repository (available for Debian and RHEL flavors) and install 
 
       .. code-block:: console
 
-         sudo dnf install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.fedora.noarch.rpm
+         sudo dnf install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
          sudo dnf install -y cvmfs
 
 
