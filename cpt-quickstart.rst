@@ -3,7 +3,7 @@ Getting Started
 
 This section describes how to install the CernVM-FS client.
 The CernVM-FS client is supported on x86, x86\_64, and ARM architectures running Linux and
-macOS \ :math:`\geq 10.14` as well as on Windows Services for Linux (WSL2).
+macOS \ :math:`\geq 10.14` as well as on Windows Subsystem for Linux (WSL2).
 There is experimental support for Power and RISC-V architectures.
 
 Overview
