@@ -28,7 +28,7 @@ Bug fixes
   * [server] Do not corrupt repository when ingesting a tarball to a base dir that contains a double slash (`#3786 <https://github.com/cvmfs/cvmfs/issues/3786>`_)
   * [server] swissknife_lease: Fix bug in response receiver callback (`#3823 <https://github.com/cvmfs/cvmfs/issues/3823>`_)
   * [client] Fixed unmounting after stopping autofs in Ubuntu 24.04 (`#3808 <https://github.com/cvmfs/cvmfs/issues/3808>`_)
-  * [client] Fixed permission issue in mounting cvmfs with apparmor (Ubuntu 25.10+) (`#3795 <https://github.com/cvmfs/cvmfs/issues/3795>`_)
+  * [client] Fixed permission issue in mounting cvmfs with apparmor (Ubuntu 24.10+) (`#3795 <https://github.com/cvmfs/cvmfs/issues/3795>`_)
   * [server] Fixed garbage collection lock to avoid spurious check failures (`#3815 <https://github.com/cvmfs/cvmfs/issues/3815>`_)
   * [shrinkwrap] Avoid possible copy errors by ensuring that directories are writeable (`#3798 <https://github.com/cvmfs/cvmfs/issues/3798>`_)
   * [macos] Chksetup for macfuse no longer complains about missing FUSE-T (`#3800 <https://github.com/cvmfs/cvmfs/issues/3800>`_)
@@ -38,7 +38,7 @@ Bug fixes
 Improvements and changes
 ------------------------
 
-  * [client] Bugreport no longer blocks and collects as much data as possible when client stuck (`#3768 <https://github.com/cvmfs/cvmfs/issues/3768>`_)
+  * [client] Bugreport no longer blocks, and collects as much data as possible when client stuck (`#3768 <https://github.com/cvmfs/cvmfs/issues/3768>`_)
   * [client] Improved EIO logging (`#3723 <https://github.com/cvmfs/cvmfs/issues/3723>`_)
   * [gateway, ducc, snapshotter] bump and cleanup golang dependencies
   * [server] Ingest command can now delete paths containing colons (:) (`#3792 <https://github.com/cvmfs/cvmfs/issues/3792>`_)
