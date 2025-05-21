@@ -8,7 +8,7 @@ CernVM-FS 2.13.0 is a minor release that has a number of  important fixes for cv
   For admins of stratum-1s: The cvmfs-server package now installs default logrotate configs to /etc/logrotate.d/cvmfs and /etc/logrotate.d/cvmfs-statsdb.  If you prefer not to use logrotate for snapshot logs and stats db, create an empty file under these paths or remove them after installation. When installed or upgraded from the packages, cvmfs-server should not overwrite any modification you make.
 
 .. note::
-  For package maintainers of cvmfs-server: You could to install the previously mentioned logrotate files with the appropriate config file behavior,and add an optional dependency on logrotate.
+  For package maintainers of cvmfs-server: You can  install the previously mentioned logrotate files with the appropriate config file behavior,and add an optional dependency on logrotate.
 
 
 As with previous releases, upgrading clients should be seamless just by
