@@ -1,4 +1,35 @@
 
+
+Release Notes for CernVM-FS 2.13.1
+==================================
+
+CernVM-FS 2.13.1 is a patch release that fixes a few minor bugs introduced in 2.13.1.
+
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend updating only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed; no active leases must be present before upgrading.
+
+.. note::
+  Packages no longer support libfuse2 for the new platforms: RHEL/Alma >= 10, Fedora >= 42, Debian >= 13 and Ubuntu >= 25.04.
+  For package maintainers: Libfuse2 support is turned off by default, and has to be enabled explicitly with the flag -DBUILD_LIBFUSE2
+  It will be deprecated completely in a future version, and you are encouraged to remove the dependency. The cvmfs package should now 
+  explicitly depend on the cvmfs_fuse3 libs packaged in cvmfs-fuse3 package  to ensure they are installed.
+
+Packages are available for both the x86_64 and aarch64 architectures, for current debian- and rhel-based distros.
+We've added packages for Almalinux 10 and Fedora 42 on top of Debian 13 already introduced in the previous release. Do try them out!
+
+Bug fixes
+---------
+  * [client] Fix mount options that can lead to "futimes" error with docker (#3872)
+  * [rpm] Allow builds without libfuse2 (#3879)
+  * [client] Fix a segfault in one of the unmount branches of the loader (#3873)
+  * [client] Fix host reset timeout (CVMFS_HOST_RESET_AFTER) (#3864)
+
+
 Release Notes for CernVM-FS 2.13.0
 ==================================
 
