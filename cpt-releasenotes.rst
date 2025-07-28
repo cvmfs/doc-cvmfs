@@ -1,5 +1,40 @@
 
 
+
+Release Notes for CernVM-FS 2.13.2
+==================================
+
+CernVM-FS 2.13.2 is a fairly large patch release. It fixes two long standing issues in the core client code that have caused crashes in some rare circumstances.
+A regression in 2.13 that has led to spurious "failed to umount (errno 22)" log messages is fixed as well.
+Furthermore this patch release includes some important improvements for stratum one operations (As a reminder, the versioning of CVMFS is semantic mostly for the client.
+New features may be added to the server tools and unpacker even in patch releases).
+
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend updating only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed; no active leases must be present before upgrading.
+
+
+Bug fixes
+---------
+  * [client] Fix loader return value when automounter unmounts (#3929)
+  * [client] Fix race when using page cache tracker for chunked files (#3685)
+  * [client] Correct PCT Close in cvmfs_open (#3917)
+  * [server] Change gc -a to only do repos where gc was run on the stratum0 (#3895)
+  * [server] Move the no collectable repos message to gc.log (#3915)
+  * [server] Do only one gc -a at a time, and remove need for check -a to be run by root (#3575)
+  * [server] snapshot: Avoid recursion into history (#3846)
+  * [server] Optimize DNS lookups by cvmfs_geo.py to ignore short host names (#3920)
+  * [client] Add cvmfs_talk metrics prometheus command for faster telemetry (#3944)
+  * [rpm]  Temporarily re-add fuse3 dependency to server to fix fstab #3943 
+  * [build system] cmake: add BUILTIN_EXTERNALS_LIST and EXCLUDE options (#3940)
+  * [client] Add CVMFS_VERSION and CVMFS_VERSION_NUMERIC env vars to config (#3934)
+  * [rpm] fix logrotate config for el8 (#3932)
+
+
 Release Notes for CernVM-FS 2.13.1
 ==================================
 
