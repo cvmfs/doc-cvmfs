@@ -54,6 +54,14 @@ To add the CVMFS repository (available for Debian and RHEL flavors) and install 
          sudo dnf install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
          sudo dnf install -y cvmfs
 
+   .. tab-item:: SUSE
+
+      .. code-block:: console
+
+         sudo rpm --import  https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
+         sudo zypper install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+         sudo zypper install -y cvmfs
+
 
 Other Platforms
 ~~~~~~~~~~~~~~~~
