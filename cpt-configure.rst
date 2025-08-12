@@ -1096,7 +1096,7 @@ Hotpatching has to be done for all repositories concurrently by
 
 ::
 
-      cvmfs_config [-c] reload
+      cvmfs_config reload [-c]
 
 The optional parameter ``-c`` specifies if the CernVM-FS cache should be
 wiped out during the hotpatch. Reloading of the parameters of a specific
