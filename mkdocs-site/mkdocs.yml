@@ -1,0 +1,89 @@
+site_name: CernVM-FS Documentation
+site_description: CernVM-FS provides a scalable, reliable and low-maintenance software distribution service
+site_author: CernVM Team
+site_url: https://cvmfs.readthedocs.io/
+
+# Repository
+repo_name: cvmfs/doc-cvmfs
+repo_url: https://github.com/cvmfs/doc-cvmfs
+edit_uri: edit/master/
+
+# Configuration
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - yaml
+    - bash
+    - console
+
+# Plugins
+plugins:
+  - search
+  - mermaid2
+  - bibtex:
+      bib_file: "references.bib"
+      csl_file: "https://raw.githubusercontent.com/citation-style-language/styles/master/ieee.csl"
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - tables
+  - fenced_code
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Release Notes: cpt-releasenotes.md
+    - Overview: cpt-overview.md
+    - Quick Start: cpt-quickstart.md
+    - Configuration: cpt-configure.md
+    - Squid Proxy: cpt-squid.md
+  - Repository Management:
+    - Repository Creation: cpt-repo.md
+    - Server Meta-information: cpt-servermeta.md
+    - Replica Servers: cpt-replica.md
+    - Repository Gateway: cpt-repository-gateway.md
+    - Containers: cpt-containers.md
+  - Advanced Topics:
+    - Plugins: cpt-plugins.md
+    - Telemetry: cpt-telemetry.md
+    - Tracer: cpt-tracer.md
+    - Enter: cpt-enter.md
+    - HPC: cpt-hpc.md
+    - Graph Driver: cpt-graphdriver.md
+    - DUCC: cpt-ducc.md
+    - XCache: cpt-xcache.md
+    - Large Scale: cpt-large-scale.md
+    - Shrinkwrap: cpt-shrinkwrap.md
+    - Notification System: cpt-notification-system.md
+    - Details: cpt-details.md
+  - Appendix:
+    - Security: apx-security.md
+    - Parameters: apx-parameters.md
+    - Server Infrastructure: apx-serverinfra.md
+    - RPM Packages: apx-rpms.md
+    - Issues: apx-issues.md
+    - Contact: apx-contact.md
+    - References: apx-references.md
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/cvmfs/cvmfs
+    - icon: fontawesome/solid/globe
+      link: https://cernvm.cern.ch/
+
+# Copyright
+copyright: Copyright &copy; 2022 CernVM Team

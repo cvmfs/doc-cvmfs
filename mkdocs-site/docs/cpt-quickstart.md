@@ -1,0 +1,303 @@
+# Getting Started
+
+This section describes how to install the CernVM-FS client. The
+CernVM-FS client is supported on x86, x86_64, and ARM architectures
+running Linux and macOS $\geq 10.14$ as well as on Windows Subsystem for
+Linux (WSL2). There is experimental support for Power and RISC-V
+architectures.
+
+## Overview
+
+The CernVM-FS repositories are located under `/cvmfs`. Each repository
+is identified by a *fully qualified repository name*. On Linux, mounting
+and unmounting of the CernVM-FS is usually controlled by `autofs` and
+automount. That means that starting from the base directory `/cvmfs`
+different repositories are mounted automatically just by accessing them.
+A repository will be automatically unmounted after some
+automount-defined idle time. On macOS, mounting and unmounting of the
+CernVM-FS is done by the user with `sudo mount -t cvmfs /cvmfs/...`
+commands.
+
+## Getting the Software
+
+The CernVM-FS source code and binary packages are available from the
+[CernVM website](https://cernvm.cern.ch/fs/#download). However, it is
+recommended to use the available package repositories that are also
+provided for the supported operating systems.
+
+### Linux
+
+To add the CVMFS repository (available for Debian and RHEL flavors) and
+install CVMFS, run:
+
+**Scientific Linux / RHEL / Alma:**
+```bash
+sudo yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+sudo yum install -y cvmfs
+```
+
+**Debian/Ubuntu:**
+```bash
+wget https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb
+sudo dpkg -i cvmfs-release-latest_all.deb
+rm -f cvmfs-release-latest_all.deb
+sudo apt-get -y update
+sudo apt-get -y install cvmfs
+```
+
+**Fedora:**
+```bash
+sudo dnf install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+sudo dnf install -y cvmfs
+```
+
+**SUSE:**
+```bash
+sudo rpm --import  https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
+sudo zypper install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+sudo zypper install -y cvmfs
+```
+```
+
+### Other Platforms
+
+**Service Container:**
+
+The CernVM-FS service container can expose the `/cvmfs` directory tree
+to the host. Import the container with
+
+```bash
+docker pull registry.cern.ch/cvmfs/service:latest
+```
+
+or with
+
+```bash
+curl https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.12.0/cvmfs-service-2.12.0.x86_64.docker.tar.gz  docker load
+```
+
+Run the container as a system service with
+
+```bash
+docker run -d --rm \
+  -e CVMFS_CLIENT_PROFILE=single \
+  -e CVMFS_REPOSITORIES=sft.cern.ch,... \
+  --cap-add SYS_ADMIN \
+  --device /dev/fuse \
+  --volume /cvmfs:/cvmfs:shared \
+  cvmfs/service:2.12.0-1
+```
+
+Use `docker stop` to unmount the `/cvmfs` tree.
+
+!!! note
+
+    If you run multiple nodes (a cluster), use `-e CVMFS_HTTP_PROXY` to set
+    a proper site proxy as described further down.
+
+**Mac OS X - homebrew / Fuse-t:**
+
+NOTE: Fuse-t is still EXPERIMENTAL and there are known issues. Use
+MacFuse for a stable experience. The easiest way to install CVMFS on
+MacOS is with homebrew:
+
+```bash
+brew tap macos-fuse-t/cask
+brew tap cvmfs/homebrew-cvmfs
+brew install cvmfs
+```
+
+**Mac OS X - Legacy macFUSE:**
+
+Note that as of macOS 11 Big Sur, [kernel extensions need to be
+enabled](https://support.apple.com/guide/mac-help/change-startup-disk-security-settings-a-mac-mchl768f7291/mac)
+to install macFUSE. Verify that fuse is available with
+
+```bash
+kextstat  grep -i fuse
+```
+
+Download the CernVM-FS client package in the terminal in order to avoid
+signature warnings
+
+```bash
+# For Intel Processors:
+curl -O https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.12.0/cvmfs-2.12.0.macfuse.intel.pkg
+# For Apple Silicon M1/M2/...
+curl -O https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.12.0/cvmfs-2.12.0.macfuse.arm64.pkg
+```
+
+Install the CernVM-FS package by opening the .pkg file and reboot.
+
+**Windows / WSL2:**
+
+Follow the [Windows
+instructions](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+to install the Windows Subsystem for Linux (WSL2). Install any of the
+Linux distributions and follow the instructions for the distribution in
+this guide. Whenever you open the Linux distribution, run
+
+```bash
+sudo cvmfs_config wsl2_start
+```
+
+to start the CernVM-FS service.
+
+## Setting up the Software
+
+### Configure AutoFS
+
+For the basic setup, run `cvmfs_config setup`. This ensures that the
+file `/etc/auto.master.d/cvmfs.autofs` exists containing
+`/cvmfs /etc/auto.cvmfs` and that the `autofs` service is running.
+Reload the `autofs` service in order to apply an updated configuration.
+
+NB: For OpenSUSE uncomment the line `#+dir:/etc/auto.master.d/` in the
+file `/etc/auto.master` and restart the `autofs` service.
+
+    sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master
+    systemctl restart autofs
+
+### Mac OS X
+
+Due to the lack of `autofs` on macOS, mount the individual repositories
+manually like
+
+    sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
+    sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
+
+For optimal configuration settings, mount the config repository before
+any other repositories.
+
+### Create default.local
+
+Create `/etc/cvmfs/default.local` and open the file for editing. Select
+the desired repositories by setting
+`CVMFS_REPOSITORIES=repo1,repo2,...`. For ATLAS, for instance, set
+
+    CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
+
+For an individual workstation or laptop, set
+
+    CVMFS_CLIENT_PROFILE=single
+
+If you set up a cluster of cvmfs nodes, specify the HTTP proxy servers
+on your site with
+
+    CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
+
+If you're unsure about the proxy names, set `CVMFS_HTTP_PROXY=DIRECT`.
+This should *only* be done for very few clients (< 5), because large
+numbers can put a heavy load on the Stratum 1 servers and result,
+amongst others, in poorer performance for the clients. For the syntax of
+more complex HTTP proxy settings, see `sct_network`{.interpreted-text
+role="ref"}. If there are no HTTP proxies yet at your site, see
+[cpt_squid](cpt-squid.md) for instructions on how to set
+them up.
+
+### Verify the file system
+
+Check if CernVM-FS mounts the specified repositories by
+`cvmfs_config probe`. If the probe fails, try to restart `autofs` with
+`sudo systemctl restart autofs`.
+
+## Building from source
+
+The CernVM-FS client is not relocatable and needs to be installed under
+/usr. On Intel architectures, it needs a gcc $\geq 4.2$ compiler, on
+ARMv7 a gcc $\geq 4.7$ compiler. In order to compile and install from
+sources, use the following commands
+
+    cd <source directory>
+    mkdir build && cd build
+    cmake ../
+    make
+    sudo make install
+
+### Building with local libraries
+
+For development purposes it might be useful to use locally installed
+libraries instead of using default system libraries. This can be done by
+defining variables during the `cmake` configuration step. The correct
+naming of the variables can be found in `cmake/Modules`. For example, in
+case of Fuse3 following variables must be set: `FUSE3_INCLUDE_DIR` and
+`FUSE3_LIBRARY`.
+
+Furthermore, `CMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON` must be set,
+otherwise will `sudo make install` strip all linked libraries that point
+to none-system libraries.
+
+Example code for building CernVM-FS with locally built Fuse3 and
+including the CernVM-FS unit tests and gateway: :
+
+    cmake -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON \
+          -D BUILD_UNITTESTS=ON -D BUILD_GATEWAY=ON \
+          -D FUSE3_INCLUDE_DIR=/usr/local/include/ \
+          -D FUSE3_LIBRARY=/usr/local/lib/x86_64-linux-gnu/libfuse3.so.3.10.5 \
+          ../
+    make
+    sudo make install
+
+## Troubleshooting
+
+-   In order to check for common misconfigurations in the base setup,
+    run
+
+```{=html}
+<!-- -->
+```
+    cvmfs_config chksetup
+
+-   CernVM-FS gathers its configuration parameter from various
+    configuration files that can overwrite each other's settings
+    (default configuration, domain specific configuration, local setup,
+    \...). To show the effective configuration for *repository*.cern.ch,
+    run
+
+```{=html}
+<!-- -->
+```
+    cvmfs_config showconfig repository.cern.ch
+
+-   In order to exclude autofs/automounter as a source of problems, you
+    can try to mount *repository*.cern.ch manually with the following
+
+```{=html}
+<!-- -->
+```
+    mkdir -p /mnt/cvmfs
+    mount -t cvmfs repository.cern.ch /mnt/cvmfs
+
+-   In order to exclude SELinux as a source of problems, you can try
+    mounting after SELinux has been disabled by
+
+```{=html}
+<!-- -->
+```
+    /usr/sbin/setenforce 0
+
+-   Once the issue has been identified, ensure that the changes are
+    taken by restarting `autofs`
+
+```{=html}
+<!-- -->
+```
+    systemctl restart autofs
+
+-   If the problem is that a repository can be mounted and unmounted but
+    later cannot be remounted, see
+    `sct_remounting_namespaces_containers`{.interpreted-text
+    role="ref"}.
+-   In order to exclude a corrupted local cache as a source of problems,
+    run
+
+```{=html}
+<!-- -->
+```
+    cvmfs_config wipecache
+
+-   Finally running with debug logs enabled can provide additional
+    information for bug reports. This can be done by specifying a log
+    file path in the client settings, e.g:
+    `CVMFS_DEBUGLOG=/tmp/cvmfs.log`. See
+    sct_debug_logs for more details.
