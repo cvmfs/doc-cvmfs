@@ -99,3 +99,10 @@ dt a[id] {
   padding-left: 0;
   margin-left: 0;
 }
+
+
+.wy-side-nav-search .wy-dropdown > a img.logo,
+.wy-side-nav-search > a img.logo {
+    width: 100px; /* Adjust to desired width */
+    height: auto; /* Maintains aspect ratio */
+}
