@@ -1,0 +1,14 @@
+# MkDocs CernVM-FS Documentation Requirements
+# Install with: pip install -r requirements.txt
+
+# Core MkDocs
+mkdocs>=1.6.0
+
+# Theme
+mkdocs-material>=9.0.0
+
+# Extensions and Plugins
+mkdocs-mermaid2-plugin>=1.1.0
+
+# Python dependencies
+setuptools>=68.0.0

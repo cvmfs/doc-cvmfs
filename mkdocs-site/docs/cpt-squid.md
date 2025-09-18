@@ -18,7 +18,7 @@ Squid is very powerful and has lots of configuration and tuning options.
 For CernVM-FS we require only the very basic static content caching. If
 you already have a [Frontier
 Squid](https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid)
-[\[Dykstra10\]]() installed you can use it as well for CernVM-FS.
+[[Dykstra10]](apx-references.md#Dykstra10) installed you can use it as well for CernVM-FS.
 
 One option that is particularly important when there are a lot of worker
 nodes and jobs that start close together is the

@@ -325,7 +325,7 @@ belong to the same UNIX group.
 ## Network Settings
 CernVM-FS uses HTTP for the data transfer. Repository data can be
 replicated to multiple web servers and cached by standard web proxies
-such as Squid [\[Guerrero99\]](). In a typical setup, repositories are
+such as Squid [[Guerrero99]](apx-references.md#Guerrero99). In a typical setup, repositories are
 replicated to a handful of web servers in different locations. These
 replicas form the CernVM-FS Stratum 1 service, whereas the replication
 source server is the CernVM-FS Stratum 0 server. In every cluster of
@@ -333,7 +333,7 @@ client machines, there should be two or more web proxy servers that
 CernVM-FS can use (see [cpt_squid](cpt-squid.md)). These
 site-local web proxies reduce the network latency for the CernVM-FS
 clients, and they reduce the load for the Stratum 1 service. CernVM-FS
-supports WPAD/PAC proxy auto-configuration [\[Gauthier99\]](), choosing
+supports WPAD/PAC proxy auto-configuration [[Gauthier99]](apx-references.md#Gauthier99), choosing
 a random proxy for load-balancing, and automatic fail-over to other
 hosts and proxies in case of network errors. Roaming clients can connect
 directly to the Stratum 1 service.
@@ -457,7 +457,7 @@ for PAC files in the order given by the semicolon separated URLs in the
 `CVMFS_PAC_URLS` environment variable. This variable defaults to
 `http://wpad/wpad.dat`. The `auto` keyword used as a URL in
 `CVMFS_PAC_URLS` is resolved to `http://wpad/wpad.dat`, too, in order to
-be compatible with Frontier [\[Blumenfeld08\]]().
+be compatible with Frontier [[Blumenfeld08]](apx-references.md#Blumenfeld08).
 
 ### Fallback Proxy List
 
@@ -847,7 +847,7 @@ The example configuration for the in-memory cache plugin in
 ## NFS Server Mode
 In case there is no local hard disk space available on a cluster of
 worker nodes, a single CernVM-FS client can be exported via nfs
-[\[Callaghan95\]]() [\[Shepler03\]]() to these worker nodes. This mode
+[[Callaghan95]](apx-references.md#Callaghan95) [[Shepler03]](apx-references.md#Shepler03) to these worker nodes. This mode
 of deployment will inevitably introduce a performance bottleneck and a
 single point of failure and should be only used if necessary.
 
@@ -1180,7 +1180,7 @@ CernVM-FS offers multiple options to remotely monitor client status and
 behavior.
 
 Since the early days, CernVM-FS supports the [Nagios monitoring
-system](http://www.nagios.org) [\[Schubert08\]](). A checker plugin is
+system](http://www.nagios.org) [[Schubert08]](apx-references.md#Schubert08). A checker plugin is
 available [on our website](https://cernvm.cern.ch/fs/#download).
 
 Since CernVM-FS 2.11 there are two more options: 1)

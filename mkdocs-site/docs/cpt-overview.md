@@ -4,8 +4,8 @@ The CernVM File System (CernVM-FS) is a read-only file system designed
 to deliver scientific software onto virtual machines and physical worker
 nodes in a fast, scalable, and reliable way. Files and file metadata are
 downloaded on demand and aggressively cached. For the distribution of
-files, CernVM-FS uses a standard HTTP [\[BernersLee96\]]()
-[\[Fielding99\]]() transport, which allows exploitation of a variety of
+files, CernVM-FS uses a standard HTTP [[BernersLee96]](apx-references.md#BernersLee96)
+[[Fielding99]](apx-references.md#Fielding99) transport, which allows exploitation of a variety of
 web caches, including commercial content delivery networks. CernVM-FS
 ensures data authenticity and integrity over these possibly untrusted
 caches and connections. The CernVM-FS software comprises client-side
@@ -19,11 +19,11 @@ an HEP experiment framework) are hosted as a CernVM-FS repository on a
 web server.](_static/concept-generic.svg)
 
 The first implementation of CernVM-FS was based on grow-fs
-[@Compostella10] [@Thain05], which was originally provided as
+[[Compostella10]](apx-references.md#Compostella10) [[Thain05]](apx-references.md#Thain05), which was originally provided as
 one of the private file system options available in Parrot. Ever since
 the design evolved and diverged, taking into account the works on
-HTTP-Fuse [\[Suzaki06\]]() and content-delivery networks
-[\[Freedman03\]]() [\[Nygren10\]]() [\[Tolia03\]](). Its current
+HTTP-Fuse [[Suzaki06]](apx-references.md#Suzaki06) and content-delivery networks
+[[Freedman03]](apx-references.md#Freedman03) [[Nygren10]](apx-references.md#Nygren10) [[Tolia03]](apx-references.md#Tolia03). Its current
 implementation provides the following key features:
 
 -   Use of the [Fuse kernel module](http://fuse.sourceforge.net) that
@@ -63,7 +63,7 @@ versioned file-by-file. In order to create and update a CernVM-FS
 repository, a distinguished machine, the so-called *Release Manager
 Machine*, is used. On such a release manager machine, a CernVM-FS
 repository is mounted in read/write mode by means of a union file system
-[\[Wright04\]](). The union file system overlays the CernVM-FS read-only
+[[Wright04]](apx-references.md#Wright04). The union file system overlays the CernVM-FS read-only
 mount point by a writable scratch area. The CernVM-FS server tool kit
 merges changes written to the scratch area into the CernVM-FS
 repository. Merging and publishing changes can be triggered at

@@ -14,3 +14,88 @@
 .wy-table-responsive {
     overflow: visible !important;
 }
+
+/* Fix navigation button cutoff issue */
+.rst-footer-buttons {
+    margin-bottom: 20px !important;
+    padding-bottom: 20px !important;
+}
+
+/* Ensure footer navigation has proper spacing */
+footer {
+    margin-top: 30px !important;
+    padding-top: 20px !important;
+}
+
+/* Fix potential overflow issues with navigation buttons */
+.btn {
+    margin-bottom: 10px !important;
+    word-wrap: break-word !important;
+}
+
+/* Better formatting for citation footnotes */
+.footnote {
+    margin-bottom: 1em !important;
+    line-height: 1.5 !important;
+}
+
+.footnote p {
+    margin-bottom: 0.5em !important;
+}
+
+/* Ensure proper spacing between footnote entries */
+.footnote + .footnote {
+    margin-top: 1em !important;
+}
+
+/* Fix any potential layout issues with long content */
+.document {
+    margin-bottom: 50px !important;
+}
+
+/* Ensure proper spacing at bottom of pages */
+.wy-nav-content {
+    max-width: 900px !important;
+    padding-bottom: 50px !important;
+}
+
+/* Better formatting for bibliography entries - definition lists */
+dl {
+    margin: 1em 0 !important;
+}
+
+dt {
+    font-weight: bold !important;
+    margin-top: 1em !important;
+    margin-bottom: 0.2em !important;
+}
+
+dd {
+    margin-left: 0 !important;
+    margin-bottom: 1em !important;
+    padding-left: 0 !important;
+    line-height: 1.5 !important;
+}
+
+/* Style the reference anchors */
+dt a[id] {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+/* Improve spacing for references page */
+#references + dl {
+    margin-top: 2em !important;
+}
+
+/* Ensure each reference appears as its own block (one per line) */
+.csl-entry {
+  display: block;
+  margin: 0 0 0.5rem 0; /* adjust spacing as you prefer */
+}
+
+/* Optional: remove extra indentation if present */
+.csl-bib-body {
+  padding-left: 0;
+  margin-left: 0;
+}

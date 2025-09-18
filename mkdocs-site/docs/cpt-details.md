@@ -11,7 +11,7 @@ dependencies minimal.
 
 ## File Catalog
 A CernVM-FS repository is defined by its *file catalog*. The file
-catalog is a [SQLite database](https://www.sqlite.org) [\[Allen10\]]()
+catalog is a [SQLite database](https://www.sqlite.org) [[Allen10]](apx-references.md#Allen10)
 having a single table that lists files and directories together with its
 metadata. The table layout is shown in the table below:
 
@@ -32,7 +32,7 @@ metadata. The table layout is shown in the table below:
  xattr  BLOB |
 
 In order to save space we do not store absolute paths. Instead, we store
-MD5 [\[Rivest92\]](), [\[Turner11\]]() hash values of the absolute path
+MD5 [[Rivest92]](apx-references.md#Rivest92), [[Turner11]](apx-references.md#Turner11) hash values of the absolute path
 names. Symbolic links are kept in the catalog. Symbolic links may
 contain environment variables in the form `$(VAR_NAME)` or
 `$(VAR_NAME:-/default/path)` that will be dynamically resolved by
@@ -42,7 +42,7 @@ count is stored in the lower 32 bits of the hard links field, and a
 group is greater than zero, all files with the same hard link group will
 get the same inode issued by the CernVM-FS Fuse client. The emulated
 hard links work within the same directory, only. The cryptographic
-content hash refers to the zlib-compressed [\[Deutsch96\]]() version of
+content hash refers to the zlib-compressed [[Deutsch96]](apx-references.md#Deutsch96) version of
 the file. Flags indicate the type of directory entry (see table below
 <tab_dirent_flags>).
 
@@ -81,8 +81,8 @@ catalog and kernel caching is turned back on.
 
 ### Content Hashes
 
-CernVM-FS can use SHA-1 [\[Jones01\]](), RIPEMD-160 [\[Dobbertin96\]]()
-and SHAKE-128 [\[Bertoni09\]]() as cryptographic hash function. The hash
+CernVM-FS can use SHA-1 [[Jones01]](apx-references.md#Jones01), RIPEMD-160 [[Dobbertin96]](apx-references.md#Dobbertin96)
+and SHAKE-128 [[Bertoni09]](apx-references.md#Bertoni09) as cryptographic hash function. The hash
 function can be changed on the Stratum 0 during the lifetime of
 repositories. On a change, new and updated files will use the new
 cryptographic hash while existing files remain unchanged. This is
@@ -406,7 +406,7 @@ they are renamed into their content-addressable names atomically by
 
 The hard disk cache is managed, CernVM-FS maintains cache size
 restrictions and replaces files according to the least recently used
-(LRU) strategy [\[Panagiotou06\]](). In order to keep track of files
+(LRU) strategy [[Panagiotou06]](apx-references.md#Panagiotou06). In order to keep track of files
 sizes and relative file access times, CernVM-FS sets up another SQLite
 database in the cache directory, the *cache catalog*. The cache catalog
 contains a single table; its structure is shown here:
@@ -702,7 +702,7 @@ changes are in fact written to the read-write branch.
 
 Preserving POSIX semantics in union file systems is non-trivial; the
 first fully functional implementation has been presented by Wright et
-al. [\[Wright04\]](). By now, union file systems are well established
+al. [[Wright04]](apx-references.md#Wright04). By now, union file systems are well established
 for "Live CD" builders, which use a RAM disk overlay on top of the
 read-only system partition in order to provide the illusion of a fully
 read-writable system. CernVM-FS supports only the OverlayFS union file

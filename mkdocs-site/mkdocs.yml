@@ -21,9 +21,6 @@ theme:
 plugins:
   - search
   - mermaid2
-  - bibtex:
-      bib_file: "references.bib"
-      csl_file: "https://raw.githubusercontent.com/citation-style-language/styles/master/ieee.csl"
 
 # Extensions
 markdown_extensions:
@@ -84,6 +81,9 @@ extra:
       link: https://github.com/cvmfs/cvmfs
     - icon: fontawesome/solid/globe
       link: https://cernvm.cern.ch/
+
+extra_css:
+  - _static/css/custom.css
 
 # Copyright
 copyright: Copyright &copy; 2022 CernVM Team

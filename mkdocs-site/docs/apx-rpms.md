@@ -29,7 +29,7 @@ The CernVM-FS software is available in form of several packages:
 **cvmfs-devel**
 
 :   Contains the `libcvmfs.a` static library and the `libcvmfs.h` header
-    file for use of CernVM-FS with Parrot [@Thain05] as well as the
+    file for use of CernVM-FS with Parrot [[Thain05]](apx-references.md#Thain05) as well as the
     `libcvmfs_cache.a` static library and `libcvmfs_cache.h` header in
     order to develop cache plugins.
 
