@@ -144,6 +144,35 @@ other mounts. For example:
       config-egi.egi.eu /cvmfs/config-egi.egi.eu cvmfs defaults,_netdev,nodev 0 0
       cms.cern.ch /cvmfs/cms.cern.ch cvmfs defaults,_netdev,nodev,x-systemd.requires-mounts-for=/cvmfs/config-egi.egi.eu 0 0
 
+.. _sct_mount_options:
+
+Mount options
+~~~~~~~~~~~~~
+
+These are CVMFS-specific mount command options. These can be put into the field 4 of ``/etc/fstab``, or passed after ``-o`` to a comand ``mount``, ``fusermount``, ``mount.cvmfs`` or ``cvmfs2``.
+
+=============================== ===============================================================================
+**Parameter**                   **Meaning**
+=============================== ===============================================================================
+``allow_other``                 Allow access to other users
+``allow_root``                  Allow access to root
+``config=FILES``                Colon-separated list of config files
+``cvmfs_suid``                  Honor set-user-ID and set-group-ID bits or file capabilities when executing programs from the filesystem being mounted
+``debug``                       Enables debug logging to destination file specified in ``CVMFS_DEBUGLOG``
+``disable_watchdog``            Disables watchdog process. Recommended for debugging. With this option, there is only one cvmfs2 process. Without this option, there are two processes.
+``foreground``                  Run in foreground
+``fuse_passthrough``            Enables FUSE passthrough (read requests bypass userspace, improves performance)
+``fuse_passthru``               Alias for ``fuse_passthrough``
+``gid=GID``                     Drop credentials to another group
+``grab_mountpoint``             Give ownership of the mountpoint to the user before mounting (required for autofs)
+``libfuse=[2,3]``               Enforce a certain libfuse version
+``nonempty``                    Allow mounts over non-empty directory
+``parse``                       Parse and print cvmfs parameters
+``simple_options_parsing``      Avoids spawning shell subprocess to parse every config file. Recommended for debugging
+``system_mount``                Indicate that mount is system-wide (makes failure to set nofile ulimit fatal)
+``uid=UID``                     Drop credentials to another user
+=============================== ===============================================================================
+
 .. _sct_privatemount:
 
 Private Mount Points
