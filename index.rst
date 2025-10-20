@@ -32,8 +32,11 @@ CernVM-FS is actively used by small and large HEP collaborations. In many
 cases, it replaces package managers and shared software areas on cluster file
 systems as means to distribute the software used to process experiment data.
 
+
 Contents
 ^^^^^^^^
+
+We recommend to consult the Release Notes and Known Issues pages before doing any upgrades.
 
 .. toctree::
    :maxdepth: 2
