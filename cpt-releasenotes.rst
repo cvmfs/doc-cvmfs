@@ -1,4 +1,35 @@
 
+Release Notes for CernVM-FS 2.13.3
+==================================
+
+
+CernVM-FS 2.13.2 is again a fairly voluminous patch release. Most importantly fixes a race in auto-mount/unmounts that could hang the client process.
+As a failsafe, it also adds a config option CVMFS_PREMOUNT_FUSE that can be set to "no" to go back to 2.12 behavior of using fusermount to mount cvmfs.
+Furthermore this patch release includes a bugfix for garbage collection on stratum 1s - now the garbage collection should really be skipped
+if it is not needed (because it has not been run on the stratum 0).
+
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend updating only a few worker nodes first and gradually ramp up once the new version proves
+to work correctly. Please take special care when upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the upgrade.
+For publisher and gateway nodes, all transactions must be closed; no active leases must be present before upgrading.
+
+
+Bug fixes
+---------
+2.13.3:
+  * [client] Fix a race with concurrent auto-mount/umounts (`#3993 <https://github.com/cvmfs/cvmfs/issues/3993>`_)
+  * [server] cvmfs_server check: add -x option for custom scratch dir (`#4011 <https://github.com/cvmfs/cvmfs/issues/4011>`_)
+  * [client] Fix CVMFS_VERSION and CVMFS_ARCH availability in config files (`#3999 <https://github.com/cvmfs/cvmfs/issues/3999>`_)
+  * [client] Add extended info with cvmfs_config status <repo> (`#3973 <https://github.com/cvmfs/cvmfs/issues/3973>`_)
+  * [server] Avoid accessing held mutexes after forking (`#3995 <https://github.com/cvmfs/cvmfs/issues/3995>`_)
+  * [client] Fix spurious "failed to umount" messages (`#3970 <https://github.com/cvmfs/cvmfs/issues/3970>`_)
+  * [server] Fix updating of last_gc when no gc is run under gc -a without dry run (`#3947 <https://github.com/cvmfs/cvmfs/issues/3947>`_)
+  * [geoip] Change geoip database to openhtc source by default (`#3967 <https://github.com/cvmfs/cvmfs/issues/3967>`_)
+  * [client] Add CVMFS_PREMOUNT_FUSE option to allow fallback to fusermount (`#4017 <https://github.com/cvmfs/cvmfs/issues/4017>`_)
+  
 
 
 Release Notes for CernVM-FS 2.13.2
@@ -23,19 +54,19 @@ For publisher and gateway nodes, all transactions must be closed; no active leas
 
 Bug fixes
 ---------
-  * [client] Fix loader return value when automounter unmounts (#3929)
-  * [client] Fix race when using page cache tracker for chunked files (#3685)
-  * [client] Correct PCT Close in cvmfs_open (#3917)
-  * [server] Change gc -a to only do repos where gc was run on the stratum0 (#3895)
-  * [server] Move the no collectable repos message to gc.log (#3915)
-  * [server] Do only one gc -a at a time, and remove need for check -a to be run by root (#3575)
-  * [server] snapshot: Avoid recursion into history (#3846)
-  * [server] Optimize DNS lookups by cvmfs_geo.py to ignore short host names (#3920)
-  * [client] Add cvmfs_talk metrics prometheus command for faster telemetry (#3944)
-  * [rpm]  Temporarily re-add fuse3 dependency to server to fix fstab #3943 
-  * [build system] cmake: add BUILTIN_EXTERNALS_LIST and EXCLUDE options (#3940)
-  * [client] Add CVMFS_VERSION and CVMFS_VERSION_NUMERIC env vars to config (#3934)
-  * [rpm] fix logrotate config for el8 (#3932)
+  * [client] Fix loader return value when automounter unmounts (`#3929 <https://github.com/cvmfs/cvmfs/issues/3929>`_)
+  * [client] Fix race when using page cache tracker for chunked files (`#3685 <https://github.com/cvmfs/cvmfs/issues/3685>`_)
+  * [client] Correct PCT Close in cvmfs_open (`#3917 <https://github.com/cvmfs/cvmfs/issues/3917>`_)
+  * [server] Change gc -a to only do repos where gc was run on the stratum0 (`#3895 <https://github.com/cvmfs/cvmfs/issues/3895>`_)
+  * [server] Move the no collectable repos message to gc.log (`#3915 <https://github.com/cvmfs/cvmfs/issues/3915>`_)
+  * [server] Do only one gc -a at a time, and remove need for check -a to be run by root (`#3575 <https://github.com/cvmfs/cvmfs/issues/3575>`_)
+  * [server] snapshot: Avoid recursion into history (`#3846 <https://github.com/cvmfs/cvmfs/issues/3846>`_)
+  * [server] Optimize DNS lookups by cvmfs_geo.py to ignore short host names (`#3920 <https://github.com/cvmfs/cvmfs/issues/3920>`_)
+  * [client] Add cvmfs_talk metrics prometheus command for faster telemetry (`#3944 <https://github.com/cvmfs/cvmfs/issues/3944>`_)
+  * [rpm]  Temporarily re-add fuse3 dependency to server to fix fstab `#3943 <https://github.com/cvmfs/cvmfs/issues/3943>`_ 
+  * [build system] cmake: add BUILTIN_EXTERNALS_LIST and EXCLUDE options (`#3940 <https://github.com/cvmfs/cvmfs/issues/3940>`_)
+  * [client] Add CVMFS_VERSION and CVMFS_VERSION_NUMERIC env vars to config (`#3934 <https://github.com/cvmfs/cvmfs/issues/3934>`_)
+  * [rpm] fix logrotate config for el8 (`#3932 <https://github.com/cvmfs/cvmfs/issues/3932>`_)
 
 
 Release Notes for CernVM-FS 2.13.1

@@ -130,6 +130,7 @@ CVMFS_PROXY_SHARD               | If set to *yes*, shard requests across all pro
                                 | load-balancing group using consistent hashing.
 CVMFS_PROXY_TEMPLATE            Overwrite the default proxy template in Geo-API calls.  Only needed for debugging.
 CVMFS_PUBLIC_KEY                Colon-separated list of repository signing keys.
+CVMFS_PREMOUNT_FUSE             | Set to "no" to use fusermount3 to mount cvmfs (may need the fuse package providing fusermount3 to be installed manually)
 CVMFS_QUOTA_LIMIT               Soft-limit of the cache in Megabyte.
 CVMFS_RELOAD_SOCKETS            Directory of the sockets used by the CernVM-FS loader to trigger hotpatching/reloading.
 CVMFS_REPOSITORIES              | Comma-separated list of fully qualified repository names
