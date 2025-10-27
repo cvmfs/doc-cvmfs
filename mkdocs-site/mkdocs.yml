@@ -1,7 +1,7 @@
 site_name: CernVM-FS Documentation
 site_description: CernVM-FS provides a scalable, reliable and low-maintenance software distribution service
 site_author: CernVM Team
-site_url: https://cvmfs.readthedocs.io/
+site_url: https://cvmfs.docs.cern.ch/
 
 # Repository
 repo_name: cvmfs/doc-cvmfs
