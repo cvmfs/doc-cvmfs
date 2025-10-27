@@ -30,33 +30,37 @@ provided for the supported operating systems.
 To add the CVMFS repository (available for Debian and RHEL flavors) and
 install CVMFS, run:
 
-**Scientific Linux / RHEL / Alma:**
-```bash
-sudo yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
-sudo yum install -y cvmfs
-```
+=== ** RHEL / Almalinux / Rocky:**
 
-**Debian/Ubuntu:**
-```bash
-wget https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb
-sudo dpkg -i cvmfs-release-latest_all.deb
-rm -f cvmfs-release-latest_all.deb
-sudo apt-get -y update
-sudo apt-get -y install cvmfs
-```
+    ```bash
+    sudo yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+    sudo yum install -y cvmfs
+    ```
 
-**Fedora:**
-```bash
-sudo dnf install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
-sudo dnf install -y cvmfs
-```
+=== **Debian / Ubuntu:**
 
-**SUSE:**
-```bash
-sudo rpm --import  https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
-sudo zypper install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
-sudo zypper install -y cvmfs
-```
+    ```bash
+    wget https://cvmrepo.s3.cern.ch/cvmrepo/apt/cvmfs-release-latest_all.deb
+    sudo dpkg -i cvmfs-release-latest_all.deb
+    rm -f cvmfs-release-latest_all.deb
+    sudo apt-get -y update
+    sudo apt-get -y install cvmfs
+    ```
+
+=== **Fedora:**
+
+    ```bash
+    sudo dnf install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+    sudo dnf install -y cvmfs
+    ```
+
+=== **SUSE:**
+
+    ```bash
+    sudo rpm --import  https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
+    sudo zypper install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
+    sudo zypper install -y cvmfs
+    ```
 ```
 
 ### Other Platforms
