@@ -198,30 +198,18 @@ One of the essential services supplied by Stratum 1s to CernVM-FS
 clients is the Geo API. This enables clients to share configurations
 worldwide while automatically sorting Stratum 1s geographically to
 prioritize connecting to the closest ones. This makes use of a GeoIP
-database from `Maxmind <https://dev.maxmind.com/geoip/geoip2/geolite2/>`_
-that translates IP addresses of clients to longitude and latitude.
-
-The database is free, but the Maxmind
-`End User License Agreement <https://www.maxmind.com/en/geolite2/eula/>`_
-requires that each user of the database
-`sign up for an account <https://www.maxmind.com/en/geolite2/signup/>`_
-and promise to update the database to the latest version within 30 days
-of when they issue a new version. The signup process will end with
-giving you a License Key. The ``cvmfs_server`` ``add-replica`` and
-``snapshot`` commands will take care of automatically updating the
-database if you put a line like the following in
-``/etc/cvmfs/server.local``, replacing ``<license key>`` with the key
-you get from the signup process:
-
-::
-
-      CVMFS_GEO_LICENSE_KEY=<license key>
-
-To keep the key secret, set the mode of ``/etc/cvmfs/server.local`` to 600.
-You can test that it works by running ``cvmfs_server update-geodb``.
+database that translates IP addresses of clients to longitude and
+latitude.  By default this database is automatically downloaded
+periodically by the ``cvmfs_server snapshot`` command.
+The format of the database is called ``MaxMind DB`` (.mmdb) but the
+database is no longer downloaded by default from Maxmind, it is 
+instead downloaded from 
+`cvmfs-contrib/config-repo on github <https://github.com/cvmfs-contrib/config-repo>`_.
+Maxmind can still be chosen as the automatic download source if desired,
+as described in the :ref:`next section <sct_legacy_geoip_db>`.
 
 Alternatively, if you have a separate mechanism of installing and
-updating the Geolite2 City database file, you can instead set
+updating a city mmdb file, you can instead set
 ``CVMFS_GEO_DB_FILE`` to the full path where you have installed it. If
 the path is ``NONE``, then no database will be required, but note that
 this will break the client Geo API so only use it for testing, when the
@@ -242,6 +230,35 @@ once a week on Tuesdays but can be controlled through a set of variables
 defined in ``cvmfs_server`` beginning with ``CVMFS_UPDATEGEO_``. Look
 in the ``cvmfs_server`` script for the details. An update can also be
 forced at any time by running ``cvmfs_server update-geodb``.
+
+.. _sct_legacy_geoip_db:
+
+Reverting to the legacy Maxmind source of the GeoIP database
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The `legacy Maxmind source <https://dev.maxmind.com/geoip/geoip2/geolite2/>`_
+of the database can still be selected as the source of the automatically
+downloaded GeoIP database.  The database is free, but the Maxmind
+`End User License Agreement <https://www.maxmind.com/en/geolite2/eula/>`_
+requires that each user of the database
+`sign up for an account <https://www.maxmind.com/en/geolite2/signup/>`_
+and promise to update the database to the latest version within 30 days
+of when they issue a new version. The signup process will end with
+giving you a License Key. The ``cvmfs_server snapshot``
+command will take care of automatically updating the
+database if you put lines like the following in
+``/etc/cvmfs/server.local``, replacing ``<license key>`` with the
+account id and key you get from the signup process:
+
+::
+
+      CVMFS_UPDATEGEO_SOURCE=maxmind
+      CVMFS_GEO_ACCOUNT_ID=<account id>
+      CVMFS_GEO_LICENSE_KEY=<license key>
+
+To keep the key secret, set the mode of ``/etc/cvmfs/server.local`` to 600.
+You can test that it works by running ``cvmfs_server update-geodb``.
+
 
 Monitoring
 ----------
