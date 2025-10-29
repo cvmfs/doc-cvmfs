@@ -3,7 +3,7 @@ Release Notes for CernVM-FS 2.13.3
 ==================================
 
 
-CernVM-FS 2.13.2 is again a fairly voluminous patch release. Most importantly fixes a race in auto-mount/unmounts that could hang the client process.
+CernVM-FS 2.13.3 is again a fairly voluminous patch release. Most importantly fixes a race in auto-mount/unmounts that could hang the client process.
 As a failsafe, it also adds a config option CVMFS_PREMOUNT_FUSE that can be set to "no" to go back to 2.12 behavior of using fusermount to mount cvmfs.
 Furthermore this patch release includes a bugfix for garbage collection on stratum 1s - now the garbage collection should really be skipped
 if it is not needed (because it has not been run on the stratum 0).
