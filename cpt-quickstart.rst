@@ -21,7 +21,7 @@ Getting the Software
 The CernVM-FS source code and binary packages are available from the `CernVM website <https://cernvm.cern.ch/fs/#download>`_.
 However, it is recommended to use the available package repositories that are also provided for the supported operating systems.
 
-Linux
+Linux (Officially Supported)
 ~~~~~~~~~~~~~~~~
 
 To add the CVMFS repository (available for Debian and RHEL flavors) and install CVMFS, run:
@@ -61,6 +61,25 @@ To add the CVMFS repository (available for Debian and RHEL flavors) and install 
          sudo rpm --import  https://cvmrepo.web.cern.ch/cvmrepo/yum/RPM-GPG-KEY-CernVM-2048
          sudo zypper install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
          sudo zypper install -y cvmfs
+
+
+Linux (3rd-Party-Maintained)
+~~~~~~~~~~~~~~~~
+
+.. tab-set::
+
+   .. tab-item:: Arch
+
+     A PKGBUILD is available on the AUR ( https://aur.archlinux.org/packages/cvmfs ). Credit goes to the maintainers Frank Siegert and Wainer Vandelli.      
+
+   .. tab-item:: Gentoo
+
+     See https://packages.gentoo.org/packages/net-fs/cvmfs . Credit goes to the maintainer Guilherme Amadio.
+
+
+
+
+
 
 
 Other Platforms
