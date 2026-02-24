@@ -227,6 +227,8 @@ CVMFS_FILE_MBYTE_LIMIT              | Maximum number of megabytes for a publishe
 CVMFS_FORCE_REMOUNT_WARNING         | Enable/disable warning through ``wall`` and grace period before forcefully
                                     | remounting a CernVM-FS repository on the release managere machine.
 CVMFS_GARBAGE_COLLECTION            Enables repository garbage collection |br| (Stratum~0 only | if set to *true*)
+                                    | A publish operation is needed after changing this setting to update
+                                    | the repository manifest before garbage collection can run.
 CVMFS_GC_DELETION_LOG               | Log file path to track all garbage collected objects during sweeping
                                     | for bookkeeping or debugging
 CVMFS_GEO_DB_FILE                   Path to externally updated location of geolite2 city database, or 'None' for no database.
