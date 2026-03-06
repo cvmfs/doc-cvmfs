@@ -106,3 +106,79 @@ dt a[id] {
     width: 100px; /* Adjust to desired width */
     height: auto; /* Maintains aspect ratio */
 }
+
+/* ── pymdownx.tabbed (alternate_style) for readthedocs theme ── */
+
+/* Hide the radio inputs used for tab state */
+.tabbed-set > input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Tab label bar */
+.tabbed-set .tabbed-labels {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.tabbed-set .tabbed-labels > label {
+    padding: 0.6em 1.2em;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #555;
+    border: 1px solid transparent;
+    border-bottom: none;
+    margin-bottom: -2px;
+    border-radius: 4px 4px 0 0;
+    transition: color 0.15s, background 0.15s;
+}
+
+.tabbed-set .tabbed-labels > label:hover {
+    color: #2980b9;
+    background: #f5f5f5;
+}
+
+/* Active tab label — one rule per possible tab index (up to 8) */
+.tabbed-set > input:nth-child(1):checked ~ .tabbed-labels > label:nth-child(1),
+.tabbed-set > input:nth-child(2):checked ~ .tabbed-labels > label:nth-child(2),
+.tabbed-set > input:nth-child(3):checked ~ .tabbed-labels > label:nth-child(3),
+.tabbed-set > input:nth-child(4):checked ~ .tabbed-labels > label:nth-child(4),
+.tabbed-set > input:nth-child(5):checked ~ .tabbed-labels > label:nth-child(5),
+.tabbed-set > input:nth-child(6):checked ~ .tabbed-labels > label:nth-child(6),
+.tabbed-set > input:nth-child(7):checked ~ .tabbed-labels > label:nth-child(7),
+.tabbed-set > input:nth-child(8):checked ~ .tabbed-labels > label:nth-child(8) {
+    color: #2980b9;
+    border-color: #e0e0e0;
+    border-bottom-color: #fff;
+    background: #fff;
+}
+
+/* Tab content area */
+.tabbed-set .tabbed-content {
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    padding: 1em;
+}
+
+/* Hide all tab panels by default */
+.tabbed-set .tabbed-content > .tabbed-block {
+    display: none;
+}
+
+/* Show the active panel — one rule per possible tab index (up to 8) */
+.tabbed-set > input:nth-child(1):checked ~ .tabbed-content > .tabbed-block:nth-child(1),
+.tabbed-set > input:nth-child(2):checked ~ .tabbed-content > .tabbed-block:nth-child(2),
+.tabbed-set > input:nth-child(3):checked ~ .tabbed-content > .tabbed-block:nth-child(3),
+.tabbed-set > input:nth-child(4):checked ~ .tabbed-content > .tabbed-block:nth-child(4),
+.tabbed-set > input:nth-child(5):checked ~ .tabbed-content > .tabbed-block:nth-child(5),
+.tabbed-set > input:nth-child(6):checked ~ .tabbed-content > .tabbed-block:nth-child(6),
+.tabbed-set > input:nth-child(7):checked ~ .tabbed-content > .tabbed-block:nth-child(7),
+.tabbed-set > input:nth-child(8):checked ~ .tabbed-content > .tabbed-block:nth-child(8) {
+    display: block;
+}
