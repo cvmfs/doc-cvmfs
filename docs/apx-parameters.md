@@ -8,10 +8,10 @@ CVMFS_ALIEN_CACHE { #cvmfs_alien_cache }
 : If set, use an alien cache at the given location
 
 CVMFS_ALT_ROOT_PATH { #cvmfs_alt_root_path }
-: alternative root catalog path. catalogs (tag / hash) under the alternative path.  If set to *yes*, use Only required for fixed
+: If set to *yes*, use alternative root catalog path. Only required for fixed catalogs (tag / hash) under the alternative path.
 
 CVMFS_ARCH { #cvmfs_arch }
-: reflect the CPU architecture on which the client runs (using `uname -m`). symlinks with cvmfs installations to auto-select the architecture.  Automatically set by CVMFs to Allows to utilize variant
+: Automatically set by CVMFS to reflect the CPU architecture on which the client runs (using `uname -m`). Allows to utilize variant symlinks with `cvmfs` installations to auto-select the architecture.
 
 CVMFS_AUTO_UPDATE { #cvmfs_auto_update }
 : If set to *no*, disables the automatic update of file catalogs.
@@ -29,10 +29,10 @@ CVMFS_BACKOFF_MAX { #cvmfs_backoff_max }
 : Maximum backoff in seconds when retrying to download data.
 
 CVMFS_BLACKLIST { #cvmfs_blacklist }
-: that denies mounting any revision < revision N. is the repository name, N is the revision number, separated by whitespace. allowed after N, not even whitespace.  File name of the blacklist Format: `<REPO N` where REPO and the two parts are Note: no extra characters are
+: File name of the blacklist that denies mounting any revision < revision N. Format: `<REPO N` where REPO is the repository name, N is the revision number, and the two parts are separated by whitespace. Note: no extra characters are allowed after N, not even whitespace.
 
 CVMFS_CATALOG_WATERMARK { #cvmfs_catalog_watermark }
-: when their number surpasses the given watermark. explicitly set by shrinkwrap.  Try to release pinned catalogs Defaults to 1/4 CVMFS_NFILES;
+: Try to release pinned catalogs when their number surpasses the given watermark. Defaults to 1/4 `CVMFS_NFILES`; explicitly set by shrinkwrap.
 
 CVMFS_CACHE_ALIEN { #cvmfs_cache_alien }
 : Deprecated, legacy parameter. Use `CVMFS_ALIEN_CACHE` instead.
@@ -41,7 +41,7 @@ CVMFS_CACHE_BASE { #cvmfs_cache_base }
 : Location (directory) of the CernVM-FS cache.
 
 CVMFS_CACHE_DIR { #cvmfs_cache_dir }
-: but automatically set by cvmfs. overwriting when using `libcvmfs`  Similar to `CVMFS_CACHE_BASE`, Only might need manual
+: Similar to `CVMFS_CACHE_BASE`, but automatically set by `cvmfs`. Only might need manual overwriting when using `libcvmfs`.
 
 CVMFS_CACHE_PRIMARY { #cvmfs_cache_primary }
 : Type of cache to use. By default it is `posix`. (see also the [Advanced Cache Configuration](cpt-configure.md#advanced-cache-configuration) section)
@@ -63,7 +63,7 @@ CVMFS_CLAIM_OWNERSHIP { #cvmfs_claim_ownership }
 : If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
 
 CVMFS_CONFIG_REPOSITORY { #cvmfs_config_repository }
-: client will get its config from. `cvmfs-config-default` sets this parameter to `cvmfs-config.cern.ch`  CVMFS repository where a CVMFS The default configuration rpm
+: CVMFS repository where a CVMFS client will get its config from. The default configuration rpm `cvmfs-config-default` sets this parameter to `cvmfs-config.cern.ch`.
 
 CVMFS_CPU_AFFINITY { #cvmfs_cpu_affinity }
 : Comma-separated list to set CPU affinity for all `cvmfs` components.
@@ -72,13 +72,13 @@ CVMFS_DEBUGLOG { #cvmfs_debuglog }
 : If set, run CernVM-FS in debug mode and write a verbose log the the specified file.
 
 CVMFS_DEFAULT_DOMAIN { #cvmfs_default_domain }
-: automatically appended to repository names  The default domain will be when given without a domain.
+: The default domain will be automatically appended to repository names when given without a domain.
 
 CVMFS_DNS_MIN_TTL { #cvmfs_dns_min_ttl }
-: seconds for DNS queries of proxy server names 1 minute.  Minimum effective TTL in (not Stratum 1s). Defaults to
+: Minimum effective TTL in seconds for DNS queries of proxy server names (not Stratum 1s). Defaults to 1 minute.
 
 CVMFS_DNS_MAX_TTL { #cvmfs_dns_max_ttl }
-: seconds for DNS queries of proxy server names 1 day.  Maximum effective TTL in (not Stratum 1s). Defaults to
+: Maximum effective TTL in seconds for DNS queries of proxy server names (not Stratum 1s). Defaults to 1 day.
 
 CVMFS_DNS_RETRIES { #cvmfs_dns_retries }
 : Number of retries when resolving proxy names
@@ -93,16 +93,16 @@ CVMFS_DNS_ROAMING { #cvmfs_dns_roaming }
 : If true, watch /etc/resolv.conf for nameserver changes
 
 CVMFS_ENFORCE_ACLS { #cvmfs_enforce_acls }
-: the repository. Requires libfuse 3.  Enforce POSIX ACLs stored in
+: Enforce POSIX ACLs stored in the repository. Requires `libfuse` 3.
 
 CVMFS_EXTERNAL_FALLBACK_PROXY { #cvmfs_external_fallback_proxy }
-: to `CVMFS_EXTERNAL_HTTP_PROXY`. to the end of the normal proxies, connections.  List of HTTP proxies similar The fallback proxies are added and disable DIRECT
+: List of HTTP proxies similar to `CVMFS_EXTERNAL_HTTP_PROXY`. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 
 CVMFS_EXTERNAL_HTTP_PROXY { #cvmfs_external_http_proxy }
 : Chain of HTTP proxy groups to be used when CernVM-FS is accessing external data
 
 CVMFS_EXTERNAL_MAX_SERVERS { #cvmfs_external_max_servers }
-: hosts to the given number (after geo-sorting them)  Caps the list of external
+: Caps the list of external hosts to the given number (after geo-sorting them)
 
 CVMFS_EXTERNAL_METALINK { #cvmfs_external_metalink }
 : Semi-colon-separated chain of RFC6249-compliant servers to locate webservers serving external data.
@@ -117,16 +117,16 @@ CVMFS_EXTERNAL_URL { #cvmfs_external_url }
 : Semicolon-separated chain of webservers serving external data chunks.
 
 CVMFS_FALLBACK_PROXY { #cvmfs_fallback_proxy }
-: to `CVMFS_HTTP_PROXY`. The fallback proxies are proxies, and disable DIRECT connections.  List of HTTP proxies similar added to the end of the normal
+: List of HTTP proxies similar to `CVMFS_HTTP_PROXY`. The fallback proxies are added to the end of the normal proxies, and disable DIRECT connections.
 
 CVMFS_FUSE_NOTIFY_INVALIDATION { #cvmfs_fuse_notify_invalidation }
-: invalidation. By default disabled on macOS to fix stability issues. recommended to turn it off.  Disable fuse notify On Linux systems, it is NOT
+: Disable fuse notify invalidation. By default disabled on macOS to fix stability issues. On Linux systems, it is NOT recommended to turn it off.
 
 CVMFS_FUSE3_MAX_THREADS { #cvmfs_fuse3_max_threads }
-: Set max number of fuse threads (requires: libfuse3 3.12)
+: Set max number of fuse threads (requires: libfuse3 > 3.12)
 
 CVMFS_FUSE3_IDLE_THREADS { #cvmfs_fuse3_idle_threads }
-: Set max number of idle fuse threads (requires: libfuse3 3.12)
+: Set max number of idle fuse threads (requires: libfuse3 > 3.12)
 
 CVMFS_FOLLOW_REDIRECTS { #cvmfs_follow_redirects }
 : When set to *yes*, follow up to 4 HTTP redirects in requests.
@@ -138,13 +138,13 @@ CVMFS_HOST_RESET_AFTER { #cvmfs_host_reset_after }
 : See `CVMFS_PROXY_RESET_AFTER`, for server URLs.
 
 CVMFS_HTTP_PROXY { #cvmfs_http_proxy }
-: used by CernVM-FS. Necessary. use proxies.  Chain of HTTP proxy groups Set to `DIRECT` if you don't
+: Chain of HTTP proxy groups used by CernVM-FS. Necessary. Set to `DIRECT` if you don't use proxies.
 
 CVMFS_HTTP_TRACING { #cvmfs_http_tracing }
 : Activates that a tracing header is attached to each CURL request. Consists of `uid`, `pid`, and `gid`. Default is `off`.
 
 CVMFS_HTTP_TRACING_HEADERS { #cvmfs_http_tracing_headers }
-: Adds additional static, user-defined tracing headers. Format: `key1:val1 Needs `CVMFS_HTTP_TRACING` to be set to `on`.  key2:val2  key3:val3`.
+: Adds additional static, user-defined tracing headers. Format: `key1:val1|key2:val2|key3:val3`. Needs `CVMFS_HTTP_TRACING` to be set to `on`.
 
 CVMFS_IGNORE_SIGNATURE { #cvmfs_ignore_signature }
 : When set to *yes*, don't verify CernVM-FS file catalog signatures.
@@ -153,7 +153,7 @@ CVMFS_INITIAL_GENERATION { #cvmfs_initial_generation }
 : Initial inode generation. Used for testing.
 
 CVMFS_INSTRUMENT_FUSE { #cvmfs_instrument_fuse }
-: performance statistics about the FUSE callbacks. `cvmfs_talk internal affairs`.  When set to *true* gather The results are displayed with
+: When set to *true* gather performance statistics about the FUSE callbacks. The results are displayed with `cvmfs_talk internal affairs`.
 
 CVMFS_NFS_INTERLEAVED_INODES { #cvmfs_nfs_interleaved_inodes }
 : In NFS mode, use only inodes of the form an+b, specified as "b%a".
@@ -183,22 +183,22 @@ CVMFS_KCACHE_TIMEOUT { #cvmfs_kcache_timeout }
 : Timeout in seconds for path names and file attributes in the kernel file system buffers.
 
 CVMFS_KEYS_DIR { #cvmfs_keys_dir }
-: files used as repository signing keys. precedence over `CVMFS_PUBLIC_KEY`.  Directory containing \*.pub If set, this parameter has
+: Directory containing \*.pub files used as repository signing keys. If set, this parameter has precedence over `CVMFS_PUBLIC_KEY`.
 
 CVMFS_LIBRARY_PATH { #cvmfs_library_path }
-: Allows `cvmfs2` to discover libraries not installed in one of standard search paths.  For standalone deployment. `libcvmfs_<...>.so` that are
+: For standalone deployment. Allows `cvmfs2` to discover libraries `libcvmfs_<...>.so` that are not installed in one of standard search paths.
 
 CVMFS_LOW_SPEED_LIMIT { #cvmfs_low_speed_limit }
 : Minimum transfer rate in bytes/second a server or proxy must provide.
 
 CVMFS_MAGIC_XATTRS_VISIBILITY { #cvmfs_magic_xattrs_visibility }
-: attributes to be listed. Options: `always`, `never`, `rootonly`. listing can only be requested for `/cvmfs/<repo>`. For any other file, specific extended attribute will work.  Allows to hide extended `rootonly` means that the only a direct request to a
+: Allows to hide extended attributes to be listed. Options: `always`, `never`, `rootonly`. `rootonly` means that the listing can only be requested for `/cvmfs/<repo>`. For any other file, only a direct request to a specific extended attribute will work.
 
 CVMFS_MAX_EXTERNAL_SERVERS { #cvmfs_max_external_servers }
-: sorted) stratum 1 servers for external data  Limit the number of (geo that are effectively used.
+: Limit the number of (geo sorted) stratum 1 servers for external data that are effectively used.
 
 CVMFS_MAX_IPADDR_PER_PROXY { #cvmfs_max_ipaddr_per_proxy }
-: addresses a proxy names resolves into. up to the limit are randomly selected.  Limit the number of IP From all registered addresses,
+: Limit the number of IP addresses a proxy names resolves into. From all registered addresses, up to the limit are randomly selected.
 
 CVMFS_MAX_RETRIES { #cvmfs_max_retries }
 : Maximum number of retries for a given proxy/host combination.
@@ -222,7 +222,7 @@ CVMFS_METALINK_RESET_AFTER { #cvmfs_metalink_reset_after }
 : See `CVMFS_PROXY_RESET_AFTER`, for metalink servers.
 
 CVMFS_MOUNT_RW { #cvmfs_mount_rw }
-: read/write file system. Write operations will fail faulty `open()` flags.  Mount CernVM-FS as a but this option can workaround
+: Mount CernVM-FS as a read/write file system. Write operations will fail but this option can workaround faulty `open()` flags.
 
 CVMFS_NFILES { #cvmfs_nfiles }
 : Maximum number of open file descriptors that can be used by the CernVM-FS process.
@@ -231,19 +231,19 @@ CVMFS_NFS_SOURCE { #cvmfs_nfs_source }
 : If set to *yes*, act as a source for the NFS daemon (NFS export).
 
 CVMFS_NFS_SHARED { #cvmfs_nfs_shared }
-: the NFS maps in an SQlite database, storage in the cache directory.  If set a path, used to store instead of the usual LevelDB
+: If set a path, used to store the NFS maps in an SQLite database, instead of the usual LevelDB storage in the cache directory.
 
 CVMFS_PAC_URLS { #cvmfs_pac_urls }
 : Chain of URLs pointing to PAC files with HTTP proxy configuration information.
 
 CVMFS_OOM_SCORE_ADJ { #cvmfs_oom_score_adj }
-: out-of-memory killer priority \[-1000 - 1000\].  Set the Linux kernel's for the CernVM-FS client
+: Set the Linux kernel's out-of-memory killer priority for the CernVM-FS client [-1000 - 1000].
 
 CVMFS_PROXY_RESET_AFTER { #cvmfs_proxy_reset_after }
-: CernVM-FS will retry the primary proxy group another group.  Delay in seconds after which in case of a fail-over to
+: Delay in seconds after which CernVM-FS will retry the primary proxy group in case of a fail-over to another group.
 
 CVMFS_PROXY_SHARD { #cvmfs_proxy_shard }
-: requests across all proxies within the current consistent hashing.  If set to *yes*, shard load-balancing group using
+: If set to *yes*, shard requests across all proxies within the current load-balancing group using consistent hashing.
 
 CVMFS_PROXY_TEMPLATE { #cvmfs_proxy_template }
 : Overwrite the default proxy template in Geo-API calls. Only needed for debugging.
@@ -258,10 +258,10 @@ CVMFS_RELOAD_SOCKETS { #cvmfs_reload_sockets }
 : Directory of the sockets used by the CernVM-FS loader to trigger hotpatching/reloading.
 
 CVMFS_REPOSITORIES { #cvmfs_repositories }
-: qualified repository names utilities such as `cvmfs_talk` and `cvmfs_config`. repositories may be mounted, unless `CVMFS_STRICT_MOUNT` is  Comma-separated list of fully to include in use of client Does not limit which set to *yes*.
+: Comma-separated list of fully qualified repository names to include in use of client utilities such as `cvmfs_talk` and `cvmfs_config`. Does not limit which repositories may be mounted, unless `CVMFS_STRICT_MOUNT` is set to *yes*.
 
 CVMFS_REPOSITORY_DATE { #cvmfs_repository_date }
-: (e.g. `2007-03-01T13:00:00Z`). as of the given date.  A timestamp in ISO format Selects the repository state
+: A timestamp in ISO format (e.g. `2007-03-01T13:00:00Z`). Selects the repository state as of the given date.
 
 CVMFS_REPOSITORY_TAG { #cvmfs_repository_tag }
 : Select a named repository snapshot that should be mounted instead of `trunk`.
@@ -285,7 +285,7 @@ CVMFS_SHARED_CACHE { #cvmfs_shared_cache }
 : If set to *no*, makes a repository use an exclusive cache.
 
 CVMFS_STATFS_CACHE_TIMEOUT { #cvmfs_statfs_cache_timeout }
-: seconds (no caching by default). frequency can be expensive.  Caching time of `statfs()` in Calling `statfs()` in high
+: Caching time of `statfs()` in seconds (no caching by default). Calling `statfs()` in high frequency can be expensive.
 
 CVMFS_STREAMING_CACHE { #cvmfs_streaming_cache }
 : If set to *yes*, use a download manager to download regular files on read.
@@ -297,19 +297,19 @@ CVMFS_SUID { #cvmfs_suid }
 : If set to *yes*, enable suid magic on the mounted repository. Requires mounting as root.
 
 CVMFS_SYSLOG_FACILITY { #cvmfs_syslog_facility }
-: and 7, uses the corresponding messages.  If set to a number between 0 and 7, uses the corresponding LOCALn facility for syslog
+: If set to a number between 0 and 7, uses the corresponding `LOCALn` facility for syslog messages.
 
 CVMFS_SYSLOG_LEVEL { #cvmfs_syslog_level }
-: syslog level for CernVM-FS messages to respectively.  If set to 1 or 2, sets the LOG_DEBUG or LOG_INFO
+: If set to 1 or 2, sets the syslog level for CernVM-FS messages to `LOG_DEBUG` or `LOG_INFO` respectively.
 
 CVMFS_SYSLOG_PREFIX { #cvmfs_syslog_prefix }
 : Prefix for each CVMFS message in the syslog. By default it is the repo name.
 
 CVMFS_SYSTEMD_NOKILL { #cvmfs_systemd_nokill }
-: command line to `@vmfs2 ...` in order to storage manager.  If set to *yes*, modify the act as a systemd lowlevel
+: If set to *yes*, modify the command line to `@vmfs2 ...` in order to act as a systemd lowlevel storage manager.
 
 CVMFS_TALK_SOCKET { #cvmfs_talk_socket }
-: Internal usage. Used for `cvmfs_talk`. Default socket is `/v ar/spool/cvmfs/<repo>/cvmfs_io`.
+: Internal usage. Used for `cvmfs_talk`. Default socket is `/var/spool/cvmfs/<repo>/cvmfs_io`.
 
 CVMFS_TALK_OWNER { #cvmfs_talk_owner }
 : Internal usage. Used for `cvmfs_talk`. By default it is the repo owner.
@@ -339,13 +339,13 @@ CVMFS_USE_GEOAPI { #cvmfs_use_geoapi }
 : Request order of Stratum 1 servers and fallback proxies via Geo-API.
 
 CVMFS_USE_SSL_SYSTEM_CA { #cvmfs_use_ssl_system_ca }
-: endpoints, provided by the system.  When connecting to an HTTPS it will load the certificates
+: When connecting to an HTTPS endpoint, it will load the certificates provided by the system.
 
 CVMFS_USER { #cvmfs_user }
 : Sets the `gid` and `uid` mount options. Don't touch or overwrite.
 
 CVMFS_USYSLOG { #cvmfs_usyslog }
-: logged to syslog are re-directed to the given file. and there is one step of log rotation.  All messages that normally are This file can grow up to 500kB Required for muCernVM.
+: All messages that normally are logged to syslog are re-directed to the given file. This file can grow up to 500kB and there is one step of log rotation. Required for muCernVM.
 
 CVMFS_XATTR_PRIVILEGED_GIDS { #cvmfs_xattr_privileged_gids }
 : Comma-separated list of (main) group IDs that are allowed to access the extended attributes listed by `CVMFS_XATTR_PROTECTED_XATTRS`.
@@ -367,10 +367,10 @@ CVMFS_AUTO_GC { #cvmfs_auto_gc }
 : Enables the automatic garbage collection on *publish* and *snapshot*
 
 CVMFS_AUTO_GC_TIMESPAN { #cvmfs_auto_gc_timespan }
-: garbage collection ago]{.title-ref}, [1 week ago]{.title-ref}, \...)  Date-threshold for automatic (For example: [3 days
+: Date-threshold for automatic garbage collection (For example: *3 days ago*, *1 week ago*, ...)
 
 CVMFS_AUTO_GC_LAPSE { #cvmfs_auto_gc_lapse }
-: collection, only garbage collect if last GC is (For example: [1 day ago]{.title-ref})  Frequency of auto garbage before the given threshold
+: Frequency of auto garbage collection, only garbage collect if last GC is before the given threshold (For example: *1 day ago*)
 
 CVMFS_AUTO_REPAIR_MOUNTPOINT { #cvmfs_auto_repair_mountpoint }
 : Set to *true* to enable automatic recovery from bogus server mount states.
@@ -379,58 +379,58 @@ CVMFS_AUTO_TAG { #cvmfs_auto_tag }
 : Creates a generic revision tag for each published revision (if set to *true*).
 
 CVMFS_AUTO_TAG_TIMESPAN { #cvmfs_auto_tag_timespan }
-: tags, after which auto tags get removed ago]{.title-ref})  Date-threshold for automatic (For example: [4 days
+: Date-threshold for automatic tags, after which auto tags get removed (For example: *4 days ago*)
 
 CVMFS_AUTOCATALOGS { #cvmfs_autocatalogs }
 : Enable/disable automatic catalog management using autocatalogs.
 
 CVMFS_AUTOCATALOGS_MAX_WEIGHT { #cvmfs_autocatalogs_max_weight }
-: an autocatalog to be considered overflowed. also *CVMFS_AUTOCATALOGS*)  Maximum number of entries in Default value: 100000 (see
+: Maximum number of entries in an autocatalog to be considered overflowed. Default value: 100000 (see also *CVMFS_AUTOCATALOGS*)
 
 CVMFS_AUTOCATALOGS_MIN_WEIGHT { #cvmfs_autocatalogs_min_weight }
-: an autocatalog to be considered underflowed. *CVMFS_AUTOCATALOGS*)  Minimum number of entries in Default value: 1000 (see also
+: Minimum number of entries in an autocatalog to be considered underflowed. Default value: 1000 (see also *CVMFS_AUTOCATALOGS*)
 
 CVMFS_AVG_CHUNK_SIZE { #cvmfs_avg_chunk_size }
-: chunk in bytes *CVMFS_USE_FILE_CHUNKING*)  Desired Average size of a file (see also
+: Desired average size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)
 
 CVMFS_CATALOG_ALT_PATHS { #cvmfs_catalog_alt_paths }
-: catalog bootstrapping shortcuts during publishing. [/data]{.title-ref} is not publicly accessible)  Enable/disable generation of (Useful when backend directory
+: Enable/disable generation of catalog bootstrapping shortcuts during publishing. (Useful when backend directory `/data` is not publicly accessible)
 
 CVMFS_CHECK_ALL_MIN_DAYS { #cvmfs_check_all_min_days }
-: checking each repository with `cvmfs_server check -a`  Minimum number of days between Default value: 30
+: Minimum number of days between checking each repository with `cvmfs_server check -a`. Default value: 30
 
 CVMFS_COMPRESSION_ALGORITHM { #cvmfs_compression_algorithm }
-: used during publishing or 'none')  Compression algorithm to be (currently either 'default'
+: Compression algorithm to be used during publishing (currently either `default` or `none`)
 
 CVMFS_CREATOR_VERSION { #cvmfs_creator_version }
-: used to create this repository  The CernVM-FS version that was (do not change manually).
+: The CernVM-FS version that was used to create this repository (do not change manually).
 
-CV MFS_DONT_CHECK_OVERLAYFS_VERSION { #cv_mfs_dont_check_overlayfs_version }
-: Disable checking of OverlayFS version before usage.
+CVMFS_DONT_CHECK_OVERLAYFS_VERSION { #cvmfs_dont_check_overlayfs_version }
+: Disable checking of OverlayFS version before usage. (see also the [Requirements for a new Repository](cpt-repo.md#requirements-for-a-new-repository) section)
 
 CVMFS_ENABLE_MTIME_NS { #cvmfs_enable_mtime_ns }
 : Use nanosecond-granularity for modification time of files (instead of milliseconds)
 
 CVMFS_ENFORCE_LIMITS { #cvmfs_enforce_limits }
-: exceeding \*LIMIT variables to be fatal to a publish  Set to *true* to cause instead of a warning
+: Set to *true* to cause exceeding `*LIMIT` variables to be fatal to a publish instead of a warning
 
 CVMFS_EXTENDED_GC_STATS { #cvmfs_extended_gc_stats }
-: the volume of garbage collected files (increases GC running time)  Set to *true* to keep track of
+: Set to *true* to keep track of the volume of garbage collected files (increases GC running time)
 
 CVMFS_EXTERNAL_DATA { #cvmfs_external_data }
-: repository to contain external data external HTTP server  Set to *true* to mark that is served from an
+: Set to *true* to mark that repository contains external data that is served from an external HTTP server
 
 CVMFS_FILE_MBYTE_LIMIT { #cvmfs_file_mbyte_limit }
-: for a published file, default value: 1024 *CVMFS_ENFORCE_LIMITS*)  Maximum number of megabytes (see also
+: Maximum number of megabytes for a published file, default value: 1024 (see also *CVMFS_ENFORCE_LIMITS*)
 
 CVMFS_FORCE_REMOUNT_WARNING { #cvmfs_force_remount_warning }
-: `wall` and grace period before forcefully repository on the release managere machine.  Enable/disable warning through remounting a CernVM-FS
+: Enable/disable warning through `wall` and grace period before forcefully remounting a CernVM-FS repository on the release managere machine.
 
 CVMFS_GARBAGE_COLLECTION { #cvmfs_garbage_collection }
-: Enables repository garbage collection (Stratum\~0 only \ if set to *true*)
+: Enables repository garbage collection (*Stratum~0 only*, if set to *true*). A publish operation is needed after changing this setting to update the repository manifest before garbage collection can run.
 
 CVMFS_GC_DELETION_LOG { #cvmfs_gc_deletion_log }
-: garbage collected objects during sweeping  Log file path to track all for bookkeeping or debugging
+: Log file path to track all garbage collected objects during sweeping for bookkeeping or debugging
 
 CVMFS_GEO_DB_FILE { #cvmfs_geo_db_file }
 : Path to externally updated location of geolite2 city database, or 'None' for no database.
@@ -442,7 +442,7 @@ CVMFS_GID_MAP { #cvmfs_gid_map }
 : Path of a file for the mapping of file owner group ids.
 
 CVMFS_HASH_ALGORITHM { #cvmfs_hash_algorithm }
-: algorithm should be used by CernVM-FS for CAS objects *rmd160* and *shake128*)  Define which secure hash (supported are: *sha1*,
+: Define which secure hash algorithm should be used by CernVM-FS for CAS objects (supported are: *sha1*, *rmd160* and *shake128*)
 
 CVMFS_IGNORE_SPECIAL_FILES { #cvmfs_ignore_special_files }
 : Set to *true* to skip special files (pipes, sockets, block device and character device files) during publish without aborting.
@@ -460,22 +460,22 @@ CVMFS_MIN_CHUNK_SIZE { #cvmfs_min_chunk_size }
 : Minimal size of a file chunk in bytes (see also *CVMFS_USE_FILE_CHUNKING*)
 
 CVMFS_NESTED_KCATALOG_LIMIT { #cvmfs_nested_kcatalog_limit }
-: allowed in nested catalogs, default 500 *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)  Maximum thousands of files (see also
+: Maximum thousands of files allowed in nested catalogs, default 500 (see also *CVMFS_ROOT_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
 
 CVMFS_NUM_UPLOAD_TASKS { #cvmfs_num_upload_tasks }
-: commit data to storage during publication. local backend.  Number of threads used to Currently only used by the
+: Number of threads used to commit data to storage during publication. Currently only used by the local backend.
 
 CVMFS_NUM_WORKERS { #cvmfs_num_workers }
-: downloaded files during a Stratum1 pull operation  Maximal number of concurrently (Stratum\~1 only).
+: Maximal number of concurrently downloaded files during a Stratum1 pull operation (*Stratum~1 only*).
 
 CVMFS_PUBLIC_KEY { #cvmfs_public_key_2 }
 : Colon-separated path to the public key file(s) or directory(ies) of the repository to be replicated. (Stratum 1 only).
 
 CVMFS_PRINT_STATISTICS { #cvmfs_print_statistics }
-: publisher statistics on the console  Set to *true* to show
+: Set to *true* to show publisher statistics on the console
 
 CVMFS_REPLICA_ACTIVE { #cvmfs_replica_active }
-: skip this repository when executing  Stratum1-only: Set to *no* to `cvmfs_server snapshot -a`
+: Stratum1-only: Set to *no* to skip this repository when executing `cvmfs_server snapshot -a`
 
 CVMFS_REPOSITORY_NAME { #cvmfs_repository_name }
 : The fully qualified name of the specific repository.
@@ -484,22 +484,22 @@ CVMFS_REPOSITORY_TYPE { #cvmfs_repository_type }
 : Defines if the repository is a master copy (*stratum0*) or a replica (*stratum1*).
 
 CVMFS_REPOSITORY_TTL { #cvmfs_repository_ttl }
-: client lookups for changes in the repository.  The frequency in seconds of Defaults to 4 minutes.
+: The frequency in seconds of client lookups for changes in the repository. Defaults to 4 minutes.
 
 CVMFS_ROOT_KCATALOG_LIMIT { #cvmfs_root_kcatalog_limit }
-: allowed in root catalogs, default 200 *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)  Maximum thousands of files (see also
+: Maximum thousands of files allowed in root catalogs, default 200 (see also *CVMFS_NESTED_KCATALOG_LIMIT* and *CVMFS_ENFORCE_LIMITS*)
 
 CVMFS_SNAPSHOT_GROUP { #cvmfs_snapshot_group }
-: repositories used with `cvmfs_server snapshot -a -g`. `cvmfs_server add-replica -g`.  Group name for subset of Added with
+: Group name for subset of repositories used with `cvmfs_server snapshot -a -g`. Added with `cvmfs_server add-replica -g`.
 
 CVMFS_SPOOL_DIR { #cvmfs_spool_dir }
-: spooler scratch directories; point and copy-on-write storage reside here.  Location of the upstream the read-only CernVM-FS moint
+: Location of the upstream spooler scratch directories; the read-only CernVM-FS moint point and copy-on-write storage reside here.
 
 CVMFS_STATISTICS_DB { #cvmfs_statistics_db }
-: publisher statistics database  Set a custom path for the
+: Set a custom path for the publisher statistics database
 
 CVMFS_STATS_DB_DAYS_TO_KEEP { #cvmfs_stats_db_days_to_keep }
-: the publisher statistics database (365 by default)  Sets the pruning interval for
+: Sets the pruning interval for the publisher statistics database (365 by default)
 
 CVMFS_STRATUM0 { #cvmfs_stratum0 }
 : URL of the master copy (*stratum0*) of this specific repository.
@@ -508,62 +508,62 @@ CVMFS_STRATUM1 { #cvmfs_stratum1 }
 : URL of the Stratum1 HTTP server for this specific repository.
 
 CVMFS_SYNCFS_LEVEL { #cvmfs_syncfs_level }
-: by called by `cvmfs_server` operations. 'default', 'cautious'.  Controls how often `sync` will Possible levels are 'none',
+: Controls how often `sync` will be called by `cvmfs_server` operations. Possible levels are `none`, `default`, `cautious`.
 
-[CVMFS_S3]()<param> { #cvmfs_s3_param }
-: S3-related parameters. See the S3 parameter table.
+CVMFS_S3_&lt;param&gt; { #cvmfs_s3_param }
+: S3-related parameters. See the [S3 Compatible Storage Systems](cpt-repo.md#s3-compatible-storage-systems) section.
 
 CVMFS_UID_MAP { #cvmfs_uid_map }
 : Path of a file for the mapping of file owner user ids.
 
 CVMFS_UNION_DIR { #cvmfs_union_dir }
-: Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed.
+: Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed (see the [CernVM-FS Repository Creation and Updating](cpt-repo.md#cernvm-fs-repository-creation-and-updating) section).
 
 CVMFS_UNION_FS_TYPE { #cvmfs_union_fs_type }
-: to be used for the repository. supported, `aufs` has no active support anymore)  Defines the union file system (only `overlayfs` is fully
+: Defines the union file system to be used for the repository (only `overlayfs` is fully supported, `aufs` has no active support anymore)
 
 CVMFS_UPLOAD_STATS_DB { #cvmfs_upload_stats_db }
-: data file to the Stratum 0 /stats location  Publish repository statistics
+: Publish repository statistics data file to the Stratum 0 `/stats` location
 
 CVMFS_UPLOAD_STATS_PLOTS { #cvmfs_upload_stats_plots }
-: plots and webpage to the Stratum 0 /stats location (requires ROOT)  Publish repository statistics
+: Publish repository statistics plots and webpage to the Stratum 0 `/stats` location (requires ROOT)
 
 CVMFS_UPSTREAM_STORAGE { #cvmfs_upstream_storage }
-: defining the basic upstream storage type  Upstream spooler description and configuration (see below).
+: Upstream spooler description defining the basic upstream storage type and configuration (see below).
 
 CVMFS_USE_FILE_CHUNKING { #cvmfs_use_file_chunking }
-: Allows backend to split big files into small chunks (*true* \  *false*)
+: Allows backend to split big files into small chunks (*true* | *false*)
 
 CVMFS_USER { #cvmfs_user_2 }
 : The user name that owns and manipulates the files inside the repository.
 
 CVMFS_VIRTUAL_DIR { #cvmfs_virtual_dir }
-: hidden, virtual `.cvmfs/snapshots` directory named tags.  Set to *true* to enable the containing entry points to all
+: Set to *true* to enable the hidden, virtual `.cvmfs/snapshots` directory containing entry points to all named tags.
 
 CVMFS_VOMS_AUTHZ { #cvmfs_voms_authz }
 : Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
 
 CVMFS_STATISTICS_DB { #cvmfs_statistics_db_2 }
-: statistics. Default is pool/cvmfs/<REPO_NAME>/stats.db` .  SQLite file path to store the `/var/s
+: SQLite file path to store the statistics. Default is `/var/spool/cvmfs/<REPO_NAME>/stats.db`.
 
 CVMFS_PRINT_STATISTICS { #cvmfs_print_statistics_2 }
 : Set to *true* to enable statistics printing to the standard output.
 
 X509_CERT_BUNDLE { #x509_cert_bundle }
-: Bundle file with CA certificates for HTTPS connections.
+: Bundle file with CA certificates for HTTPS connections (see [Large-Scale Data CernVM-FS](cpt-large-scale.md)).
 
 X509_CERT_DIR { #x509_cert_dir }
-: Directory file with CA certificates for HTTPS connections, defaults to `/etc/grid-security/certificates`.
+: Directory file with CA certificates for HTTPS connections, defaults to `/etc/grid-security/certificates` (see [Large-Scale Data CernVM-FS](cpt-large-scale.md)).
 
 ### Deprecated parameters
 
 Will be removed in future versions.
 
-C VMFS_GENERATE_LEGACY_BULK_CHUNKS { #c_vmfs_generate_legacy_bulk_chunks }
-: enable generation of whole-file objects for large files.  Deprecated, set to *true* to
+CVMFS_GENERATE_LEGACY_BULK_CHUNKS { #cvmfs_generate_legacy_bulk_chunks }
+: Deprecated, set to *true* to enable generation of whole-file objects for large files.
 
 CVMFS_IGNORE_XDIR_HARDLINKS { #cvmfs_ignore_xdir_hardlinks }
-: automatically break the hardlinks across directories.  Deprecated, defaults to *true* hardlinks are found. Instead
+: Deprecated, defaults to *true* hardlinks are found. Instead automatically break the hardlinks across directories.
 
 ### Format of CVMFS_UPSTREAM_STORAGE
 
@@ -596,10 +596,10 @@ endpoint of the gateway service, e.g.
 The following parameters are used to configure a tiered cache manager
 instance.
 
-[CVMFS_CACHE]()\$name_UPPER { #cvmfs_cache_name_upper }
+CVMFS_CACHE\_$name\_UPPER { #cvmfs_cache_name_upper }
 : Name of the upper layer cache instance
 
-[CVMFS_CACHE]()\$name_LOWER { #cvmfs_cache_name_lower }
+CVMFS_CACHE\_$name\_LOWER { #cvmfs_cache_name_lower }
 : Name of the lower layer cache instance
 
 CVMFS_CACHE_LOWER_READONLY { #cvmfs_cache_lower_readonly }
@@ -610,10 +610,10 @@ CVMFS_CACHE_LOWER_READONLY { #cvmfs_cache_lower_readonly }
 The following parameters are used to configure an external cache plugin
 as a cache manager instance.
 
-[CVMFS_CACHE]()\$name_CMDLINE { #cvmfs_cache_name_cmdline }
-: plugin, the executable and command line separated by comma.  If the client should start the parameters of the plugin,
+CVMFS_CACHE\_$name\_CMDLINE { #cvmfs_cache_name_cmdline }
+: If the client should start the plugin, the executable and command line parameters of the plugin, separated by comma.
 
-[CVMFS_CACHE]()\$name_LOCATOR { #cvmfs_cache_name_locator }
+CVMFS_CACHE\_$name\_LOCATOR { #cvmfs_cache_name_locator }
 : The address of the socket used for communication with the plugin.
 
 ## In-memory Cache Plugin Parameters
