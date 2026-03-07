@@ -6,11 +6,6 @@ window.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  var logoLink = logo.closest("a");
-  if (logoLink && !logoLink.classList.contains("icon-home")) {
-    logoLink.classList.add("icon-home");
-  }
-
   window.setTimeout(function () {
     if (sidebarTitle.querySelector("#version-selector") || typeof base_url !== "string") {
       return;
