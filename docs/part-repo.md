@@ -1,5 +1,0 @@
-# Advanced Topics
-
-cpt-plugins cpt-telemetry cpt-tracer cpt-enter cpt-hpc cpt-graphdriver
-cpt-ducc cpt-xcache cpt-large-scale cpt-shrinkwrap
-cpt-notification-system cpt-details
