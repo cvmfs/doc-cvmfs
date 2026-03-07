@@ -194,3 +194,37 @@ dt a[id] {
 .tabbed-set > input:nth-child(8):checked ~ .tabbed-content > .tabbed-block:nth-child(8) {
     display: block;
 }
+
+/* Minimal Pygments token styling for shell-oriented quickstart blocks */
+.highlight .c1 {
+    color: #3D7B7B;
+    font-style: italic;
+}
+
+.highlight .s1,
+.highlight .s2 {
+    color: #BA2121;
+}
+
+.highlight .se {
+    color: #AA5D1F;
+    font-weight: 700;
+}
+
+.highlight .nb {
+    color: #008000;
+}
+
+.highlight .nv {
+    color: #19177C;
+}
+
+.highlight .m,
+.highlight .o,
+.highlight .ow {
+    color: #666;
+}
+
+.highlight .ow {
+    font-weight: 700;
+}

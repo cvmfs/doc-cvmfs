@@ -32,7 +32,7 @@ install CVMFS, run:
 
 === "RHEL / Almalinux / Rocky"
 
-    ``` console
+    ```bash
     sudo yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
     ```
@@ -158,16 +158,20 @@ Reload the `autofs` service in order to apply an updated configuration.
 NB: For OpenSUSE uncomment the line `#+dir:/etc/auto.master.d/` in the
 file `/etc/auto.master` and restart the `autofs` service.
 
-    sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master
-    systemctl restart autofs
+```bash
+sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master
+systemctl restart autofs
+```
 
 ### Mac OS X
 
 Due to the lack of `autofs` on macOS, mount the individual repositories
 manually like
 
-    sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
-    sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
+```bash
+sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
+sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
+```
 
 For optimal configuration settings, mount the config repository before
 any other repositories.
@@ -178,16 +182,22 @@ Create `/etc/cvmfs/default.local` and open the file for editing. Select
 the desired repositories by setting
 `CVMFS_REPOSITORIES=repo1,repo2,...`. For ATLAS, for instance, set
 
-    CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
+```bash
+CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,grid.cern.ch
+```
 
 For an individual workstation or laptop, set
 
-    CVMFS_CLIENT_PROFILE=single
+```bash
+CVMFS_CLIENT_PROFILE=single
+```
 
 If you set up a cluster of cvmfs nodes, specify the HTTP proxy servers
 on your site with
 
-    CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
+```bash
+CVMFS_HTTP_PROXY="http://myproxy1:port|http://myproxy2:port"
+```
 
 If you're unsure about the proxy names, set `CVMFS_HTTP_PROXY=DIRECT`.
 This should *only* be done for very few clients (< 5), because large
@@ -211,11 +221,13 @@ The CernVM-FS client is not relocatable and needs to be installed under
 ARMv7 a gcc $\geq 4.7$ compiler. In order to compile and install from
 sources, use the following commands
 
-    cd <source directory>
-    mkdir build && cd build
-    cmake ../
-    make
-    sudo make install
+```bash
+cd <source directory>
+mkdir build && cd build
+cmake ../
+make
+sudo make install
+```
 
 ### Building with local libraries
 
@@ -233,23 +245,24 @@ to none-system libraries.
 Example code for building CernVM-FS with locally built Fuse3 and
 including the CernVM-FS unit tests and gateway: :
 
-    cmake -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON \
-          -D BUILD_UNITTESTS=ON -D BUILD_GATEWAY=ON \
-          -D FUSE3_INCLUDE_DIR=/usr/local/include/ \
-          -D FUSE3_LIBRARY=/usr/local/lib/x86_64-linux-gnu/libfuse3.so.3.10.5 \
-          ../
-    make
-    sudo make install
+```bash
+cmake -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON \
+      -D BUILD_UNITTESTS=ON -D BUILD_GATEWAY=ON \
+      -D FUSE3_INCLUDE_DIR=/usr/local/include/ \
+      -D FUSE3_LIBRARY=/usr/local/lib/x86_64-linux-gnu/libfuse3.so.3.10.5 \
+      ../
+make
+sudo make install
+```
 
 ## Troubleshooting
 
 -   In order to check for common misconfigurations in the base setup,
     run
 
-```{=html}
-<!-- -->
-```
+    ```bash
     cvmfs_config chksetup
+    ```
 
 -   CernVM-FS gathers its configuration parameter from various
     configuration files that can overwrite each other's settings
@@ -257,35 +270,31 @@ including the CernVM-FS unit tests and gateway: :
     \...). To show the effective configuration for *repository*.cern.ch,
     run
 
-```{=html}
-<!-- -->
-```
+    ```bash
     cvmfs_config showconfig repository.cern.ch
+    ```
 
 -   In order to exclude autofs/automounter as a source of problems, you
     can try to mount *repository*.cern.ch manually with the following
 
-```{=html}
-<!-- -->
-```
+    ```bash
     mkdir -p /mnt/cvmfs
     mount -t cvmfs repository.cern.ch /mnt/cvmfs
+    ```
 
 -   In order to exclude SELinux as a source of problems, you can try
     mounting after SELinux has been disabled by
 
-```{=html}
-<!-- -->
-```
+    ```bash
     /usr/sbin/setenforce 0
+    ```
 
 -   Once the issue has been identified, ensure that the changes are
     taken by restarting `autofs`
 
-```{=html}
-<!-- -->
-```
+    ```bash
     systemctl restart autofs
+    ```
 
 -   If the problem is that a repository can be mounted and unmounted but
     later cannot be remounted, see
@@ -294,10 +303,9 @@ including the CernVM-FS unit tests and gateway: :
 -   In order to exclude a corrupted local cache as a source of problems,
     run
 
-```{=html}
-<!-- -->
-```
+    ```bash
     cvmfs_config wipecache
+    ```
 
 -   Finally running with debug logs enabled can provide additional
     information for bug reports. This can be done by specifying a log

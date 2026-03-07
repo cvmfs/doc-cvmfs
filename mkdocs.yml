@@ -11,11 +11,7 @@ edit_uri: edit/master/
 # Configuration
 theme:
   name: readthedocs
-  highlightjs: true
-  hljs_languages:
-    - yaml
-    - bash
-    - console
+  highlightjs: false
   logo: _static/cvmfs-logo.png
 
 # Plugins
@@ -29,19 +25,23 @@ plugins:
 # Extensions
 markdown_extensions:
   - admonition
-  - codehilite:
-      guess_lang: false
   - toc:
       permalink: true
   - tables
   - fenced_code
   - pymdownx.tabbed:
       alternate_style: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      use_pygments: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+#  - codehilite:
+#      guess_lang: false
+#  - pymdownx.superfences:
+#      custom_fences:
+#        - name: mermaid
+#          class: mermaid
+#          format: !!python/name:pymdownx.superfences.fence_code_format
 
 # Navigation
 nav:
