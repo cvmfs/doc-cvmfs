@@ -16,9 +16,12 @@ theme:
     - yaml
     - bash
     - console
-#  logo: _static/cvmfs-logo.png
+  logo: _static/cvmfs-logo.png
 
 # Plugins
+# `mike deploy ...` / `mike serve` inject the mike plugin automatically, which
+# adds the version selector for supported themes like `readthedocs` while
+# keeping plain `mkdocs build --strict` usable for local and CI sanity checks.
 plugins:
   - search
   - mermaid2
@@ -88,6 +91,9 @@ extra:
 
 extra_css:
   - _static/css/custom.css
+
+extra_javascript:
+  - _static/js/mike-logo-fix.js
 
 # Copyright
 copyright: Copyright &copy; 2025 CernVM Team

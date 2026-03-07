@@ -1,5 +1,8 @@
 name: mkdocs-build
 
+# CI validates the source MkDocs project. Multi-version publishing/local preview
+# are handled separately via `mike deploy latest` and `mike serve`.
+
 on: [push, pull_request]
 
 jobs:
@@ -16,6 +19,6 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r requirements.txt
-    - name: MkDocs build
+    - name: MkDocs strict build (base config used by mike)
       run: |
         python -m mkdocs build --strict

@@ -103,8 +103,20 @@ dt a[id] {
 
 .wy-side-nav-search .wy-dropdown > a img.logo,
 .wy-side-nav-search > a img.logo {
-    width: 100px; /* Adjust to desired width */
-    height: auto; /* Maintains aspect ratio */
+    display: block;
+    width: 100px;
+    height: auto;
+    margin: 0 auto 0.75rem;
+}
+
+.wy-side-nav-search #version-selector {
+    display: block;
+    width: calc(100% - 30px);
+    margin: 0 auto 0.75rem;
+}
+
+.wy-side-nav-search [role="search"] {
+    width: 100%;
 }
 
 /* ── pymdownx.tabbed (alternate_style) for readthedocs theme ── */

@@ -15,6 +15,9 @@ build:
     # golang: "1.17"
 
 # Build documentation from the repository-root MkDocs configuration.
+# Versioned publishing and the theme version switcher are managed with `mike`
+# outside this RTD config (for example: `mike deploy latest`; local preview:
+# `mike serve`).
 mkdocs:
    configuration: mkdocs.yml
 

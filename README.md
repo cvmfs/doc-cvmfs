@@ -6,6 +6,11 @@ This repository contains the canonical MkDocs sources and static assets for the 
 
 #### Building the documentation locally
 
+This repository uses `mike` for published multi-version documentation and the
+version switcher. Use plain MkDocs targets for quick single-version sanity
+checks, and use `mike` when you want to preview or update the versioned docs
+tree.
+
 Install the Python dependencies:
 
 ```bash
@@ -34,6 +39,32 @@ or:
 
 ```bash
 make serve
+```
+
+#### Versioned documentation workflow
+
+Preview the versioned documentation tree locally with `mike`:
+
+```bash
+mike serve
+```
+
+or:
+
+```bash
+make mike-serve
+```
+
+Update the published `latest` docs alias with `mike`:
+
+```bash
+mike deploy latest
+```
+
+or:
+
+```bash
+make mike-latest
 ```
 
 The generated HTML output is written to `site/`.
