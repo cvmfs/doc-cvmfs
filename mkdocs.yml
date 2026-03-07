@@ -28,6 +28,7 @@ markdown_extensions:
   - toc:
       permalink: true
   - def_list
+  - attr_list
   - tables
   - fenced_code
   - pymdownx.tabbed:
@@ -95,6 +96,7 @@ extra_css:
 
 extra_javascript:
   - _static/js/mike-logo-fix.js
+  - _static/js/parameter-permalinks.js
 
 # Copyright
 copyright: Copyright &copy; 2025 CernVM Team
