@@ -1,4 +1,4 @@
-name: sphinx-build-html
+name: mkdocs-build
 
 on: [push, pull_request]
 
@@ -11,14 +11,11 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-python@v2
       with:
-        python-version: 3.9 
+        python-version: 3.9
     - name: Install Requirements
       run: |
-        pip install --upgrade pip 
+        pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Sphinx build - html
+    - name: MkDocs build
       run: |
-        make html
-    - name: Sphinx build - epub
-      run: |
-        make epub
+        python -m mkdocs build --strict

@@ -1,6 +1,5 @@
-# .readthedocs.yaml
-# Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# Read the Docs configuration for the repository-root MkDocs project.
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details.
 
 # Required
 version: 2
@@ -15,15 +14,13 @@ build:
     # rust: "1.55"
     # golang: "1.17"
 
-# Build documentation in the docs/ directory with Sphinx
-sphinx:
-   configuration: conf.py
+# Build documentation from the repository-root MkDocs configuration.
+mkdocs:
+   configuration: mkdocs.yml
 
-# If using Sphinx, optionally build your docs in additional formats such as PDF
-formats:
-   - pdf
-   - epub
-   - htmlzip
+# Read the Docs only supports built-in pdf/epub/htmlzip output for Sphinx.
+# Leave offline formats disabled until a separate MkDocs-compatible export
+# pipeline is defined for this repository.
 
 # Optionally declare the Python requirements required to build your docs
 python:

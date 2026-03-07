@@ -16,7 +16,7 @@ theme:
     - yaml
     - bash
     - console
-  logo: _static/cvmfs-logo.png
+#  logo: _static/cvmfs-logo.png
 
 # Plugins
 plugins:

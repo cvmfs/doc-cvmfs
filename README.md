@@ -18,11 +18,25 @@ Build the site from the repository root:
 mkdocs build
 ```
 
+or:
+
+```bash
+make build
+```
+
 Serve the site locally for editing:
 
 ```bash
 mkdocs serve
 ```
 
+or:
+
+```bash
+make serve
+```
+
 The generated HTML output is written to `site/`.
+
+PDF/EPUB automation is not currently provided by the root MkDocs setup. Read the Docs only offers built-in offline formats for Sphinx projects, and this repository does not yet define a separate MkDocs-compatible PDF/EPUB toolchain.
 

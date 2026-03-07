@@ -32,7 +32,7 @@ install CVMFS, run:
 
 === "RHEL / Almalinux / Rocky"
 
-    ```bash
+    ``` console
     sudo yum install -y https://cvmrepo.s3.cern.ch/cvmrepo/yum/cvmfs-release-latest.noarch.rpm
     sudo yum install -y cvmfs
     ```
