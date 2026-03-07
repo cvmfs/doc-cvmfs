@@ -77,6 +77,11 @@ dd {
     line-height: 1.5 !important;
 }
 
+/* Indent parameter-page definition bodies without affecting references */
+.rst-content h1#cernvm-fs-parameters ~ dl > dd {
+    margin-left: 1.25rem !important;
+}
+
 /* Style the reference anchors */
 dt a[id] {
     color: inherit !important;
