@@ -4,7 +4,7 @@
 This section provides technical details on the CernVM-FS server setup
 including the infrastructure necessary for an individual repository. It
 is highly recommended to first consult
-"sct_serveranatomy" for a more general
+the server anatomy section for a more general
 overview of the involved directory structure.
 
 ## Prerequisites
@@ -24,8 +24,7 @@ setup and tools to be in place:
 CernVM-FS stores the entire repository content (file content and
 metadata catalogs) into a content addressable storage (CAS). This
 storage can either be a file system at `/srv/cvmfs` or an S3 compatible
-object storage system (see "`sct_s3storagesetup`{.interpreted-text
-role="ref"}" for details). In the former case the contents of
+object storage system (see [S3 compatible storage systems](cpt-repo.md#s3-compatible-storage-systems) for details). In the former case the contents of
 `/srv/cvmfs` are as follows:
 
   **File Path**                         **Description**
@@ -73,9 +72,9 @@ somewhere else if necessary.
   `/etc/cvmfs/repositories.d`          **CernVM-FS server config directory** This contains the configuration directories for individual CernVM-FS repositories. Note that this path is shortened using `/.../repos.d/` in the rest of this table.
   `/.../repos.d/<fqrn>`                **Config directory for specific repo** This contains the configuration files for one specific CernVM-FS repository server.
   `/.../repos.d/<fqrn>/server.conf`    **Server configuration file** Authoriative configuration file for the CernVM-FS server tools. This file should only contain valid server configuration variables
-                                       <apxsct_serverparameters> as it controls the behaviour of the CernVM-FS server operations like publishing, pulling and so forth.
+                                       as described in the [server parameters appendix](apx-parameters.md#server-parameters), as it controls the behaviour of the CernVM-FS server operations like publishing, pulling and so forth.
   `/.../repos.d/<fqrn>/client.conf`    **Client configuration file** Authoriative configuration file for the CernVM-FS client used to mount the latest revision of a Stratum 0 release manager machine. This file should only contain valid client configuration
-                                       variables <apxsct_clientparameters>. This file must not exist for Stratum 1 repositories.
+                                       variables from the [client parameters appendix](apx-parameters.md#client-parameters). This file must not exist for Stratum 1 repositories.
   `/.../repos.d/<fqrn>/replica.conf`   **Replication configuration file** Contains configuration variables for Stratum 1 specific repositories. This file must not exist for Stratum 0 repositories.
 
 ## Environment Setup
@@ -90,7 +89,7 @@ mounting of both the CernVM-FS client at
 Granting HTTP access can happen in various ways and depends on the
 chosen backend storage type. For an S3 hosted backend storage, the
 CernVM-FS client can usually be directly pointed to the S3 bucket used
-for storage (see "sct_s3storagesetup"
+for storage (see [S3 compatible storage systems](cpt-repo.md#s3-compatible-storage-systems)
 for details). In case of a local file system backend any web server can
 be used for this purpose. By default, CernVM-FS assumes Apache and uses
 that automatically.

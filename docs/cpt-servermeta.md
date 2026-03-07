@@ -30,7 +30,7 @@ user-defined portion of the data with a text editor (cf. `$EDITOR`):
     The `cvmfs_server` package requires the `jq` utility, which validates
     CVMFS JSON data.
 
-Below are examples <sct_jsonexamples> of
+Below are examples of
 both the repository list and user-defined JSON files.
 
 ## Repository Specific Meta Information
@@ -47,8 +47,7 @@ Note that this JSON file is stored inside CernVM-FS's backend data
 structure and gets replicated to Stratum1 servers automatically.
 
 Editing is done per repository using the `cvmfs_server` utility. As with
-the `global meta information <sct_globalmetainfo>`{.interpreted-text
-role="ref"} `cvmfs_server` uses `jq` to validate edited JSON information
+[global meta information](#global-meta-information), `cvmfs_server` uses `jq` to validate edited JSON information
 before storing it:
 
     cvmfs_server update-repoinfo <repo name>
@@ -59,8 +58,7 @@ path that should be stored as the repository's meta information:
     cvmfs_server update-repoinfo -f <path to JSON file> <repo name>
 
 An example of a repository-specific meta information file can be found
-in `the section below <sct_repometainfo_example>`{.interpreted-text
-role="ref"}.
+in the [Examples](#examples) section below.
 
 ## Examples
 ### /cvmfs/info/v1/meta.json

@@ -11,14 +11,14 @@ reproducible, ready-to-use environment while retaining the advantages of
 CernVM-FS regarding data distribution, content deduplication, software
 preservation and ease of operations.
 
-## Mounting `/cvmfs` inside a container
+## Mounting <code class="cvmfs-inline-path">/cvmfs</code> inside a container
 
-The simplest way to access `/cvmfs` from inside a container is to
-bind-mount the `/cvmfs` host directory inside the container.
+The simplest way to access <code class="cvmfs-inline-path">/cvmfs</code> from inside a container is to
+bind-mount the <code class="cvmfs-inline-path">/cvmfs</code> host directory inside the container.
 
 Using this approach will allow using small images to create a basic
 operating system environment, and to access all the necessary
-application software through `/cvmfs`.
+application software through <code class="cvmfs-inline-path">/cvmfs</code>.
 
 This is supported by all the common containers runtimes, including:
 
@@ -78,7 +78,7 @@ comma.
 
 For Kubernetes, the approach is more heterogeneous, and it depends on
 the cluster settings. A recommended approach is creating a DaemonSet so
-that on every node one pod exposes `/cvmfs` to other pods. This pod may
+that on every node one pod exposes <code class="cvmfs-inline-path">/cvmfs</code> to other pods. This pod may
 use the cvmfs service container.
 
 Alternatively, a
@@ -102,7 +102,7 @@ Every container image is stored in two forms on CernVM-FS
 1.  All the unpacked layers of the image
 2.  The whole unpacked root file system of the image
 
-With the whole file system root directory in `/cvmfs`, `apptainer` can
+With the whole file system root directory in <code class="cvmfs-inline-path">/cvmfs</code>, `apptainer` can
 directly start a container.
 
     apptainer exec /cvmfs/unpacked.cern.ch/registry.hub.docker.com/library/centos\:centos7 /bin/bash
@@ -369,7 +369,7 @@ cvmfs-snapshotter logs using `journalctl -u cvmfs-snapshotter`.
 
 In order to use images from `unpacked.cern.ch` with podman, the podman
 client needs to point to an *image store* that references the images on
-`/cvmfs`. The image store is a directory is a directory with a certain
+<code class="cvmfs-inline-path">/cvmfs</code>. The image store is a directory is a directory with a certain
 file structure that provides an index of images and layers. The
 CernVM-FS container tools by default create a podman image store for
 published images.

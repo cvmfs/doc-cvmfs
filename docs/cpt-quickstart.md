@@ -8,10 +8,10 @@ There is experimental support for Power and RISC-V architectures.
 
 ## Overview
 
-The CernVM-FS repositories are located under `/cvmfs`. Each repository
+The CernVM-FS repositories are located under <code class="cvmfs-inline-path">/cvmfs</code>. Each repository
 is identified by a *fully qualified repository name*. On Linux, mounting
 and unmounting of the CernVM-FS is usually controlled by `autofs` and
-automount. That means that starting from the base directory `/cvmfs`
+automount. That means that starting from the base directory <code class="cvmfs-inline-path">/cvmfs</code>
 different repositories are mounted automatically just by accessing them.
 A repository will be automatically unmounted after some
 automount-defined idle time. On macOS, mounting and unmounting of the
@@ -66,7 +66,7 @@ install CVMFS, run:
 
 **Service Container:**
 
-The CernVM-FS service container can expose the `/cvmfs` directory tree
+The CernVM-FS service container can expose the <code class="cvmfs-inline-path">/cvmfs</code> directory tree
 to the host. Import the container with
 
 ```bash
@@ -91,7 +91,7 @@ docker run -d --rm \
   cvmfs/service:2.12.0-1
 ```
 
-Use `docker stop` to unmount the `/cvmfs` tree.
+Use `docker stop` to unmount the <code class="cvmfs-inline-path">/cvmfs</code> tree.
 
 !!! note
 
@@ -203,8 +203,7 @@ If you're unsure about the proxy names, set `CVMFS_HTTP_PROXY=DIRECT`.
 This should *only* be done for very few clients (< 5), because large
 numbers can put a heavy load on the Stratum 1 servers and result,
 amongst others, in poorer performance for the clients. For the syntax of
-more complex HTTP proxy settings, see `sct_network`{.interpreted-text
-role="ref"}. If there are no HTTP proxies yet at your site, see
+more complex HTTP proxy settings, see the [Network Settings](cpt-configure.md#network-settings) section. If there are no HTTP proxies yet at your site, see
 [cpt_squid](cpt-squid.md) for instructions on how to set
 them up.
 
@@ -217,8 +216,8 @@ Check if CernVM-FS mounts the specified repositories by
 ## Building from source
 
 The CernVM-FS client is not relocatable and needs to be installed under
-/usr. On Intel architectures, it needs a gcc $\geq 4.2$ compiler, on
-ARMv7 a gcc $\geq 4.7$ compiler. In order to compile and install from
+/usr. On Intel architectures, it needs a gcc >= 4.2 compiler, on
+ARMv7 a gcc >= 4.7 compiler. In order to compile and install from
 sources, use the following commands
 
 ```bash
@@ -297,9 +296,9 @@ sudo make install
     ```
 
 -   If the problem is that a repository can be mounted and unmounted but
-    later cannot be remounted, see
-    `sct_remounting_namespaces_containers`{.interpreted-text
-    role="ref"}.
+    later cannot be remounted, see the [remounting and
+    namespaces/containers](cpt-configure.md#remounting-and-namespacescontainers)
+    section.
 -   In order to exclude a corrupted local cache as a source of problems,
     run
 
@@ -310,5 +309,5 @@ sudo make install
 -   Finally running with debug logs enabled can provide additional
     information for bug reports. This can be done by specifying a log
     file path in the client settings, e.g:
-    `CVMFS_DEBUGLOG=/tmp/cvmfs.log`. See
-    sct_debug_logs for more details.
+    `CVMFS_DEBUGLOG=/tmp/cvmfs.log`. See the [Debug Logs](cpt-configure.md#debug-logs)
+    section for more details.

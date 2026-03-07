@@ -1,8 +1,7 @@
 # Implementation Notes
 
 CernVM-FS has a modular structure and relies on several open source
-libraries. Figure `below <fig_cvmfsblocks>`{.interpreted-text
-role="ref"} shows the internal building blocks of CernVM-FS. Most of
+libraries. The figure below shows the internal building blocks of CernVM-FS. Most of
 these libraries are shipped with the CernVM-FS sources and are linked
 statically in order to facilitate debugging and to keep the system
 dependencies minimal.
@@ -43,8 +42,7 @@ group is greater than zero, all files with the same hard link group will
 get the same inode issued by the CernVM-FS Fuse client. The emulated
 hard links work within the same directory, only. The cryptographic
 content hash refers to the zlib-compressed [[Deutsch96]](apx-references.md#Deutsch96) version of
-the file. Flags indicate the type of directory entry (see table below
-<tab_dirent_flags>).
+the file. Flags indicate the type of directory entry (see the table below).
 
 Extended attributes are either NULL or stored as a BLOB of key-value
 pairs. It starts with 8 bytes for the data structure's version
@@ -97,7 +95,7 @@ In order to keep catalog sizes reasonable[^1], repository subtrees may
 be cut and stored as separate *nested catalogs*. There is no limit on
 the level of nesting. A reasonable approach is to store separate
 software versions as separate nested catalogs. The figure
-below <fig_nested> shows the simplified
+below shows the simplified
 directory structure which we use for the ATLAS repository.
 
 ![Directory structure used for the ATLAS repository
@@ -160,8 +158,7 @@ list.
 Below is an example of a typical manifest file. Each line starts with a
 capital letter specifying the metadata field, followed by the actual
 data string. The list of meta information is ended by a separator line
-(`--`) followed by signature information further described here
-<sct_cvmfspublished_signature>.
+(`--`) followed by the [repository signature](#repository-signature) described below.
 
     C64551dccfbe0a48de7618dd7deb290200b474759
     B1442336
@@ -235,8 +232,8 @@ of the repository.
 ![](_static/reposignature.svg)
 
 The top level hash used for the repository signature can be found in the
-repository manifest right below the separator line (`--` /
-see above <sct_manifeststructure>). It
+repository manifest right below the separator line (`--`) in the manifest
+structure described in the [internal manifest structure](#internal-manifest-structure) above. It
 is the cryptographic hash of the manifest's metadata lines excluding
 the separator line. Following the top level hash is the actual signature
 produced by the X.509 certificate signing procedure in binary form.
@@ -258,8 +255,7 @@ project](https://www.openssl.org/docs/manmaster/man3/).
 In addition to validating the white-list, CernVM-FS checks certificate
 fingerprints against the local black-list `/etc/cvmfs/blacklist` and the
 blacklist in an optional
-`"Config Repository" <sct_config_repository>`{.interpreted-text
-role="ref"}. The blacklisted fingerprints have to be in the same format
+[config repository](cpt-configure.md#the-config-repository). The blacklisted fingerprints have to be in the same format
 as the fingerprints on the white-list. The black-list has precedence
 over the white-list.
 
@@ -312,7 +308,7 @@ Although the HTTP protocol overhead is small in terms of data volume, in
 high latency networks we suffer from the bare number of requests: Each
 request-response cycle has a penalty of at least the network round trip
 time. Using plain HTTP/1.0, this results in at least
-$3\cdot\text{round trip time}$ additional running time per file download
+three times the round trip time in additional running time per file download
 for TCP handshake, HTTP GET, and TCP connection finalization. By
 including the `Connection: Keep-Alive` header into HTTP requests, we
 advise the HTTP server end to keep the underlying TCP connection opened.
@@ -443,8 +439,8 @@ In case of an exclusive cache, the cache manager runs as a separate
 thread of the `cvmfs2` process. This thread gets notified by the Fuse
 module whenever a file is opened or inserted. Notification is done
 through a pipe. The shared cache uses the very same code, except that
-the thread becomes a separate process (see Figure
-below <fig_sharedcache>). This cache
+the thread becomes a separate process (see the figure
+below). This cache
 manager process is not another binary but `cvmfs2` forks to itself with
 special arguments, indicating that it is supposed to run as a cache
 manager. The cache manager does not need to be started as a service. The
@@ -471,9 +467,9 @@ in inconsistencies because CernVM-FS does not control the cache lifetime
 of NFS clients. A once issued inode can be asked for anytime later by a
 client. To be able to reply to such client queries even after reloading
 catalogs or remounts of CernVM-FS, the CernVM-FS *NFS maps* implement a
-persistent store of the path names $\mapsto$ inode mappings. Storing
+persistent store of the path name-to-inode mappings. Storing
 them on hard disk allows for control of the CernVM-FS memory consumption
-(currently $\approx$ 45 MB extra) and ensures consistency between
+(currently about 45 MB extra) and ensures consistency between
 remounts of CernVM-FS. The performance penalty for doing so is small.
 CernVM-FS uses [Google's leveldb](https://github.com/google/leveldb), a
 fast, local key value store. Reads and writes are only performed when
@@ -558,7 +554,7 @@ directories.
 
 A directory listing is served by a query on the file catalog. Although
 the "parent"-column is indexed (see
-Catalog table schema <tab_catalog>),
+the catalog table schema),
 this is a relatively slow function. We expect directory listing to
 happen rather seldom.
 
@@ -613,7 +609,7 @@ There are the following supported magic attributes:
   `pubkeys`                The loaded public RSA keys used for repository whitelist verification.
   `rawlink`                Shows unresolved variant symbolic links; only accessible from the root attribute namespace (use [attr -Rg rawlink]{.title-ref}).
   `repo_counters`          Shows the aggregate counters of the repository contents (number of files etc.)
-  `repo_metainfo`          Shows the repository meta info <sct_metainfo> file, if available
+  `repo_metainfo`          Shows the [repository meta info](cpt-servermeta.md#repository-specific-meta-information) file, if available
   `revision`               Shows the file catalog revision of the mounted root catalog, an auto-increment counter increased on every repository publish.
   `root_hash`              Shows the cryptographic hash of the root file catalog.
   `rx`                     Shows the overall amount of downloaded kilobytes.
@@ -710,8 +706,7 @@ systems. It used to support `aufs`, but no active support is provided
 for it anymore.
 
 Union file systems can be used to track changes on CernVM-FS
-repositories (Figure `below <fig_overlay>`{.interpreted-text
-role="ref"}). In this case, the read-only file system interface of
+repositories (Figure below). In this case, the read-only file system interface of
 CernVM-FS is used in conjunction with a writable scratch area for
 changes.
 
@@ -722,10 +717,10 @@ area.](_static/overlay.svg)
 
 Based on the read-write interface to CernVM-FS, we create a feed-back
 loop that represents the addition of new software releases to a
-CernVM-FS repository. A repository in base revision $r$ is mounted in
+CernVM-FS repository. A repository in base revision r is mounted in
 read-write mode on the publisher's end. Changes are written to the
 scratch area and, once published, are re-mounted as repository revision
-$r+1$. In this way, CernVM-FS provides snapshots. In case of errors, one
+r+1. In this way, CernVM-FS provides snapshots. In case of errors, one
 can safely resume from a previously committed revision.
 
 **Footnotes**

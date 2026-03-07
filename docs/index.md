@@ -9,7 +9,7 @@ the worldwide-distributed computing infrastructure used to run data
 processing applications. CernVM-FS is implemented as a POSIX read-only
 file system in user space (a FUSE module). Files and directories are
 hosted on standard web servers and mounted in the universal namespace
-`/cvmfs`. Internally, CernVM-FS uses content-addressable storage and
+<code class="cvmfs-inline-path">/cvmfs</code>. Internally, CernVM-FS uses content-addressable storage and
 Merkle trees in order to maintain file data and metadata. CernVM-FS uses
 outgoing HTTP connections only, thereby it avoids most of the firewall
 issues of other network file systems. It transfers data and metadata on

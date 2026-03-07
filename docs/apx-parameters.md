@@ -19,9 +19,9 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_CACHE_ALIEN  Deprecated, legacy parameter. Use `CVMFS_ALIEN_CACHE` instead.
  CVMFS_CACHE_BASE  Location (directory) of the CernVM-FS cache.
  CVMFS_CACHE_DIR  but automatically set by cvmfs. overwriting when using `libcvmfs`  Similar to `CVMFS_CACHE_BASE`, Only might need manual
- CVMFS_CACHE_PRIMARY  Type of cache to use. By default it is `posix`. (see also sct_c ache_advanced)
+ CVMFS_CACHE_PRIMARY  Type of cache to use. By default it is `posix`. (see also the [Advanced Cache Configuration](cpt-configure.md#advanced-cache-configuration) section)
  CVMFS_CACHE_REFCOUNT  If set to *yes*, deduplicate open file descriptors by refcounting.
- [CVNFS_CACHE]()<name>\_<param>  cache configuration for cache of type `name`. sct_c ache_advanced. [<param>]{.title-ref}\` values can include e.g. `ALIEN`, `WORKSPACE`.  Parameters used by advanced See `LOCATOR`, `TYPE`, `CMDLINE`,
+ [CVNFS_CACHE]()<name>\_<param>  Parameters used by advanced cache configuration for cache type `name`. Values can include e.g. `ALIEN`, `WORKSPACE`. See `LOCATOR`, `TYPE`, and `CMDLINE`.
  CVMFS_CACHE_SYMLINKS  If set to *yes*, enables symlink caching in the kernel.
  CVMFS_CHECK_PERMISSIONS  If set to *no*, disable checking of file ownership and permissions (open all files).
  CVMFS_CLAIM_OWNERSHIP  If set to *yes*, allows CernVM-FS to claim ownership of files and directories.
@@ -56,7 +56,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_IGNORE_SIGNATURE  When set to *yes*, don't verify CernVM-FS file catalog signatures.
  CVMFS_INITIAL_GENERATION  Initial inode generation. Used for testing.
  CVMFS_INSTRUMENT_FUSE  performance statistics about the FUSE callbacks. `cvmfs_talk internal affairs`.  When set to *true* gather The results are displayed with
- CVMFS_NFS_INTERLEAVED_INODES  In NFS mode, use only inodes of the form $an+b$, specified as "b%a".
+ CVMFS_NFS_INTERLEAVED_INODES  In NFS mode, use only inodes of the form an+b, specified as "b%a".
  CVMFS_INFLUX_EXTRA_FIELDS  Static fields always attached to the (absolute) output of the InfluxDB Telemetry Aggregator
  CVMFS_INFLUX_EXTRA_TAGS  Static tags always attached to the (absolute + delta) output of the InfluxDB Telemetry Aggregator
  CVMFS_INFLUX_HOST  Host name or IP address of the receiver of the InfluxDB Telemetry Aggregator
@@ -75,7 +75,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_MAX_SERVERS  Limit the number of (geo sorted) stratum 1 servers that are effectively used.
  CVMFS_MAX_TTL  Maximum file catalog TTL in minutes. Can overwrite the TTL stored in the catalog.
  CVMFS_MEMCACHE_SIZE  Size of the CernVM-FS metadata memory cache in Megabytes.
- CVMFS_MOUNT_DIR  Directory where CernVM-FS is mounted to. Default is `/cvmfs` and cannot be overwritten.
+ CVMFS_MOUNT_DIR  Directory where CernVM-FS is mounted to. Default is <code class="cvmfs-inline-path">/cvmfs</code> and cannot be overwritten.
  CVMFS_METALINK_URL  Semi-colon-separated chain of RFC6249-compliant servers to locate Stratum-1 servers.
  CVMFS_METALINK_RESET_AFTER  See `CVMFS_PROXY_RESET_AFTER`, for metalink servers.
  CVMFS_MOUNT_RW  read/write file system. Write operations will fail faulty `open()` flags.  Mount CernVM-FS as a but this option can workaround
@@ -103,7 +103,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_STREAMING_CACHE  If set to *yes*, use a download manager to download regular files on read.
  CVMFS_STRICT_MOUNT  If set to *yes*, mount only repositories that are listed in `CVMFS_REPOSITORIES`.
  CVMFS_SUID  If set to *yes*, enable suid magic on the mounted repository. Requires mounting as root.
- CVMFS_SYSLOG_FACILITY  and 7, uses the corresponding messages.  If set to a number between 0 LOCAL\$n\$ facility for syslog
+ CVMFS_SYSLOG_FACILITY  and 7, uses the corresponding messages.  If set to a number between 0 and 7, uses the corresponding LOCALn facility for syslog
  CVMFS_SYSLOG_LEVEL  syslog level for CernVM-FS messages to respectively.  If set to 1 or 2, sets the LOG_DEBUG or LOG_INFO
  CVMFS_SYSLOG_PREFIX  Prefix for each CVMFS message in the syslog. By default it is the repo name.
  CVMFS_SYSTEMD_NOKILL  command line to `@vmfs2 ...` in order to storage manager.  If set to *yes*, modify the act as a systemd lowlevel
@@ -119,7 +119,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_USE_GEOAPI  Request order of Stratum 1 servers and fallback proxies via Geo-API.
  CVMFS_USE_SSL_SYSTEM_CA  endpoints, provided by the system.  When connecting to an HTTPS it will load the certificates
  CVMFS_USER  Sets the `gid` and `uid` mount options. Don't touch or overwrite.
- CVMFS_USYSLOG  logged to syslog are re-directed to the given file. and there is one step of log rotation.  All messages that normally are This file can grow up to 500kB Required for \$mu\$CernVM.
+ CVMFS_USYSLOG  logged to syslog are re-directed to the given file. and there is one step of log rotation.  All messages that normally are This file can grow up to 500kB Required for muCernVM.
  CVMFS_XATTR_PRIVILEGED_GIDS  Comma-separated list of (main) group IDs that are allowed to access the extended attributes listed by `CVMFS_XATTR_PROTECTED_XATTRS`.
  CVMFS_XATTR_PROTECTED_XATTRS  Comma-separated list of extended attributes (full name, e.g. `user.fqrn`) that are only accessible by `root` and the group IDs listed by `CVMFS_XATTR_PRIVILEGED_GIDS`.
  CVMFS_WORKSPACE  Set the local directory for storing special files (defaults to the cache directory).
@@ -143,7 +143,7 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_CHECK_ALL_MIN_DAYS  checking each repository with `cvmfs_server check -a`  Minimum number of days between Default value: 30
  CVMFS_COMPRESSION_ALGORITHM  used during publishing or 'none')  Compression algorithm to be (currently either 'default'
  CVMFS_CREATOR_VERSION  used to create this repository  The CernVM-FS version that was (do not change manually).
- CV MFS_DONT_CHECK_OVERLAYFS_VERSION  version before usage. sct_rep orequirements)  Disable checking of OverlayFS (see
+ CV MFS_DONT_CHECK_OVERLAYFS_VERSION  Disable checking of OverlayFS version before usage.
  CVMFS_ENABLE_MTIME_NS  Use nanosecond-granularity for modification time of files (instead of milliseconds)
  CVMFS_ENFORCE_LIMITS  exceeding \*LIMIT variables to be fatal to a publish  Set to *true* to cause instead of a warning
  CVMFS_EXTENDED_GC_STATS  the volume of garbage collected files (increases GC running time)  Set to *true* to keep track of
@@ -178,9 +178,9 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_STRATUM0  URL of the master copy (*stratum0*) of this specific repository.
  CVMFS_STRATUM1  URL of the Stratum1 HTTP server for this specific repository.
  CVMFS_SYNCFS_LEVEL  by called by `cvmfs_server` operations. 'default', 'cautious'.  Controls how often `sync` will Possible levels are 'none',
- [CVMFS_S3]()<param>  S3-related parameters. See S3 Parameter table <tab_s3co nfparameters>
+ [CVMFS_S3]()<param>  S3-related parameters. See the S3 parameter table.
  CVMFS_UID_MAP  Path of a file for the mapping of file owner user ids.
- CVMFS_UNION_DIR  system for copy-on-write semantics of CernVM-FS. repository are performed sct_repocr eation_update).  Mount point of the union file Here, changes to the (see
+ CVMFS_UNION_DIR  Mount point of the union file system for copy-on-write semantics of CernVM-FS. Here, changes to the repository are performed.
  CVMFS_UNION_FS_TYPE  to be used for the repository. supported, `aufs` has no active support anymore)  Defines the union file system (only `overlayfs` is fully
  CVMFS_UPLOAD_STATS_DB  data file to the Stratum 0 /stats location  Publish repository statistics
  CVMFS_UPLOAD_STATS_PLOTS  plots and webpage to the Stratum 0 /stats location (requires ROOT)  Publish repository statistics
@@ -191,8 +191,8 @@ Parameters recognized in configuration files under /etc/cvmfs:
  CVMFS_VOMS_AUTHZ  Membership requirement (e.g. VOMS authentication) to be added into the file catalogs
  CVMFS_STATISTICS_DB  statistics. Default is pool/cvmfs/<REPO_NAME>/stats.db` .  SQLite file path to store the `/var/s
  CVMFS_PRINT_STATISTICS  Set to *true* to enable statistics printing to the standard output.
- X509_CERT_BUNDLE  Bundle file with CA certificates for HTTPS connections (see sct_data)
- X509_CERT_DIR  certificates for HTTPS connections, /etc/grid-security/certificates (see sct_data)  Directory file with CA defaults to
+ X509_CERT_BUNDLE  Bundle file with CA certificates for HTTPS connections.
+ X509_CERT_DIR  Directory file with CA certificates for HTTPS connections, defaults to `/etc/grid-security/certificates`.
 
 ### Deprecated parameters
 
@@ -253,8 +253,8 @@ as a cache manager instance.
 ## In-memory Cache Plugin Parameters
 
 The following parameters are interpreted from the configuration file
-provided to the in-memory cache plugin (see Section
-sct_cache_advanced_example).
+provided to the in-memory cache plugin (see the [Advanced Cache
+Configuration](cpt-configure.md#advanced-cache-configuration) section).
 
   **Parameter**                 **Meaning**
   ----------------------------- -------------------------------------------------------------------------------------

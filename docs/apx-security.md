@@ -22,7 +22,7 @@ CernVM-FS does **not** provide data confidentiality out of the box. By
 default, data is transferred through HTTP and thus only public data
 should be stored on CernVM-FS. However, CernVM-FS can be operated with
 HTTPS data transport. In combination with client-authentication using an
-authz helper (see Section sct_authz),
+authz helper (see the [authorization helpers](cpt-plugins.md#authorization-helpers) section),
 CernVM-FS can be configured for end-to-end data confidentiality.
 
 Once downloaded and stored in a cache, the CernVM-FS client fully trusts
@@ -59,8 +59,7 @@ The private part of the repository key needs to be accessible on the
 release manager machine. The private part of the repository master key
 used to sign the whitelist *can* be maintained on a file on the release
 manager machine. We recommend, however, to use a smart card to store
-this private key. See section `sct_master_keys`{.interpreted-text
-role="ref"} for more details.
+this private key. See the [Master keys](cpt-repo.md#master-keys) section for more details.
 
 ## Content Hashes
 

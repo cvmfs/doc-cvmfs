@@ -17,7 +17,7 @@ section.
 
 ## Parrot-Mounted CernVM-FS instead of Fuse Module
 
-Instead of accessing `/cvmfs` through a Fuse module, processes can use
+Instead of accessing <code class="cvmfs-inline-path">/cvmfs</code> through a Fuse module, processes can use
 the [Parrot connector](http://cernvm.cern.ch/portal/filesystem/parrot).
 The parrot connector works on x86_64 Linux if the `ptrace` system call
 is not disabled. In contrast to a plain copy of a CernVM-FS repository

@@ -228,3 +228,15 @@ dt a[id] {
 .highlight .ow {
     font-weight: 700;
 }
+
+/* Tone down ordinary inline code without affecting code blocks */
+.rst-content :not(pre) > code:not(.cvmfs-inline-path) {
+    color: #555;
+}
+
+/* Accent only explicitly marked inline `/cvmfs` snippets */
+.rst-content code.cvmfs-inline-path {
+    color: #2980b9;
+    background: rgba(41, 128, 185, 0.08);
+    border: 1px solid rgba(41, 128, 185, 0.2);
+}
