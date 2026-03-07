@@ -18,8 +18,7 @@ verification, and it allows for file system snapshots.
 In order to provide a writable CernVM-FS repository, CernVM-FS uses a
 union file system that combines a read-only CernVM-FS mount point with a
 writable scratch area.
-This figure below
-outlines the process of publishing a repository.
+The figure below outlines the process of publishing a repository.
 
 ## CernVM-FS Server Quick-Start Guide
 
@@ -113,21 +112,32 @@ into a CernVM-FS repository.
 
 ## Notable CernVM-FS Server Locations and Files
 There are a number of possible customizations in the CernVM-FS server
-installation. The following table provides an overview of important
+installation. The following entries provide an overview of important
 configuration files and intrinsic paths together with some customization
 hints. For an exhaustive description of the CernVM-FS server
 infrastructure please consult Appendix
-"[apx_serverinfra](apx-serverinfra.md)".
+[CernVM-FS Server Infrastructure](apx-serverinfra.md).
 
- **File Path**  **Description**
- ---  ---
- <code class="cvmfs-inline-path">/cvmfs</code>  **Repository mount points** Contains read-only union file system mountpoints that become writable during repository updates. Do not symlink or manually mount anything here.
- `/srv/cvmfs`  **Central repository storage location** Can be mounted or symlinked to another location *before* creating the first repository.
- `/srv/cvmfs/<fqrn>`  **Storage location of a repository** Can be symlinked to another location *before* creating the repository `<fqrn>`.
- `/var/spool/cvmfs`  **Internal states of repositories** Can be mounted or symlinked to another location *before* creating the first repository. Hosts the scratch area used during repository updates, thus might consume notable disk space during repository updates.
- `/etc/cvmfs`  **Configuration files and keychains** Similar to the structure described in this table. Do not symlink this directory.
- `/etc/cvmfs/cvmfs_server_hooks.sh`  **Customizable server behavior** See the [server hooks section](#customizable-actions-using-server-hooks) for further details.
- `/etc/cvmfs/repositories.d`  **Repository configuration location** Contains repository server specific configuration files.
+<code class="cvmfs-inline-path">/cvmfs</code>
+: **Repository mount points.** Contains read-only union file system mountpoints that become writable during repository updates. Do not symlink or manually mount anything here.
+
+`/srv/cvmfs`
+: **Central repository storage location.** Can be mounted or symlinked to another location *before* creating the first repository.
+
+`/srv/cvmfs/<fqrn>`
+: **Storage location of a repository.** Can be symlinked to another location *before* creating the repository `<fqrn>`.
+
+`/var/spool/cvmfs`
+: **Internal states of repositories.** Can be mounted or symlinked to another location *before* creating the first repository. Hosts the scratch area used during repository updates, thus might consume notable disk space during repository updates.
+
+`/etc/cvmfs`
+: **Configuration files and keychains.** Similar to the structure described in these entries. Do not symlink this directory.
+
+`/etc/cvmfs/cvmfs_server_hooks.sh`
+: **Customizable server behavior.** See the [server hooks section](#customizable-actions-using-server-hooks) for further details.
+
+`/etc/cvmfs/repositories.d`
+: **Repository configuration location.** Contains repository server specific configuration files.
 
 ## CernVM-FS Repository Creation and Updating
 The CernVM-FS server tool kit provides the `cvmfs_server` utility in
@@ -203,13 +213,10 @@ is how to use it:
 2.  Store its masterkey and pub into the smartcard with
     `cvmfs_server masterkeycard -s my.repo.name`
 
-3.
-
-    Make a backup copy of `/etc/cvmfs/keys/my.repo.name.masterkey` on
-
-    :   at least one USB flash drive because the next step will
-        irretrievably delete the file. Keep the flash drive offline in a
-        safe place in case something happens to the smartcard.
+3.  Make a backup copy of `/etc/cvmfs/keys/my.repo.name.masterkey` on
+    at least one USB flash drive because the next step will
+    irretrievably delete the file. Keep the flash drive offline in a
+    safe place in case something happens to the smartcard.
 
 4.  Convert the repository to use the smartcard with
     `cvmfs_server masterkeycard -c my.repo.name`. This will delete the
@@ -264,7 +271,7 @@ content will be processed with the new settings.
 #### External Files
 
 Files in a CernVM-FS repository can be marked as *external files*.
-Externals files are not expected to be served from the HTTP server(s)
+External files are not expected to be served from the HTTP server(s)
 that provide the file catalogs but from an independent set of HTTP
 server(s). The idea is for CernVM-FS to be able to provide a directory
 of files that is already present on an HTTP service. External files are
@@ -353,28 +360,52 @@ parameters to `cvmfs_server mkfs` or `cvmfs_server add-replica`:
     cvmfs_server mkfs -s /etc/cvmfs/.../mys3.conf \
       -w http://mybucket.s3.amazonaws.com my.repo.name
 
-The file `mys3.conf` contains the S3 settings (see
-the table below). The
-`-w` option is used define the S3 server URL, e.g.
+The file `mys3.conf` contains the S3 settings below. The
+`-w` option is used to define the S3 server URL, e.g.
 <http://localhost:3128>, which is used for accessing the repository's
 backend storage on S3.
 
- **Parameter**  **Meaning**
- ---  ---
- `CVMFS_S3_ACCESS_KEY`  S3 account access key
- `CVMFS_S3_SECRET_KEY`  S3 account secret key
- `CVMFS_S3_HOST`  S3 server hostname, e.g. s3.amazonaws.com. The hostname should NOT be prefixed by "http://"
- `CVMFS_S3_FLAVOR`  Set to "azure" if you store files in Microsoft Azure Blob Storage
- `CVMFS_S3_REGION`  The S3 region, e.g. eu-central-1. If specified, AWSv4 authorization protocol is used.
- `CVMFS_S3_PORT`  The port on which the S3 instance is running
- `CVMFS_S3_BUCKET`  S3 bucket name. The repository name is used as a subdirectory inside the bucket.
- `CVMFS_S3_TIMEOUT`  Timeout in seconds for the connection to the S3 server.
- `CVMFS_S3_MAX_RETRIES`  Number of retries for the connection to the S3 server.
- `CVMFS_S3_MAX _NUMBER_OF_PARALLEL_CONNECTIONS`  Number of parallel uploads to the S3 server, e.g. 400
- `CVMFS_S3_DNS_BUCKETS`  Set to false to disable DNS-style bucket URLs (<http: //><bucket>.<host>/<object>). Enabled by default.
- `CVMFS_S3_PEEK_BEFORE_PUT`  Make PUT requests conditional to a prior HEAD request. Enabled by default.
- `CVMFS_S3_USE_HTTPS`  Allow to use S3 implementation over HTTPS and not over HTTP
- `CVMFS_S3_X_AMZ_ACL`  (ACLs). Allowed is one value of `"public-write"`, `"authenticated-read"`, `"bucket-owner-read"`, `"bucket-owner-full-control"`, [Amazon ACL Overview](https://docs.aws.ama zon.com/AmazonS3/latest/userguid e/acl-overview.html#canned-acl))  Canned access control lists `"public-read"` (default), `"aws-exec-read"`, or `""` (for explanation see
+`CVMFS_S3_ACCESS_KEY`
+: S3 account access key.
+
+`CVMFS_S3_SECRET_KEY`
+: S3 account secret key.
+
+`CVMFS_S3_HOST`
+: S3 server hostname, e.g. `s3.amazonaws.com`. The hostname should **not** be prefixed by `http://`.
+
+`CVMFS_S3_FLAVOR`
+: Set to `azure` if you store files in Microsoft Azure Blob Storage.
+
+`CVMFS_S3_REGION`
+: The S3 region, e.g. `eu-central-1`. If specified, AWSv4 authorization protocol is used.
+
+`CVMFS_S3_PORT`
+: The port on which the S3 instance is running.
+
+`CVMFS_S3_BUCKET`
+: S3 bucket name. The repository name is used as a subdirectory inside the bucket.
+
+`CVMFS_S3_TIMEOUT`
+: Timeout in seconds for the connection to the S3 server.
+
+`CVMFS_S3_MAX_RETRIES`
+: Number of retries for the connection to the S3 server.
+
+`CVMFS_S3_MAX_NUMBER_OF_PARALLEL_CONNECTIONS`
+: Number of parallel uploads to the S3 server, e.g. `400`.
+
+`CVMFS_S3_DNS_BUCKETS`
+: Set to `false` to disable DNS-style bucket URLs (`http://<bucket>.<host>/<object>`). Enabled by default.
+
+`CVMFS_S3_PEEK_BEFORE_PUT`
+: Make `PUT` requests conditional to a prior `HEAD` request. Enabled by default.
+
+`CVMFS_S3_USE_HTTPS`
+: Allow use of the S3 implementation over HTTPS rather than HTTP.
+
+`CVMFS_S3_X_AMZ_ACL`
+: Canned access control lists (ACLs). Allowed is one value of `"public-read"` (default), `"public-write"`, `"authenticated-read"`, `"aws-exec-read"`, `"bucket-owner-read"`, `"bucket-owner-full-control"`, or `""` (for explanation see [Amazon ACL Overview](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl)).
 
 ### Repository Update
 Typically, a repository publisher does the following steps in order to
@@ -412,11 +443,11 @@ defaults to 4 minutes. The default can be changed by setting
 `/etc/cvmfs/repositories.d/$repository/server.conf` file to a new value
 given in seconds. The value should not fall below 1 minute.
 
-If the repository is replicated to a stratum 1 server (see Chapter
-[cpt_replica](cpt-replica.md)), replication of the changes
+If the repository is replicated to a stratum 1 server (see
+[Setting up a Replica Server (Stratum 1)](cpt-replica.md)), replication of the changes
 needs to finish before the repository time-to-live applies. The status
 of the replication can be checked by the
-[cvmfs_info](https://github.com/cvmfs/cvmfs_info) utility, like
+[`cvmfs_info`](https://github.com/cvmfs/cvmfs_info) utility, like
 
     cvmfs_info http://cvmfs-stratum-zero.cern.ch/cvmfs/cernvm-prod.cern.ch
 
@@ -472,9 +503,11 @@ a graft is encountered, the file is published as if it was present on
 the repository machine: the repository admin is responsible for making
 sure the file's data is distributed accordingly.
 
-To graft a file, `foo` to a directory, one must: - Create an empty,
-zero-length file named `foo` in the directory. - Create a separate
-graft-file named `.cvmfsgraft-foo` in the same directory.
+To graft a file `foo` into a directory, one must:
+
+- Create an empty, zero-length file named `foo` in the directory.
+- Create a separate graft file named `.cvmfsgraft-foo` in the same
+  directory.
 
 The `.cvmfsgraft` file must have the following format:
 
@@ -493,21 +526,30 @@ last chunk ends at the end of the file.
 To help generate checksum files, the `cvmfs_swissknife graft` command is
 provided. The `graft` command takes the following options:
 
- **Option**  **Description**
- ---  ---
- `-i`  Input file to process (`-` for reading from stdin)
- `-o`  Output location for graft file (optional)
- `-v`  Verbose output (optional)
- `-Z`  Compression algorithm (default: none) (optional)
- `-c`  Chunk size (in MB; default: 32) (optional)
- `-a`  hash algorithm (default: `SHA-1`) (optional)
+`-i`
+: Input file to process (`-` for reading from stdin).
+
+`-o`
+: Output location for graft file (optional).
+
+`-v`
+: Verbose output (optional).
+
+`-Z`
+: Compression algorithm (default: none) (optional).
+
+`-c`
+: Chunk size (in MB; default: `32`) (optional).
+
+`-a`
+: Hash algorithm (default: `SHA-1`) (optional).
 
 This command outputs both the `.cvmfsgraft` file and zero-length
 "real" file if `-o` is used; otherwise, it prints the contents of the
 `.cvmfsgraft` file to `stdout`. A typical invocation would look like
 this:
 
-    cat /path/to/some/file  cvmfs_swissknife graft -i - -o /cvmfs/repo.example.com/my_file
+    cat /path/to/some/file | cvmfs_swissknife graft -i - -o /cvmfs/repo.example.com/my_file
 
 ### Template Transactions
 
@@ -973,7 +1015,7 @@ file sizes of the catalogs in bytes.
 ### Repository Mount Point Management
 
 CernVM-FS server maintains two mount points for each repository (see
-[apx_serverinfra](apx-serverinfra.md) for details) and needs
+[CernVM-FS Server Infrastructure](apx-serverinfra.md) for details) and needs
 to keep them in sync with
 [transactional operations](#repository-update) on the repository.
 
@@ -1096,21 +1138,44 @@ At the end of each successful transaction, a new row is inserted into
 the `publish_statistics` table of the database, with the following
 columns:
 
- **Field**  **Type**
- ---  ---
- publish_id  Integer
- start_time  Text (timestamp format: [YYYY-MM-DD
- finished_time  Text (timestamp format: [YYYY-MM-DD
- files_added  Integer
- files_removed  Integer
- files_changed  Integer
- duplicated_files  Integer
- directories_added  Integer
- directories_removed  Integer
- directories_changed  Integer
- sz_bytes_added  Integer
- sz_bytes_removed  Integer
- sz_bytes_uploaded  Integer
+`publish_id`
+: Integer.
+
+`start_time`
+: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`).
+
+`finished_time`
+: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`).
+
+`files_added`
+: Integer.
+
+`files_removed`
+: Integer.
+
+`files_changed`
+: Integer.
+
+`duplicated_files`
+: Integer.
+
+`directories_added`
+: Integer.
+
+`directories_removed`
+: Integer.
+
+`directories_changed`
+: Integer.
+
+`sz_bytes_added`
+: Integer.
+
+`sz_bytes_removed`
+: Integer.
+
+`sz_bytes_uploaded`
+: Integer.
 
 By setting `CVMFS_PRINT_STATISTICS=true`, in addition to being saved in
 the database, the metrics are printed to the console at the end of the
@@ -1119,15 +1184,26 @@ the database, the metrics are printed to the console at the end of the
 When the garbage collector is run, a new row is inserted into the
 `gc_statistics` table, with the following columns:
 
- **Field**  **Type**
- ---  ---
- gc_id  Integer
- start_time  Text (timestamp format: [YYYY-MM-DD
- finished_time  Text (timestamp format: [YYYY-MM-DD
- n_preserved_catalogs  Integer
- n_condemned_catalogs  Integer
- n_condemned_objects  Integer
- sz_condemned_bytes (\*)  Integer |
+`gc_id`
+: Integer.
+
+`start_time`
+: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`).
+
+`finished_time`
+: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`).
+
+`n_preserved_catalogs`
+: Integer.
+
+`n_condemned_catalogs`
+: Integer.
+
+`n_condemned_objects`
+: Integer.
+
+`sz_condemned_bytes` (\*)
+: Integer.
 
 (\*) Disabled by default due to the non-negligible computation cost. Can
 be enabled with `CVMFS_EXTENDED_GC_STATS=true`
@@ -1137,14 +1213,14 @@ This interval can be changed by the `CVMFS_STATS_DB_DAYS_TO_KEEP`
 parameter.
 
 The contents of any table (`publish_statistics`, `gc_statistics`, or
-`properties`) in the database can be exported to text using: :
+`properties`) in the database can be exported to text using:
 
     # cvmfs_server print-stats [-t <TABLE_NAME>] <REPO_NAME>
 
 If the `-t` argument is omitted, the `publish_statistics` table is
 exported.
 
-Two database files can be merged as follows: :
+Two database files can be merged as follows:
 
     # cvmfs_server merge-stats [-o <OUTPUT_DB>] <DB_FILE_1> <DB_FILE_2>
 
