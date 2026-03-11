@@ -27,15 +27,39 @@ storage can either be a file system at `/srv/cvmfs` or an S3 compatible
 object storage system (see [S3 compatible storage systems](cpt-repo.md#s3-compatible-storage-systems) for details). In the former case the contents of
 `/srv/cvmfs` are as follows:
 
-  **File Path**                         **Description**
-  ------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  `/srv/cvmfs`                          **Central repository storage location** Can be mounted or symlinked to another location *before* creating the first repository.
-  `/srv/cvmfs/<fqrn>`                   **Storage location of a specific repository** Can be symlinked to another location *before* creating the repository `<fqrn>`. This location needs to be both writable by the repository owner and accessible through an HTTP server.
-  `/srv/cvmfs/<fqrn>/.cvmfspublished`   **Manifest file of the repository** The manifest provides the entry point into the repository. It is the only file that needs to be signed by the repository's private key.
-  `/srv/cvmfs/<fqrn>/.cvmfswhitelist`   **List of trusted repository certificates** Contains a list of certificate fingerprints that should be allowed to sign a repository manifest (see .cvmfspublished). The whitelist needs to be signed by a globally trusted private key.
-  `/srv/cvmfs/<fqrn>/data`              **CAS location of the repository** Data storage of the repository. Contains catalogs, files, file chunks, certificates and history databases in a content addressable file format. This directory and all its contents need to be writable by the repository owner.
-  `/srv/cvmfs/<fqrn>/data/00..ff`       **Second CAS level directories** Splits the flat CAS namespace into multiple directories. First two digits of the file content hash defines the directory the remainder is used as file name inside the corresponding directory.
-  `/srv/cvmfs/<fqrn>/data/txn`          **CAS transaction directory** Stores partial files during creation. Once writing has completed, the file is committed into the CAS using an atomic rename operation.
+**File Path**
+:   **Description**
+:   **Details**
+
+---
+
+`/srv/cvmfs`
+:   **Central repository storage location**
+:   Can be mounted or symlinked to another location *before* creating the first repository.
+
+`/srv/cvmfs/<fqrn>`
+:   **Storage location of a specific repository**
+:   Can be symlinked to another location *before* creating the repository `<fqrn>`. This location needs to be both writable by the repository owner and accessible through an HTTP server.
+
+`/srv/cvmfs/<fqrn>/.cvmfspublished`
+:   **Manifest file of the repository**
+:   The manifest provides the entry point into the repository. It is the only file that needs to be signed by the repository's private key.
+
+`/srv/cvmfs/<fqrn>/.cvmfswhitelist`
+:   **List of trusted repository certificates**
+:   Contains a list of certificate fingerprints that should be allowed to sign a repository manifest (see .cvmfspublished). The whitelist needs to be signed by a globally trusted private key.
+
+`/srv/cvmfs/<fqrn>/data`
+:   **CAS location of the repository**
+:   Data storage of the repository. Contains catalogs, files, file chunks, certificates and history databases in a content addressable file format. This directory and all its contents need to be writable by the repository owner.
+
+`/srv/cvmfs/<fqrn>/data/00..ff`
+:   **Second CAS level directories**
+:   Splits the flat CAS namespace into multiple directories. First two digits of the file content hash defines the directory the remainder is used as file name inside the corresponding directory.
+
+`/srv/cvmfs/<fqrn>/data/txn`
+:   **CAS transaction directory**
+:   Stores partial files during creation. Once writing has completed, the file is committed into the CAS using an atomic rename operation.
 
 ## Server Spool Area of a Repository (Stratum0)
 
