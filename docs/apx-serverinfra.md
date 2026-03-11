@@ -115,15 +115,30 @@ certificate, `<fqrn>.key` for the repository's private key and
 `<fqrn>.pub` for the public key. All of those files can be symlinked
 somewhere else if necessary.
 
-  **File Path**                        **Description**
-  ------------------------------------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  `/etc/cvmfs/repositories.d`          **CernVM-FS server config directory** This contains the configuration directories for individual CernVM-FS repositories. Note that this path is shortened using `/.../repos.d/` in the rest of this table.
-  `/.../repos.d/<fqrn>`                **Config directory for specific repo** This contains the configuration files for one specific CernVM-FS repository server.
-  `/.../repos.d/<fqrn>/server.conf`    **Server configuration file** Authoriative configuration file for the CernVM-FS server tools. This file should only contain valid server configuration variables
-                                       as described in the [server parameters appendix](apx-parameters.md#server-parameters), as it controls the behaviour of the CernVM-FS server operations like publishing, pulling and so forth.
-  `/.../repos.d/<fqrn>/client.conf`    **Client configuration file** Authoriative configuration file for the CernVM-FS client used to mount the latest revision of a Stratum 0 release manager machine. This file should only contain valid client configuration
-                                       variables from the [client parameters appendix](apx-parameters.md#client-parameters). This file must not exist for Stratum 1 repositories.
-  `/.../repos.d/<fqrn>/replica.conf`   **Replication configuration file** Contains configuration variables for Stratum 1 specific repositories. This file must not exist for Stratum 0 repositories.
+**File Path**
+:   **Description**
+:   **Details**
+
+---
+`/etc/cvmfs/repositories.d`
+:   **CernVM-FS server config directory**
+:   This contains the configuration directories for individual CernVM-FS repositories. Note that this path is shortened using `/.../repos.d/` in the rest of this table.
+
+`/.../repos.d/<fqrn>`
+:   **Config directory for specific repo**
+:   This contains the configuration files for one specific CernVM-FS repository server.
+
+`/.../repos.d/<fqrn>/server.conf`
+:   **Server configuration file**
+:   Authoriative configuration file for the CernVM-FS server tools. This file should only contain valid server configuration variables as described in the [server parameters appendix](apx-parameters.md#server-parameters), as it controls the behaviour of the CernVM-FS server operations like publishing, pulling and so forth.
+
+`/.../repos.d/<fqrn>/client.conf`
+:   **Client configuration file**
+:   Authoriative configuration file for the CernVM-FS client used to mount the latest revision of a Stratum 0 release manager machine. This file should only contain valid client configuration variables from the [client parameters appendix](apx-parameters.md#client-parameters). This file must not exist for Stratum 1 repositories.
+
+`/.../repos.d/<fqrn>/replica.conf`
+:   **Replication configuration file**
+:   Contains configuration variables for Stratum 1 specific repositories. This file must not exist for Stratum 0 repositories.
 
 ## Environment Setup
 
