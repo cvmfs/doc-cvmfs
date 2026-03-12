@@ -233,7 +233,7 @@ dd {
 /* Lay out parameter-page definition lists like three-column rows */
 .rst-content h1#cernvm-fs-server-infrastructure ~ dl {
     display: grid;
-    grid-template-columns: minmax(20ch, 28ch) minmax(14ch, 18ch) minmax(0, 1fr);
+    grid-template-columns: minmax(20ch, 30ch) minmax(14ch, 18ch) minmax(0, 1fr);
     column-gap: 0;
     row-gap: 0.5rem;
 }
