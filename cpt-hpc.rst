@@ -76,7 +76,7 @@ Preloading the CernVM-FS Cache
 
 When the CernVM-FS client can be installed on the worker node but for
 whatever reason on-demand downloading to a local cache is difficult, the
-`cvmfs_preload utility <http://cernvm.cern.ch/portal/filesystem/downloads>`_
+`cvmfs_preload utility <https://ecsft.cern.ch/dist/cvmfs/preload/>`_
 can be used to preload a CernVM-FS cache onto the shared cluster file system.
 Internally it uses the same code that is used to replicate between CernVM-FS
 stratum 0 and stratum 1. The ``cvmfs_preload`` command is a self-extracting
