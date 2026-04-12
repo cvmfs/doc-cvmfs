@@ -756,8 +756,16 @@ dt a[id] {
 }
 
 /* Accent only explicitly marked inline `/cvmfs` snippets */
-.rst-content code.cvmfs-inline-path {
+.rst-content code.cvmfs-inline-path,
+.rst-content pre .cvmfs-inline-path,
+.rst-content .highlight .cvmfs-inline-path {
     color: #2980b9;
     background: rgba(41, 128, 185, 0.08);
     border: 1px solid rgba(41, 128, 185, 0.2);
+}
+
+.rst-content pre .cvmfs-inline-path,
+.rst-content .highlight .cvmfs-inline-path {
+    border-radius: 0.25rem;
+    padding: 0 0.12rem;
 }

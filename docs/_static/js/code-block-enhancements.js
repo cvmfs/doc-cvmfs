@@ -1,5 +1,6 @@
 window.addEventListener("DOMContentLoaded", function () {
   var selector = ".rst-content .codehilite, .rst-content div.highlight, .rst-content pre.highlight";
+  var cvmfsPathPattern = /(^|[^A-Za-z0-9._~\/-])(\/cvmfs(?:\/[^\s"'`<>()\[\]{}]*)?)/g;
 
   function detectLanguage(elements) {
     for (var i = 0; i < elements.length; i += 1) {
@@ -45,6 +46,81 @@ window.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function wrapCvmfsPathsInNode(textNode) {
+    var text = textNode.nodeValue;
+    var fragment = document.createDocumentFragment();
+    var lastIndex = 0;
+    var match;
+    var pathIndex;
+    var pathText;
+
+    cvmfsPathPattern.lastIndex = 0;
+
+    while ((match = cvmfsPathPattern.exec(text))) {
+      pathIndex = match.index + match[1].length;
+      pathText = match[2];
+
+      if (pathIndex > lastIndex) {
+        fragment.appendChild(document.createTextNode(text.slice(lastIndex, pathIndex)));
+      }
+
+      var marker = document.createElement("span");
+      marker.className = "cvmfs-inline-path";
+      marker.textContent = pathText;
+      fragment.appendChild(marker);
+      lastIndex = pathIndex + pathText.length;
+    }
+
+    if (lastIndex < text.length) {
+      fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+    }
+
+    textNode.parentNode.replaceChild(fragment, textNode);
+  }
+
+  function enhanceCvmfsPaths(root) {
+    var walker;
+    var current;
+    var textNodes = [];
+
+    if (!root) {
+      return;
+    }
+
+    walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+
+    while ((current = walker.nextNode())) {
+      if (!current.nodeValue || current.nodeValue.indexOf("/cvmfs") === -1) {
+        continue;
+      }
+
+      if (!current.parentElement) {
+        continue;
+      }
+
+      if (current.parentElement.closest(".cvmfs-inline-path, .code-copy-button")) {
+        continue;
+      }
+
+      textNodes.push(current);
+    }
+
+    textNodes.forEach(wrapCvmfsPathsInNode);
+  }
+
+  document.querySelectorAll(".rst-content code").forEach(function (code) {
+    if (code.closest("pre") || code.classList.contains("cvmfs-inline-path")) {
+      return;
+    }
+
+    if (/^\s*\/cvmfs(?:\/|$)/.test(code.textContent.trim())) {
+      code.classList.add("cvmfs-inline-path");
+      return;
+    }
+
+    enhanceCvmfsPaths(code);
+  });
+
   document.querySelectorAll(selector).forEach(function (node) {
     if (node.dataset.codeEnhanced === "true") {
       return;
@@ -79,6 +155,7 @@ window.addEventListener("DOMContentLoaded", function () {
     wrapper.appendChild(block);
 
     var sourceText = code.textContent.replace(/\u00a0/g, " ").replace(/\n$/, "");
+    enhanceCvmfsPaths(code);
 
     var copyButton = document.createElement("button");
     copyButton.type = "button";
