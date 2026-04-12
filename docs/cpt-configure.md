@@ -35,14 +35,28 @@ use the `CVMFS_FQRN` parameter, which contains the fully qualified
 repository names that is being mounted. The current working directory is
 set to the parent directory of the configuration file at hand.
 
-  **File**                      **Purpose**
-  ----------------------------- -----------------------------------------------------------------------------------------------------------------------------
-  `config.sh`                   Set of internal helper functions.
-  `default.conf`                Set of base parameters.
-  `default.d/$config.conf`      Adjustments to the default.conf configuration, usually installed by a cvmfs-config-\... package. Read before default.local.
-  `domain.d/$domain.conf`       Domain-specific parameters and implementations of the functions in `config.sh`
-  `config.d/$repository.conf`   Repository-specific parameters and implementations of the functions in `config.sh`
-  `keys/`                       Contains domain-specific sub directories with public keys used to verify the digital signature of file catalogs
+<div class="dl-table-header dl-table-header--two-column">
+  <span>File</span>
+  <span>Purpose</span>
+</div>
+
+`config.sh`
+: Set of internal helper functions.
+
+`default.conf`
+: Set of base parameters.
+
+`default.d/$config.conf`
+: Adjustments to the default.conf configuration, usually installed by a cvmfs-config-\... package. Read before default.local.
+
+`domain.d/$domain.conf`
+: Domain-specific parameters and implementations of the functions in `config.sh`.
+
+`config.d/$repository.conf`
+: Repository-specific parameters and implementations of the functions in `config.sh`.
+
+`keys/`
+: Contains domain-specific sub directories with public keys used to verify the digital signature of file catalogs.
 
 ### The Config Repository
 In addition to the local system configuration, a client can configure a
@@ -395,9 +409,9 @@ the chain, the first is probed again. To avoid endless loops, for each
 file download the number of switches is limited by the total number of
 proxies.
 
-Proxies within the same group are separated by a pipe character ``,
+Proxies within the same group are separated by a pipe character `|`,
 while groups are separated from each other by a semicolon character
-`;`[^1]. Note that it is possible for a proxy group to consist of only
+`;` (for example, `http://proxy1:8080|http://proxy2:8080;DIRECT`). Note that it is possible for a proxy group to consist of only
 one proxy. In the case of proxies that use a DNS *round-robin* entry,
 wherein a single host name resolves to multiple IP addresses, CVMFS
 automatically internally transforms the name into a load-balanced group,
@@ -721,11 +735,19 @@ Multiple instances can thus be safely defined with different names, but
 only one is selected when the client boots. The following table lists
 the valid cache manager instance types.
 
-  \*\* Type\*\*   **Behavior**
-  --------------- -------------------------------------------------------------------------------------------------
-  posix           Uses a cache directory with the standard cache implementation
-  tiered          Uses two other cache manager instances in a layered configuration
-  external        Uses an external cache plugin process (see Section [cpt_plugins](cpt-plugins.md))
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Type</span>
+  <span>Behavior</span>
+</div>
+
+`posix`
+: Uses a cache directory with the standard cache implementation.
+
+`tiered`
+: Uses two other cache manager instances in a layered configuration.
+
+`external`
+: Uses an external cache plugin process (see [Plugins](cpt-plugins.md)).
 
 The instance name "default" is blocked because the regular cache
 configuration syntax is automatically mapped to
@@ -1228,7 +1250,3 @@ will log with high verbosity which makes the debug mode unsuitable for
 production use. In order to turn on the debug mode, set
 `CVMFS_DEBUGLOG=/tmp/cvmfs.log`.
 
-**Footnotes**
-
-[^1]: The usual proxy notation rules apply, like
-    `http://proxy1:8080http://proxy2:8080;DIRECT`
