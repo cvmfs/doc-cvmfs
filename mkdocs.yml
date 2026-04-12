@@ -35,6 +35,7 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.highlight:
       use_pygments: true
+      default_lang: bash
   - pymdownx.superfences
   - pymdownx.inlinehilite
 #  - codehilite:
@@ -97,6 +98,7 @@ extra_css:
 extra_javascript:
   - _static/js/mike-logo-fix.js
   - _static/js/parameter-permalinks.js
+  - _static/js/code-block-enhancements.js
 
 # Copyright
 copyright: Copyright &copy; 2025 CernVM Team

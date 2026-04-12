@@ -473,17 +473,92 @@ dt a[id] {
 }
 
 /* Minimal Pygments token styling for shell-oriented quickstart blocks */
-.rst-content .codehilite,
-.rst-content .highlight {
+.rst-content .code-block-wrap {
+    position: relative;
     margin: 1.1em 0 1.35em;
-    border: 1px solid #dbe3ea;
-    border-radius: 8px;
-    background: #f8fafc;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    padding-right: 2.2rem;
 }
 
-.rst-content .codehilite pre,
-.rst-content .highlight pre {
+.rst-content .code-block,
+.rst-content .codehilite {
+    margin: 0;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.rst-content .code-copy-button {
+    position: absolute;
+    top: 0.45rem;
+    right: 0;
+    border: 0;
+    border-radius: 0.45rem;
+    background: transparent;
+    color: #aaaaaa;
+    width: 1.85rem;
+    height: 1.85rem;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    cursor: pointer;
+    transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.rst-content .code-block-wrap:hover .code-copy-button,
+.rst-content .code-block-wrap:focus-within .code-copy-button,
+.rst-content .code-copy-button:focus,
+.rst-content .code-copy-button[data-copied="true"] {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.rst-content .code-copy-button::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='11' height='11' rx='2'/%3E%3Cpath d='M5 15V6a2 2 0 0 1 2-2h9'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='11' height='11' rx='2'/%3E%3Cpath d='M5 15V6a2 2 0 0 1 2-2h9'/%3E%3C/svg%3E");
+}
+
+.rst-content .code-copy-button:hover,
+.rst-content .code-copy-button:focus {
+    background: transparent;
+    color: #666666;
+    opacity: 1;
+}
+
+.rst-content .code-copy-button:focus {
+    outline: 2px solid rgba(41, 128, 185, 0.18);
+    outline-offset: 1px;
+}
+
+.rst-content .code-copy-button[data-copied="true"] {
+    background: transparent;
+    color: #16a34a;
+}
+
+.rst-content .code-copy-button[data-copied="true"]::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+
+.rst-content .code-block pre,
+.rst-content .codehilite pre {
     margin: 0 !important;
     padding: 0.95rem 1.1rem;
     background: transparent !important;
@@ -492,47 +567,187 @@ dt a[id] {
     overflow-x: auto;
 }
 
-.rst-content .codehilite pre > code,
-.rst-content .highlight pre > code {
+.rst-content .code-block pre > code,
+.rst-content .codehilite pre > code {
     display: block;
     padding: 0 !important;
     border: 0 !important;
     background: transparent !important;
-    color: #1f2937;
+    color: #444444;
     font-size: 0.92em;
 }
 
-.highlight .c1 {
-    color: #3D7B7B;
+@media screen and (max-width: 600px) {
+    .rst-content .code-block-wrap {
+        padding-right: 2rem;
+    }
+
+    .rst-content .code-copy-button {
+        top: 0.4rem;
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    .rst-content .code-block pre,
+    .rst-content .codehilite pre {
+        padding: 0.95rem 1rem;
+    }
+}
+
+.highlight {
+    background: #ffffff;
+    color: #444444;
+}
+
+.highlight .hll {
+    background-color: #ffffcc;
+}
+
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cpf,
+.highlight .cs {
+    color: #888888;
+}
+
+.highlight .ch {
+    color: #287088;
+}
+
+.highlight .cp {
+    color: #289870;
+}
+
+.highlight .err,
+.highlight .gr,
+.highlight .gd {
+    color: #c02828;
+}
+
+.highlight .gt,
+.highlight .nt,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt,
+.highlight .k {
+    color: #2838b0;
+}
+
+.highlight .kc,
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il,
+.highlight .gp {
+    color: #444444;
+}
+
+.highlight .o {
+    color: #666666;
+}
+
+.highlight .ow,
+.highlight .sc,
+.highlight .sr,
+.highlight .sx {
+    color: #a848a8;
+}
+
+.highlight .p,
+.highlight .pm,
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cpf,
+.highlight .cs {
+    color: #888888;
+}
+
+.highlight .g,
+.highlight .gh,
+.highlight .go,
+.highlight .gu {
+    color: #666666;
+}
+
+.highlight .gi,
+.highlight .na,
+.highlight .nb,
+.highlight .bp {
+    color: #388038;
+}
+
+.highlight .cp,
+.highlight .nl,
+.highlight .nn {
+    color: #289870;
+}
+
+.highlight .nc,
+.highlight .nd,
+.highlight .nx,
+.highlight .py {
+    color: #287088;
+}
+
+.highlight .ne,
+.highlight .vg {
+    color: #908828;
+}
+
+.highlight .nf,
+.highlight .fm {
+    color: #785840;
+}
+
+.highlight .nv,
+.highlight .vc,
+.highlight .vi {
+    color: #b04040;
+}
+
+.highlight .dl,
+.highlight .no,
+.highlight .sd,
+.highlight .vm {
+    color: #b85820;
+}
+
+.highlight .s,
+.highlight .sb,
+.highlight .s1,
+.highlight .s2,
+.highlight .sh,
+.highlight .si,
+.highlight .ss {
+    color: #b83838;
+}
+
+.highlight .sa {
+    color: #444444;
+}
+
+.highlight .se,
+.highlight .ni {
+    color: #709030;
+}
+
+.highlight .ge {
     font-style: italic;
 }
 
-.highlight .s1,
-.highlight .s2 {
-    color: #BA2121;
-}
-
-.highlight .se {
-    color: #AA5D1F;
+.highlight .gs {
     font-weight: 700;
 }
 
-.highlight .nb {
-    color: #008000;
-}
-
-.highlight .nv {
-    color: #19177C;
-}
-
-.highlight .m,
-.highlight .o,
-.highlight .ow {
-    color: #666;
-}
-
-.highlight .ow {
-    font-weight: 700;
+.highlight .w {
+    color: #a89028;
 }
 
 /* Tone down ordinary inline code without affecting code blocks */

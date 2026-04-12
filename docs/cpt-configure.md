@@ -445,12 +445,12 @@ configured to listen on port 3128. If the two local proxies are equally
 preferable to use and configured identically to each other, and the same
 applies for the two regional proxies, use :
 
-    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128http://p2.site.example.org:3128;http://p3.region.example.org:3128http://p4.region.example.org:3128"
+    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128|http://p2.site.example.org:3128;http://p3.region.example.org:3128|http://p4.region.example.org:3128"
 
 However, if `p1` should always be preferred over `p2` (for example if it
 has a faster network or larger cache), use :
 
-    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128;http://p2.site.example.org:3128;http://p3.region.example.org:3128http://p4.region.example.org:3128"
+    CVMFS_HTTP_PROXY="http://p1.site.example.org:3128;http://p2.site.example.org:3128;http://p3.region.example.org:3128|http://p4.region.example.org:3128"
 
 Moreover, if `p3` should always be preferred over `p4` (for example if
 it is significantly closer to your site), use :
@@ -1220,23 +1220,21 @@ header, e.g. to identify the client that send the request. As key, only
 alphanumeric sequences are accepted and white space around the key is
 ignored. Invalid keys are ignored. An example is given below
 
-``` bash
-# client config
-CVMFS_HTTP_TRACING=on #(default off)
-# illegal headers are: CVMFS-X-h2:ff and X-CVMFS-h3:12_ad
-CVMFS_HTTP_TRACING_HEADERS='h1:testCVMFS-X-h2:ffX-CVMFS-h3:12_ad   h4  : 12fs_?'
+    # client config
+    CVMFS_HTTP_TRACING=on #(default off)
+    # illegal headers are: CVMFS-X-h2:ff and X-CVMFS-h3:12_ad
+    CVMFS_HTTP_TRACING_HEADERS='h1:testCVMFS-X-h2:ffX-CVMFS-h3:12_ad   h4  : 12fs_?'
 
-# debug output
-(download) CURL Header for URL: /data/81/7c882d4a2e9dd7f9c5c2bfb4e04ff316e436dfC is:
-Connection: Keep-Alive
-Pragma:
-User-Agent: cvmfs Fuse 2.11.0
-X-CVMFS-h1: test
-X-CVMFS-h4: 12fs_?
-X-CVMFS-PID: 561710
-X-CVMFS-GID: 0
-X-CVMFS-UID: 0
-```
+    # debug output
+    (download) CURL Header for URL: /data/81/7c882d4a2e9dd7f9c5c2bfb4e04ff316e436dfC is:
+    Connection: Keep-Alive
+    Pragma:
+    User-Agent: cvmfs Fuse 2.11.0
+    X-CVMFS-h1: test
+    X-CVMFS-h4: 12fs_?
+    X-CVMFS-PID: 561710
+    X-CVMFS-GID: 0
+    X-CVMFS-UID: 0
 
 ## Debug Logs
 The `cvmfs2` binary forks a watchdog process on start. Using this
