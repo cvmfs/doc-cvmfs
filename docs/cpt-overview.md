@@ -53,7 +53,7 @@ implementation provides the following key features:
 -   Possibility to use S3 compatible storage instead of a file system as
     repository storage
 
-In contrast to general purpose network file systems such as nfs or afs,
+In contrast to general purpose network file systems such as NFS or AFS,
 CernVM-FS is particularly crafted for fast and scalable software
 distribution. Running and compiling software is a use case general
 purpose distributed file systems are not optimized for. In contrast to

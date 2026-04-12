@@ -842,7 +842,7 @@ The example configuration for the in-memory cache plugin in
 
 ## NFS Server Mode
 In case there is no local hard disk space available on a cluster of
-worker nodes, a single CernVM-FS client can be exported via nfs
+worker nodes, a single CernVM-FS client can be exported via NFS 
 [[Callaghan95]](apx-references.md#Callaghan95) [[Shepler03]](apx-references.md#Shepler03) to these worker nodes. This mode
 of deployment will inevitably introduce a performance bottleneck and a
 single point of failure and should be only used if necessary.
@@ -851,7 +851,7 @@ NFS export requires Linux kernel >= 2.6.27 on the NFS server. For
 instance, exporting works for Scientific Linux 6 but not for Scientific
 Linux 5. The NFS server should run a lock server as well. For proper NFS
 support, set `CVMFS_NFS_SOURCE=yes`. On the client side, all available
-nfs implementations should work.
+NFS implementations should work.
 
 In the NFS mode, upon mount an additional directory
 `nfs_maps.$repository_name` appears in the CernVM-FS cache directory.
