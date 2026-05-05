@@ -6,9 +6,9 @@ directory, is written as another line into the log file.
 
 In order to activate the tracer, set
 
-    CVMFS_TRACEFILE=/tmp/cvmfs-trace-\@fqrn\@.log  # the cvmfs user must have write permission to the target directory
+    CVMFS_TRACEFILE=/tmp/cvmfs-trace-@fqrn@.log  # the cvmfs user must have write permission to the target directory
 
-The `\@fqrn\@` syntax ensures that the trace file is different for every
+The `@fqrn@` syntax ensures that the trace file is different for every
 repository.
 
 The trace is internally buffered. Therefore, it is important to either

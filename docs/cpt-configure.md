@@ -376,15 +376,15 @@ the Stratum 1 servers can be automatically sorted according to round
 trip time by `cvmfs_talk host probe` (see the [Auxiliary Tools](#auxiliary-tools) section). Otherwise, the proxy server would invalidate round trip
 time measurement.
 
-The special sequence `\@fqrn\@` in the `CVMFS_SERVER_URL` string is
+The special sequence `@fqrn@` in the `CVMFS_SERVER_URL` string is
 replaced by fully qualified repository name (atlas.cern.ch, cms.cern.ch,
 \...). That allows to use the same parameter for many repositories
 hosted under the same domain. For instance,
-`http://cvmfs-stratum-one.cern.ch/cvmfs/\@fqrn\@` can resolve to
+`http://cvmfs-stratum-one.cern.ch/cvmfs/@fqrn@` can resolve to
 `http://cvmfs-stratum-one.cern.ch/cvmfs/atlas.cern.ch`,
 `http://cvmfs-stratum-one.cern.ch/cvmfs/cms.cern.ch`, and so on
 depending on the repository that is being mounted. The same works for
-the sequence `\@org\@` which is replaced by the unqualified repository
+the sequence `@org@` which is replaced by the unqualified repository
 name (atlas, cms, \...).
 
 ### Proxy Lists
