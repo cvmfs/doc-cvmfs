@@ -42,3 +42,4 @@ Authors of this documentation:
 > -   Simone Mosciatti
 > -   Radu Popescu
 > -   Laura Promberger
+> -   Valentin Volkl
