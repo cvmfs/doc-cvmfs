@@ -281,9 +281,9 @@ nerdctl.](https://github.com/containerd/nerdctl/blob/main/docs/cvmfs.md).
 The snapshotter can be tested and used with docker (> 24.0).
 
 1.  Write the following configuration to
-    [/etc/docker/daemon.json]{.title-ref}
+    `/etc/docker/daemon.json`
 
-``` json
+```javascript
 {
     "storage-driver": "cvmfs-snapshotter",
     "features": {
@@ -294,28 +294,25 @@ The snapshotter can be tested and used with docker (> 24.0).
 
 2.  Restart the deamon
 
-```{=html}
-<!-- -->
-```
+```bash
     systemctl restart docker
+```
 
 3.  Verify if you're using the containerd storage driver:
 
-```{=html}
-<!-- -->
-```
+```console
     $ docker info -f '{{ .DriverStatus }}'
     [[driver-type io.containerd.snapshotter.v1]]
     $ docker info -f '{{ .Driver }}'
     cvmfs-snapshotter
+```
 
 4.  Then run or pull images:
 
-```{=html}
-<!-- -->
-```
+```console
     docker pull clelange/cms-higgs-4l-full:latest
     docker run -it --rm clelange/cms-higgs-4l-full:latest
+```
 
 Pulling this image should be done in few seconds with the snapshotter.
 See also the [containerd image store manual page in

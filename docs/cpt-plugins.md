@@ -34,38 +34,40 @@ debugging of a cache plugin.
 
 Broadly speaking, a cache plugin process performs the following steps
 
-    #include <libcvmfs_cache.h>
+```cpp
+#include <libcvmfs_cache.h>
 
-    cvmcache_init_global();
-    // Option parsing, which can use cvmcache_options_... functions to parse
-    // CernVM-FS client configuration files
+cvmcache_init_global();
+// Option parsing, which can use cvmcache_options_... functions to parse
+// CernVM-FS client configuration files
 
-    // Optionally: spawning the watchdog to create stack traces when the cache
-    // plugin crashes
-    cvmcache_spawn_watchdog(NULL);
+// Optionally: spawning the watchdog to create stack traces when the cache
+// plugin crashes
+cvmcache_spawn_watchdog(NULL);
 
-    // Create a plugin context by passing function pointers to callbacks
-    struct cvmcache_context *ctx = cvmcache_init(&callbacks);
+// Create a plugin context by passing function pointers to callbacks
+struct cvmcache_context *ctx = cvmcache_init(&callbacks);
 
-    // Connect to the socket defined by the locator string
-    cvmcache_listen(ctx, locator);
+// Connect to the socket defined by the locator string
+cvmcache_listen(ctx, locator);
 
-    // Spawn an I/O thread in which the callback functions are called
-    cvmcache_process_requests(ctx, 0);
+// Spawn an I/O thread in which the callback functions are called
+cvmcache_process_requests(ctx, 0);
 
-    // Depending on whether the plugin is started independently or by the
-    // CernVM-FS client, cvmcache_process_requests() termination behaves
-    // differently
+// Depending on whether the plugin is started independently or by the
+// CernVM-FS client, cvmcache_process_requests() termination behaves
+// differently
 
-    if (!cvmcache_is_supervised()) {
-      // Decide when the plugin should be terminated, e.g. wait for a signal
-      cvmcache_terminate(ctx);
-    }
+if (!cvmcache_is_supervised()) {
+  // Decide when the plugin should be terminated, e.g. wait for a signal
+  cvmcache_terminate(ctx);
+}
 
-    // Cleanup
-    cvmcache_wait_for(ctx);
-    cvmcache_terminate_watchdog();
-    cvmcache_cleanup_global();
+// Cleanup
+cvmcache_wait_for(ctx);
+cvmcache_terminate_watchdog();
+cvmcache_cleanup_global();
+```
 
 The core of the cache plugin is the implementation of the callback
 functions provided to `cvmcache_init()`. Not all callback functions need
@@ -174,13 +176,25 @@ integer fields. The revision is currently 0 and unused. Message IDs
 indicate certain other fields that can or should be present. Additional
 JSON text is ignored. The message ID can be one of the following
 
-  **Code**   **Meaning**
-  ---------- ------------------------------------------------------------
-  0          Cvmfs: "Hello, helper, are you there?" (handshake)
-  1          Helper: "Yes, cvmfs, I'm here" (handshake reply)
-  2          Cvmfs: "Please verify, helper" (verification request)
-  3          Helper: "I verified, cvmfs, here's the result" (permit)
-  4          Cvmfs: "Please shutdown, helper" (termination)
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Code</span>
+  <span>Meaning</span>
+</div>
+
+`0`
+: Cvmfs: "Hello, helper, are you there?" (handshake)
+
+`1`
+: Helper: "Yes, cvmfs, I'm here" (handshake reply)
+
+`2`
+: Cvmfs: "Please verify, helper" (verification request)
+
+`3`
+: Helper: "I verified, cvmfs, here's the result" (permit)
+
+`4`
+: Cvmfs: "Please shutdown, helper" (termination)
 
 #### Handshake and Termination
 
@@ -201,12 +215,22 @@ The permit has to contain a status indicating success or failure
 (`status` integer field) and a time to live for this reply in seconds
 (`ttl` integer field). The status can be one of the following
 
-  **Code**   **Meaning**
-  ---------- ----------------------------------------------------------
-  0          Success (allow access)
-  1          Authentication token of the user not found (deny access)
-  2          Invalid authentication token (deny access)
-  3          User is not member of the required groups (deny access)
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Code</span>
+  <span>Meaning</span>
+</div>
+
+`0`
+: Success (allow access)
+
+`1`
+: Authentication token of the user not found (deny access)
+
+`2`
+: Invalid authentication token (deny access)
+
+`3`
+: User is not member of the required groups (deny access)
 
 On success, the permit can optionally contain a Base64 encoded version
 of either an X.509 proxy certificate (`x509_proxy` string field) or a

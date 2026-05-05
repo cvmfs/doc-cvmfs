@@ -251,6 +251,23 @@ dd {
         margin-bottom: 0.75em !important;
     }
 }
+
+/* Color the parameter names: green for client-side, purple for server-side.
+   Order matters — later rules override earlier ones for equal-specificity sibling selectors. */
+.rst-content h1#cernvm-fs-parameters ~ dl > dt {
+    color: #2e7d32;
+}
+
+.rst-content h2#server-parameters ~ dl > dt {
+    color: #6a1b9a;
+}
+
+.rst-content h2#tiered-cache-parameters ~ dl > dt,
+.rst-content h2#external-cache-plugin-parameters ~ dl > dt,
+.rst-content h2#in-memory-cache-plugin-parameters ~ dl > dt {
+    color: #2e7d32;
+}
+
 /* Lay out parameter-page definition lists like three-column rows */
 .rst-content h1#cernvm-fs-server-infrastructure ~ dl {
     display: grid;

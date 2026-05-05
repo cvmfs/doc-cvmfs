@@ -24,22 +24,50 @@ and `CVMFS_TRACEBUFFER_THRESHOLD`.
 
 The generated trace log is a CSV file with the following fields
 
- **Field**  **Description**
- ---  ---
- Timestamp  Seconds since the UNIX epoch, miliseconds precision
- Event code  Numerical ID for the system call. Negative numbers indicate internal events, such as mounting and unmounting.
- Path  The repository relative target path of the system call
- Event name  A string literal corresponding to the event code.
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Field</span>
+  <span>Description</span>
+</div>
+
+Timestamp
+: Seconds since the UNIX epoch, miliseconds precision
+
+Event code
+: Numerical ID for the system call. Negative numbers indicate internal events, such as mounting and unmounting.
+
+Path
+: The repository relative target path of the system call
+
+Event name
+: A string literal corresponding to the event code.
 
 The following events are known:
 
- **Event ID**  **Description**
- ---  ---
- 1  Open file
- 2  List directory contents
- 3  Read symbolic link
- 4  Lookup path
- 5  Get file system metadata (e.g. df call)
- 6  Get file/directory metadata
- 7  List extended attributes of a file/directory
- 8  Read extended attributes of a file/directory
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Event ID</span>
+  <span>Description</span>
+</div>
+
+`1`
+: Open file
+
+`2`
+: List directory contents
+
+`3`
+: Read symbolic link
+
+`4`
+: Lookup path
+
+`5`
+: Get file system metadata (e.g. df call)
+
+`6`
+: Get file/directory metadata
+
+`7`
+: List extended attributes of a file/directory
+
+`8`
+: Read extended attributes of a file/directory

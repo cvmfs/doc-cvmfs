@@ -12,7 +12,7 @@ These problems can be overcome as described in the following sections.
 
 CernVM-FS can be run as an unprivileged user under several different
 scenarios. See documentation about that in the Security
-sct_running_client_as_normal_user
+[Running the client as a normal user](apx-security.md#running-the-client-as-a-normal-user)
 section.
 
 ## Parrot-Mounted CernVM-FS instead of Fuse Module
@@ -45,20 +45,19 @@ to a shared file system, this approach has the following advantages:
 When there is no possible way to run the CernVM-FS client, an option
 that has been used on some HPC systems is to download entire or partial
 snapshots of CernVM-FS repositories using the
-`cvmfs_shrinkwrap utility <cpt_shrinkwrap>`{.interpreted-text
-role="ref"}. These snapshots are also sometimes called "HPC fat
-container images". This has many disadvantages compared to running a
-CernVM-FS client, so it is typically a last resort.
+[cvmfs_shrinkwrap utility](cpt-shrinkwrap.md). These snapshots are also
+sometimes called "HPC fat container images". This has many disadvantages
+compared to running a CernVM-FS client, so it is typically a last resort.
 
 ## NFS Export with Cray DVS
 
 Some HPC sites have tried running the cvmfs client on just one server
 and exporting to worker nodes over
-NFS <sct_nfs_server_mode>. These
+[NFS](cpt-configure.md#nfs-server-mode). These
 installations can be made to work, but they are very inefficient, and
 often run into operational problems. If you want to try it out anyway
 using the Cray DVS please see the
-workaround <sct_nfs_interleaved> on
+[workaround](cpt-configure.md#export-of-cvmfs-with-cray-dvs) on
 inode handling and DVS export.
 
 !!! note
@@ -78,8 +77,8 @@ self-extracting binary with no further dependencies and should work on a
 majority of x86_64 Linux hosts. Note however that this method can
 significantly strain the cluster file system's metadata server(s) and
 that many HPC systems have had better results with
-`loopback filesystems <sct_loopback_filesystems>`{.interpreted-text
-role="ref"} as node caches as discussed below.
+[loopback filesystems](#loopback-file-systems-for-nodes-caches) as node
+caches as discussed below.
 
 The `cvmfs_preload` command replicates from a stratum 0 (not from a
 stratum 1). Because this induces significant load on the source server,
@@ -162,5 +161,5 @@ the bottleneck under typical workloads.
 
 Diskless compute nodes can also combine an in-memory cache with a
 preloaded directory on the shared cluster file system. An example
-configuration can be found in Section
-sct_cache_advanced_example.
+configuration can be found in the
+[Advanced Cache Configuration example](cpt-configure.md#example).

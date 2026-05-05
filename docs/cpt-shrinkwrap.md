@@ -29,12 +29,22 @@ deduplication.
 The shrinkwrap output directory should be formatted with XFS. The ext
 file systems limit the number of hard links to 64k.
 
- **File Path**  **Description**
- ---  ---
- `/tmp/cvmfs`  **Default base directory** Single mount point that can be used to package repositories, containing both the directory tree and the data directory.
- `<base>/<fqrn>`  **Repository file tree** Directory containing the visible structure and file names for a repository.
- `<base>/.data`  **File storage location for repositories** Content-addressed files in a hidden directory.
- `<base>/.provenance`  **Storage location for provenance** Hidden directory that stores the provenance information, including `libcvmfs` configurations and specification files.
+<div class="dl-table-header dl-table-header--two-column">
+  <span>File Path</span>
+  <span>Description</span>
+</div>
+
+`/tmp/cvmfs`
+: **Default base directory.** Single mount point that can be used to package repositories, containing both the directory tree and the data directory.
+
+`<base>/<fqrn>`
+: **Repository file tree.** Directory containing the visible structure and file names for a repository.
+
+`<base>/.data`
+: **File storage location for repositories.** Content-addressed files in a hidden directory.
+
+`<base>/.provenance`
+: **Storage location for provenance.** Hidden directory that stores the provenance information, including `libcvmfs` configurations and specification files.
 
 ### Specification File
 
@@ -147,22 +157,22 @@ Some examples of this could be ZIP, tarballs, or squashfs. The
 recommendation is to use squashfs as it provides a great amount of
 portability and is supported for directly mounting on most OS.
 
-If tools for creating squashfs are not already available try : :
+If tools for creating squashfs are not already available try:
 
     apt-get install squashfs-tools
 
-\-- or \-- :
+or :
 
     yum install squashfs-tools
 
-After this has been installed a squashfs image can be created using the
-above image : :
+Then a squashfs image can be created using the
+above image:
 
     mksquashfs /tmp/cvmfs root-sft-image.sqsh
 
 This process may take time to create depending on the size of the
 shrinkwrapped image. The squashfs image can now be moved around and
-mounted using : :
+mounted using:
 
     mount -t squashfs /PATH/TO/IMAGE/root-sft-image.sqsh /cvmfs
 

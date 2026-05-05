@@ -20,7 +20,10 @@ theme:
 # keeping plain `mkdocs build --strict` usable for local and CI sanity checks.
 plugins:
   - search
-  - mermaid2
+  - mermaid2:
+      version: 9.4.3
+      arguments:
+        startOnLoad: true
 
 # Extensions
 markdown_extensions:

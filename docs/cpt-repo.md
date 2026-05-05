@@ -885,17 +885,17 @@ directories are accessed together. This is typically the case for
 software releases, but can be also on the directory level that separates
 platforms. For instance, for a directory layout like
 
-    /cvmfs/experiment.cern.ch
-      - /software
-          - /i686
-              - 1.0
-              - 2.0
-          `    - common
-          - /x86_64
-              - 1.0
-          `    - common
-      - /grid-certificates
-      - /scripts
+		/cvmfs/experiment.cern.ch
+			|- /software
+			|    |- /i686
+			|    |    |- 1.0
+			|    |    |- 2.0
+			|    `    |- common
+			|    |- /x86_64
+			|    |    |- 1.0
+			|    `    |- common
+			|- /grid-certificates
+			|- /scripts
 
 it makes sense to have nested catalogs at
 
@@ -1138,44 +1138,47 @@ At the end of each successful transaction, a new row is inserted into
 the `publish_statistics` table of the database, with the following
 columns:
 
+**Field name**
+: **Field type**
+
 `publish_id`
-: Integer.
+: Integer
 
 `start_time`
-: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`).
+: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
 
 `finished_time`
-: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`).
+: Text (timestamp format: `YYYY-MM-DD hh-mm-ss`)
 
 `files_added`
-: Integer.
+: Integer
 
 `files_removed`
-: Integer.
+: Integer
 
 `files_changed`
-: Integer.
+: Integer
 
 `duplicated_files`
-: Integer.
+: Integer
 
 `directories_added`
-: Integer.
+: Integer
 
 `directories_removed`
-: Integer.
+: Integer
 
 `directories_changed`
-: Integer.
+: Integer
 
 `sz_bytes_added`
-: Integer.
+: Integer
 
 `sz_bytes_removed`
-: Integer.
+: Integer
 
 `sz_bytes_uploaded`
-: Integer.
+: Integer
 
 By setting `CVMFS_PRINT_STATISTICS=true`, in addition to being saved in
 the database, the metrics are printed to the console at the end of the

@@ -51,16 +51,31 @@ This is followed by the list of pairs, which start with two 8 byte
 values for the length of the key/value followed by the concatenated
 strings of the key and the value.
 
-  ----------- ----------------------------------------
-  **Flags**   **Meaning**
-  1           Directory
-  2           Transition point to a nested catalog
-  33          Root directory of a nested catalog
-  4           Regular file
-  8           Symbolic link
-  68          Chunked file
-  132         External file (stored under path name)
-  ----------- ----------------------------------------
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Flags</span>
+  <span>Meaning</span>
+</div>
+
+`1`
+: Directory
+
+`2`
+: Transition point to a nested catalog
+
+`33`
+: Root directory of a nested catalog
+
+`4`
+: Regular file
+
+`8`
+: Symbolic link
+
+`68`
+: Chunked file
+
+`132`
+: External file (stored under path name)
 
 As of bit 8, the flags store the cryptographic content hash algorithm
 used to process the given file. Bit 11 is 1 if the file is stored
@@ -91,10 +106,18 @@ further cryptographic hash functions.
 
 ### Nested Catalogs
 
-In order to keep catalog sizes reasonable[^1], repository subtrees may
+In order to keep catalog sizes reasonable , repository subtrees may
 be cut and stored as separate *nested catalogs*. There is no limit on
 the level of nesting. A reasonable approach is to store separate
-software versions as separate nested catalogs. The figure
+software versions as separate nested catalogs.
+
+
+!!! note
+
+     As a rule of thumb, file catalogs (when compressed) are reasonably small.
+
+
+The figure
 below shows the simplified
 directory structure which we use for the ATLAS repository.
 
@@ -177,41 +200,52 @@ metadata fields.
 
 > <br />
 
-  ----------- -----------------------------------------------------------
-  **Field**   **Metadata Description**
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Field</span>
+  <span>Metadata Description</span>
+</div>
 
-  `C`         Cryptographic hash of the repository's current root
-              catalog
+`C`
+: Cryptographic hash of the repository's current root catalog
 
-  `B`         Size of the root file catalog in bytes
+`B`
+: Size of the root file catalog in bytes
 
-  `A`         "yes" if the catalog should be fetched under its
-              alternative name (outside servers /data directory)
+`A`
+: "yes" if the catalog should be fetched under its alternative name (outside servers /data directory)
 
-  `R`         MD5 hash of the repository's root path (usually always
-              `d41d8cd98f00b204e9800998ecf8427e`)
+`R`
+: MD5 hash of the repository's root path (usually always `d41d8cd98f00b204e9800998ecf8427e`)
 
-  `X`         Cryptographic hash of the signing certificate
+`X`
+: Cryptographic hash of the signing certificate
 
-  `G`         "yes" if the repository is garbage-collectable
+`G`
+: "yes" if the repository is garbage-collectable
 
-  `H`         Cryptographic hash of the repository's named tag history
-              database
+`H`
+: Cryptographic hash of the repository's named tag history database
 
-  `T`         Unix timestamp of this particular revision
+`T`
+: Unix timestamp of this particular revision
 
-  `D`         Time To Live (TTL) of the root catalog
+`D`
+: Time To Live (TTL) of the root catalog
 
-  `S`         Revision number of this published revision
+`S`
+: Revision number of this published revision
 
-  `N`         The full name of the manifested repository
+`N`
+: The full name of the manifested repository
 
-  `M`         Cryptographic hash of the repository JSON metadata
+`M`
+: Cryptographic hash of the repository JSON metadata
 
-  `Y`         Cryptographic hash of the reflog checksum
+`Y`
+: Cryptographic hash of the reflog checksum
 
-  `L`         currently unused (reserved for micro catalogs)
-  ----------- -----------------------------------------------------------
+`L`
+: currently unused (reserved for micro catalogs)
 
 ### Repository Signature
 In order to provide authoritative information about a repository
@@ -576,52 +610,142 @@ like
 
 There are the following supported magic attributes:
 
-  **Parameter**            **Meaning**
-  ------------------------ ----------------------------------------------------------------------------------------------------------------------------------
-  `catalog_counters`       Like `repo_counters` but only for the nested catalog that hosts the given path.
-  `chunks`                 Number of chunks of a regular file.
-  `chunk_list`             Hashes and sizes of the chunks of a regular (large) file.
-  `compression`            Compression algorithm, for regular files only. Either "zlib" or "none".
-  `direct_io`              Indicates if the current entry is using direct IO. Either 0 or 1.
-  `expires`                Shows the remaining lifetime of the mounted root file catalog in minutes.
-  `external_file`          Indicates if a regular file is an external file or not. Either 0 or 1.
-  `external_host`          Like `host` but for the host settings to fetch external files.
-  `external_timeout`       Like `timeout` but for the host settings to fetch external files.
-  `fqrn`                   Shows the fully qualified repository name of the mounted repository.
-  `hash`                   Shows the cryptographic hash of a regular file as listed in the file catalog.
-  `hitrate`                Shows overall cache hitrate since mounting the repository.
-  `host`                   Shows the currently active HTTP server.
-  `host_list`              Shows the ordered list of HTTP servers.
-  `inode_max`              Shows the highest possible inode with the current set of loaded catalogs.
-  `lhash`                  Shows the cryptographic hash of a regular file as stored in the local cache, if available.
-  `logbuffer`              Shows system log messages for the repository.
-  `maxfd`                  Shows the maximum number of file descriptors available to file system clients.
-  `ncleanup24`             Shows the number of cache cleanups in the last 24 hours.
-  `nclg`                   Shows the number of currently loaded nested catalogs.
-  `ndiropen`               Shows the overall number of opened directories.
-  `ndownload`              Shows the overall number of downloaded files since mounting.
-  `nioerr`                 Shows the total number of I/O errors encountered since mounting.
-  `nopen`                  Shows the overall number of `open()` calls since mounting.
-  `pid`                    Shows the process ID of the CernVM-FS Fuse process.
-  `proxy`                  Shows the currently active HTTP proxy.
-  `proxy_list`             Shows all registered proxies for this repository. Also contains fallback proxies. If none are used it shows `DIRECT`.
-  `proxy_list_external`    Shows all registered proxies used for accessing external data. If none are used it shows `DIRECT`.
-  `pubkeys`                The loaded public RSA keys used for repository whitelist verification.
-  `rawlink`                Shows unresolved variant symbolic links; only accessible from the root attribute namespace (use [attr -Rg rawlink]{.title-ref}).
-  `repo_counters`          Shows the aggregate counters of the repository contents (number of files etc.)
-  `repo_metainfo`          Shows the [repository meta info](cpt-servermeta.md#repository-specific-meta-information) file, if available
-  `revision`               Shows the file catalog revision of the mounted root catalog, an auto-increment counter increased on every repository publish.
-  `root_hash`              Shows the cryptographic hash of the root file catalog.
-  `rx`                     Shows the overall amount of downloaded kilobytes.
-  `speed`                  Shows the average download speed.
-  `tag`                    The configured repository tag.
-  `timeout`                Shows the timeout for proxied connections in seconds.
-  `timestamp_last_ioerr`   Shows the timestamp when the last IO error occured.
-  `timeout_direct`         Shows the timeout for direct connections in seconds.
-  `uptime`                 Shows the time passed since mounting in minutes.
-  `useddirp`               Shows the number of currently open directories.
-  `usedfd`                 Shows the number of file descriptors currently issued to file system clients.
-  `version`                Shows the version of the loaded CernVM-FS binary.
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Parameter</span>
+  <span>Meaning</span>
+</div>
+
+`catalog_counters`
+: Like `repo_counters` but only for the nested catalog that hosts the given path.
+
+`chunks`
+: Number of chunks of a regular file.
+
+`chunk_list`
+: Hashes and sizes of the chunks of a regular (large) file.
+
+`compression`
+: Compression algorithm, for regular files only. Either "zlib" or "none".
+
+`direct_io`
+: Indicates if the current entry is using direct IO. Either 0 or 1.
+
+`expires`
+: Shows the remaining lifetime of the mounted root file catalog in minutes.
+
+`external_file`
+: Indicates if a regular file is an external file or not. Either 0 or 1.
+
+`external_host`
+: Like `host` but for the host settings to fetch external files.
+
+`external_timeout`
+: Like `timeout` but for the host settings to fetch external files.
+
+`fqrn`
+: Shows the fully qualified repository name of the mounted repository.
+
+`hash`
+: Shows the cryptographic hash of a regular file as listed in the file catalog.
+
+`hitrate`
+: Shows overall cache hitrate since mounting the repository.
+
+`host`
+: Shows the currently active HTTP server.
+
+`host_list`
+: Shows the ordered list of HTTP servers.
+
+`inode_max`
+: Shows the highest possible inode with the current set of loaded catalogs.
+
+`lhash`
+: Shows the cryptographic hash of a regular file as stored in the local cache, if available.
+
+`logbuffer`
+: Shows system log messages for the repository.
+
+`maxfd`
+: Shows the maximum number of file descriptors available to file system clients.
+
+`ncleanup24`
+: Shows the number of cache cleanups in the last 24 hours.
+
+`nclg`
+: Shows the number of currently loaded nested catalogs.
+
+`ndiropen`
+: Shows the overall number of opened directories.
+
+`ndownload`
+: Shows the overall number of downloaded files since mounting.
+
+`nioerr`
+: Shows the total number of I/O errors encountered since mounting.
+
+`nopen`
+: Shows the overall number of `open()` calls since mounting.
+
+`pid`
+: Shows the process ID of the CernVM-FS Fuse process.
+
+`proxy`
+: Shows the currently active HTTP proxy.
+
+`proxy_list`
+: Shows all registered proxies for this repository. Also contains fallback proxies. If none are used it shows `DIRECT`.
+
+`proxy_list_external`
+: Shows all registered proxies used for accessing external data. If none are used it shows `DIRECT`.
+
+`pubkeys`
+: The loaded public RSA keys used for repository whitelist verification.
+
+`rawlink`
+: Shows unresolved variant symbolic links; only accessible from the root attribute namespace (use `attr -Rg rawlink`).
+
+`repo_counters`
+: Shows the aggregate counters of the repository contents (number of files etc.)
+
+`repo_metainfo`
+: Shows the [repository meta info](cpt-servermeta.md#repository-specific-meta-information) file, if available
+
+`revision`
+: Shows the file catalog revision of the mounted root catalog, an auto-increment counter increased on every repository publish.
+
+`root_hash`
+: Shows the cryptographic hash of the root file catalog.
+
+`rx`
+: Shows the overall amount of downloaded kilobytes.
+
+`speed`
+: Shows the average download speed.
+
+`tag`
+: The configured repository tag.
+
+`timeout`
+: Shows the timeout for proxied connections in seconds.
+
+`timestamp_last_ioerr`
+: Shows the timestamp when the last IO error occured.
+
+`timeout_direct`
+: Shows the timeout for direct connections in seconds.
+
+`uptime`
+: Shows the time passed since mounting in minutes.
+
+`useddirp`
+: Shows the number of currently open directories.
+
+`usedfd`
+: Shows the number of file descriptors currently issued to file system clients.
+
+`version`
+: Shows the version of the loaded CernVM-FS binary.
 
 Extended attributes can be queried using the `attr` command. For
 instance, `attr -g hash /cvmfs/atlas.cern.ch/ChangeLog` returns the
@@ -651,12 +775,22 @@ Different pages of the attribute can be accessed with
 
 The commands also work with single page attributes (page number is 0).
 
-  **Parameter**         **Meaning**
-  --------------------- ------------------------------------------------------------------------------------------------------------------------
-  `<attr>@?`            Human-readable information about the attribute.
-  `<attr>~?`            Machine-readable (CSV format) information about the attribute.
-  `<attr>@<page num>`   Output of the attribute with a descriptive header. Page numbers are starting from 0. Errors are returned as plaintext.
-  `<attr>~<page num>`   Output of the attribute. Page numbers are starting from 0. Errors are returned as signals.
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Parameter</span>
+  <span>Meaning</span>
+</div>
+
+`<attr>@?`
+: Human-readable information about the attribute.
+
+`<attr>~?`
+: Machine-readable (CSV format) information about the attribute.
+
+`<attr>@<page num>`
+: Output of the attribute with a descriptive header. Page numbers are starting from 0. Errors are returned as plaintext.
+
+`<attr>~<page num>`
+: Output of the attribute. Page numbers are starting from 0. Errors are returned as signals.
 
 ### Restricting Access to Extended Attributes
 
@@ -723,7 +857,4 @@ scratch area and, once published, are re-mounted as repository revision
 r+1. In this way, CernVM-FS provides snapshots. In case of errors, one
 can safely resume from a previously committed revision.
 
-**Footnotes**
 
-[^1]: As a rule of thumb, file catalogs (when compressed) are reasonably
-    small.
