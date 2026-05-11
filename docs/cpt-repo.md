@@ -1297,6 +1297,15 @@ set and `cvmfs_server gc` run from cron at a time when no publish
 operations will be happening; garbage collection and publish operations
 cannot happen at the same time.
 
+!!! note
+
+    If you plan to run `cvmfs_server gc` manually (instead of relying on
+    `CVMFS_AUTO_GC`), you must first publish a transaction after setting
+    `CVMFS_GARBAGE_COLLECTION=true`. The garbage collection flag is stored
+    in the repository manifest and is only updated during a publish
+    operation. Without this step, `cvmfs_server gc` will fail with
+    "repository does not allow garbage collection".
+
 #### Enabling Garbage Collection on an Existing Replication (Stratum 1)
 
 In order to use automatic garbage collection on a stratum 1 replica, set
