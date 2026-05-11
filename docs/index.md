@@ -26,6 +26,9 @@ many cases, it replaces package managers and shared software areas on
 cluster file systems as means to distribute the software used to process
 experiment data.
 
+We recommend to consult the Release Notes and Known Issues pages before
+doing any upgrades.
+
 ## Contact and Authors
 
 Visit our website on [cernvm.cern.ch](http://cernvm.cern.ch/).

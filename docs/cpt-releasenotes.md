@@ -1,5 +1,12 @@
 # Release Notes for CernVM-FS 2.13.2
 
+!!! note
+
+    In CernVM-FS 2.13.2 there is a race when automounting/-unmounting
+    repositories that lead to clients. A new patch release is in
+    preparation. This issue can be mitigated by increasing the autofs
+    timeout. See the "Known Issues" page for more details.
+
 CernVM-FS 2.13.2 is a fairly large patch release. It fixes two long
 standing issues in the core client code that have caused crashes in some
 rare circumstances. A regression in 2.13 that has led to spurious
