@@ -395,6 +395,12 @@ dt a[id] {
 }
 
 
+.wy-side-nav-search {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+}
+
 .wy-side-nav-search .wy-dropdown > a img.logo,
 .wy-side-nav-search > a img.logo {
     display: block;
