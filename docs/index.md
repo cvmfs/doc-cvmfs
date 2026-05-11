@@ -26,7 +26,7 @@ many cases, it replaces package managers and shared software areas on
 cluster file systems as means to distribute the software used to process
 experiment data.
 
-We recommend to consult the Release Notes and Known Issues pages before
+We recommend to consult the [Release Notes](cpt-releasenotes.md) and [Known Issues](apx-issues.md) pages before
 doing any upgrades.
 
 ## Contact and Authors
