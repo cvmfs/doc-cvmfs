@@ -251,6 +251,9 @@ CVMFS_PROXY_TEMPLATE { #cvmfs_proxy_template }
 CVMFS_PUBLIC_KEY { #cvmfs_public_key }
 : Colon-separated list of repository signing keys.
 
+CVMFS_PREMOUNT_FUSE { #cvmfs_premount_fuse }
+: Set to "no" to use fusermount3 to mount cvmfs (may need the fuse package providing fusermount3 to be installed manually).
+
 CVMFS_QUOTA_LIMIT { #cvmfs_quota_limit }
 : Soft-limit of the cache in Megabyte.
 
