@@ -82,6 +82,7 @@ nav:
     - Security: apx-security.md
     - Parameters: apx-parameters.md
     - Server Infrastructure: apx-serverinfra.md
+    - Package Repositories: apx-package-repos.md
     - RPM Packages: apx-rpms.md
     - Issues: apx-issues.md
     - Contact: apx-contact.md
