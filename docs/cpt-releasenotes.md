@@ -1,110 +1,13 @@
-# Release Notes for CernVM-FS 2.13.3
+# Release Notes for CernVM-FS 2.14.0
 
-CernVM-FS 2.13.3 is again a fairly voluminous patch release. Most
-importantly it fixes a race in auto-mount/unmounts that could hang the
-client process. As a failsafe, it also adds a config option
-`CVMFS_PREMOUNT_FUSE` that can be set to "no" to go back to 2.12
-behavior of using fusermount to mount cvmfs. Furthermore this patch
-release includes a bugfix for garbage collection on stratum 1s - now
-the garbage collection should really be skipped if it is not needed
-(because it has not been run on the stratum 0).
-
-As with previous releases, upgrading clients should be seamless just by
-installing the new package from the repository. As usual, we recommend
-updating only a few worker nodes first and gradually ramp up once the
-new version proves to work correctly. Please take special care when
-upgrading a cvmfs client in NFS mode.
-
-For Stratum 1 servers, there should be no running snapshots during the
-upgrade. For publisher and gateway nodes, all transactions must be
-closed; no active leases must be present before upgrading.
-
-## Bug fixes
-
-2.13.3:
-
--   [client] Fix a race with concurrent auto-mount/umounts
-    ([#3993](https://github.com/cvmfs/cvmfs/issues/3993))
--   [server] cvmfs_server check: add -x option for custom scratch dir
-    ([#4011](https://github.com/cvmfs/cvmfs/issues/4011))
--   [client] Fix CVMFS_VERSION and CVMFS_ARCH availability in config
-    files ([#3999](https://github.com/cvmfs/cvmfs/issues/3999))
--   [client] Add extended info with cvmfs_config status \<repo\>
-    ([#3973](https://github.com/cvmfs/cvmfs/issues/3973))
--   [server] Avoid accessing held mutexes after forking
-    ([#3995](https://github.com/cvmfs/cvmfs/issues/3995))
--   [client] Fix spurious "failed to umount" messages
-    ([#3970](https://github.com/cvmfs/cvmfs/issues/3970))
--   [server] Fix updating of last_gc when no gc is run under gc -a
-    without dry run
-    ([#3947](https://github.com/cvmfs/cvmfs/issues/3947))
--   [geoip] Change geoip database to openhtc source by default
-    ([#3967](https://github.com/cvmfs/cvmfs/issues/3967))
--   [client] Add CVMFS_PREMOUNT_FUSE option to allow fallback to
-    fusermount ([#4017](https://github.com/cvmfs/cvmfs/issues/4017))
-
-# Release Notes for CernVM-FS 2.13.2
-
-!!! note
-
-    In CernVM-FS 2.13.2 there is a race when automounting/-unmounting
-    repositories that lead to clients. A new patch release is in
-    preparation. This issue can be mitigated by increasing the autofs
-    timeout. See the "Known Issues" page for more details.
-
-CernVM-FS 2.13.2 is a fairly large patch release. It fixes two long
-standing issues in the core client code that have caused crashes in some
-rare circumstances. A regression in 2.13 that has led to spurious
-"failed to umount (errno 22)" log messages is fixed as well.
-Furthermore this patch release includes some important improvements for
-stratum one operations (As a reminder, the versioning of CVMFS is
-semantic mostly for the client. New features may be added to the server
-tools and unpacker even in patch releases).
-
-As with previous releases, upgrading clients should be seamless just by
-installing the new package from the repository. As usual, we recommend
-updating only a few worker nodes first and gradually ramp up once the
-new version proves to work correctly. Please take special care when
-upgrading a cvmfs client in NFS mode.
-
-For Stratum 1 servers, there should be no running snapshots during the
-upgrade. For publisher and gateway nodes, all transactions must be
-closed; no active leases must be present before upgrading.
-
-## Bug fixes
-
--   [client] Fix loader return value when automounter unmounts
-    ([#3929](https://github.com/cvmfs/cvmfs/issues/3929))
--   [client] Fix race when using page cache tracker for chunked files
-    ([#3685](https://github.com/cvmfs/cvmfs/issues/3685))
--   [client] Correct PCT Close in cvmfs_open
-    ([#3917](https://github.com/cvmfs/cvmfs/issues/3917))
--   [server] Change gc -a to only do repos where gc was run on the
-    stratum0 ([#3895](https://github.com/cvmfs/cvmfs/issues/3895))
--   [server] Move the no collectable repos message to gc.log
-    ([#3915](https://github.com/cvmfs/cvmfs/issues/3915))
--   [server] Do only one gc -a at a time, and remove need for check -a
-    to be run by root
-    ([#3575](https://github.com/cvmfs/cvmfs/issues/3575))
--   [server] snapshot: Avoid recursion into history
-    ([#3846](https://github.com/cvmfs/cvmfs/issues/3846))
--   [server] Optimize DNS lookups by cvmfs_geo.py to ignore short host
-    names ([#3920](https://github.com/cvmfs/cvmfs/issues/3920))
--   [client] Add cvmfs_talk metrics prometheus command for faster
-    telemetry ([#3944](https://github.com/cvmfs/cvmfs/issues/3944))
--   [rpm] Temporarily re-add fuse3 dependency to server to fix fstab
-    [#3943](https://github.com/cvmfs/cvmfs/issues/3943)
--   [build system] cmake: add BUILTIN_EXTERNALS_LIST and EXCLUDE
-    options ([#3940](https://github.com/cvmfs/cvmfs/issues/3940))
--   [client] Add CVMFS_VERSION and CVMFS_VERSION_NUMERIC env vars to
-    config ([#3934](https://github.com/cvmfs/cvmfs/issues/3934))
--   [rpm] fix logrotate config for el8
-    ([#3932](https://github.com/cvmfs/cvmfs/issues/3932))
-
-# Release Notes for CernVM-FS 2.13.1
-
-CernVM-FS 2.13.1 is a patch release that fixes a few bugs introduced in
-2.13.0.
+CernVM-FS 2.14.0 is a feature release with a number of notable additions
+on both the client and the server side. On the client, it introduces
+file bundle prefetching, and reworks the code to  reduce the required
+client capabilities to a minimum. On the server, highlights include partial
+replication of repositories, a mountless publisher mode (`mkfs -P`),
+batched S3 deletes, and faster deletion of nested catalogs during
+ingest. Additionally, a number of long standing issues, such as the auto-tag timespan setting being ignored on a publisher, or abort not working in out-of-disk-condition are fixed. The container unpacking tool DUCC gains multi-arch image support and can now convert images
+without FUSE mounts.
 
 As with previous releases, upgrading clients should be seamless just by
 installing the new package from the repository. As usual, we recommend
@@ -118,106 +21,126 @@ closed; no active leases must be present before upgrading.
 
 !!! note
 
-    Packages no longer support libfuse2 for the new platforms: RHEL/Alma >=
-    10, Fedora >= 42, Debian >= 13 and Ubuntu >= 25.04. For package
-    maintainers: Libfuse2 support is turned off by default, and has to be
-    enabled explicitly with the flag -DBUILD_LIBFUSE2 It will be deprecated
-    completely in a future version, and the dependency can already be
-    removed, as libfuse3 is required by default. The cvmfs package should
-    now explicitly depend on the cvmfs_fuse3 libs packaged in cvmfs-fuse3
-    package to ensure they are installed.
+    For package maintainers: the bundled `vjson` JSON parser has been
+    replaced by [nlohmann-json](https://github.com/nlohmann/json). The
+    `vjson` dependency can be dropped; on RPM-based distributions the
+    build now depends on `nlohmann-json` (a header-only library) instead.
 
 Packages are available for both the x86_64 and aarch64 architectures,
-for current debian- and rhel-based distros. We've added packages for
-Almalinux 10 and Fedora 42 on top of Debian 13 already introduced in the
-previous release. Do try them out!
+for current debian- and rhel-based distros.
+
+## New features and improvements
+
+### Client
+
+-   [client] File bundle prefetching
+    ([#4002](https://github.com/cvmfs/cvmfs/issues/4002))
+-   [client] Implement FUSE passthrough
+    ([#4006](https://github.com/cvmfs/cvmfs/issues/4006))
+-   [client] Reduce client capabilities to minimum
+    ([#3730](https://github.com/cvmfs/cvmfs/issues/3730))
+-   [client] Add support for xattrs with values up to 64k
+    ([#3622](https://github.com/cvmfs/cvmfs/issues/3622))
+-   [client] Add a `revision_timestamp` magic xattr
+    ([#4183](https://github.com/cvmfs/cvmfs/issues/4183))
+-   [client] Add `CVMFS_REPOSITORIES_NOMOUNT` parameter to reduce syslog
+    noise ([#4181](https://github.com/cvmfs/cvmfs/issues/4181))
+-   [client] Per-repo granularity of `CVMFS_DEBUGLOG` at reload
+    ([#4085](https://github.com/cvmfs/cvmfs/issues/4085))
+-   [client] Skip open files on cache cleanup when possible
+    ([#4029](https://github.com/cvmfs/cvmfs/issues/4029))
+-   [client] Allow rootless `cvmfs_config chksetup`
+    ([#4214](https://github.com/cvmfs/cvmfs/issues/4214))
+-   [client] Update prometheus exporter metric names
+    ([#4282](https://github.com/cvmfs/cvmfs/issues/4282))
+
+### Server
+
+-   [server] Partial replication of a repository
+    ([#4184](https://github.com/cvmfs/cvmfs/issues/4184))
+-   [server] Convenience features: `mkfs -P` (mountless publisher) and
+    `cvmfs_server connect-gw`
+    ([#4182](https://github.com/cvmfs/cvmfs/issues/4182))
+-   [server] Graceful abort of a transaction under out-of-diskspace
+    conditions ([#4158](https://github.com/cvmfs/cvmfs/issues/4158))
+-   [server] Batched S3 deletes, add `CVMFS_S3_BATCH_DELETE_SIZE`
+    ([#4122](https://github.com/cvmfs/cvmfs/issues/4122),
+    [#4210](https://github.com/cvmfs/cvmfs/issues/4210),
+    [#4199](https://github.com/cvmfs/cvmfs/issues/4199))
+-   [server] ingest: delete nested catalogs by unlinking their reference
+    by default (fast delete); add `CVMFS_INGEST_FAST_DELETE` to restore
+    legacy traversal
+    ([#4124](https://github.com/cvmfs/cvmfs/issues/4124),
+    [#4198](https://github.com/cvmfs/cvmfs/issues/4198))
+-   [server] Add `cvmfs_server ingestsql` utility
+    ([#4099](https://github.com/cvmfs/cvmfs/issues/4099))
+-   [server] Add `cvmfs_swissknife rotate-statsdb`
+    ([#4163](https://github.com/cvmfs/cvmfs/issues/4163))
+-   [server] Add `CVMFS_INFO_HEADER`
+    ([#3735](https://github.com/cvmfs/cvmfs/issues/3735))
+-   [server] New tools for container overlays on catalog level
+    ([#4092](https://github.com/cvmfs/cvmfs/issues/4092))
+-   [server] Allow to send `CVMFS_AUTO_TAG_TIMESPAN` from publisher, and
+    set a 2 week default for the autotag timespan
+    ([#4204](https://github.com/cvmfs/cvmfs/issues/4204),
+    [#4278](https://github.com/cvmfs/cvmfs/issues/4278))
+-   [server] Summarize `cvmfs_server check` errors
+    ([#4277](https://github.com/cvmfs/cvmfs/issues/4277))
+-   [server] Reduce output for non-interactive status, and use proxy when
+    contacting stratum 1s
+    ([#4227](https://github.com/cvmfs/cvmfs/issues/4227))
+-   [server] Allow `cvmfs_server resign` without `.crt` if
+    `.cvmfswhitelist` exists
+    ([#4128](https://github.com/cvmfs/cvmfs/issues/4128))
+
+### Gateway
+
+-   [gw] Implement tag removal on publishers connected to a gateway
+    ([#4285](https://github.com/cvmfs/cvmfs/issues/4285))
+-   [gw] Add endpoint to refresh lease
+    ([#4294](https://github.com/cvmfs/cvmfs/issues/4294))
+
+### DUCC
+
+-   [ducc] Multi-arch image support
+    ([#3897](https://github.com/cvmfs/cvmfs/issues/3897),
+    [#4170](https://github.com/cvmfs/cvmfs/issues/4170))
+-   [ducc] `cvmfs_ducc convert` without FUSE mounts
+    ([#4288](https://github.com/cvmfs/cvmfs/issues/4288))
+-   [ducc] Add `delete-images` and `prune-images`
+    ([#4171](https://github.com/cvmfs/cvmfs/issues/4171))
+-   [ducc] Support publishing to CVMFS repository subdirectories
+    ([#4076](https://github.com/cvmfs/cvmfs/issues/4076))
+-   [ducc] Limit concurrency in downloads and download only layers not
+    already unpacked
+    ([#4117](https://github.com/cvmfs/cvmfs/issues/4117),
+    [#4130](https://github.com/cvmfs/cvmfs/issues/4130))
+-   [ducc] Deprecate `loop` command
+    ([#4120](https://github.com/cvmfs/cvmfs/issues/4120))
 
 ## Bug fixes
 
-> -   \[client\] Fix mount options that can lead to "futimes" error
->     with docker ([#3872](https://github.com/cvmfs/cvmfs/issues/3872))
-> -   \[rpm\] Allow builds without libfuse2
->     ([#3879](https://github.com/cvmfs/cvmfs/issues/3879))
-> -   \[client\] Fix a segfault in one of the unmount branches of the
->     loader ([#3873](https://github.com/cvmfs/cvmfs/issues/3873))
-> -   \[client\] Fix host reset timeout (CVMFS_HOST_RESET_AFTER)
->     ([#3864](https://github.com/cvmfs/cvmfs/issues/3864))
+-   [client] Fix bug when using libcurl 8.20+
+    ([#4252](https://github.com/cvmfs/cvmfs/issues/4252))
+-   [server] Always refresh mountpoint for gateway publication to fix a
+    race ([#4303](https://github.com/cvmfs/cvmfs/issues/4303))
+-   [server] Never publish a snapshot with a missing root catalog
+    ([#4272](https://github.com/cvmfs/cvmfs/issues/4272))
+-   [gw] Don't hold `leaseMutex` during commit
+    ([#4274](https://github.com/cvmfs/cvmfs/issues/4274))
+-   [ducc] Ignore missing hardlink targets when ingesting container
+    layers ([#4286](https://github.com/cvmfs/cvmfs/issues/4286))
+-   [ducc] Fix gc for multiarch images
+    ([#4197](https://github.com/cvmfs/cvmfs/issues/4197))
+-   [ducc] Proper backoff on 429 responses from registry
+    ([#4110](https://github.com/cvmfs/cvmfs/issues/4110))
 
-# Release Notes for CernVM-FS 2.13.0
+## Packaging
 
-CernVM-FS 2.13.0 is a minor release that has a number of important fixes
-for cvmfs_server ingest, mounting cvmfs on Ubuntu 24.10+, and some small
-improvements.
-
-!!! note
-
-    For admins of stratum-1s: The cvmfs-server package now installs default
-    logrotate configs to /etc/logrotate.d/cvmfs and
-    /etc/logrotate.d/cvmfs-statsdb. If you prefer not to use logrotate for
-    snapshot logs and stats db, create an empty file under these paths or
-    remove them after installation. When installed or upgraded from the
-    packages, cvmfs-server should not overwrite any modification you make.
-
-!!! note
-
-    For package maintainers of cvmfs-server: You can install the previously
-    mentioned logrotate files with the appropriate config file behavior, and
-    add an optional dependency on logrotate.
-
-As with previous releases, upgrading clients should be seamless just by
-installing the new package from the repository. As usual, we recommend
-updating only a few worker nodes first and gradually ramp up once the
-new version proves to work correctly. Please take special care when
-upgrading a cvmfs client in NFS mode.
-
-For Stratum 1 servers, there should be no running snapshots during the
-upgrade. For publisher and gateway nodes, all transactions must be
-closed; no active leases must be present before upgrading.
-
-Packages are available for both the x86_64 and aarch64 architectures,
-for current debian- and rhel-based distros. We no longer provide
-packages for Centos7 and Ubuntu 20.04, but add packages for Debian 13.
-
-## Bug fixes
-
-> -   \[server\] Do not corrupt repository when ingesting a tarball to a
->     base dir that contains a double slash
->     ([#3786](https://github.com/cvmfs/cvmfs/issues/3786))
-> -   \[server\] swissknife_lease: Fix bug in response receiver callback
->     ([#3823](https://github.com/cvmfs/cvmfs/issues/3823))
-> -   \[client\] Fixed unmounting after stopping autofs in Ubuntu 24.04
->     ([#3808](https://github.com/cvmfs/cvmfs/issues/3808))
-> -   \[client\] Fixed permission issue in mounting cvmfs with apparmor
->     (Ubuntu 24.10+)
->     ([#3795](https://github.com/cvmfs/cvmfs/issues/3795))
-> -   \[server\] Fixed garbage collection lock to avoid spurious check
->     failures ([#3815](https://github.com/cvmfs/cvmfs/issues/3815))
-> -   \[shrinkwrap\] Avoid possible copy errors by ensuring that
->     directories are writeable
->     ([#3798](https://github.com/cvmfs/cvmfs/issues/3798))
-> -   \[macos\] Chksetup for macfuse no longer complains about missing
->     FUSE-T ([#3800](https://github.com/cvmfs/cvmfs/issues/3800))
-> -   \[macos\] Run apfs.util after creating firmlinks on macos
->     ([#3776](https://github.com/cvmfs/cvmfs/issues/3776))
-
-## Improvements and changes
-
-> -   \[client\] Bugreport no longer blocks, and collects as much data
->     as possible when client stuck
->     ([#3768](https://github.com/cvmfs/cvmfs/issues/3768))
-> -   \[client\] Improved EIO logging
->     ([#3723](https://github.com/cvmfs/cvmfs/issues/3723))
-> -   \[gateway, ducc, snapshotter\] bump and cleanup golang
->     dependencies
-> -   \[server\] Ingest command can now delete paths containing colons
->     (:) ([#3792](https://github.com/cvmfs/cvmfs/issues/3792))
-> -   \[server\] Install default logrotate configs for /var/log/cvmfs
->     and statsdb ([#3839](https://github.com/cvmfs/cvmfs/issues/3839))
-> -   \[client\] Add cvmfs_config killall options -r(reset fuse) /
->     -s(stuck fuse reset) to abort fuse connection
->     ([#3831](https://github.com/cvmfs/cvmfs/issues/3831))
-> -   \[rpm\] Automatically set permissions for cvmfs_ducc
->     ([#3790](https://github.com/cvmfs/cvmfs/issues/3790))
-> -   \[client\] chksetup: Now uses max-time instead of connect-timeout
->     to avoid blocking when contacting stratum 1s
->     ([#3822](https://github.com/cvmfs/cvmfs/issues/3822))
+-   [rpm] Replace the `vjson` dependency with `nlohmann-json`
+-   [rpm] Migrate from bootstrap.sh to cmake: libarchive
+    ([#4064](https://github.com/cvmfs/cvmfs/issues/4064))
+-   [container] Add optional flag to run `cvmfs_fsck` at start
+    ([#4188](https://github.com/cvmfs/cvmfs/issues/4188))
+-   [macos] Compile with `cxxstd=11`
+    ([#4101](https://github.com/cvmfs/cvmfs/issues/4101))
