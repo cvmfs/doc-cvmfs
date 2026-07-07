@@ -78,6 +78,7 @@ nav:
     - Notification System: cpt-notification-system.md
     - XCache: cpt-xcache.md
     - Large Scale: cpt-large-scale.md
+    - Filebundles: cpt-file-bundles.md
   - Appendix:
     - Security: apx-security.md
     - Parameters: apx-parameters.md
