@@ -67,6 +67,7 @@ nav:
   - Advanced Topics:
     - HPC: cpt-hpc.md
     - Shrinkwrap: cpt-shrinkwrap.md
+    - Partial Replication: cpt-partial-replication.md
     - Plugins: cpt-plugins.md
     - Telemetry: cpt-telemetry.md
     - Tracer: cpt-tracer.md
