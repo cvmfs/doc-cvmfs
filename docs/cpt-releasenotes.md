@@ -1,3 +1,50 @@
+# Release Notes for CernVM-FS 2.14.1
+
+CernVM-FS 2.14.1 is a patch release that fixes a few issues found
+during testing of 2.14.0. On the client side, it fixes 
+some issues with the new file bundle prefetching feature
+including a trigger inconsistency.
+On the server, it
+fixes a possible (rare)  catalog corruption that could occur on a certain migration
+path, and fixes the S3 V2 signature for multi-object deletes with
+DNS-style buckets. The shrinkwrap tool also receives several fixes.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend
+updating only a few worker nodes first and gradually ramp up once the
+new version proves to work correctly. Please take special care when
+upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the
+upgrade. For publisher and gateway nodes, all transactions must be
+closed; no active leases must be present before upgrading.
+
+## Bug fixes
+
+2.14.1:
+
+-   [client] Fix metalink request retry and failover handling
+    ([#4380](https://github.com/cvmfs/cvmfs/issues/4380))
+-   [client] Prefetch file bundles asynchronously and support libcvmfs
+    ([#4359](https://github.com/cvmfs/cvmfs/issues/4359))
+-   [server] Avoid a catalog corruption on a certain migration path
+    ([#4362](https://github.com/cvmfs/cvmfs/issues/4362))
+-   [client] Fix file bundle trigger inconsistency and other issues
+    ([#4351](https://github.com/cvmfs/cvmfs/issues/4351))
+-   [client] Fix `repo_metainfo` magic xattr always reporting "manifest
+    not available"
+    ([#4344](https://github.com/cvmfs/cvmfs/issues/4344))
+-   [client] aliencache: fix cache dir error logic
+    ([#4350](https://github.com/cvmfs/cvmfs/issues/4350))
+-   [server] Fix S3 V2 signature for multi-object delete with DNS
+    buckets ([#4336](https://github.com/cvmfs/cvmfs/issues/4336))
+-   [shrinkwrap] Fix spec tree exclusion and support gitignore-style
+    re-inclusion ([#4356](https://github.com/cvmfs/cvmfs/issues/4356))
+-   [shrinkwrap] Create the `.data` directory structure in parallel
+    ([#4348](https://github.com/cvmfs/cvmfs/issues/4348))
+-   [shrinkwrap] Surface the real reason for cache init failures
+    ([#4346](https://github.com/cvmfs/cvmfs/issues/4346))
+
 # Release Notes for CernVM-FS 2.14.0
 
 CernVM-FS 2.14.0 is a feature release with a number of notable additions
