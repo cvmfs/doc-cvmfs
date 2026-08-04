@@ -18,7 +18,7 @@ section.
 ## Parrot-Mounted CernVM-FS instead of Fuse Module
 
 Instead of accessing <code class="cvmfs-inline-path">/cvmfs</code> through a Fuse module, processes can use
-the [Parrot connector](http://cernvm.cern.ch/portal/filesystem/parrot).
+the [Parrot connector](https://cctools.readthedocs.io/en/latest/parrot/).
 The parrot connector works on x86_64 Linux if the `ptrace` system call
 is not disabled. In contrast to a plain copy of a CernVM-FS repository
 to a shared file system, this approach has the following advantages:
@@ -117,7 +117,7 @@ into the same cache directory.
 ### Access from the Nodes
 
 In order to access a preloaded cache from the nodes, [set the path to
-the directory](http://cernvm.cern.ch/portal/filesystem/parrot) as an
+the directory](cpt-configure.md#alien-cache) as an
 *Alien Cache*. Since there won't be cache misses, parrot or fuse
 clients do not need to download additional files from the network.
 

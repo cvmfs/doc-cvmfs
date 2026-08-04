@@ -297,7 +297,7 @@ application similar to gdb sandboxes. But instead of debugging the
 application, parrot transparently rewrites file system calls and can
 effectively provide <code class="cvmfs-inline-path">/cvmfs</code> to an application. We recommend using the
 [latest precompiled
-parrot](http://ccl.cse.nd.edu/software/downloadfiles.php), which has
+parrot](https://cctools.readthedocs.io/en/latest/install/), which has
 CernVM-FS support built-in.
 
 In order to sandbox a command `<CMD>` with options `<OPTIONS>` in
