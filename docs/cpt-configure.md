@@ -1265,6 +1265,11 @@ include in the `cvmfs-info` header, with strings substituted as following:
 If `CVMFS_INFO_HEADER` is set, the `cvmfs-info` header will be sent even if
 `CVMFS_SEND_INFO_HEADER` is not set.
 
+Here is an example using all of the substitutions:
+```
+CVMFS_INFO_HEADER="%{path} pid:%{pid} uid:%{uid} gid:%{gid}%{env:CVMFS_INFO}"
+```
+
 Note that
 [Frontier Squid](https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid)
 logs `cvmfs-info` headers by default.
