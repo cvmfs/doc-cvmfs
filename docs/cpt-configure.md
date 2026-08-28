@@ -24,6 +24,12 @@ The `.conf` and `.local` configuration files are key-value pairs in the
 form `PARAMETER=value`. For boolean parameters, `yes`/`no`, `on`/`off`,
 `true`/`false` or `1`/`0` can be used as truth values. These are
 case-insensitive, so `TRUE`, `On`, and `yes` are equivalent.
+Generally speaking, `.conf` files are meant to be provided "out-of-the-box",
+by configuration packages or other upstream sources, while `.local` files 
+are meant for administrators or end users to apply their own local
+configurations which can override the upstream configuration. Using 
+`.conf` and `.local` files in this way therefore avoids conflicting
+modifications of the same configuration files.
 
 The configuration files are sourced by /bin/sh. Hence, a limited set of
 shell commands can be used inside these files including comments, `if`
@@ -44,16 +50,25 @@ set to the parent directory of the configuration file at hand.
 : Set of internal helper functions.
 
 `default.conf`
-: Set of base parameters.
+: Set of base parameters. Generally should not be modified.
+
+`default.local`
+: Put your required parameters here. Applies globally to all repositories.
 
 `default.d/$config.conf`
 : Adjustments to the default.conf configuration, usually installed by a cvmfs-config-\... package. Read before default.local.
 
 `domain.d/$domain.conf`
-: Domain-specific parameters and implementations of the functions in `config.sh`.
+: Domain-specific parameters and implementations of the functions in `config.sh`; generally provided by upstream sources and should not be modified.
+
+`domain.d/$domain.local`
+: Put your domain-specific configuration here.
 
 `config.d/$repository.conf`
-: Repository-specific parameters and implementations of the functions in `config.sh`.
+: Repository-specific parameters and implementations of the functions in `config.sh`; generally provided by upstream sources and should not be modified.
+
+`config.d/$repository.local`
+: Put your repository-specific configuration here.
 
 `keys/`
 : Contains domain-specific sub directories with public keys used to verify the digital signature of file catalogs.
