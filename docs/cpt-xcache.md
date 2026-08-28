@@ -1,7 +1,7 @@
 # Setting up an Xcache reverse proxy
 This page describes how to set up an experimental HTTP reverse proxy
 layer for CernVM-FS based on
-[Xcache](http://xrootd.org/doc/dev47/pss_config.htm).
+[Xcache](https://xrootd.web.cern.ch/doc/dev6/pss_config.htm).
 
 !!! note
 

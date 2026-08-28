@@ -82,7 +82,7 @@ that on every node one pod exposes <code class="cvmfs-inline-path">/cvmfs</code>
 use the cvmfs service container.
 
 Alternatively, a
-[CSI-plugin](https://clouddocs.web.cern.ch/containers/tutorials/cvmfs.html#kubernetes)
+[CSI-plugin](https://github.com/cvmfs-contrib/cvmfs-csi)
 makes it simple to mount a repository inside a Kubernetes managed
 container. The plugin is distributed and available to the CERN
 Kubernetes managed clusters.
