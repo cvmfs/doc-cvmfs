@@ -173,6 +173,9 @@ CVMFS_INFLUX_METRIC_NAME { #cvmfs_influx_metric_name }
 CVMFS_INFLUX_PORT { #cvmfs_influx_port }
 : Port of the host (receiver) of the InfluxDB Telemetry Aggregator
 
+CVMFS_INFO_HEADER ( #cvmfs_info_header )
+: Defines the contents of a `cvmfs-info` HTTP header sent by the client.
+
 CVMFS_IPFAMILY_PREFER { #cvmfs_ipfamily_prefer }
 : Which IP protocol to prefer when connecting to proxies. Can be either 4 or 6.
 
@@ -276,7 +279,7 @@ CVMFS_ROOT_HASH { #cvmfs_root_hash }
 : Hash of the root file catalog, implies `CVMFS_AUTO_UPDATE=no`.
 
 CVMFS_SEND_INFO_HEADER { #cvmfs_send_info_header }
-: If set to *yes*, include the cvmfs path of downloaded data in HTTP headers.
+: If set to *yes*, include the relative path of downloaded data in the `cvmfs-info` HTTP header, unless CVMFS_INFO_HEADER is set which overrides that content.
 
 CVMFS_SERVER_CACHE_MODE { #cvmfs_server_cache_mode }
 : Enable special cache semantics for a client used as a publisher's repository base line.

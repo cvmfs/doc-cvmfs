@@ -24,9 +24,7 @@ One option that is particularly important when there are a lot of worker
 nodes and jobs that start close together is the
 [collapsed_forwarding]{.title-ref} option. This combines multiple
 simultaneous requests for the same object into a single request to a
-Stratum 1 server. This did not work properly on squid versions prior to
-3.5.28, which includes the default squid on EL7. This also works
-properly in Frontier Squid.
+Stratum 1 server.  This also works properly in Frontier Squid.
 
 In any case, cache sizes and access control needs to be configured in
 order to use the Squid server with CernVM-FS. In order to do so, browse

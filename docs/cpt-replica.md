@@ -116,7 +116,7 @@ squid called frontier-squid. It is kept up to date with the latest squid
 bug fixes and has features for easier upgrading and monitoring.
 Step-by-step instructions for setting it up with a Stratum 1 is
 available in the [OSG
-documentation](https://opensciencegrid.org/docs/other/install-cvmfs-stratum1/#configuring-frontier-squid).
+documentation](https://osg-htc.org/docs/other/install-cvmfs-stratum1/#configuring-frontier-squid).
 
 Otherwise, a [squid]{.title-ref} package is available in most Linux
 operating systems. The Squid configuration differs from the site-local

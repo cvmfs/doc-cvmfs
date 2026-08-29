@@ -1195,16 +1195,22 @@ metadata can be gathered by `df -i`.
 CernVM-FS offers multiple options to remotely monitor client status and
 behavior.
 
-Since the early days, CernVM-FS supports the [Nagios monitoring
+CernVM-FS supports the [Nagios monitoring
 system](http://www.nagios.org) [[Schubert08]](apx-references.md#Schubert08). A checker plugin is
 available [on our website](https://cernvm.cern.ch/fs/#download).
 
-Since CernVM-FS 2.11 there are two more options: 1)
+In addition, there are two more options: 1)
 Telemetry Aggregator <cpt_telemetry>
 that allows the remote monitoring of all counters of
-`cvmfs_talk internal affairs`, and 2) sending an extended CURL HTTP
-header for each download request. For this, `CVMFS_HTTP_TRACING` must be
-set. It will then include `uid`, `gid`, and `pid` with each download
+`cvmfs_talk internal affairs`, and 2) sending extended HTTP
+headers with each download request.
+The latter is done with either `CVMFS_HTTP_TRACING` or 
+`CVMFS_SEND_INFO_HEADER`/`CVMFS_INFO_HEADER` settings.
+
+### CVMFS_HTTP_TRACING
+
+If `CVMFS_HTTP_TRACING` is set, http headers
+will include `uid`, `gid`, and `pid` with each download
 request.
 
 !!! note
@@ -1235,6 +1241,38 @@ ignored. Invalid keys are ignored. An example is given below
     X-CVMFS-PID: 561710
     X-CVMFS-GID: 0
     X-CVMFS-UID: 0
+
+### CVMFS_SEND_INFO_HEADER/CVMFS_INFO_HEADER
+
+If `CVMFS_SEND_INFO_HEADER` is set to *yes*, and `CVMFS_INFO_HEADER` is
+not set, then http requests will include the relative path of the
+requested file in a `cvmfs-info` header.
+
+Alternatively, `CVMFS_INFO_HEADER` can be set to specify the things to
+include in the `cvmfs-info` header, with strings substituted as following:
+
+1. `%{path}` - the relative path of the requested file
+2. `%{pid}` - the requester's process id
+3. `%{uid}` - the requester's user id
+4. `%{gid}` - the requester's group id
+5. `%{env:VARNAME}` - the value of $VARNAME in the requester's process
+   space, preceded by a blank if it exists and is not empty.  Note that
+   this requires that the cvmfs process hold on to the CAP_DAC_READ_SEARCH
+   capability which allows it to read from any file on the host machine.
+   That works with cvmfs packages installed by the root user but not
+   when cvmfs is started as an unprivileged user.
+
+If `CVMFS_INFO_HEADER` is set, the `cvmfs-info` header will be sent even if
+`CVMFS_SEND_INFO_HEADER` is not set.
+
+Here is an example using all of the substitutions:
+```
+CVMFS_INFO_HEADER="%{path} pid:%{pid} uid:%{uid} gid:%{gid}%{env:CVMFS_INFO}"
+```
+
+Note that
+[Frontier Squid](https://twiki.cern.ch/twiki/bin/view/Frontier/InstallSquid)
+logs `cvmfs-info` headers by default.
 
 ## Debug Logs
 The `cvmfs2` binary forks a watchdog process on start. Using this
