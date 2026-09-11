@@ -86,6 +86,8 @@ for current debian- and rhel-based distros.
     ([#4006](https://github.com/cvmfs/cvmfs/issues/4006))
 -   [client] Reduce client capabilities to minimum
     ([#3730](https://github.com/cvmfs/cvmfs/issues/3730))
+-   [client] Add `CVMFS_INFO_HEADER`
+    ([#3735](https://github.com/cvmfs/cvmfs/issues/3735))
 -   [client] Add support for xattrs with values up to 64k
     ([#3622](https://github.com/cvmfs/cvmfs/issues/3622))
 -   [client] Add a `revision_timestamp` magic xattr
@@ -123,8 +125,6 @@ for current debian- and rhel-based distros.
     ([#4099](https://github.com/cvmfs/cvmfs/issues/4099))
 -   [server] Add `cvmfs_swissknife rotate-statsdb`
     ([#4163](https://github.com/cvmfs/cvmfs/issues/4163))
--   [server] Add `CVMFS_INFO_HEADER`
-    ([#3735](https://github.com/cvmfs/cvmfs/issues/3735))
 -   [server] New tools for container overlays on catalog level
     ([#4092](https://github.com/cvmfs/cvmfs/issues/4092))
 -   [server] Allow to send `CVMFS_AUTO_TAG_TIMESPAN` from publisher, and
