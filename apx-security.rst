@@ -3,10 +3,13 @@
 Security Considerations
 =======================
 
-CernVM-FS provides end-to-end data integrity and authenticity using a signed
-Merkle Tree. CernVM-FS clients verify the signature and the content hashes of
-all downloaded data. Once a particular revision of a file system is stored in
-a client's local cache, the client will not apply an older revision anymore.
+CernVM-FS verifies end-to-end data integrity and authenticity using a signed
+Merkle Tree. CernVM-FS clients verify the cryptographic signature and the
+content hashes of all downloaded data. (This is a stronger form of integrity
+verification than using TLS, because it ensures the integrity of the content
+rather than the connection.) Once a particular revision of a file system is
+stored in a client's local cache, the client will not apply an older revision
+anymore.
 
 The public key used to ultimately verify a repository's signature needs to be
 distributed to clients through a channel different from CernVM-FS content
@@ -21,12 +24,32 @@ Besides the client, data is also verified by the replication code (Stratum 1 or
 preloaded cache) and by the release manager machine in case the repository is
 stored in S3 and not on a local file system.
 
-CernVM-FS does **not** provide data confidentiality out of the box. By default,
-data is transferred through HTTP and thus only public data should be stored on
-CernVM-FS. However, CernVM-FS can be operated with HTTPS data transport. In
-combination with client-authentication using an authz helper (see Section
-:ref:`sct_authz`), CernVM-FS can be configured for end-to-end data
-confidentiality.
+CernVM-FS does **not** provide data confidentiality out of the box. In the
+standard deployment scenario, repositories contain public content, and data is
+transferred via HTTP in order to enable caching in forward proxy servers, which
+is required for scalability and performance. CernVM-FS can be operated with
+HTTPS data transport, but this breaks site-local cacheability, as a forward
+caching proxy would be considered a MITM attacker in the context of a HTTPS
+connection to a stratum server. Therefore, HTTPS should only be used in the
+following situations:
+
+- If it is necessary to preserve the confidentiality of client data access
+  (i.e. concealing which clients are accessing which files - even though the
+  files may be public).
+- If an alternative caching solution is employed (e.g. a commercial CDN with
+  TLS termination), eliminating the need for conventional caching forward
+  proxy servers.
+- To host repositories of confidential data, in conjunction with an
+  authorization mechanism as described below.
+
+Note that most commercial object storages support unencrypted HTTP access, as
+it is a common requirement for CDN edge nodes and reverse proxying.
+
+CernVM-FS can also be used to deliver confidential data. For example, if HTTPS
+is used in combination with client-authentication using an authz helper (see
+Section :ref:`sct_authz`), CernVM-FS can be configured for end-to-end data
+confidentiality. Alternatively, HTTP transport and firewall rules can be used
+to allow access only from authorized trusted IP addresses.
 
 Once downloaded and stored in a cache, the CernVM-FS client fully trusts the
 cache. Data in the cache can be checked for silent corruption but no integrity
