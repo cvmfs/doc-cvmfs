@@ -27,11 +27,12 @@ CernVM-FS can be operated with HTTPS data transport, but this breaks
 site-local cacheability, as a forward caching proxy would be considered
 a MITM attacker in the context of a HTTPS connection to a stratum server.
 Therefore, HTTPS should only be used in the following situations:
-- If it is necessary to preserve the confidentiality of client data access (i.e. concealing which clients are accessing which files - even though the files may be public).
-- If an alternative caching solution is employed (e.g. a commercial CDN with TLS termination), eliminating the need for conventional caching forward proxy servers.
-- To host repositories of confidential data, in conjunction with an authorization mechanism as described below.
 
-Note that most commercial object storages support unencrypted HTTP access, as it is a common requirement for CDN edge nodes and reverse proxying.
+-   If it is necessary to preserve the confidentiality of client data access (i.e. concealing which clients are accessing which files - even though the files may be public).
+-   If an alternative caching solution is employed (e.g. a commercial CDN with TLS termination), eliminating the need for conventional caching forward proxy servers.
+-   To host repositories of confidential data, in conjunction with an authorization mechanism as described below.
+
+Note that nearly all commercial object storages support unencrypted HTTP access, as it is a common requirement for CDN edge nodes and reverse proxying.
 
 CernVM-FS can also be used to deliver confidential data.
 For example, if HTTPS is used in combination with client-authentication using an
