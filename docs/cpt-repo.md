@@ -551,6 +551,94 @@ this:
 
     cat /path/to/some/file | cvmfs_swissknife graft -i - -o /cvmfs/repo.example.com/my_file
 
+### Publishing with ingestsql
+
+This is a publishing workflow alternative to the canonical [transaction/publish way](#repository-update).
+
+`cvmfs_swissknife ingestsql` command tells CVMFS Gateway to update the catalogs according to what is in the SQLite database file supplied as an input parameter.
+
+In the database, there are descriptions of files, directories and links to create or modify, and the list of entities to delete.
+These entries contain metadata such as filename, permissions mode, modification time, owner user and group number, size, hash etc.
+
+`ingestsql` connects to CVMFS Gateway and relays such metadata updates to it.
+Gateway then incorporates these info the catalogs and increments the revision, making the updates visible to all clients.
+
+For these metadata updates to be correct, the newly added files listed in the database must be placed at the locations specified, using other tools.
+For S3-based CVMFS repository, `s3cmd` or `aws s3 cp` commands can be used.
+See also `cvmfs-posix-tools`, where utilities such as `cvmfs-rsync` combine the functionality of uploading the actual files and updating the repository metadata using `ingestsql`.
+
+#### ingestsql arguments
+
+```
+# cvmfs_swissknife help
+...
+Command ingestsql
+--
+Graft the contents of a SQLite DB to the repository
+Options:
+ -D    input sqlite DB
+ -N    fully qualified repository name
+ -g    gateway URL (optional)
+ -w    stratum 0 base url (optional)
+ -t    temporary directory (will try TMPDIR if not set) (optional)
+ -@    proxy URL (optional)
+ -k    public key (optional)
+ -l    lease path (optional)
+ -p    prefix to add to lease and all graft files (optional)
+ -q    number of concurrent write jobs (optional)
+ -s    gateway secret (optional)
+ -3    s3 config (optional)
+ -a    Allow additions (default true, false if -d specified) (optional)
+ -d    Allow deletions (optional)
+ -x    Force deletion of any lease (optional)
+ -c    Enable corefile generation (requires ulimit -c >0) (optional)
+ -n    create empty database file (optional)
+ -C    config prefix, default /etc/cvmfs/gateway-client/ (optional)
+ -B    mount point to block on pending visibility of update (optional)
+ -W    Timeout, in seconds, for waiting on pending visibility of update (default: if -B given, wait infinitely; if no -B, immediate exit) (optional)
+ -T    reset TTL in sec (optional)
+ -z    Create missing nested catalogs (optional)
+ -r    lease retry interval (optional)
+ -Z    check and set completed_graft property (optional)
+ -P    priority for graft (integer) (optional)
+ -v    Enable verbose logging (optional)
+```
+
+There is also a wrapper `cvmfs_server ingestsql`.
+
+#### Configuration files
+
+`cvmfs_swissknife ingestsql` uses an optional config file at a location `<config-prefix>/<repo name>/config`, where `config-prefix` is set by `-C` command line argument, defaulting to `/etc/cvmfs/gateway-client/`.
+
+The config file can contain the following parameters.
+Each parameter has a corresponding command line option which overrides the config file.
+
+* `CVMFS_GATEWAY` - HTTP URL for requests to CVMFS Gateway (`-g`);
+* `CVMFS_STRATUM0` - HTTP URL for repo access (`-w`);
+* `CVMFS_HTTP_PROXY` - HTTP proxy URL, or literal `DIRECT` (`-@`).
+
+#### Examples
+
+```
+cvmfs_swissknife ingestsql -D '' -N '' -n my.db
+echo HELLO > hello_ingestsql.txt
+wc --bytes hello_ingestsql.txt # 6
+sha1sum hello_ingestsql.txt # a8eec30a5b2d71bc890175f5b361ebb28d7c54a8
+sqlite3 my.db <<< "insert into files (name, size, hashes) values ('hello_ingestsql.txt', 6, 'a8eec30a5b2d71bc890175f5b361ebb28d7c54a8');"
+s3cmd put hello_ingestsql.txt s3://mybucket/my.repo.name/external/hello_ingestsql.txt
+cvmfs_swissknife ingestsql \
+   -D my.db \
+   -N my.repo.name \
+   -g http://cvmfs-gateway-server/api/v1 \
+   -w http://s3-server/mybucket/my.repo.name \
+   -@ http://proxy-server \
+   -k /etc/cvmfs/keys/my.repo.name.pub \
+   -s /etc/cvmfs/keys/my.repo.name.gw \
+   -3 /etc/cvmfs/s3.conf \
+   -t /tmp
+```
+
+
 ### Template Transactions
 
 In a "template transaction", an existing directory is used as a
