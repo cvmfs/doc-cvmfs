@@ -128,6 +128,11 @@ CVMFS_FUSE3_MAX_THREADS { #cvmfs_fuse3_max_threads }
 CVMFS_FUSE3_IDLE_THREADS { #cvmfs_fuse3_idle_threads }
 : Set max number of idle fuse threads (requires: libfuse3 > 3.12)
 
+CVMFS_FUSE_PASSTHROUGH { #cvmfs_fuse_passthrough }
+: If set to *on*, let the kernel read file contents directly from the cache
+  without going through `cvmfs2` (requires: kernel >= 6.17, libfuse3 >= 3.17).
+  See [FUSE Passthrough](cpt-configure.md#fuse-passthrough).
+
 CVMFS_FOLLOW_REDIRECTS { #cvmfs_follow_redirects }
 : When set to *yes*, follow up to 4 HTTP redirects in requests.
 
