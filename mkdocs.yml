@@ -80,6 +80,7 @@ nav:
     - XCache: cpt-xcache.md
     - Large Scale: cpt-large-scale.md
     - Filebundles: cpt-file-bundles.md
+    - FUSE Passthrough: cpt-fuse-passthrough.md
     - macOS: cpt-macos.md
   - Appendix:
     - Security: apx-security.md
