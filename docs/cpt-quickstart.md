@@ -15,7 +15,7 @@ automount. That means that starting from the base directory <code class="cvmfs-i
 different repositories are mounted automatically just by accessing them.
 A repository will be automatically unmounted after some
 automount-defined idle time. On macOS, mounting and unmounting of the
-CernVM-FS is done by the user with `sudo mount -t cvmfs /cvmfs/...`
+CernVM-FS is done by the user with `mount -t cvmfs` and `umount`
 commands.
 
 ## Getting the Software
@@ -111,39 +111,24 @@ Use `docker stop` to unmount the <code class="cvmfs-inline-path">/cvmfs</code> t
     If you run multiple nodes (a cluster), use `-e CVMFS_HTTP_PROXY` to set
     a proper site proxy as described further down.
 
-**Mac OS X - homebrew / Fuse-t:**
+**macOS:**
 
-NOTE: Fuse-t is still EXPERIMENTAL and there are known issues. Use
-MacFuse for a stable experience. The easiest way to install CVMFS on
-MacOS is with homebrew:
+The macOS client supports several mount backends: NFS (preferred, no
+kernel extension needed), macFUSE with the kernel extension, and macFUSE
+with FSKit. FUSE-T is no longer supported. See [macOS Client
+Backends](cpt-macos.md) for installation instructions for each backend.
 
-```bash
-brew tap macos-fuse-t/cask
-brew tap cvmfs/homebrew-cvmfs
-brew install cvmfs
-```
+!!! warning "Pre-release"
 
-**Mac OS X - Legacy macFUSE:**
+    The macOS package below is a pre-release of CernVM-FS 2.15.0,
+    intended for testing, not for production use.
 
-Note that as of macOS 11 Big Sur, [kernel extensions need to be
-enabled](https://support.apple.com/guide/mac-help/change-startup-disk-security-settings-a-mac-mchl768f7291/mac)
-to install macFUSE. Verify that fuse is available with
+Download and install the CernVM-FS package:
 
 ```bash
-kextstat  grep -i fuse
+curl -O 'https://ecsft.cern.ch/dist/cvmfs/prerelease/cvmfs-2.15.0-pre1/cvmfs-2.15.0~pre1.pkg'
+sudo installer -pkg 'cvmfs-2.15.0~pre1.pkg' -target /
 ```
-
-Download the CernVM-FS client package in the terminal in order to avoid
-signature warnings
-
-```bash
-# For Intel Processors:
-curl -O https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.12.0/cvmfs-2.12.0.macfuse.intel.pkg
-# For Apple Silicon M1/M2/...
-curl -O https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.12.0/cvmfs-2.12.0.macfuse.arm64.pkg
-```
-
-Install the CernVM-FS package by opening the .pkg file and reboot.
 
 **Windows / WSL2:**
 
@@ -176,22 +161,19 @@ sed -i 's%#+dir:/etc/auto.master.d%+dir:/etc/auto.master.d%' /etc/auto.master
 systemctl restart autofs
 ```
 
-### Mac OS X
+### macOS
 
-Due to the lack of `autofs` on macOS, mount the individual repositories
-manually like
+There is no `autofs` integration on macOS. Mount the individual
+repositories manually, starting with the config repository:
 
 ```bash
-sudo cvmfs_config setup
-sudo mkdir -p /cvmfs/cvmfs-config.cern.ch
-sudo mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
+mkdir -p /cvmfs/cvmfs-config.cern.ch
+mount -t cvmfs cvmfs-config.cern.ch /cvmfs/cvmfs-config.cern.ch
 ```
 
-For optimal configuration settings, mount the config repository before
-any other repositories.
-Note that the actual mountpoints are located under
-`/Users/Shared/cvmfs` — `/cvmfs` is a "firmlink" that points there, and
-is created by `cvmfs_config`.
+`/cvmfs` is a firmlink to `/Volumes/cvmfs`, created by
+`cvmfs_config setup`. Backend-specific details, e.g. that FSKit mounts
+must not use `sudo`, are in [macOS Client Backends](cpt-macos.md).
 
 ### Create default.local
 
