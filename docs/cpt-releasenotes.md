@@ -1,3 +1,86 @@
+# Release Notes for CernVM-FS 2.14.2
+
+CernVM-FS 2.14.2 is a patch release. On the client side, it fixes a
+shared cache manager crash during cache cleanup with
+`CVMFS_CACHE_CLEANUP_NONOPENLRU=yes`, several aborts related to FUSE
+passthrough, a reload hang involving the config repository, and the
+watchdog losing its credentials on repositories mounted before the 2.14
+upgrade. It also adds `CVMFS_OOM_SCORE_WATCHDOG` to protect the watchdog
+from the OOM killer. On the server, `cvmfs_server snapshot` now retries
+HTTP 502/503/504 responses from the stratum 0, and `cvmfs_server gc -p`
+prunes objects that are no longer needed after a full replica becomes a
+partial replica. DUCC receives fixes for multi-arch and flat image
+conversion. Packages are now also built for riscv64.
+
+As with previous releases, upgrading clients should be seamless just by
+installing the new package from the repository. As usual, we recommend
+updating only a few worker nodes first and gradually ramp up once the
+new version proves to work correctly. Please take special care when
+upgrading a cvmfs client in NFS mode.
+
+For Stratum 1 servers, there should be no running snapshots during the
+upgrade. For publisher and gateway nodes, all transactions must be
+closed; no active leases must be present before upgrading.
+
+!!! note
+
+    Repositories mounted before the upgrade to 2.14 keep running with
+    the old privileges. A remount is needed for them to run with reduced
+    privileges.
+
+## Bug fixes and improvements
+
+2.14.2:
+
+-   [client] Fix shared cache manager crash that drops all mounts during
+    cache cleanup with `CVMFS_CACHE_CLEANUP_NONOPENLRU=yes`
+    ([#4560](https://github.com/cvmfs/cvmfs/issues/4560))
+-   [client] Fix watchdog losing its credentials on repositories mounted
+    before the 2.14 upgrade
+    ([#4553](https://github.com/cvmfs/cvmfs/issues/4553))
+-   [client] Fix abort on first file open with `CVMFS_FUSE_PASSTHROUGH=on`
+    for unprivileged mounts and mounts running as the cvmfs user
+    ([#4545](https://github.com/cvmfs/cvmfs/issues/4545))
+-   [client] Fix abort on every unmount when passthrough support is built
+    in but disabled at runtime
+    ([#4457](https://github.com/cvmfs/cvmfs/issues/4457))
+-   [client] Allow naming bundle specs `.cvmfsbundle-<file>.cvmfsbundle`,
+    so tools that scan by extension (e.g. Lmod) no longer pick them up
+    ([#4541](https://github.com/cvmfs/cvmfs/issues/4541))
+-   [client] Fix reload hanging when another repository triggers an
+    automount of the config repository
+    ([#4485](https://github.com/cvmfs/cvmfs/issues/4485),
+    [#4514](https://github.com/cvmfs/cvmfs/issues/4514))
+-   [client] Add `CVMFS_OOM_SCORE_WATCHDOG` to protect the watchdog from
+    the OOM killer, so a crashed client can still be unmounted and
+    remounted ([#4481](https://github.com/cvmfs/cvmfs/issues/4481))
+-   [client] Fix config variables being set to blank when only set inside
+    a false conditional block
+    ([#4476](https://github.com/cvmfs/cvmfs/issues/4476))
+-   [server] Fix `cvmfs_server snapshot` aborting on HTTP 502/503/504 from
+    the stratum 0; retry them like 429
+    ([#4540](https://github.com/cvmfs/cvmfs/issues/4540))
+-   [server] Add `cvmfs_server gc -p` to prune objects that are no longer
+    needed after a full replica becomes a partial replica
+    ([#4483](https://github.com/cvmfs/cvmfs/issues/4483))
+-   [server] Use local time instead of GMT in garbage collection progress
+    output, matching the gc wrapper's own timestamps
+    ([#4518](https://github.com/cvmfs/cvmfs/issues/4518))
+-   [ducc] Fix dangling arch-independent link for images that lack the
+    server's architecture (e.g. arm64-only images on an amd64 stratum 0);
+    fail on image indexes without a usable platform
+    ([#4549](https://github.com/cvmfs/cvmfs/issues/4549))
+-   [ducc] Fix flat image conversion when `cvmfs_repo` includes a
+    subdirectory ([#4519](https://github.com/cvmfs/cvmfs/issues/4519))
+-   [ducc] Add `prune-images --prune-not-in-wishlist` to remove images
+    that were dropped from the wishlist but are still in the registry
+    ([#4471](https://github.com/cvmfs/cvmfs/issues/4471))
+-   [packaging] Build riscv64 packages
+    ([#4532](https://github.com/cvmfs/cvmfs/issues/4532))
+-   [packaging] Fix RPM build on Fedora 45+ by using the system curl,
+    since the vendored one does not build with OpenSSL 4
+    ([#4531](https://github.com/cvmfs/cvmfs/issues/4531))
+
 # Release Notes for CernVM-FS 2.14.1
 
 CernVM-FS 2.14.1 is a patch release that fixes a few issues found
