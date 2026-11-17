@@ -132,7 +132,7 @@ CVMFS_FOLLOW_REDIRECTS { #cvmfs_follow_redirects }
 : When set to *yes*, follow up to 4 HTTP redirects in requests.
 
 CVMFS_HIDE_MAGIC_XATTRS { #cvmfs_hide_magic_xattrs }
-: If set to *yes* the client will not expose CernVM-FS specific extended attributes
+: Legacy form of `CVMFS_MAGIC_XATTRS_VISIBILITY`. *yes* corresponds to `never`, *no* to `always`. Ignored if `CVMFS_MAGIC_XATTRS_VISIBILITY` is set.
 
 CVMFS_HOST_RESET_AFTER { #cvmfs_host_reset_after }
 : See `CVMFS_PROXY_RESET_AFTER`, for server URLs.
@@ -195,7 +195,7 @@ CVMFS_LOW_SPEED_LIMIT { #cvmfs_low_speed_limit }
 : Minimum transfer rate in bytes/second a server or proxy must provide.
 
 CVMFS_MAGIC_XATTRS_VISIBILITY { #cvmfs_magic_xattrs_visibility }
-: Allows to hide extended attributes to be listed. Options: `always`, `never`, `rootonly`. `rootonly` means that the listing can only be requested for `/cvmfs/<repo>`. For any other file, only a direct request to a specific extended attribute will work.
+: Controls whether magic extended attributes appear in an extended attribute listing (`listxattr()`). Options: `rootonly` (default), `always`, `never`. With `rootonly`, attributes are only listed for `/cvmfs/<repository>`. Reading a specific attribute by name works regardless of this setting. See [Listing Extended Attributes](cpt-details.md#listing-extended-attributes).
 
 CVMFS_MAX_EXTERNAL_SERVERS { #cvmfs_max_external_servers }
 : Limit the number of (geo sorted) stratum 1 servers for external data that are effectively used.

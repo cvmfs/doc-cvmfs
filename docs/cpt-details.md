@@ -792,6 +792,45 @@ The commands also work with single page attributes (page number is 0).
 `<attr>~<page num>`
 : Output of the attribute. Page numbers are starting from 0. Errors are returned as signals.
 
+### Listing Extended Attributes
+
+`CVMFS_MAGIC_XATTRS_VISIBILITY` controls whether the magic extended
+attributes show up in a listing of extended attributes
+(`listxattr()`, e.g. `attr -l` or `getfattr -d`). It does not affect
+reading a specific attribute by name (`getxattr()`), which works
+regardless of this setting.
+
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Value</span>
+  <span>Meaning</span>
+</div>
+
+`rootonly`
+: Default. Attributes are only listed for the repository root directory `/cvmfs/<repository>`. For all other files and directories, the listing is empty.
+
+`always`
+: Attributes are listed for every file and directory.
+
+`never`
+: Attributes are never listed.
+
+Example: list the magic attributes for every file
+
+    CVMFS_MAGIC_XATTRS_VISIBILITY=always
+
+The older boolean parameter `CVMFS_HIDE_MAGIC_XATTRS` is still
+supported: `yes` corresponds to `never` and `no` to `always`. If both are
+set, `CVMFS_MAGIC_XATTRS_VISIBILITY` takes precedence.
+
+On publisher nodes, `cvmfs_server mkfs` sets
+`CVMFS_MAGIC_XATTRS_VISIBILITY=never` for the client mount of the
+repository. This mount is the read-only lower layer of the
+[union file system](#read-write-interface-using-a-union-file-system).
+When a file is modified, the union file system copies it to the scratch
+area together with all extended attributes returned by the listing. Any
+listed magic attribute would thus become a regular extended attribute of
+the new file and could be published into the repository.
+
 ### Restricting Access to Extended Attributes
 
 Access to extended attributes can be restricted in the client config to
