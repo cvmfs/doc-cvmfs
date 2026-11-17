@@ -134,10 +134,47 @@ vi /etc/cvmfs/repositories.d/example.cern.ch/partial-replication.spec
 cvmfs_server snapshot example.cern.ch
 ```
 
-Newly included catalogs and objects are fetched during the snapshot.  If
-paths are removed from the specification, they stop being part of the
+Newly included catalogs and objects are fetched during the snapshot.
+When the specification differs from the one uploaded by the last
+snapshot, the snapshot revisits existing catalogs, so newly included
+objects are fetched even if the upstream revision has not changed.
+
+If paths are removed from the specification, they stop being part of the
 current partial replica and can be removed from storage by garbage
 collection once no served revision references them.
+
+### Pruning excluded objects
+
+A regular garbage collection keeps every object referenced by a
+preserved revision, including objects of subtrees that are now excluded.
+This leaves a lot of data on disk when a full replica is converted into
+a partial one, or when paths are removed from the specification.  Use
+`cvmfs_server gc -p` to delete the objects of excluded subtrees from all
+preserved revisions:
+
+```bash
+cvmfs_server snapshot example.cern.ch
+cvmfs_server gc -p -d example.cern.ch   # dry run
+cvmfs_server gc -p example.cern.ch
+```
+
+Like the snapshot, pruning works per nested catalog: an object is removed
+only if the nested catalog that references it is excluded.  The command
+refuses to run unless:
+
+-   the repository is a Stratum 1 with `CVMFS_PARTIAL_REPLICATION=true`
+    and a readable `CVMFS_PARTIAL_REPLICATION_SPEC`, and
+-   the specification matches the `.cvmfs_partial_replication` file
+    uploaded by the last snapshot.  After editing the specification, run
+    a snapshot first.
+
+`-p` cannot be combined with `-a` or `-A`, since it needs a
+per-repository inclusion specification.  If a pruned subtree is included
+again later, the next snapshot fetches its objects again.
+
+!!! note
+
+    `cvmfs_server gc -p` is available starting with CernVM-FS 2.14.2.
 
 ## Client configuration
 
