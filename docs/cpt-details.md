@@ -792,6 +792,43 @@ The commands also work with single page attributes (page number is 0).
 `<attr>~<page num>`
 : Output of the attribute. Page numbers are starting from 0. Errors are returned as signals.
 
+### Listing Extended Attributes
+
+`CVMFS_MAGIC_XATTRS_VISIBILITY` controls whether the magic extended
+attributes show up in a listing of extended attributes
+(`listxattr()`, e.g. `attr -l` or `getfattr -d`). It does not affect
+reading a specific attribute by name (`getxattr()`), which works
+regardless of this setting.
+
+<div class="dl-table-header dl-table-header--two-column">
+  <span>Value</span>
+  <span>Meaning</span>
+</div>
+
+`rootonly`
+: Default. Attributes are only listed for the repository root directory `/cvmfs/<repository>`. For all other files and directories, the listing is empty.
+
+`always`
+: Attributes are listed for every file and directory.
+
+`never`
+: Attributes are never listed.
+
+Hiding the attributes from listings avoids side effects with tools that
+copy or archive all extended attributes of a file, such as `cp -a`,
+`rsync -X`, or `tar --xattrs`, which would otherwise query every magic
+attribute of every file.
+
+Example: list the magic attributes for every file
+
+    CVMFS_MAGIC_XATTRS_VISIBILITY=always
+
+The older boolean parameter `CVMFS_HIDE_MAGIC_XATTRS` is still
+supported: `yes` corresponds to `never` and `no` to `always`. If both are
+set, `CVMFS_MAGIC_XATTRS_VISIBILITY` takes precedence. On publisher
+nodes, `cvmfs_server mkfs` sets `CVMFS_MAGIC_XATTRS_VISIBILITY=never`
+for the client mount of the repository.
+
 ### Restricting Access to Extended Attributes
 
 Access to extended attributes can be restricted in the client config to
