@@ -242,6 +242,9 @@ CVMFS_PAC_URLS { #cvmfs_pac_urls }
 CVMFS_OOM_SCORE_ADJ { #cvmfs_oom_score_adj }
 : Set the Linux kernel's out-of-memory killer priority for the CernVM-FS client [-1000 - 1000].
 
+CVMFS_OOM_SCORE_WATCHDOG { #cvmfs_oom_score_watchdog }
+: Set the Linux kernel's out-of-memory killer priority for the watchdog process [-1000 - 1000], independent of `CVMFS_OOM_SCORE_ADJ`. Keeping the watchdog alive lets a crashed client still be unmounted and remounted. Lowering the score requires root, so it has no effect on unprivileged mounts. Takes effect on the next mount, not on reload. Unset by default; planned to default to -1000 in a future release. Available since 2.14.2.
+
 CVMFS_PROXY_RESET_AFTER { #cvmfs_proxy_reset_after }
 : Delay in seconds after which CernVM-FS will retry the primary proxy group in case of a fail-over to another group.
 
