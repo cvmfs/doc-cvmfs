@@ -136,13 +136,23 @@ Follow the [Windows
 instructions](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 to install the Windows Subsystem for Linux (WSL2). Install any of the
 Linux distributions and follow the instructions for the distribution in
-this guide. Whenever you open the Linux distribution, run
+this guide.
+
+The way `autofs` is started depends on whether systemd is enabled in your
+WSL2 distribution. See the [systemd support section of the WSL
+documentation](https://learn.microsoft.com/en-us/windows/wsl/wsl-config#systemd-support)
+for how to enable it.
+
+- **With systemd enabled (recommended):** `autofs` is managed like on any other Linux host.
+`cvmfs_config setup` activates the `autofs` service, and it starts automatically whenever the distribution starts.
+No further action is needed.
+- **Without systemd:** the service is not started automatically. To start the automounter you should manually run:
 
 ```bash
 sudo cvmfs_config wsl2_start
 ```
 
-to start the CernVM-FS service.
+If systemd is available, `cvmfs_config wsl2_start` will act as a thin wrapper to `systemctl enable --now autofs.service`.
 
 ## Setting up the Software
 
@@ -152,6 +162,10 @@ For the basic setup, run `cvmfs_config setup`. This ensures that the
 file `/etc/auto.master.d/cvmfs.autofs` exists containing
 `/cvmfs /etc/auto.cvmfs` and that the `autofs` service is running.
 Reload the `autofs` service in order to apply an updated configuration.
+
+NB: On WSL2 without systemd, `cvmfs_config setup` skips activating the
+`autofs` service. Start it with `sudo cvmfs_config wsl2_start` instead
+(see [Windows / WSL2](#other-platforms)).
 
 NB: For OpenSUSE uncomment the line `#+dir:/etc/auto.master.d/` in the
 file `/etc/auto.master` and restart the `autofs` service.
