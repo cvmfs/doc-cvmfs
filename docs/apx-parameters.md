@@ -299,6 +299,9 @@ CVMFS_STATFS_CACHE_TIMEOUT { #cvmfs_statfs_cache_timeout }
 CVMFS_STREAMING_CACHE { #cvmfs_streaming_cache }
 : If set to *yes*, use a download manager to download regular files on read.
 
+CVMFS_STREAMING_CACHE_BUFFER_SIZE { #cvmfs_streaming_cache_buffer_size }
+: Size in bytes of the in-memory buffer of recently downloaded objects used by the streaming cache manager. Default: 67108864 (64 MiB). Objects larger than the buffer are downloaded again on every read.
+
 CVMFS_STRICT_MOUNT { #cvmfs_strict_mount }
 : If set to *yes*, mount only repositories that are listed in `CVMFS_REPOSITORIES`.
 

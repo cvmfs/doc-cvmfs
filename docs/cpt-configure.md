@@ -816,9 +816,21 @@ the user. In order to use the streaming cache manager, set:
 
     CVMFS_STREAMING_CACHE=yes
 
-Note: The streaming cache manager is not ideal when doing multiple small
-reads of a large chunk, as each read will trigger a re-download of the
-entire chunk.
+Recently downloaded objects are kept in a ring buffer in memory, so that
+consecutive reads of the same file or chunk are served without another
+download. The buffer size in bytes is set by
+`CVMFS_STREAMING_CACHE_BUFFER_SIZE` (default: 64 MiB, `67108864`). For
+example, for a 256 MiB buffer:
+
+    CVMFS_STREAMING_CACHE_BUFFER_SIZE=268435456
+
+Objects larger than the buffer, or of unknown size, are not buffered.
+Every read of such an object triggers a download of the entire object,
+which makes multiple small reads of it slow. The buffer should therefore
+be larger than the largest chunk size of the mounted repositories
+(`CVMFS_MAX_CHUNK_SIZE` on the publisher, 16 MiB by default). Buffer
+hits, evictions and objects that did not fit are counted in the
+`streaming_cache_mgr.*` counters of `cvmfs_talk internal affairs`.
 
 #### External Cache Plugin
 
